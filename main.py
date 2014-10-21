@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import pandas as pd
 
-import pdb
 
 def clean_axis(ax):
     """Remove ticks, tick labels, and frame from axis"""
@@ -15,14 +14,14 @@ def clean_axis(ax):
     for sp in ax.spines.values():
         sp.set_visible(False)
 
-def plot_figure(coeff_matrix,nth_window):
+def plot_figure(coeff_matrix,nth_window, prefix=""):
     df = pd.DataFrame(coeff_matrix)
     figure1 = plt.figure()
     heatmap = figure1.add_subplot(1,1,1)
     my_axis = heatmap.imshow(df,interpolation='nearest',cmap=cm.OrRd)
     my_axi = my_axis.get_axes()
     clean_axis(my_axi)
-    figure1.savefig('figure'+str(nth_window)+'.png')
+    figure1.savefig(prefix+'figure'+str(nth_window)+'.png')
 
 file_path = "compressed_katrina_data.txt"
 gene_start_column = 5
@@ -52,13 +51,37 @@ for nth_window in range(0, total_window_number):
     filled_matrix = imputer.fit_transform(current_window)
     current_lasso = LassoWrapper(filled_matrix)
     coeff_mat = current_lasso.get_coeffs()
-    pdb.set_trace()
     coeff_matrix_3d[:,:,nth_window] = coeff_mat
     plot_figure(coeff_mat,nth_window)
     roll_me.next()
 
 gene_names=list(current_window.columns.values)
 # hmm maybe make a heatmap for each slice...
+# get the binary coefficients of each index
+binary_matrix = np.empty((n_genes,n_genes))
+for row_index in range(n_genes):
+    for col_index in range(n_genes):
+        coeffs_over_time = coeff_matrix_3d[row_index,col_index,:]
+        if sum(coeffs_over_time) == 0:
+            binary_matrix[row_index,col_index]=0
+        else:
+            binary_matrix[row_index,col_index]=1
+
+ii,jj = np.where(binary_matrix==1)
+present = np.append(ii,jj)
+present = np.unique(present)
+present_mat = coeff_matrix_3d[present,:,:]
+present_mat = present_mat[:,present,:]
+present_genes = [gene_names[item] for item in present]
+
+for nth_window in range(0, total_window_number):
+    coeff_mat = present_mat[:,:,nth_window]
+    plot_figure(coeff_mat,nth_window,"compressed_")
+
+    #move all the non-zero coefficients into a binary matrix
+
+
+
 
 
 
