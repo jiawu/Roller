@@ -39,7 +39,7 @@ class Roller:
             self.current_window = self.get_window()
             return(self.current_window)
         else:
-            return("reached end")
+            return("end")
 
     def set_window(self, width):
         self.window_width = width
