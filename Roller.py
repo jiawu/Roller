@@ -19,6 +19,9 @@ class Roller:
         else:
             self.gene_start = 0
         self.current_window = self.get_window()
+    def get_n_windows(self):
+        total_windows = self.overall_width - self.window_width
+        return(total_windows)
 
     def get_window(self):
         raw_window = self.get_window_raw()
