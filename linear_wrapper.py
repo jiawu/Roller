@@ -27,4 +27,4 @@ class LassoWrapper:
             #to prevent self-edges
             coeffs = np.insert(coeffs,col_index,0)
             coeff_matrix=np.vstack((coeff_matrix,coeffs))
-        return(coeff_matrix)
+        return coeff_matrix
