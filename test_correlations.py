@@ -6,11 +6,37 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 import sys
+import pandas as pd
+from mpl_toolkits.mplot3d import Axes3D
+
+"""
+NOTES
+
+This is really hacky code that was put together to look at correlations between oscillations
+that have different phase and frequency.
+
+Conclusions: Using pearson/spearman correlation, phases and frequency must be close or signals
+will not be correlated
+"""
+
+#Phase is rows
+#Frequency is columns
+phases = np.array([np.linspace(0,2*np.pi,100)]*100).T
+freqs = np.array([np.linspace(1,10,100)]*100)
+data = np.array(pd.read_csv("phase_freq_correlation_values.csv", header=None).values)
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.plot_surface(phases, freqs, data)
+plt.xlabel('Phases')
+plt.ylabel('Freqs')
+plt.show()
+sys.exit()
+
 
 t = np.linspace(0,2*np.pi,10000)
 s = np.cos(t)
 
-phases = np.linspace(0,2*np.pi,100)
+
 x = ufun.simple(t).signal()
 print np.cov(x,x)
 z = ufun.simple(t, phase=0.5*np.pi).signal()
@@ -19,19 +45,25 @@ z = ufun.simple(t, phase=0.5*np.pi).signal()
 #plt.show()
 #plt.plot(x,z)
 #plt.show()
-pearsons = []
-spearmans = []
-for phase in phases:
-    y = ufun.simple(t, phase=phase).signal()
-    coef, p = stats.pearsonr(x,y)
-    pearsons.append(coef)
-    coef, p = stats.spearmanr(x,y)
-    spearmans.append(coef)
+phases = np.linspace(0,2*np.pi,100)
+freqs = np.linspace(1,10,100)
+pearsons = np.matrix(np.zeros([len(phases),len(freqs)]))
+spearmans = np.matrix(np.zeros([len(phases),len(freqs)]))
+for ii in range(len(phases)):
+    print ii
+    for jj in range(len(freqs)):
+        y = ufun.simple(t, phase=phases[ii],freq=freqs[jj]).signal()
+        coef, p = stats.pearsonr(x,y)
+        pearsons[ii,jj] = coef
+        coef, p = stats.spearmanr(x,y)
+        spearmans[ii,jj] = coef
 
+np.savetxt('phase_freq_correlation_values.csv', pearsons, delimiter=',')
+sys.exit()
 plt.plot(phases,pearsons, phases, spearmans)
 plt.show()
 
-freqs = np.linspace(1,10,100)
+
 pearsons2 = []
 spearmans2 = []
 
