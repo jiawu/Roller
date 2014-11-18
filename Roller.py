@@ -35,12 +35,12 @@ class Roller:
 
     def get_n_windows(self):
         total_windows = self.overall_width - self.window_width
-        return(total_windows)
+        return total_windows
 
     def get_window(self):
         raw_window = self.get_window_raw()
         only_genes = raw_window.iloc[:, self.gene_start:self.gene_end]
-        return(only_genes)
+        return only_genes
 
     def get_window_raw(self):
         start_index = self.current_step
@@ -51,18 +51,19 @@ class Roller:
 
     def next(self):
         end_index = self.current_step + self.window_width
-        if (end_index <= self.overall_width) :
-            self.current_step = self.current_step + self.step_size
+        if end_index <= self.overall_width:
+            self.current_step += self.step_size
             self.current_window = self.get_window()
-            return(self.current_window)
+            return self.current_window
         else:
-            return("end")
+            return "end"
 
     def set_window(self, width):
         self.window_width = width
 
     def set_step(self, step):
         self.step_size = step
+
     def reset(self):
         self.current_step = 0
 
