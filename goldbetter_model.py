@@ -68,9 +68,10 @@ def mm(substrate, Km):
 
 # Equations
 # mRNAs of Per, Cry, and Bmal1
-dMP_dt = v_sP * hill(B_n, K_AP, n) - v_mP * mm(M_P, K_mP) - k_dmp * M_P
-dMC_dt = v_sC * hill(B_n, K_AC, n) - v_mC * mm(M_C, K_mC) - k_dmc * M_C
-dMB_dt = v_sB * hill(B_n, K_IB, m) - v_mP * mm(M_B, K_mB) - k_dmb * M_B #todo: This equation seems off, maybe typo in supplement
+dMP_dt = v_sP * hill(B_N, K_AP, n) - v_mP * mm(M_P, K_mP) - k_dmp * M_P
+dMC_dt = v_sC * hill(B_N, K_AC, n) - v_mC * mm(M_C, K_mC) - k_dmc * M_C
+# todo: This equation seems off, maybe typo in supplement
+dMB_dt = v_sB * hill(B_N, K_IB, m) - v_mP * mm(M_B, K_mB) - k_dmb * M_B
 
 # Phosphorylated and nonphosphorylated proteins PER and CRY in cytosol
 dPC_dt = k_sP * M_P - v_1p * mm(P_C, K_p) + v_2p * mm(P_CP, K_dp) + k4 * PC_C - k3 * P_C * C_C - k_dn * P_C
@@ -78,3 +79,19 @@ dCC_dt = k_sC * M_C - v_1c * mm(C_C, K_p) + v_2c * mm(C_CP, K_dp) + k4 * PC_C - 
 dPCP_dt = v_1p * mm(P_C, K_p) - v_2p * mm(P_CP, K_dp) - v_dpc * mm(P_CP, K_d) - k_dn * P_CP
 dCCP_dt = v_1c * mm(C_C, K_p) - v_2c * mm(C_CP, K_dp) - v_dcc * mm(C_CP, K_d) - k_dn * C_CP
 
+# Phosphorylated and nonphosphorylated PER-CRY complex in cytosol and nucleus
+dPCC_dt = -v_1pc * mm(PC_C, K_p) + v_2pc * mm(PC_CP,
+                                              K_dp) - k4 * PC_C + k3 * P_C * C_C + k2 * PC_N - k1 * PC_C - k_dn * PC_C
+dPCN_dt = -v_3pc * mm(PC_N, K_p) + v_4pc * mm(PC_NP,
+                                              K_dp) - k2 * PC_N + k1 * P_C - k7 * B_N * PC_N + k8 * I_N - k_dn * PC_N
+dPCCP_dt = v_1pc * mm(PC_C, K_p) - v_2pc * mm(PC_CP, K_dp) - v_dpcc * mm(PC_CP, K_d) - k_dn * PC_CP
+dPCNP_dt = v_3pc * mm(PC_N, K_p) - v_4pc * mm(PC_NP, K_dp) - v_dpcn * mm(PC_NP, K_d) - k_dn * PC_NP
+
+# Phosphorylated and nonphosphorylated protein BMAL1 in the cytosol and nucleus:
+dBC_dt = k_sb * M_B - v_1b * mm(B_C, K_p) + v_2b * mm(B_CP, K_dp) - k5 * B_C + k6 * B_N - k_dn * B_C
+dBCP_dt = v_1b * mm(B_C, K_p) - v_2b * mm(B_CP, K_dp) - v_dbc * mm(B_CP, K_d) - k_dn * B_CP
+dBN_dt = -v_3b * mm(B_N, K_p) + v_4b * mm(B_NP, K_dp) + K5 * B_C - k6 * B_N - k7 * B_N * PC_N + k8 * I_N - k_dn * B_N
+dBNP_dt = v_3b * mm(B_N, K_p) - v_4b * mm(B_NP, K_dp) - v_dbn * mm(B_NP, K_d) - k_dn * B_NP
+
+# Inactive complex between PER-CRY and CLOCK-BMAL1 in nucleus
+dIN_dt = -k8 * I_N + k7 * B_N * PC_N - v_din * mm(I_N, K_d) - k_dn * I_N
