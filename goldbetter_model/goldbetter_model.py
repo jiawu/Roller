@@ -133,6 +133,8 @@ def goldbetter_ode(y, time):
 
 if __name__ == "__main__":
     t = np.linspace(0, 1000, 10000)
+    print t
+    sys.exit()
     states = 16
     state_names = np.array(['Bmal_n', 'Per_mRNA', 'Cry_mRNA', 'Bmal_mRNA', 'Per_c', 'Per_c_phos', 'Per-Cry_c', 'Cry_c',
                    'Cry_c_phos', 'Per-Cry_c_phos', 'Per-Cry_n', 'Per-Cry_n_phos', 'Per-Cry_in', 'Bmal_c', 'Bmal_c_phos',
@@ -140,6 +142,6 @@ if __name__ == "__main__":
     y0 = tuple([1]*states)
     Y = integrate.odeint(goldbetter_ode, y0, t)
     #plot_states(state_names, Y)
-    np.save('raw_goldbetter_data', Y)
+    np.save('raw_goldbetter_data', np.vstack((t,Y.T)).T)
     np.save('goldbetter_state_names', state_names)
 
