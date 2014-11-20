@@ -77,9 +77,8 @@ def goldbetter_ode(y, time):
     dMP_dt = v_sP * hill(B_N, K_AP, n) - v_mP * mm(M_P, K_mP) - k_dmp * M_P
     dMC_dt = v_sC * hill(B_N, K_AC, n) - v_mC * mm(M_C, K_mC) - k_dmc * M_C
 
-    # It appears as if there is a typo in the supplement, this should be the correct equation though
-    dMB_dt = v_sB * hill(B_N, K_IB, m) - v_mB * mm(M_B, K_mB) - k_dmb * M_B
-    #dMB_dt = v_sB * (K_IB**m/(K_IB**m+B_N**m)) - v_mB * mm(M_B, K_mB) - k_dmb * M_B
+    # The hill kinects are switched for this because B_N represses MB transcription
+    dMB_dt = v_sB * hill(K_IB, B_N, m) - v_mB * mm(M_B, K_mB) - k_dmb * M_B
 
     # Phosphorylated and nonphosphorylated proteins PER and CRY in cytosol
     dPC_dt = k_sP * M_P - v_1p * mm(P_C, K_p) + v_2p * mm(P_CP, K_dp) + k4 * PC_C - k3 * P_C * C_C - k_dn * P_C
@@ -109,9 +108,9 @@ def goldbetter_ode(y, time):
             dBC_dt, dBCP_dt, dBNP_dt)
 
 if __name__ == "__main__":
-    t = np.linspace(0,100,1000)
+    t = np.linspace(0, 1000, 10000)
     states = 16
-    y0 = tuple([4]*states)
+    y0 = tuple([1]*states)
     Y = integrate.odeint(goldbetter_ode, y0, t)
     plt.plot(t, Y)
     plt.show()
