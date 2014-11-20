@@ -2,8 +2,11 @@ __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
 import numpy as np
+import sys
 from scipy import integrate
 import matplotlib.pyplot as plt
+import gmpy2 as gy
+
 
 def hill(L, Ka, coeff):
     theta = (L**coeff)/(Ka**coeff+L**coeff)
@@ -12,6 +15,27 @@ def hill(L, Ka, coeff):
 def mm(substrate, Km):
     rate = substrate/(Km+substrate)
     return rate
+
+def plot_states(states, Y, savepath = None):
+    num_states = len(states)
+    rows = int(np.sqrt(num_states))
+    if gy.is_square(num_states):
+        cols = int(np.sqrt(num_states))
+    else:
+        cols = int(np.sqrt(num_states))+1
+    fig = plt.figure(figsize=(17, 10))
+    for ii in range(num_states):
+        cur_ax = fig.add_subplot(rows, cols, ii+1)
+        cur_ax.plot(t, Y[:, ii])
+        cur_ax.set_title(state_names[ii])
+        cur_ax.set_xlabel('Time')
+        cur_ax.set_ylabel('Rel Abundance')
+    fig.subplots_adjust(hspace=0.7)
+    fig.subplots_adjust(wspace=0.3)
+    if savepath is None:
+        plt.show()
+    else:
+        plt.savefig('savepath')
 
 def goldbetter_ode(y, time):
     # Constants
@@ -110,7 +134,10 @@ def goldbetter_ode(y, time):
 if __name__ == "__main__":
     t = np.linspace(0, 1000, 10000)
     states = 16
+    state_names = np.array(['Bmal_n', 'Per_mRNA', 'Cry_mRNA', 'Bmal_mRNA', 'Per_c', 'Per_c_phos', 'Per-Cry_c', 'Cry_c',
+                   'Cry_c_phos', 'Per-Cry_c_phos', 'Per-Cry_n', 'Per-Cry_n_phos', 'Per-Cry_in', 'Bmal_c', 'Bmal_c_phos',
+                   'Bmal_n_phos'])
     y0 = tuple([1]*states)
     Y = integrate.odeint(goldbetter_ode, y0, t)
-    plt.plot(t, Y)
-    plt.show()
+    plot_states(state_names, Y)
+
