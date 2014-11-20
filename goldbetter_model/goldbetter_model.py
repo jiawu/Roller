@@ -139,5 +139,7 @@ if __name__ == "__main__":
                    'Bmal_n_phos'])
     y0 = tuple([1]*states)
     Y = integrate.odeint(goldbetter_ode, y0, t)
-    plot_states(state_names, Y)
+    #plot_states(state_names, Y)
+    np.save('raw_goldbetter_data', Y)
+    np.save('goldbetter_state_names', state_names)
 
