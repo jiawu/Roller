@@ -26,7 +26,7 @@ class Roller:
         self.step_size = 1
 
         # Get overall width of the time-course
-        self.time_vec = self.raw_data['Time'].unique()
+        self.time_vec = self.raw_data["Time"].unique()
         self.overall_width = len(self.time_vec)
         if gene_end is not None:
             self.gene_end = gene_end
@@ -51,7 +51,7 @@ class Roller:
         start_index = self.current_step
         end_index = start_index + self.window_width
         time_window = self.time_vec[start_index:end_index]
-        data = self.raw_data[self.raw_data['Time'].isin(time_window)]
+        data = self.raw_data[self.raw_data["Time"].isin(time_window)]
         return data
 
     def next(self):
