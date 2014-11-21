@@ -2,8 +2,12 @@ __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
 import numpy as np
+import sys
+import pandas as pd
 from scipy import integrate
 import matplotlib.pyplot as plt
+import gmpy2 as gy
+
 
 def hill(L, Ka, coeff):
     theta = (L**coeff)/(Ka**coeff+L**coeff)
@@ -12,6 +16,27 @@ def hill(L, Ka, coeff):
 def mm(substrate, Km):
     rate = substrate/(Km+substrate)
     return rate
+
+def plot_states(states, Y, savepath = None):
+    num_states = len(states)
+    rows = int(np.sqrt(num_states))
+    if gy.is_square(num_states):
+        cols = int(np.sqrt(num_states))
+    else:
+        cols = int(np.sqrt(num_states))+1
+    fig = plt.figure(figsize=(17, 10))
+    for ii in range(num_states):
+        cur_ax = fig.add_subplot(rows, cols, ii+1)
+        cur_ax.plot(t, Y[:, ii])
+        cur_ax.set_title(state_names[ii])
+        cur_ax.set_xlabel('Time')
+        cur_ax.set_ylabel('Rel Abundance')
+    fig.subplots_adjust(hspace=0.7)
+    fig.subplots_adjust(wspace=0.3)
+    if savepath is None:
+        plt.show()
+    else:
+        plt.savefig('savepath')
 
 def goldbetter_ode(y, time):
     # Constants
@@ -77,9 +102,8 @@ def goldbetter_ode(y, time):
     dMP_dt = v_sP * hill(B_N, K_AP, n) - v_mP * mm(M_P, K_mP) - k_dmp * M_P
     dMC_dt = v_sC * hill(B_N, K_AC, n) - v_mC * mm(M_C, K_mC) - k_dmc * M_C
 
-    # It appears as if there is a typo in the supplement, this should be the correct equation though
-    dMB_dt = v_sB * hill(B_N, K_IB, m) - v_mB * mm(M_B, K_mB) - k_dmb * M_B
-    #dMB_dt = v_sB * (K_IB**m/(K_IB**m+B_N**m)) - v_mB * mm(M_B, K_mB) - k_dmb * M_B
+    # The hill kinects are switched for this because B_N represses MB transcription
+    dMB_dt = v_sB * hill(K_IB, B_N, m) - v_mB * mm(M_B, K_mB) - k_dmb * M_B
 
     # Phosphorylated and nonphosphorylated proteins PER and CRY in cytosol
     dPC_dt = k_sP * M_P - v_1p * mm(P_C, K_p) + v_2p * mm(P_CP, K_dp) + k4 * PC_C - k3 * P_C * C_C - k_dn * P_C
@@ -109,9 +133,17 @@ def goldbetter_ode(y, time):
             dBC_dt, dBCP_dt, dBNP_dt)
 
 if __name__ == "__main__":
-    t = np.linspace(0,100,1000)
+    t = np.linspace(0, 1000, 10000)
     states = 16
-    y0 = tuple([4]*states)
+    state_names = np.array(['Time','Bmal_n', 'Per_mRNA', 'Cry_mRNA', 'Bmal_mRNA', 'Per_c', 'Per_c_phos', 'Per-Cry_c', 'Cry_c',
+                   'Cry_c_phos', 'Per-Cry_c_phos', 'Per-Cry_n', 'Per-Cry_n_phos', 'Per-Cry_in', 'Bmal_c', 'Bmal_c_phos',
+                   'Bmal_n_phos'])
+    y0 = tuple([1]*states)
     Y = integrate.odeint(goldbetter_ode, y0, t)
-    plt.plot(t, Y)
-    plt.show()
+    all_data = np.vstack((t,Y.T)).T
+    df = pd.DataFrame(data=all_data, columns = state_names)
+    df.to_csv('goldbetter_data.txt', sep=' ')
+    #plot_states(state_names, Y)
+    #np.save('raw_goldbetter_data', np.vstack((t,Y.T)).T)
+    #np.save('goldbetter_state_names', state_names)
+
