@@ -3,6 +3,10 @@ import pandas as pd
 class Roller:
     """
     A thing that grabs different timepoints of data, can set window and step size.
+
+    To do list:
+        -currently it looks for the "time" column. It looks for a hardcoded label"Time" which should be changed to a variable.
+        -accept different kinds of files
     """
     def __init__(self, file_path, gene_start=None, gene_end=None):
         """
@@ -14,6 +18,7 @@ class Roller:
         """
         # Read the raw data into a pandas dataframe object
         self.raw_data = pd.read_csv(file_path, sep=" ")
+        self.raw_data = self.raw_data.dropna(axis=0, how='all')
 
         # Set roller defaults
         self.current_step = 0
@@ -21,7 +26,7 @@ class Roller:
         self.step_size = 1
 
         # Get overall width of the time-course
-        self.time_vec = self.raw_data['time'].unique()
+        self.time_vec = self.raw_data['Time'].unique()
         self.overall_width = len(self.time_vec)
         if gene_end is not None:
             self.gene_end = gene_end
@@ -46,7 +51,7 @@ class Roller:
         start_index = self.current_step
         end_index = start_index + self.window_width
         time_window = self.time_vec[start_index:end_index]
-        data = self.raw_data[self.raw_data['time'].isin(time_window)]
+        data = self.raw_data[self.raw_data['Time'].isin(time_window)]
         return data
 
     def next(self):
