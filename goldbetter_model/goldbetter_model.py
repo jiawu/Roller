@@ -3,6 +3,7 @@ __email__ = 'jfinkle@u.northwestern.edu'
 
 import numpy as np
 import sys
+import pandas as pd
 from scipy import integrate
 import matplotlib.pyplot as plt
 import gmpy2 as gy
@@ -134,12 +135,15 @@ def goldbetter_ode(y, time):
 if __name__ == "__main__":
     t = np.linspace(0, 1000, 10000)
     states = 16
-    state_names = np.array(['Bmal_n', 'Per_mRNA', 'Cry_mRNA', 'Bmal_mRNA', 'Per_c', 'Per_c_phos', 'Per-Cry_c', 'Cry_c',
+    state_names = np.array(['Time','Bmal_n', 'Per_mRNA', 'Cry_mRNA', 'Bmal_mRNA', 'Per_c', 'Per_c_phos', 'Per-Cry_c', 'Cry_c',
                    'Cry_c_phos', 'Per-Cry_c_phos', 'Per-Cry_n', 'Per-Cry_n_phos', 'Per-Cry_in', 'Bmal_c', 'Bmal_c_phos',
                    'Bmal_n_phos'])
     y0 = tuple([1]*states)
     Y = integrate.odeint(goldbetter_ode, y0, t)
+    all_data = np.vstack((t,Y.T)).T
+    df = pd.DataFrame(data=all_data, columns = state_names)
+    df.to_csv('goldbetter_data.txt', sep=' ')
     #plot_states(state_names, Y)
-    np.save('raw_goldbetter_data', np.vstack((t,Y.T)).T)
-    np.save('goldbetter_state_names', state_names)
+    #np.save('raw_goldbetter_data', np.vstack((t,Y.T)).T)
+    #np.save('goldbetter_state_names', state_names)
 
