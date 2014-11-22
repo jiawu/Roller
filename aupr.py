@@ -2,9 +2,9 @@ __author__ = 'jfinkle'
 
 import pandas as pd
 import numpy as np
-from sklearn.metrics import roc_curve
 import sys
 import matplotlib.pyplot as plt
+from scipy import integrate
 
 # Load adjacency matrices
 
@@ -71,7 +71,9 @@ def calc_roc(ref, pred):
         else:
             precision.append(tp/(tp+fp))
 
-    return precision, recall
+        aupr = integrate.cumtrapz(precision, recall)
+
+    return precision, recall, aupr[-1]
 
 xls = pd.ExcelFile('goldbetter_model/adjacency_matrix.xlsx')
 df = xls.parse()
@@ -83,10 +85,11 @@ np.random.seed(8)
 weights = np.random.random(len(df2)**2)
 reference = create_link_list(df, weights)
 random = np.array([np.sum(reference.Edge_Exists.values)/256.0]*256)
-prediction = create_link_list(df2, weights)
-p, r = calc_roc(reference, prediction)
-plt.plot(r, p, r, random, 'r')
+prediction = create_link_list(df, weights)
+p, r, area = calc_roc(reference, prediction)
+plt.plot(r, p, 'o', r, random, 'r')
 plt.xlabel('Recall')
 plt.ylabel('Precision')
 plt.legend(['Test', 'Random'])
+print area
 plt.show()
