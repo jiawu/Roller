@@ -25,10 +25,10 @@ def plot_states(states, Y, savepath = None):
     else:
         cols = int(np.sqrt(num_states))+1
     fig = plt.figure(figsize=(17, 10))
-    for ii in range(num_states):
+    for ii in range(num_states-2):
         cur_ax = fig.add_subplot(rows, cols, ii+1)
-        cur_ax.plot(t, Y[:, ii])
-        cur_ax.set_title(state_names[ii])
+        cur_ax.plot(t, Y[:, ii+1])
+        cur_ax.set_title(state_names[ii+1])
         cur_ax.set_xlabel('Time')
         cur_ax.set_ylabel('Rel Abundance')
     fig.subplots_adjust(hspace=0.7)
@@ -142,8 +142,10 @@ if __name__ == "__main__":
     Y = integrate.odeint(goldbetter_ode, y0, t)
     all_data = np.vstack((t,Y.T)).T
     df = pd.DataFrame(data=all_data, columns = state_names)
-    df.to_csv('goldbetter_data.txt', sep=' ')
-    #plot_states(state_names, Y)
+    #df.to_csv('goldbetter_data.txt', sep=' ')
+    plt.plot(Y)
+    plt.show()
+
     #np.save('raw_goldbetter_data', np.vstack((t,Y.T)).T)
     #np.save('goldbetter_state_names', state_names)
 
