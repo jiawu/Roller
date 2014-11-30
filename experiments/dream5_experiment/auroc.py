@@ -64,5 +64,5 @@ df = xls.parse()
 reference = create_link_list(df)
 prediction = create_link_list(df)
 t_rate, f_rate = calc_roc(reference, prediction)
-#print t_rate
-#print f_rate
+print t_rate
+print f_rate

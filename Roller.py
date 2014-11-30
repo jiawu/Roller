@@ -1,10 +1,13 @@
 import pandas as pd
 
+import pdb
 class Roller:
     """
     A thing that grabs different timepoints of data, can set window and step size.
 
     To do list:
+        -i need to make two modules: a file processing module and a rolling module.
+        -currently it only accepts tab separated files.
         -currently it looks for the "time" column. It looks for a hardcoded label"Time" which should be changed to a variable.
         -accept different kinds of files
     """
@@ -24,9 +27,9 @@ class Roller:
         self.current_step = 0
         self.window_width = 3
         self.step_size = 1
-
+        #pdb.set_trace()
         # Get overall width of the time-course
-        self.time_vec = self.raw_data["Time"].unique()
+        self.time_vec = self.raw_data["time"].unique()
         self.overall_width = len(self.time_vec)
         if gene_end is not None:
             self.gene_end = gene_end
@@ -39,7 +42,7 @@ class Roller:
         self.current_window = self.get_window()
 
     def get_n_windows(self):
-        total_windows = self.overall_width - self.window_width
+        total_windows = (self.overall_width - self.window_width)/(self.step_size)
         return total_windows
 
     def get_window(self):
@@ -51,7 +54,7 @@ class Roller:
         start_index = self.current_step
         end_index = start_index + self.window_width
         time_window = self.time_vec[start_index:end_index]
-        data = self.raw_data[self.raw_data["Time"].isin(time_window)]
+        data = self.raw_data[self.raw_data["time"].isin(time_window)]
         return data
 
     def next(self):
