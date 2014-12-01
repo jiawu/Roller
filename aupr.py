@@ -5,14 +5,31 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import integrate
 
+def possible_edges(parents, children):
+    """
+    Create a list of all the possible edges between parents and children
+
+    :param parents: array
+        labels for parents
+    :param children: array
+        labels for children
+    :return: array, length = parents * children
+        array of parent, child combinations for all possible edges
+    """
+    parent_index = range(len(parents))
+    child_index = range(len(children))
+    a, b = np.meshgrid(parent_index, child_index)
+    parent_list = parents[a.flatten()]
+    child_list = children[b.flatten()]
+    possible_edge_list = np.array(zip(parent_list, child_list))
+    return possible_edge_list
+
 def create_link_list(df, w):
     parent_names = df.index.values
     child_names = df.columns.values
-    parent_index = range(len(parent_names))
-    child_index = range(len(child_names))
-    a, b = np.meshgrid(parent_index, child_index)
-    parents = parent_names[a.flatten()]
-    children = child_names[b.flatten()]
+    edges = possible_edges(parent_names, child_names)
+    parents = edges[:, 0]
+    children = edges[:, 1]
     directed_edges = df.values.flatten()
     all_edges = np.abs(directed_edges)
     ll_array = np.array([parents, children, zip(parents, children), directed_edges, all_edges, w])
@@ -111,29 +128,31 @@ def calc_roc(ref, pred):
         auroc = integrate.cumtrapz(fpr, tpr)
     return tpr, fpr, auroc[-1]
 
-xls = pd.ExcelFile('goldbetter_model/adjacency_matrix.xlsx')
-df = xls.parse()
 
-xls2 = pd.ExcelFile('goldbetter_model/test_matrix.xlsx')
-df2 = xls2.parse()
+if __name__ == '__main__':
+    xls = pd.ExcelFile('goldbetter_model/adjacency_matrix.xlsx')
+    df = xls.parse()
 
-np.random.seed(8)
-weights = np.random.random(len(df2)**2)
-reference = create_link_list(df, weights)
-random = np.array([np.sum(reference.Edge_Exists.values)/256.0]*256)
-prediction = create_link_list(df2, weights)
-p, r, area = calc_pr(reference, prediction)
-plt.plot(r, p, r, random, 'r')
-plt.xlabel('Recall')
-plt.ylabel('Precision')
-plt.legend(['Test', 'Random'])
-print area
-plt.show()
+    xls2 = pd.ExcelFile('goldbetter_model/test_matrix.xlsx')
+    df2 = xls2.parse()
 
-tpr, fpr, area = calc_roc(reference, prediction)
-plt.plot(fpr, tpr, fpr, fpr, 'r')
-plt.xlabel('FPR')
-plt.ylabel('TPR')
-plt.legend(['Test', 'Random'], loc='best')
-print area
-plt.show()
+    np.random.seed(8)
+    weights = np.random.random(len(df2)**2)
+    reference = create_link_list(df, weights)
+    random = np.array([np.sum(reference.Edge_Exists.values)/256.0]*256)
+    prediction = create_link_list(df2, weights)
+    p, r, area = calc_pr(reference, prediction)
+    plt.plot(r, p, r, random, 'r')
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.legend(['Test', 'Random'])
+    print area
+    plt.show()
+
+    tpr, fpr, area = calc_roc(reference, prediction)
+    plt.plot(fpr, tpr, fpr, fpr, 'r')
+    plt.xlabel('FPR')
+    plt.ylabel('TPR')
+    plt.legend(['Test', 'Random'], loc='best')
+    print area
+    plt.show()
