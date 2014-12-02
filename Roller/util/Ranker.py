@@ -49,29 +49,3 @@ def low_mem_ptest(p, o_values, permutepath, savepath):
         stdevs[:, ii] = np.std(cur_betas[:, 1:], 1, ddof=1)
         print time.clock()-tic
 
-    # Calculate zscores
-    zscores = (o_values-averages)/stdevs
-
-    save_ptest_output(savepath, p, o_values, averages, stdevs, zscores)
-
-def ptest(p, o_values, savepath):
-    permutations = p
-    print 'Starting %i permutations' %permutations
-    for p in range(permutations):
-        print 'Permutation %i' %p
-        x_permuted = shuffle(xMatrix)
-        d.run_dionesus(x_permuted, yMatrix, show_output=False)
-        o_values = np.dstack((o_values, np.array(d.beta_matrix.copy())))
-    print o_values.shape
-
-    # Calculate average
-    o_values = o_values[:, :, 0]
-    avg = np.mean(o_values[:, :, 1:], 2)
-
-    # Calculate standard deviation
-    stdev = np.std(o_values[:, :, 1:], 2, ddof=1)
-
-    # Calculate zscore
-    zscores = (o_values-avg)/stdev
-
-    save_ptest_output(savepath, p, o_values, avg, stdev, zscores)

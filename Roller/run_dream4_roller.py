@@ -9,52 +9,6 @@ import matplotlib as mpl
 import pdb
 #import auroc
 
-def clean_axis(ax):
-    """Remove ticks, tick labels, and frame from axis"""
-    ax.get_xaxis().set_ticks([])
-    ax.get_yaxis().set_ticks([])
-    for sp in ax.spines.values():
-        sp.set_visible(False)
-
-def plot_lines(series_list, regulator_labels, target_labels, window_size, suffix=""):
-    figure2 = plt.figure()
-    lineplot = figure2.add_subplot(1,1,1)
-    lineplot.set_xlabel('start day')
-    lineplot.set_ylabel('Beta')
-    lines = []
-    time = [x for x in range(0,22-window_size)]
-    label_list = []
-    for counter,series in enumerate(series_list):
-        my_label = str(regulator_labels[counter]+" -> "+target_labels[counter])
-        label_list.append(my_label)
-        pdb.set_trace()
-        line, = lineplot.plot(time, series, label = my_label)
-        lines.append(line)
-    figure2.legend(lines,label_list)
-    figure2.savefig('line_figure'+str(window_size)+suffix+'.png')
-
-def plot_figure(coeff_matrix,nth_window, row_labels, col_labels, window_size,prefix=""):
-    df = pd.DataFrame(coeff_matrix)
-    figure1 = plt.figure()
-    heatmap = figure1.add_subplot(1,1,1)
-    my_axis = heatmap.imshow(df,interpolation='nearest',cmap=cm.OrRd, vmin=0, vmax=1.2)
-    my_axi = my_axis.get_axes()
-    clean_axis(my_axi)
-    heatmap.set_yticks(np.arange(df.shape[0]))
-    heatmap.yaxis.set_ticks_position('left')
-    heatmap.set_yticklabels(row_labels)
-    heatmap.set_xticks(np.arange(df.shape[1]))
-    heatmap.xaxis.set_ticks_position('top')
-    xlabelsL = heatmap.set_xticklabels(col_labels)
-    for label in xlabelsL:
-        label.set_rotation(90)
-    for l in heatmap.get_xticklines() + heatmap.get_yticklines():
-        l.set_markersize(0)
-    title=heatmap.set_title("Day " +str(nth_window) + " to Day " +str(nth_window+window_size))
-    title.set_x(1.2)
-    figure1.savefig(prefix+'figure'+str(nth_window)+'.png')
-
-
 #file_path = "/Users/jjw036/Roller/experiments/dream5_experiment/raw_data/insilico_size10_1_timeseries.tsv"
 file_path = "/Users/jjw036/Roller/goldbetter_model/goldbetter_data.txt"
 gene_start_column = 1
