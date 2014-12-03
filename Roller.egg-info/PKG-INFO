@@ -11,16 +11,25 @@ Description: Roller
         Proposed Project File Structure:
         
         Roller/
-        	__init__.py
-        	Roller.py
-        	run_roller_example.py
-        	run_emt.py
-        	run_goldbetter.py
-        	
-        	unittests/
-        		test_roller.py
+        	Roller/
+                __init__.py
+                Roller.py
+                run_roller_example.py
+                run_emt.py
+                run_goldbetter.py	
+                unittests/
+                    test_roller.py
         		
-        	data/
+                util/
+                    __init__.py
+                    Grapher.py
+                    Evaluator.py
+                    Permuter.py
+                    LinearWrapper.py
+                    ForestWrapper.py
+                    PLSWrapper.py
+        	
+            data/
         		dream4/
         			...
         			gold_standard.csv
@@ -30,14 +39,6 @@ Description: Roller
         		time_varying/
         		emt/
         	
-        	util/
-        		__init__.py
-        		Grapher.py
-        		Evaluator.py
-        		Permuter.py
-        		LinearWrapper.py
-        		ForestWrapper.py
-        		PLSWrapper.py
         	
         	output/
         	

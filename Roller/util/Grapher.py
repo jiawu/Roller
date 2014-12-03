@@ -1,3 +1,8 @@
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import pandas as pd
+import pdb
+import numpy as np
 def clean_axis(ax):
     """Remove ticks, tick labels, and frame from axis"""
     ax.get_xaxis().set_ticks([])

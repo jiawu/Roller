@@ -1,26 +1,27 @@
-from Roller import Roller
+import Roller
 from sklearn.preprocessing import Imputer
-from linear_wrapper import LassoWrapper
+from Roller.util.linear_wrapper import LassoWrapper
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-import pandas as pd
 import matplotlib as mpl
 import pdb
+import Roller.util.Grapher as gr
 #import auroc
 
-#file_path = "/Users/jjw036/Roller/experiments/dream5_experiment/raw_data/insilico_size10_1_timeseries.tsv"
-file_path = "/Users/jjw036/Roller/goldbetter_model/goldbetter_data.txt"
+file_path = "/Users/jjw036/Roller/data/dream4/insilico_size10_1_timeseries.tsv"
+#file_path = "/Users/jjw036/Roller/goldbetter_model/goldbetter_data.txt"
 gene_start_column = 1
-roll_me = Roller(file_path, gene_start_column)
-window_size = 1000
+time_label = "Time"
+separator = "\t"
+gene_end = None
+
+roll_me = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
+window_size = 5
 #get only TFs data, window size of 4
 roll_me.set_window(window_size)
 #impute missing values
 imputer = Imputer(missing_values="NaN")
 mpl.rcParams.update({'font.size':8})
 mpl.rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
-
 total_window_number = roll_me.get_n_windows()
 #todo: fix the below two lines, I don't need this to get the matrix size...
 current_window = roll_me.get_window()
@@ -69,7 +70,7 @@ present_genes_ii = [gene_names[item] for item in present_ii]
 present_genes_jj = [gene_names[item] for item in present_jj]
 for nth_window in range(0, total_window_number):
     coeff_mat = present_mat[:,:,nth_window]
-    plot_figure(coeff_mat,nth_window,present_genes_ii, present_genes_jj, window_size,str("compressed_window"+str(window_size)))
+    #gr.plot_figure(coeff_mat,nth_window,present_genes_ii, present_genes_jj, window_size,str("compressed_window"+str(window_size)))
 
     #move all the non-zero coefficients into a binary matrix
 series_list = []
@@ -92,7 +93,7 @@ for gene in present_genes_jj:
     tfs_of_interest = [ (col_index,y) for y in present_targets]
     regulator_labels = [gene]*len(tfs_of_interest)
     target_labels = [present_genes_ii[item] for item in present_targets]
-    pdb.set_trace()
-    np.savetxt('binary_mat')
+    #pdb.set_trace()
+    #np.savetxt('binary_mat')
     #plot_lines(tf_list, regulator_labels, target_labels, window_size, suffix=str("targets_of_"+gene))
 
