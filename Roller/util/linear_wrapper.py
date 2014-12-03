@@ -8,6 +8,7 @@ class LassoWrapper:
 
 
     def __init__(self, data_frame):
+        #todo: data_frame is really a numpy array. Make a better name
         self.data = data_frame
 
     def get_coeffs(self, alpha=0.2):
