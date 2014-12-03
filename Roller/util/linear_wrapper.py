@@ -1,10 +1,11 @@
 from sklearn import linear_model
 import numpy as np
 
+#Note: if the optimal alpha value is very small, then another method other than LASSO should be used.
+
 class LassoWrapper:
     #I want this to spit out a matrix of coefficients, where row is the gene target and columns are the regulators
 
-    #potentially I want to do cross validation too to see if the cross validation score is better rolling vs non-rolling. I need to think of the strategy for this.
 
     def __init__(self, data_frame):
         self.data = data_frame
