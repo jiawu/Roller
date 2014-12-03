@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import Roller
 from sklearn.preprocessing import Imputer
 from Roller.util.linear_wrapper import LassoWrapper
@@ -5,7 +6,7 @@ import numpy as np
 import matplotlib as mpl
 import pdb
 import Roller.util.Grapher as gr
-#import auroc
+
 
 file_path = "/Users/jjw036/Roller/data/dream4/insilico_size10_1_timeseries.tsv"
 #file_path = "/Users/jjw036/Roller/goldbetter_model/goldbetter_data.txt"
