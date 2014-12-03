@@ -8,7 +8,7 @@ import pdb
 import Roller.util.Grapher as gr
 
 
-file_path = "/Users/jjw036/Roller/data/dream4/insilico_size10_1_timeseries.tsv"
+file_path = "data/dream4/insilico_size10_1_timeseries.tsv"
 #file_path = "/Users/jjw036/Roller/goldbetter_model/goldbetter_data.txt"
 gene_start_column = 1
 time_label = "Time"

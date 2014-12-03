@@ -15,7 +15,7 @@ class LassoWrapper:
         clf = linear_model.Lasso(alpha)
         #loop that iterates through the target genes
         all_data = self.data
-        coeff_matrix = np.array([],dtype=np.float_).reshape(0,all_data.shape[1])
+        coeff_matrix = np.array([],dtype=np.float_).reshape(0, all_data.shape[1])
 
         for col_index,column in enumerate(all_data.T):
             #delete the column that is currently being tested
