@@ -19,4 +19,3 @@ if __name__ == '__main__':
     window_size = roll_me.overall_width
 
     coefs = roll_me.fit(window_size)
-    print coefs

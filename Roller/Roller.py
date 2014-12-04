@@ -84,7 +84,7 @@ class Roller:
     def reset(self):
         self.current_step = 0
 
-    def fit(self, window_size, method = 'lasso'):
+    def fit(self, window_size, method = 'lasso', alpha = 0.2):
         """
         Fit the rolling model
 
@@ -92,19 +92,21 @@ class Roller:
             Matrix of coefficients. Each slice is the beta coefficient matrix for a given window
         """
 
-        # get only TFs data, window size of 4
+        # Set the window size
         self.set_window(window_size)
 
+        # Calculate total number of windows, and regressors, then initialize coefficient matrix
         total_window_number = self.get_n_windows()
         n_genes = len(self.gene_list)
         coeff_matrix_3d = np.empty((n_genes, n_genes, total_window_number))
 
-        for nth_window in range(0, total_window_number):
+        for nth_window in range(total_window_number):
             #loop gets the window, gets the coefficients for that window, then increments the window
             current_window = self.get_window()
 
             #check if any values are completely blank
-            sums = [current_window.iloc[:, x].sum() for x in range(0, 10)]
+            #todo: what is this for?
+            sums = [current_window.iloc[:, x].sum() for x in range(n_genes)]
             ind = np.where(np.isnan(sums))[0]
             current_window.iloc[:, ind] = 0
             current_window *= 100
