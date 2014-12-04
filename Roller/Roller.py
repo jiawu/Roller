@@ -1,5 +1,4 @@
 import pandas as pd
-from sklearn.preprocessing import Imputer
 import numpy as np
 from util.linear_wrapper import LassoWrapper
 
@@ -109,13 +108,13 @@ class Roller:
             sums = [current_window.iloc[:, x].sum() for x in range(n_genes)]
             ind = np.where(np.isnan(sums))[0]
             current_window.iloc[:, ind] = 0
-            current_window *= 100
+
             filled_matrix = current_window.values
-            #filled_matrix = imputer.fit_transform(current_window)
+
             current_lasso = LassoWrapper(filled_matrix)
-            coeff_mat = current_lasso.get_coeffs(10)
+            coeff_mat = current_lasso.get_coeffs(alpha)
             coeff_matrix_3d[:, :, nth_window] = coeff_mat
-            #plot_figure(coeff_mat,nth_window,gene_names,gene_names,window_size)
+
             self.next()
 
         return coeff_matrix_3d
