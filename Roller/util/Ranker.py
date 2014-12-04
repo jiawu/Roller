@@ -55,3 +55,4 @@ def boostrap():
     # Generate n models
     # Keep beta value ranges for each model
     # Count how many times a beta value appears
+    pass

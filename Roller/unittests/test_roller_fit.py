@@ -17,15 +17,6 @@ if __name__ == '__main__':
 
     roll_me = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
     window_size = roll_me.overall_width
-    #get only TFs data, window size of 4
-    roll_me.set_window(window_size)
-    #impute missing values
-    imputer = Imputer(missing_values="NaN")
-    mpl.rcParams.update({'font.size':8})
-    mpl.rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
-    total_window_number = roll_me.get_n_windows()
-    current_window = roll_me.get_window()
-    filled_matrix = imputer.fit_transform(current_window)
-    n_genes = filled_matrix.shape[1]
-    coeff_matrix_3d = np.empty((n_genes,n_genes,total_window_number))
-    gene_names=list(current_window.columns.values)
+
+    coefs = roll_me.fit(window_size)
+    print coefs
