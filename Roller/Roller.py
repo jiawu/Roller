@@ -76,6 +76,9 @@ class Roller:
     def reset(self):
         self.current_step = 0
 
+    def get_max_window_size(self):
+        print self.raw_data.shape
+
     def fit(self):
         """
         Fit the rolling model
