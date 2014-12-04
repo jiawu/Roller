@@ -76,3 +76,48 @@ class Roller:
     def reset(self):
         self.current_step = 0
 
+    def fit(self):
+        """
+        Fit the rolling model
+
+        :return: 3D matrix (n_windows, n_parents, n_children)
+            Matrix of coefficients. Each slice is the beta coefficient matrix for a given window
+        """
+        file_path = "data/dream4/insilico_size10_1_timeseries.tsv"
+        #file_path = "/Users/jjw036/Roller/goldbetter_model/goldbetter_data.txt"
+        gene_start_column = 1
+        time_label = "Time"
+        separator = "\t"
+        gene_end = None
+
+        roll_me = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
+        window_size = 5
+        #get only TFs data, window size of 4
+        roll_me.set_window(window_size)
+        #impute missing values
+        imputer = Imputer(missing_values="NaN")
+        mpl.rcParams.update({'font.size':8})
+        mpl.rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
+        total_window_number = roll_me.get_n_windows()
+        #todo: fix the below two lines, I don't need this to get the matrix size...
+        current_window = roll_me.get_window()
+        filled_matrix = imputer.fit_transform(current_window)
+        n_genes = filled_matrix.shape[1]
+        coeff_matrix_3d = np.empty((n_genes,n_genes,total_window_number))
+        gene_names=list(current_window.columns.values)
+        for nth_window in range(0, total_window_number):
+        #loop gets the window, gets the coefficients for that window, then increments the window
+        current_window = roll_me.get_window()
+
+        #check if any values are completely blank
+        sums = [current_window.iloc[:,x].sum() for x in range(0,10)]
+        ind = np.where(np.isnan(sums))[0]
+        current_window.iloc[:,ind]=0
+        current_window = current_window *100
+        filled_matrix = current_window.values
+        #filled_matrix = imputer.fit_transform(current_window)
+        current_lasso = LassoWrapper(filled_matrix)
+        coeff_mat = current_lasso.get_coeffs(10)
+        coeff_matrix_3d[:,:,nth_window] = coeff_mat
+        #plot_figure(coeff_mat,nth_window,gene_names,gene_names,window_size)
+        roll_me.next()
