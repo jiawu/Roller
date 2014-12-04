@@ -50,7 +50,7 @@ def low_mem_ptest(p, o_values, permutepath, savepath):
         print time.clock()-tic
 
 
-def boostrap():
+def boostrap(n_bootstraps, method='lasso'):
     # Method specific
     # Generate n models
     # Keep beta value ranges for each model
