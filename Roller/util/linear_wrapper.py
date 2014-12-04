@@ -30,3 +30,39 @@ class LassoWrapper:
             coeffs = np.insert(coeffs,col_index,0)
             coeff_matrix=np.vstack((coeff_matrix,coeffs))
         return coeff_matrix
+
+    def get_max_alpha(self):
+
+        # Get maximum edges, assuming all explanors are also response variables and no self edges
+        [n, p] = self.data.shape
+        max_edges = p * (p-1)
+
+        # Raise exception if Lasso doesn't converge with alpha == 0
+        if np.count_nonzero(self.get_coeffs(0)) != max_edges:
+            raise ValueError('Lasso does not converge with alpha = 0')
+
+        # Start stepping with forward like selection
+        max_step_size = 1e4
+        min_step_size = 1e-9
+        powers = int(np.log10(max_step_size/min_step_size))
+        step_sizes = [max_step_size/(10**ii) for ii in range(powers+1)]
+        cur_min = 0
+        alpha_max = step_sizes[0]
+        for ii, cur_max in enumerate(step_sizes[:-1]):
+            if alpha_max > cur_max:
+                cur_max = alpha_max
+            cur_step = step_sizes[ii+1]
+            cur_range = np.linspace(cur_min, cur_max, (cur_max-cur_min)/cur_step+1)
+            for cur_alpha in cur_range:
+                num_coef = np.count_nonzero(self.get_coeffs(cur_alpha))
+                if num_coef > 0:
+                    cur_min = cur_alpha
+                elif num_coef == 0:
+                    alpha_max = cur_alpha
+                    break
+        return alpha_max
+
+
+
+
+
