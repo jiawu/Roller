@@ -106,18 +106,18 @@ class Roller:
         coeff_matrix_3d = np.empty((n_genes,n_genes,total_window_number))
         gene_names=list(current_window.columns.values)
         for nth_window in range(0, total_window_number):
-        #loop gets the window, gets the coefficients for that window, then increments the window
-        current_window = roll_me.get_window()
+            #loop gets the window, gets the coefficients for that window, then increments the window
+            current_window = roll_me.get_window()
 
-        #check if any values are completely blank
-        sums = [current_window.iloc[:,x].sum() for x in range(0,10)]
-        ind = np.where(np.isnan(sums))[0]
-        current_window.iloc[:,ind]=0
-        current_window = current_window *100
-        filled_matrix = current_window.values
-        #filled_matrix = imputer.fit_transform(current_window)
-        current_lasso = LassoWrapper(filled_matrix)
-        coeff_mat = current_lasso.get_coeffs(10)
-        coeff_matrix_3d[:,:,nth_window] = coeff_mat
-        #plot_figure(coeff_mat,nth_window,gene_names,gene_names,window_size)
-        roll_me.next()
+            #check if any values are completely blank
+            sums = [current_window.iloc[:,x].sum() for x in range(0,10)]
+            ind = np.where(np.isnan(sums))[0]
+            current_window.iloc[:,ind]=0
+            current_window = current_window *100
+            filled_matrix = current_window.values
+            #filled_matrix = imputer.fit_transform(current_window)
+            current_lasso = LassoWrapper(filled_matrix)
+            coeff_mat = current_lasso.get_coeffs(10)
+            coeff_matrix_3d[:,:,nth_window] = coeff_mat
+            #plot_figure(coeff_mat,nth_window,gene_names,gene_names,window_size)
+            roll_me.next()
