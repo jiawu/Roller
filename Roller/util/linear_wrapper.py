@@ -31,7 +31,24 @@ class LassoWrapper:
             coeff_matrix=np.vstack((coeff_matrix,coeffs))
         return coeff_matrix
 
-    def get_max_alpha(self):
+    def get_max_alpha(self, max_expected_alpha=1e4, min_step_size=1e-9):
+        """
+        Get the smallest value of alpha that returns a lasso coefficient matrix of all zeros
+
+        :param max_expected_alpha: float, optional
+
+            Largest expected value of alpha that will return all zeros. This is a guess and is dependent on the data.
+            The function will step from the minimum to this value with a step size one power of 10 less than this value
+
+        :param min_step_size: float, optional
+
+            The smallest step size that will be taken. This also defines the precision of the alpha value returned
+
+        :return: float
+
+            The smallest alpha value that will return all zero beta values, subject to the precision of min_step_size
+
+        """
 
         # Get maximum edges, assuming all explanors are also response variables and no self edges
         [n, p] = self.data.shape
@@ -41,25 +58,39 @@ class LassoWrapper:
         if np.count_nonzero(self.get_coeffs(0)) != max_edges:
             raise ValueError('Lasso does not converge with alpha = 0')
 
-        # Start stepping with forward like selection
-        max_step_size = 1e4
-        min_step_size = 1e-9
-        powers = int(np.log10(max_step_size/min_step_size))
-        step_sizes = [max_step_size/(10**ii) for ii in range(powers+1)]
+        # Raise exception if max_expected_alpha does not return all zero betas
+        if np.count_nonzero(self.get_coeffs(max_expected_alpha)) != 0:
+            raise ValueError('max_expected_alpha not high enough, coefficients still exist. Guess higher')
+
+        # Set ranges of step sizes, assumed to be powers of 10
+        powers = int(np.log10(max_expected_alpha/min_step_size))
+        step_sizes = [max_expected_alpha/(10**ii) for ii in range(powers+1)]
+
+        # Intialize loop values
         cur_min = 0
         alpha_max = step_sizes[0]
+
+        # Start stepping with forward like selection
         for ii, cur_max in enumerate(step_sizes[:-1]):
+
+            # Set the maximum for the range to scan
             if alpha_max > cur_max:
                 cur_max = alpha_max
+
+            # Set the current step size and new range to look through
             cur_step = step_sizes[ii+1]
             cur_range = np.linspace(cur_min, cur_max, (cur_max-cur_min)/cur_step+1)
+
+            # In the current range, check when coefficients start popping up
             for cur_alpha in cur_range:
                 num_coef = np.count_nonzero(self.get_coeffs(cur_alpha))
                 if num_coef > 0:
                     cur_min = cur_alpha
                 elif num_coef == 0:
+                    # Found a new maximum that eliminates all betas, no need to keep stepping
                     alpha_max = cur_alpha
                     break
+
         return alpha_max
 
 

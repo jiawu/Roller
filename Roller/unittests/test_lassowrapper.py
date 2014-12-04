@@ -35,6 +35,8 @@ if __name__ == '__main__':
     genes = df.columns.values
     replicates = len(times)/float(len(times_set))
     data = df.values
+
+    # Remove NaNs from TSV
     data = data[~np.isnan(data).any(axis=1)]
 
     # Initialize lassowrapper
