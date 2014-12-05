@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 import pdb
 class Roller:
@@ -76,3 +77,12 @@ class Roller:
     def reset(self):
         self.current_step = 0
 
+    def remove_blank_rows(self):
+        """calculates sum of rows. if sum is NAN, then remove row"""
+        coln = len(self.raw_data.columns)
+        sums = [self.raw_data.iloc[:,x].sum() for x in range(0,coln)]
+        ind = np.where(np.isnan(sums))[0]
+        self.raw_data.iloc[:,ind]=0
+
+    def get_n_genes(self):
+        return(len(self.raw_data.columns))
