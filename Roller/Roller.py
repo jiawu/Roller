@@ -95,7 +95,7 @@ class Roller:
     def get_n_genes(self):
         return(len(self.raw_data.columns) -1)
 
-    def fit(self, window_size, method='lasso', alpha=0.2, resample=False):
+    def fit(self, window_size, method='lasso', alpha=0.2, resamples=0):
         """
         Fit the rolling model
 
@@ -124,3 +124,30 @@ class Roller:
             self.next()
 
         return coeff_matrix_3d
+
+    def resample_window(self, window_values):
+        """
+        Resample window values, along a specific axis
+        :param window_values: array
+
+        :return: array
+        """
+        n, p = window_values.shape
+
+        # For each column randomly choose samples
+        resample_values = np.array([np.random.choice(window_values[:,ii], size=n) for ii in range(p)]).T
+
+        return resample_values
+
+
+
+    def add_noise_to_window(self, window_values, max_random=0.2):
+        """
+
+        :param window_values:
+        :param max_random:
+        :return:
+        """
+        noise = np.random.uniform(low=1-max_random, high=1+max_random, size=window_values.shape)
+        noisy_values = np.multiply(window_values, noise)
+        return noisy_values
