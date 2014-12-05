@@ -1,5 +1,8 @@
 import pandas as pd
 import numpy as np
+from sklearn.preprocessing import Imputer
+import numpy as np
+from util.linear_wrapper import LassoWrapper
 
 import pdb
 class Roller:
@@ -30,9 +33,11 @@ class Roller:
         self.step_size = 1
         self.time_label = time_label
         #pdb.set_trace()
+
         # Get overall width of the time-course
         self.time_vec = self.raw_data[self.time_label].unique()
         self.overall_width = len(self.time_vec)
+
         if gene_end is not None:
             self.gene_end = gene_end
         else:
@@ -41,10 +46,13 @@ class Roller:
             self.gene_start = gene_start
         else:
             self.gene_start = 0
+
+        self.gene_list = self.raw_data.columns.values[self.gene_start:self.gene_end]
+
         self.current_window = self.get_window()
 
     def get_n_windows(self):
-        total_windows = (self.overall_width - self.window_width)/(self.step_size)
+        total_windows = (self.overall_width - self.window_width+1)/(self.step_size)
         return total_windows
 
     def get_window(self):
@@ -86,3 +94,39 @@ class Roller:
 
     def get_n_genes(self):
         return(len(self.raw_data.columns))
+
+    def fit(self, window_size, method = 'lasso', alpha = 0.2):
+        """
+        Fit the rolling model
+
+        :return: 3D matrix (n_windows, n_parents, n_children)
+            Matrix of coefficients. Each slice is the beta coefficient matrix for a given window
+        """
+
+        # Set the window size
+        self.set_window(window_size)
+
+        # Calculate total number of windows, and regressors, then initialize coefficient matrix
+        total_window_number = self.get_n_windows()
+        n_genes = len(self.gene_list)
+        coeff_matrix_3d = np.empty((n_genes, n_genes, total_window_number))
+
+        for nth_window in range(total_window_number):
+            #loop gets the window, gets the coefficients for that window, then increments the window
+            current_window = self.get_window()
+
+            #check if any values are completely blank
+            #todo: what is this for?
+            sums = [current_window.iloc[:, x].sum() for x in range(n_genes)]
+            ind = np.where(np.isnan(sums))[0]
+            current_window.iloc[:, ind] = 0
+            current_window *= 100
+            filled_matrix = current_window.values
+            #filled_matrix = imputer.fit_transform(current_window)
+            current_lasso = LassoWrapper(filled_matrix)
+            coeff_mat = current_lasso.get_coeffs(10)
+            coeff_matrix_3d[:, :, nth_window] = coeff_mat
+            #plot_figure(coeff_mat,nth_window,gene_names,gene_names,window_size)
+            self.next()
+
+        return coeff_matrix_3d

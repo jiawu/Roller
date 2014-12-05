@@ -8,6 +8,18 @@ I never made this into a module, so some of the variables aren't passed to the f
 Therefore, not all of the functions are immediately usable. Still, you should get the idea.
 
 
+
+Brainstorming:
+    1. get a Roller
+    2. For each window
+    3. Permute the data
+    4. calculate coefficients for the permuted data
+    5. create a X by X matrix. within the X by X matrix, each unit is a dict with a mean and variance.
+    6. append to the X by X matrix by doing the inline calculations
+    7. repeat steps 3-6 N number of times.
+    8. plot distribution of mean and standard deviation for each edge.
+    9. compare cutoffs
+
 """
 
 import numpy as np
@@ -16,6 +28,72 @@ import sys
 from sklearn.utils import shuffle
 import time
 import dionesus as dio
+from Roller.util.linear_wrapper import LassoWrapper
+
+class Permuter():
+    def __init__(self):
+        self.permutation_means = None
+        self.permutation_sd = None
+
+    def set_data(self):
+        pass
+
+    def run_permutation_test(self, roller_object, alpha = 10, permutation_n=1000):
+        total_window_number = roller_object.get_n_windows()
+        n_genes = roller_object.get_n_genes()
+        #initialize permutation results array
+        self.permutation_means = np.empty((n_genes,n_genes, total_window_number))
+        self.permutation_sd = np.empty((n_genes,n_genes,total_window_number))
+        roller_object.reset()
+        for nth_window in range(0, total_window_number):
+            current_window = roller_object.get_window()
+            permuted_window = current_window.copy()
+            for nth_perm in range(0, permutation_n):
+                self.permute_data(permuted_window.values)
+                current_lasso = LassoWrapper(permuted_window.values)
+                permuted_coeffs = current_lasso.get_coeffs(alpha)
+            roller_object.next()
+
+#        coeff_matrix_3d = np.empty((n_genes,n_genes,permutation_n, total_window_number))
+
+    def calculate_inline(nth_window,):
+        pass
+
+    def permute_data(self, array):
+        """Warning: Modifies data in place. also remember the """
+        #new_array   = array
+        _ = [np.random.shuffle(i) for i in array]
+        return array
+
+    def update_variance(self, prev_result, new_samples):
+        """incremental calculation of means: accepts new_samples, which is a list of samples. then calculates a new mean. this is a useful function for calculating the means of large arrays"""
+        n = float(prev_result["n"])
+        mean = float(prev_result["mean"])
+        sum_squares = float(prev_result["ss"])
+
+        for x in new_samples:
+            n = n + 1
+            #delta = float(x) - mean
+            old_mean = mean
+            mean = old_mean + (float(x)-old_mean)/n
+            sum_squares = sum_squares + (float(x)-mean)*(float(x)-old_mean)
+
+        if (n < 2):
+            return 0
+
+        variance = sum_squares/(n-1)
+        result = {  "mean": mean,
+                    "ss": sum_squares,
+                    "variance": variance,
+                    "n": n}
+        return result
+
+
+    def get_true_edges(self, fp_cutoff, edges):
+        pass
+
+    def get_edge_list(self):
+        pass
 
 def save_permutes(x, num_permutes, path):
     for ii in range(num_permutes):

@@ -10,7 +10,7 @@ import pandas as pd
 ########################################################################################################################
 ########################################################################################################################
 
-NOTE: This will be made into a complete unittest when Justin learns how to do them better. For now its just going to
+NOTE: This will be made into a complete unittest when Justin learns how to do them. For now its just going to
 be a script used to make sure the LassoWrapper.get_maximum_alpha function works properly
 
 ########################################################################################################################
@@ -30,9 +30,18 @@ if __name__ == '__main__':
     # Load data
     file_path = "../../data/dream4/insilico_size10_1_timeseries.tsv"
     df = pd.DataFrame.from_csv(file_path, sep='\t')
-    print df.head()
+    times = df.index.values[~np.isnan(df.index.values)]
+    times_set = set(times)
+    genes = df.columns.values
+    replicates = len(times)/float(len(times_set))
+    data = df.values
 
-
+    # Remove NaNs from TSV
+    data = data[~np.isnan(data).any(axis=1)]
 
     # Initialize lassowrapper
-    #lasso_wrapper = LassoWrapper()
+    lasso_wrapper = LassoWrapper(data)
+    alpha = 0.0
+    coef = lasso_wrapper.get_coeffs(alpha)
+    m = lasso_wrapper.get_max_alpha()
+    print m

@@ -49,3 +49,10 @@ def low_mem_ptest(p, o_values, permutepath, savepath):
         stdevs[:, ii] = np.std(cur_betas[:, 1:], 1, ddof=1)
         print time.clock()-tic
 
+
+def boostrap():
+    # Method specific
+    # Generate n models
+    # Keep beta value ranges for each model
+    # Count how many times a beta value appears
+    pass
