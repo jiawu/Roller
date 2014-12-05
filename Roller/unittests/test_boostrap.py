@@ -14,11 +14,8 @@ if __name__ == '__main__':
     separator = "\t"
     gene_end = None
 
-    # Initial Model
+    # Initialize Model
     roll_me = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
-    window_size = roll_me.overall_width
-    alpha = 0.003
-    roll_me.set_window(window_size)
-    current_window = roll_me.get_window()
-    coef = roll_me.fit(window_size, alpha=alpha, resamples=100)
-    print coef.shape
+    boot = Ranker.Bootstrapper(roll_me)
+    boot.run_bootstrap(5, 15, 12)
+    print boot.bootstrap_matrix.shape
