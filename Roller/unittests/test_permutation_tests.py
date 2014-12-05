@@ -1,0 +1,72 @@
+import unittest
+from Roller.util.permutation_test import Permuter
+import numpy as np
+from random import randint
+
+"""I'm performing a running mean and variance calculation. It seems to be a close enough approximation, and this unit test will check if the answer is within 6 decimal places of the desired answer"""
+
+class TestPermutations(unittest.TestCase):
+    def setUp(self):
+        self.permuter = Permuter()
+
+    def test_mean_calculation(self):
+        #initialize result dict, which is a dict with mean, n, ss
+
+        result = {'n':0, 'mean':0, 'ss':0}
+        new_samples = [randint(0,100) for r in xrange(5)]
+        new_result=self.permuter.update_variance(result,new_samples)
+
+        correct_mean = np.mean(new_samples)
+        self.assertEqual(new_result["mean"], correct_mean)
+
+    def test_large_mean_calculation(self):
+        #initialize result dict, which is a dict with mean, n, ss
+
+        result = {'n':0, 'mean':0, 'ss':0}
+        new_samples = [randint(0,100) for r in xrange(10000)]
+        new_result=self.permuter.update_variance(result,new_samples)
+
+        correct_mean = np.mean(new_samples)
+        #get within 6 decimals?
+        self.assertEqual("%.6f" % new_result["mean"],"%.6f" % correct_mean)
+
+    def test_variance_calculation(self):
+        #initialize result dict, which is a dict with mean, n, ss
+
+        result = {'n':0, 'mean':0, 'ss':0}
+        new_samples = [randint(0,100) for r in xrange(100)]
+        new_result=self.permuter.update_variance(result,new_samples)
+
+        correct_var = np.var(new_samples, ddof=1)
+        self.assertEqual("%.6f" % new_result["variance"], "%.6f" % correct_var)
+
+    def test_incremental_variance_calculation(self):
+        #initialize result dict, which is a dict with mean, n, ss
+
+        result = {'n':0, 'mean':0, 'ss':0}
+        new_samples_A = [randint(0,100) for r in xrange(30)]
+        new_result=self.permuter.update_variance(result,new_samples_A)
+
+        new_samples_B = [randint(0,100) for r in xrange(1)]
+        new_result = self.permuter.update_variance(new_result,new_samples_B)
+        combined_samples = new_samples_A + new_samples_B
+
+        correct_var = np.var(combined_samples, ddof=1)
+        self.assertEqual("%.6f" % new_result["variance"], "%.6f" % correct_var)
+
+    def test_incremental_mean_calculation(self):
+        #initialize result dict, which is a dict with mean, n, ss
+
+        result = {'n':0, 'mean':0, 'ss':0}
+        new_samples_A = [randint(0,10000) for r in xrange(30)]
+        new_result=self.permuter.update_variance(result,new_samples_A)
+
+        new_samples_B = [randint(0,10000) for r in xrange(1)]
+        new_result = self.permuter.update_variance(new_result,new_samples_B)
+        combined_samples = new_samples_A + new_samples_B
+
+        correct_var = np.mean(combined_samples)
+        self.assertEqual("%.6f" % new_result["mean"], "%.6f" % correct_var)
+
+if __name__ == '__main__':
+    unittest.main()

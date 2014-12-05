@@ -1,10 +1,10 @@
 import unittest
-from Roller import Roller
+import Roller
 import numpy as np
 
 class TestRoller(unittest.TestCase):
     def setUp(self):
-        self.roller = Roller('compressed_katrina_data.txt', 5)
+        self.roller = Roller.Roller('../../data/emt/compressed_katrina_data.txt', 5, None, "time", " ")
 
     def test_next(self):
         self.roller.next()
