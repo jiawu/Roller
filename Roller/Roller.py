@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+from sklearn.preprocessing import Imputer
+import numpy as np
 from util.linear_wrapper import LassoWrapper
 
 import pdb
@@ -83,6 +85,16 @@ class Roller:
     def reset(self):
         self.current_step = 0
 
+    def remove_blank_rows(self):
+        """calculates sum of rows. if sum is NAN, then remove row"""
+        coln = len(self.raw_data.columns)
+        sums = [self.raw_data.iloc[:,x].sum() for x in range(0,coln)]
+        ind = np.where(np.isnan(sums))[0]
+        self.raw_data.iloc[:,ind]=0
+
+    def get_n_genes(self):
+        return(len(self.raw_data.columns) -1)
+
     def fit(self, window_size, method = 'lasso', alpha = 0.2):
         """
         Fit the rolling model
@@ -108,13 +120,13 @@ class Roller:
             sums = [current_window.iloc[:, x].sum() for x in range(n_genes)]
             ind = np.where(np.isnan(sums))[0]
             current_window.iloc[:, ind] = 0
-
+            current_window *= 100
             filled_matrix = current_window.values
-
+            #filled_matrix = imputer.fit_transform(current_window)
             current_lasso = LassoWrapper(filled_matrix)
-            coeff_mat = current_lasso.get_coeffs(alpha)
+            coeff_mat = current_lasso.get_coeffs(10)
             coeff_matrix_3d[:, :, nth_window] = coeff_mat
-
+            #plot_figure(coeff_mat,nth_window,gene_names,gene_names,window_size)
             self.next()
 
         return coeff_matrix_3d

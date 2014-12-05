@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib as mpl
 import pdb
 import Roller.util.Grapher as gr
-
+from Roller.util.permutation_test import Permuter
 
 file_path = "data/dream4/insilico_size10_1_timeseries.tsv"
 #file_path = "/Users/jjw036/Roller/goldbetter_model/goldbetter_data.txt"
@@ -23,6 +23,7 @@ roll_me.set_window(window_size)
 imputer = Imputer(missing_values="NaN")
 mpl.rcParams.update({'font.size':8})
 mpl.rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
+roll_me.remove_blank_rows()
 total_window_number = roll_me.get_n_windows()
 #todo: fix the below two lines, I don't need this to get the matrix size...
 current_window = roll_me.get_window()
@@ -36,17 +37,20 @@ for nth_window in range(0, total_window_number):
     current_window = roll_me.get_window()
 
     #check if any values are completely blank
-    sums = [current_window.iloc[:,x].sum() for x in range(0,10)]
-    ind = np.where(np.isnan(sums))[0]
-    current_window.iloc[:,ind]=0
-    current_window = current_window *100
+    current_window = current_window
     filled_matrix = current_window.values
     #filled_matrix = imputer.fit_transform(current_window)
     current_lasso = LassoWrapper(filled_matrix)
-    coeff_mat = current_lasso.get_coeffs(10)
+    coeff_mat = current_lasso.get_coeffs(3)
     coeff_matrix_3d[:,:,nth_window] = coeff_mat
     #plot_figure(coeff_mat,nth_window,gene_names,gene_names,window_size)
     roll_me.next()
+
+permuter = Permuter()
+
+#give it a roller object
+permuter.run_permutation_test(roll_me, alpha = 3)
+pdb.set_trace()
 
 # hmm maybe make a heatmap for each slice...
 # get the binary coefficients of each index
