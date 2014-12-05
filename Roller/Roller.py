@@ -95,7 +95,7 @@ class Roller:
     def get_n_genes(self):
         return(len(self.raw_data.columns) -1)
 
-    def fit(self, window_size, method = 'lasso', alpha = 0.2):
+    def fit(self, window_size, method='lasso', alpha=0.2, resample=False):
         """
         Fit the rolling model
 
@@ -115,16 +115,10 @@ class Roller:
             #loop gets the window, gets the coefficients for that window, then increments the window
             current_window = self.get_window()
 
-            #check if any values are completely blank
-            #todo: what is this for?
-            sums = [current_window.iloc[:, x].sum() for x in range(n_genes)]
-            ind = np.where(np.isnan(sums))[0]
-            current_window.iloc[:, ind] = 0
-            current_window *= 100
             filled_matrix = current_window.values
             #filled_matrix = imputer.fit_transform(current_window)
             current_lasso = LassoWrapper(filled_matrix)
-            coeff_mat = current_lasso.get_coeffs(10)
+            coeff_mat = current_lasso.get_coeffs(alpha)
             coeff_matrix_3d[:, :, nth_window] = coeff_mat
             #plot_figure(coeff_mat,nth_window,gene_names,gene_names,window_size)
             self.next()

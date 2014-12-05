@@ -17,6 +17,7 @@ if __name__ == '__main__':
 
     roll_me = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
     window_size = roll_me.overall_width
+    roll_me.remove_blank_rows()
     alpha=0.003
     coefs = roll_me.fit(window_size, alpha=alpha)
     np.set_printoptions(suppress=True)
