@@ -93,7 +93,7 @@ class Roller:
         self.raw_data.iloc[:,ind]=0
 
     def get_n_genes(self):
-        return(len(self.raw_data.columns))
+        return(len(self.raw_data.columns) -1)
 
     def fit(self, window_size, method = 'lasso', alpha = 0.2):
         """

@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib as mpl
 import pdb
 import Roller.util.Grapher as gr
-
+from Roller.util.permutation_test import Permuter
 
 file_path = "data/dream4/insilico_size10_1_timeseries.tsv"
 #file_path = "/Users/jjw036/Roller/goldbetter_model/goldbetter_data.txt"
@@ -37,14 +37,20 @@ for nth_window in range(0, total_window_number):
     current_window = roll_me.get_window()
 
     #check if any values are completely blank
-    current_window = current_window *100
+    current_window = current_window
     filled_matrix = current_window.values
     #filled_matrix = imputer.fit_transform(current_window)
     current_lasso = LassoWrapper(filled_matrix)
-    coeff_mat = current_lasso.get_coeffs(10)
+    coeff_mat = current_lasso.get_coeffs(3)
     coeff_matrix_3d[:,:,nth_window] = coeff_mat
     #plot_figure(coeff_mat,nth_window,gene_names,gene_names,window_size)
     roll_me.next()
+
+permuter = Permuter()
+
+#give it a roller object
+permuter.run_permutation_test(roll_me, alpha = 3)
+pdb.set_trace()
 
 # hmm maybe make a heatmap for each slice...
 # get the binary coefficients of each index
