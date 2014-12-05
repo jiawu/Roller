@@ -23,6 +23,7 @@ roll_me.set_window(window_size)
 imputer = Imputer(missing_values="NaN")
 mpl.rcParams.update({'font.size':8})
 mpl.rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
+roll_me.remove_blank_rows()
 total_window_number = roll_me.get_n_windows()
 #todo: fix the below two lines, I don't need this to get the matrix size...
 current_window = roll_me.get_window()
@@ -36,9 +37,6 @@ for nth_window in range(0, total_window_number):
     current_window = roll_me.get_window()
 
     #check if any values are completely blank
-    sums = [current_window.iloc[:,x].sum() for x in range(0,10)]
-    ind = np.where(np.isnan(sums))[0]
-    current_window.iloc[:,ind]=0
     current_window = current_window *100
     filled_matrix = current_window.values
     #filled_matrix = imputer.fit_transform(current_window)
