@@ -109,21 +109,39 @@ class Roller:
         # Calculate total number of windows, and regressors, then initialize coefficient matrix
         total_window_number = self.get_n_windows()
         n_genes = len(self.gene_list)
-        coeff_matrix_3d = np.empty((n_genes, n_genes, total_window_number))
 
-        for nth_window in range(total_window_number):
-            #loop gets the window, gets the coefficients for that window, then increments the window
-            current_window = self.get_window()
+        if not resamples:
+            coeff_matrix_3d = np.empty((n_genes, n_genes, total_window_number))
 
-            filled_matrix = current_window.values
-            #filled_matrix = imputer.fit_transform(current_window)
-            current_lasso = LassoWrapper(filled_matrix)
-            coeff_mat = current_lasso.get_coeffs(alpha)
-            coeff_matrix_3d[:, :, nth_window] = coeff_mat
-            #plot_figure(coeff_mat,nth_window,gene_names,gene_names,window_size)
-            self.next()
+            for nth_window in range(total_window_number):
+                #loop gets the window, gets the coefficients for that window, then increments the window
+                current_window = self.get_window()
 
-        return coeff_matrix_3d
+                filled_matrix = current_window.values
+                #filled_matrix = imputer.fit_transform(current_window)
+                current_lasso = LassoWrapper(filled_matrix)
+                coeff_mat = current_lasso.get_coeffs(alpha)
+                coeff_matrix_3d[:, :, nth_window] = coeff_mat
+                #plot_figure(coeff_mat,nth_window,gene_names,gene_names,window_size)
+                self.next()
+
+            return coeff_matrix_3d
+
+        else:
+            coeff_matrix_4d = np.empty((n_genes, n_genes, total_window_number, resamples))
+
+            for nth_window in range(total_window_number):
+                #loop gets the window, gets the coefficients for that window, then increments the window
+                current_window = self.get_window()
+                filled_matrix = current_window.values
+                for sample in range(resamples):
+                    sample_matrix = self.resample_window(filled_matrix)
+                    current_lasso = LassoWrapper(sample_matrix)
+                    coeff_mat = current_lasso.get_coeffs(alpha)
+                    coeff_matrix_4d[:, :, nth_window, sample] = coeff_mat
+                self.next()
+
+            return coeff_matrix_4d
 
     def resample_window(self, window_values):
         """
