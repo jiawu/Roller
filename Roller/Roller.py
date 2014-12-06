@@ -11,9 +11,10 @@ class Roller:
 
     To do list:
         -i need to make two modules: a file processing module and a rolling module.
-        -currently it only accepts tab separated files.
-        -currently it looks for the "time" column. It looks for a hardcoded label"Time" which should be changed to a variable.
-        -accept different kinds of files
+        -accept different table formats
+
+        -add permute_window()
+        -add bootstrape_window()
     """
     def __init__(self, file_path, gene_start=None, gene_end=None, time_label="Time", separator = "\t"):
         """

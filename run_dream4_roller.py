@@ -41,7 +41,7 @@ for nth_window in range(0, total_window_number):
     filled_matrix = current_window.values
     #filled_matrix = imputer.fit_transform(current_window)
     current_lasso = LassoWrapper(filled_matrix)
-    coeff_mat = current_lasso.get_coeffs(3)
+    coeff_mat = current_lasso.get_coeffs(0.002)
     coeff_matrix_3d[:,:,nth_window] = coeff_mat
     #plot_figure(coeff_mat,nth_window,gene_names,gene_names,window_size)
     roll_me.next()
@@ -49,7 +49,7 @@ for nth_window in range(0, total_window_number):
 permuter = Permuter()
 
 #give it a roller object
-permuter.run_permutation_test(roll_me, alpha = 3)
+permuter.run_permutation_test(roll_me, alpha = 0.002)
 pdb.set_trace()
 
 # hmm maybe make a heatmap for each slice...
