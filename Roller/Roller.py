@@ -96,7 +96,7 @@ class Roller:
     def get_n_genes(self):
         return(len(self.raw_data.columns) -1)
 
-    def fit(self, window_size, method = 'lasso', alpha = 0.2):
+    def fit(self, window_size, method='lasso', alpha=0.2, resamples=0):
         """
         Fit the rolling model
 
@@ -110,24 +110,63 @@ class Roller:
         # Calculate total number of windows, and regressors, then initialize coefficient matrix
         total_window_number = self.get_n_windows()
         n_genes = len(self.gene_list)
-        coeff_matrix_3d = np.empty((n_genes, n_genes, total_window_number))
 
-        for nth_window in range(total_window_number):
-            #loop gets the window, gets the coefficients for that window, then increments the window
-            current_window = self.get_window()
+        if not resamples:
+            coeff_matrix_3d = np.empty((n_genes, n_genes, total_window_number))
 
-            #check if any values are completely blank
-            #todo: what is this for?
-            sums = [current_window.iloc[:, x].sum() for x in range(n_genes)]
-            ind = np.where(np.isnan(sums))[0]
-            current_window.iloc[:, ind] = 0
-            current_window *= 100
-            filled_matrix = current_window.values
-            #filled_matrix = imputer.fit_transform(current_window)
-            current_lasso = LassoWrapper(filled_matrix)
-            coeff_mat = current_lasso.get_coeffs(10)
-            coeff_matrix_3d[:, :, nth_window] = coeff_mat
-            #plot_figure(coeff_mat,nth_window,gene_names,gene_names,window_size)
-            self.next()
+            for nth_window in range(total_window_number):
+                #loop gets the window, gets the coefficients for that window, then increments the window
+                current_window = self.get_window()
 
-        return coeff_matrix_3d
+                filled_matrix = current_window.values
+                #filled_matrix = imputer.fit_transform(current_window)
+                current_lasso = LassoWrapper(filled_matrix)
+                coeff_mat = current_lasso.get_coeffs(alpha)
+                coeff_matrix_3d[:, :, nth_window] = coeff_mat
+                #plot_figure(coeff_mat,nth_window,gene_names,gene_names,window_size)
+                self.next()
+
+            return coeff_matrix_3d
+
+        else:
+            coeff_matrix_4d = np.empty((n_genes, n_genes, total_window_number, resamples))
+
+            for nth_window in range(total_window_number):
+                #loop gets the window, gets the coefficients for that window, then increments the window
+                current_window = self.get_window()
+                filled_matrix = current_window.values
+                for sample in range(resamples):
+                    sample_matrix = self.resample_window(filled_matrix)
+                    current_lasso = LassoWrapper(sample_matrix)
+                    coeff_mat = current_lasso.get_coeffs(alpha)
+                    coeff_matrix_4d[:, :, nth_window, sample] = coeff_mat
+                self.next()
+
+            return coeff_matrix_4d
+
+    def resample_window(self, window_values):
+        """
+        Resample window values, along a specific axis
+        :param window_values: array
+
+        :return: array
+        """
+        n, p = window_values.shape
+
+        # For each column randomly choose samples
+        resample_values = np.array([np.random.choice(window_values[:,ii], size=n) for ii in range(p)]).T
+
+        return resample_values
+
+
+
+    def add_noise_to_window(self, window_values, max_random=0.2):
+        """
+
+        :param window_values:
+        :param max_random:
+        :return:
+        """
+        noise = np.random.uniform(low=1-max_random, high=1+max_random, size=window_values.shape)
+        noisy_values = np.multiply(window_values, noise)
+        return noisy_values

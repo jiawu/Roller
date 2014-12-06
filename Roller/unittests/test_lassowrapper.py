@@ -37,7 +37,7 @@ if __name__ == '__main__':
     data = df.values
 
     # Remove NaNs from TSV
-    data = data[~np.isnan(data).any(axis=1)]
+    data = data[~np.isnan(data).all(axis=1)]
 
     # Initialize lassowrapper
     lasso_wrapper = LassoWrapper(data)
