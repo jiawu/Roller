@@ -48,3 +48,20 @@ def plot_figure(coeff_matrix,nth_window, row_labels, col_labels, window_size,pre
     title.set_x(1.2)
     figure1.savefig(prefix+'figure'+str(nth_window)+'.png')
 
+def plot_stability(freq_matrix, alphas, nth_window):
+    # Assuming a square matrix
+    n_genes = len(freq_matrix)
+    fig = plt.figure(figsize=(17, 10))
+    graph = 1
+    for ii in range(n_genes):
+        for jj in range(n_genes):
+            stability = freq_matrix[ii, jj, nth_window, :]
+            ax = fig.add_subplot(n_genes, n_genes, graph)
+            graph+=1
+            ax.plot(alphas, stability)
+            ax.set_xlabel('Alpha values')
+            ax.set_ylabel('Freq')
+    fig.subplots_adjust(hspace=0.5)
+    fig.subplots_adjust(wspace=0.5)
+    plt.show()
+

@@ -96,7 +96,7 @@ class Roller:
     def get_n_genes(self):
         return(len(self.raw_data.columns) -1)
 
-    def fit(self, window_size, method='lasso', alpha=0.2, resamples=0):
+    def fit(self, window_size, method='lasso', alpha=0.2, resamples=0, noise=0.2):
         """
         Fit the rolling model
 
@@ -137,7 +137,8 @@ class Roller:
                 filled_matrix = current_window.values
                 for sample in range(resamples):
                     sample_matrix = self.resample_window(filled_matrix)
-                    current_lasso = LassoWrapper(sample_matrix)
+                    noisy_sample = self.add_noise_to_window(sample_matrix, noise)
+                    current_lasso = LassoWrapper(noisy_sample)
                     coeff_mat = current_lasso.get_coeffs(alpha)
                     coeff_matrix_4d[:, :, nth_window, sample] = coeff_mat
                 self.next()

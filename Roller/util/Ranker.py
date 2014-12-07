@@ -4,6 +4,7 @@ __email__ = 'jfinkle@u.northwestern.edu'
 import Roller
 from linear_wrapper import LassoWrapper
 import numpy as np
+import matplotlib.pyplot as plt
 
 class Bootstrapper(object):
     # Method specific
@@ -18,15 +19,17 @@ class Bootstrapper(object):
         # Set maximum alpha
         self.set_max_alpha()
 
-    def run_bootstrap(self, window_size, n_bootstraps, n_alphas):
+    def run_bootstrap(self, window_size, n_bootstraps, n_alphas, noise=0.2):
         alpha_range = np.linspace(0, self.max_alpha, n_alphas)
         self.roller_object.set_window(window_size)
         for ii, alpha in enumerate(alpha_range):
-            current_coef = self.roller_object.fit(window_size, alpha=alpha, resamples=n_bootstraps)
+            current_coef = self.roller_object.fit(window_size, alpha=alpha, resamples=n_bootstraps, noise=noise)
             if ii is 0:
                 empty_shape = list(current_coef.shape) + [len(alpha_range)]
                 self.bootstrap_matrix = np.empty(tuple(empty_shape))
             self.bootstrap_matrix[:, :, :, :, ii] = current_coef
+        frequencies = self.calc_edge_freq(alpha_range)/float(n_bootstraps)
+        return alpha_range, frequencies
 
     def set_max_alpha(self):
         # Get maximum possible alpha for the whole data set
@@ -34,3 +37,9 @@ class Bootstrapper(object):
         current_window = self.roller_object.get_window()
         lasso = LassoWrapper(current_window.values)
         self.max_alpha = lasso.get_max_alpha()
+
+    def calc_edge_freq(self, alpha_array):
+        "This is agnostic to the edge sign, only whether it exists"
+        edge_exists = self.bootstrap_matrix != 0
+        freq_matrix = np.sum(edge_exists, axis=3)
+        return freq_matrix
