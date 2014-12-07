@@ -4,9 +4,10 @@ from sklearn.preprocessing import Imputer
 from Roller.util.linear_wrapper import LassoWrapper
 import numpy as np
 import matplotlib as mpl
-import pdb
-import Roller.util.Grapher as gr
 from Roller.util.permutation_test import Permuter
+import itertools
+from Roller.util import utility_module as utility
+from Roller.util.Ranker import Bootstrapper
 
 file_path = "data/dream4/insilico_size10_1_timeseries.tsv"
 #file_path = "/Users/jjw036/Roller/goldbetter_model/goldbetter_data.txt"
@@ -32,7 +33,21 @@ n_genes = filled_matrix.shape[1]
 coeff_matrix_3d = np.empty((n_genes,n_genes,total_window_number))
 gene_names=list(current_window.columns.values)
 
-for nth_window in range(0, total_window_number):
+#zscore all data
+
+roll_me.zscore_all_data()
+
+#regulator-target labels
+edge_labels = [x for x in itertools.product(gene_names,repeat=2)]
+
+##initialize pandas panel with edge stats
+##todo: delete this part
+column_names = ['regulator-target', 'B', 'p-test-B-mean', 'p-test-B-std','p-test-p-values', 'stability']
+
+
+##build initial model##
+print("Creating initial model...")
+for nth_window in range(0,total_window_number):
     #loop gets the window, gets the coefficients for that window, then increments the window
     current_window = roll_me.get_window()
 
@@ -46,59 +61,61 @@ for nth_window in range(0, total_window_number):
     #plot_figure(coeff_mat,nth_window,gene_names,gene_names,window_size)
     roll_me.next()
 
-permuter = Permuter()
+##convert coeff model to edge list
+##takes a 3D matrix and gene names list, converts it to a 3D edge list. it assumes that the 3d matrix is symmetric and square.
 
+#initial model conversion
+initial_model = utility.create_3D_linked_list(edge_labels, coeff_matrix_3d, 'B')
+
+roll_me.reset()
+print("Running permutation test...")
+#start permutation test
+#permuter = Permuter()
 #give it a roller object
-permuter.run_permutation_test(roll_me, alpha = 0.002)
-pdb.set_trace()
+#permuter.run_permutation_test(roll_me, alpha = 0.002)
+#perm_means=permuter.permutation_means
+#perm_sd=permuter.permutation_sd
 
-# hmm maybe make a heatmap for each slice...
-# get the binary coefficients of each index
-binary_matrix = np.empty((n_genes,n_genes))
-for row_index in range(n_genes):
-    for col_index in range(n_genes):
-        coeffs_over_time = coeff_matrix_3d[row_index,col_index,:]
-        if sum(coeffs_over_time) == 0:
-            binary_matrix[row_index,col_index]=0
-        else:
-            binary_matrix[row_index,col_index]=1
+#permuted_model_means = utility.create_3D_linked_list(edge_labels, perm_means, 'p-means')
+#permuted_model_sd = utility.create_3D_linked_list(edge_labels, perm_sd, 'p-sd')
 
-ii,jj = np.where(binary_matrix==1)
-present = np.append(ii,jj)
-present = np.unique(present)
-present_ii = np.unique(ii)
-present_jj = np.unique(jj)
+#get the permutation test beta matrix, mean and standard deviation.
 
-present_mat = coeff_matrix_3d[present_ii,:,:]
-present_mat = present_mat[:,present_jj,:]
-present_genes_ii = [gene_names[item] for item in present_ii]
-present_genes_jj = [gene_names[item] for item in present_jj]
-for nth_window in range(0, total_window_number):
-    coeff_mat = present_mat[:,:,nth_window]
-    #gr.plot_figure(coeff_mat,nth_window,present_genes_ii, present_genes_jj, window_size,str("compressed_window"+str(window_size)))
+roll_me.reset()
+print("Running bootstrapping test...")
+booter = Bootstrapper(roll_me)
+boots = 100
+max_random = 0.1
+n_alphas = 100
 
-    #move all the non-zero coefficients into a binary matrix
-series_list = []
+booted_alphas = booter.run_bootstrap(window_size, boots, n_alphas, noise=max_random)
+sums = np.sum(booter.freq_matrix,axis=3)
+auc = []
+for nth_window in range(0,total_window_number):
+    auc.append(booter.get_nth_window_auc(0))
+auc = np.dstack(auc)
+#get 3d coeff matrix for stability scores
+stability_model = utility.create_3D_linked_list(edge_labels, auc, 'stability')
 
-#targets of plot
-for gene in present_genes_jj:
-    col_index = present_genes_jj.index(gene)
-    present_coeffs_over_time = present_mat[:,col_index,:]
-    binary_matrix_tf = np.empty((present_coeffs_over_time.shape[0]))
-    tf_list = []
-    for row_index in range(len(present_genes_ii)):
-        coeffs_TF = present_coeffs_over_time[row_index,:]
-        if sum(coeffs_TF) == 0:
-            binary_matrix_tf[row_index]=0
-        else:
-            binary_matrix_tf[row_index]=1
-            tf_list.append(coeffs_TF)
 
-    present_targets = np.where(binary_matrix_tf==1)[0]
-    tfs_of_interest = [ (col_index,y) for y in present_targets]
-    regulator_labels = [gene]*len(tfs_of_interest)
-    target_labels = [present_genes_ii[item] for item in present_targets]
-    #pdb.set_trace()
-    #np.savetxt('binary_mat')
-    #plot_lines(tf_list, regulator_labels, target_labels, window_size, suffix=str("targets_of_"+gene))
+#merge panels into one large panel with B, p-means, p-sd, stability, and p-value
+#ugh this is such a pain in the ass
+all_panels = [initial_model,permuted_model_means, permuted_model_sd, stability_model]
+for nth_window in range(0,total_window_number):
+    #merge panels
+    for panel_index in range(1,len(all_panels)):
+        all_panels[0].merge(all_panels, panel_index, on='regulator-target')
+
+
+
+#Research Question: Does rolling regression improve the sensitivity of inference methods? Compare lasso_rolling with regular lasso
+
+#combine 3D panels into one dataframe, consisting of the edge and average rank through windows. rank standard deviation.
+
+
+#final_model.sort_index(axis=0)
+
+
+
+#load gold standard model and compare averaged model to gold stardard with AUROC
 

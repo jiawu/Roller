@@ -113,7 +113,6 @@ class Roller:
 
         if not resamples:
             coeff_matrix_3d = np.empty((n_genes, n_genes, total_window_number))
-
             for nth_window in range(total_window_number):
                 #loop gets the window, gets the coefficients for that window, then increments the window
                 current_window = self.get_window()
@@ -130,10 +129,14 @@ class Roller:
 
         else:
             coeff_matrix_4d = np.empty((n_genes, n_genes, total_window_number, resamples))
-
+            print(total_window_number)
             for nth_window in range(total_window_number):
+                print(nth_window)
+                pdb.set_trace()
                 #loop gets the window, gets the coefficients for that window, then increments the window
                 current_window = self.get_window()
+                print(current_window)
+                print(self.get_window_raw())
                 filled_matrix = current_window.values
                 for sample in range(resamples):
                     sample_matrix = self.resample_window(filled_matrix)
@@ -152,6 +155,7 @@ class Roller:
 
         :return: array
         """
+        #pdb.set_trace()
         n, p = window_values.shape
 
         # For each column randomly choose samples
@@ -171,3 +175,48 @@ class Roller:
         noise = np.random.uniform(low=1-max_random, high=1+max_random, size=window_values.shape)
         noisy_values = np.multiply(window_values, noise)
         return noisy_values
+
+    def zscore_all_data(self):
+        #zscores all the data
+        dataframe =  self.raw_data
+
+        for item in dataframe.columns:
+            if item == self.time_label:
+                next
+            #for each column, calculate the zscore
+            #zscore is calculated as X - meanX / std(ddof = 1)
+            dataframe[item] = (dataframe[item] - dataframe[item].mean())/dataframe[item].std(ddof=1)
+        self.raw_data = dataframe
+
+    def get_window_stats(self):
+        """for each window, get a dict:
+            N : the number of datapoints in this window,
+            time_labels: the names of the timepoints in a roller model
+            step_size: the step-size of the current model
+            window_size: the size of the window of the current model
+            total_windows: the number of windows total
+            window_index: the index of the window. counts start at 0. ie if the window index is 0 it is the 1st window. if the window index is 12, it is the 12th window in the series."""
+        current_window = self.get_window_raw()
+
+        """calculate the window index. todo: move into own function later"""
+        min_time = np.amin(current_window[self.time_label])
+        window_index = np.where(self.time_vec == min_time)/self.step_size
+        # to calculate the nth window, time vector
+        # index of the time-vector, step size of 2? window 4, step size 2
+        #
+        #total windows = total width (10) - window_width (2) +1 / step size
+        # 10 time points 0 1 2 3 4 5 6 7 8 9
+        #width is 2: 0 and 1
+        # step size is 2
+        # 01, 12, 23, 34, 45, 56, 67, 78, 89
+
+        #todo: so the issue is that total windows (get n windows) is the true number of windows, and window index is the nth -1 window... it would be great to consolidate these concepts but no big deal if they can't be.
+
+
+        window_stats = {'N': len(current_window.index),
+                        'time_labels': current_window[self.time_label].unique(),
+                        'step_size': self.step_size,
+                        'window_size': self.window_width,
+                        'total_windows': self.get_n_windows(),
+                        'window_index': window_index}
+        return window_stats

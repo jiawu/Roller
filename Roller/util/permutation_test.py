@@ -50,7 +50,6 @@ class Permuter():
 
         #outermost loop: iterate through all windows
         for nth_window in range(0, total_window_number):
-            print(nth_window)
             current_window = roller_object.get_window()
             permuted_window = current_window.copy()
 
@@ -59,6 +58,8 @@ class Permuter():
             result = {'n':zeros.copy(), 'mean':zeros.copy(), 'ss':zeros.copy()}
             #inner loop: permute the window N number of times
             for nth_perm in range(0, permutation_n):
+                if (nth_perm % 200 == 0):
+                    print('Perm Window: '+ str(nth_window) + ' Perm Run: ' +str(nth_perm))
                 #permute data
                 self.permute_data(permuted_window.values)
                 #fit the data and get coefficients

@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     print max_alpha
 
-    boots = 1000
+    boots = 10
     max_random = 0.1
     n_alphas = 100
     """
