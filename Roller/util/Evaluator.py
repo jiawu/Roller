@@ -53,17 +53,6 @@ class Evaluator:
     def calc_pr(self, pred, sort_on = 'exists'):
         # True Positive Rate (TPR) = TP/(TP+FN)
         # False Positive Rate (FPR) = FP/(FP+TN)
-        ref = self.gs_data
-
-        #ref.sort(columns=self.interaction_label, inplace=True)
-        #pred.sort(columns=self.interaction_label, inplace=True)
-        #if not np.array_equal(ref[self.interaction_label].values, pred[self.interaction_label].values):
-            #print 'Not same edges'
-            #return
-
-        #pred.sort(columns=sort_on, ascending=False, inplace=True)
-
-        ref_edge_list = ref[self.interaction_label].values.tolist()
 
         #initialize counts
         #todo: remove below, it is unnecessary
@@ -123,45 +112,34 @@ class Evaluator:
         results['fp'] = float(fp)
         return(results)
 
-    def calc_roc(self,ref, pred):
+    def calc_roc(self, pred):
         # True Positive Rate (TPR) = TP/(TP+FN)
         # False Positive Rate (FPR) = FP/(FP+TN)
-        ref.sort(columns='Edge', inplace=True)
-        pred.sort(columns='Edge', inplace=True)
-        if not np.array_equal(ref.Edge.values, pred.Edge.values):
-            print 'Not same edges'
-            return
-
-        pred.sort(columns='W', ascending=False, inplace=True)
-        ref_edge_list = ref.Edge.values.tolist()
-        num_edges = len(ref_edge_list)
-
-        total_p = float(np.sum(ref.Edge_Exists.values))
-        total_n = len(ref.Edge_Exists.values) - total_p
 
         tp = 0.0
         fp = 0.0
         tpr = []
         fpr = []
+        current_list = []
+        for edge in pred['regulator-target']:
+            current_list.append(edge)
+            counts = self._evaluate(current_list)
 
-        for ii, row in enumerate(pred.iterrows()):
-            pred_edge = row[1].Edge
-            predicted = row[1].Edge_Exists
-            ref_idx = ref_edge_list.index(pred_edge)
-            real = ref.Edge_Exists.values[ref_idx]
-            if real and predicted:
-                tp+=1
-                #print real, predicted, 'tp'
-            elif not real and predicted:
-                fp +=1
-                #print real, predicted, 'fp'
+            total_p = counts['tp']+ counts['fn']
+            total_n = counts['fp']+ counts['tn']
 
-            tpr.append(tp/total_p)
-            fpr.append(fp/total_n)
+            if total_n == 0:
+                fpr.append(0.0)
+            else:
+                fpr.append(counts['fp']/total_n)
+            if total_p == 0:
+                tpr.append(0.0)
+            else:
+                tpr.append(counts['tp']/total_p)
 
             auroc = integrate.cumtrapz(fpr, tpr)
+        pdb.set_trace()
         return tpr, fpr, auroc[-1]
-
 
 if __name__ == '__main__':
     xls = pd.ExcelFile('../../goldbetter_model/adjacency_matrix.xlsx')

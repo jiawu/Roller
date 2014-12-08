@@ -132,7 +132,6 @@ class Roller:
             print(total_window_number)
             for nth_window in range(total_window_number):
                 print(nth_window)
-                pdb.set_trace()
                 #loop gets the window, gets the coefficients for that window, then increments the window
                 current_window = self.get_window()
                 print(current_window)
@@ -180,12 +179,11 @@ class Roller:
         #zscores all the data
         dataframe =  self.raw_data
 
+        #for each column, calculate the zscore
+        #zscore is calculated as X - meanX / std(ddof = 1)
         for item in dataframe.columns:
-            if item == self.time_label:
-                next
-            #for each column, calculate the zscore
-            #zscore is calculated as X - meanX / std(ddof = 1)
-            dataframe[item] = (dataframe[item] - dataframe[item].mean())/dataframe[item].std(ddof=1)
+            if item != self.time_label:
+                dataframe[item] = (dataframe[item] - dataframe[item].mean())/dataframe[item].std(ddof=1)
         self.raw_data = dataframe
 
     def get_window_stats(self):
