@@ -53,15 +53,19 @@ def plot_stability(freq_matrix, alphas, nth_window):
     n_genes = len(freq_matrix)
     fig = plt.figure(figsize=(17, 10))
     graph = 1
+    x_max = round(np.max(alphas),3)
+    x_min = round(np.min(alphas), 3)
+    x_mid = round((np.max(alphas)-np.min(alphas))/2.0,3)
     for ii in range(n_genes):
         for jj in range(n_genes):
             stability = freq_matrix[ii, jj, nth_window, :]
             ax = fig.add_subplot(n_genes, n_genes, graph)
             graph+=1
             ax.plot(alphas, stability)
-            ax.set_xlabel('Alpha values')
-            ax.set_ylabel('Freq')
-    fig.subplots_adjust(hspace=0.5)
-    fig.subplots_adjust(wspace=0.5)
+            #ax.set_xlabel('Alpha values')
+            #ax.set_ylabel('Freq')
+            ax.yaxis.set_ticks([0.0, 0.5, 1.0])
+            ax.xaxis.set_ticks([x_min, x_mid, x_max])
+    fig.subplots_adjust(left=0.04, bottom=0.03, right=0.97, top=0.97, hspace=0.5, wspace=0.5)
     plt.show()
 
