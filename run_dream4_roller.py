@@ -8,6 +8,7 @@ from Roller.util.permutation_test import Permuter
 import itertools
 from Roller.util import utility_module as utility
 from Roller.util.Ranker import Bootstrapper
+import pdb
 
 file_path = "data/dream4/insilico_size10_1_timeseries.tsv"
 #file_path = "/Users/jjw036/Roller/goldbetter_model/goldbetter_data.txt"
@@ -70,14 +71,14 @@ initial_model = utility.create_3D_linked_list(edge_labels, coeff_matrix_3d, 'B')
 roll_me.reset()
 print("Running permutation test...")
 #start permutation test
-#permuter = Permuter()
+permuter = Permuter()
 #give it a roller object
-#permuter.run_permutation_test(roll_me, alpha = 0.002)
-#perm_means=permuter.permutation_means
-#perm_sd=permuter.permutation_sd
+permuter.run_permutation_test(roll_me, alpha = 0.002)
+perm_means=permuter.permutation_means
+perm_sd=permuter.permutation_sd
 
-#permuted_model_means = utility.create_3D_linked_list(edge_labels, perm_means, 'p-means')
-#permuted_model_sd = utility.create_3D_linked_list(edge_labels, perm_sd, 'p-sd')
+permuted_model_means = utility.create_3D_linked_list(edge_labels, perm_means, 'p-means')
+permuted_model_sd = utility.create_3D_linked_list(edge_labels, perm_sd, 'p-sd')
 
 #get the permutation test beta matrix, mean and standard deviation.
 
@@ -99,15 +100,13 @@ stability_model = utility.create_3D_linked_list(edge_labels, auc, 'stability')
 
 
 #merge panels into one large panel with B, p-means, p-sd, stability, and p-value
-#ugh this is such a pain in the ass
 all_panels = [initial_model,permuted_model_means, permuted_model_sd, stability_model]
 for nth_window in range(0,total_window_number):
     #merge panels
     for panel_index in range(1,len(all_panels)):
         all_panels[0].merge(all_panels, panel_index, on='regulator-target')
 
-
-
+pdb.set_trace()
 #Research Question: Does rolling regression improve the sensitivity of inference methods? Compare lasso_rolling with regular lasso
 
 #combine 3D panels into one dataframe, consisting of the edge and average rank through windows. rank standard deviation.
