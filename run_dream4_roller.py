@@ -9,6 +9,10 @@ import itertools
 from Roller.util import utility_module as utility
 from Roller.util.Ranker import Bootstrapper
 import pdb
+import pandas as pd
+import pickle
+import scipy
+
 
 file_path = "data/dream4/insilico_size10_1_timeseries.tsv"
 #file_path = "/Users/jjw036/Roller/goldbetter_model/goldbetter_data.txt"
@@ -69,6 +73,8 @@ for nth_window in range(0,total_window_number):
 initial_model = utility.create_3D_linked_list(edge_labels, coeff_matrix_3d, 'B')
 
 roll_me.reset()
+
+"""
 print("Running permutation test...")
 #start permutation test
 permuter = Permuter()
@@ -98,18 +104,52 @@ auc = np.dstack(auc)
 #get 3d coeff matrix for stability scores
 stability_model = utility.create_3D_linked_list(edge_labels, auc, 'stability')
 
-
+pdb.set_trace()
 #merge panels into one large panel with B, p-means, p-sd, stability, and p-value
 all_panels = [initial_model,permuted_model_means, permuted_model_sd, stability_model]
+"""
+#save and load results
+saved_location = "test_run.obj"
+#pickle.dump(all_panels, open(saved_location, "wb"))
+
+loaded_file = pickle.load(open(saved_location,"rb"))
+all_panels = loaded_file
+
+results_table = [] # aggregated results for each window. index of list is the window number
+
 for nth_window in range(0,total_window_number):
     #merge panels
-    for panel_index in range(1,len(all_panels)):
-        all_panels[0].merge(all_panels, panel_index, on='regulator-target')
+    aggregated_window = all_panels[0][nth_window].merge(all_panels[1][nth_window], on='regulator-target').merge(all_panels[2][nth_window], on='regulator-target').merge(all_panels[3][nth_window],on='regulator-target')
+    results_table.append(aggregated_window)
+pdb.set_trace()
 
+#z-score again, find p-value using mean and standard deviation
+results_table_pvalues = []
+for nth_window in results_table:
+    #don't get self edges in the p-value calculation. this is to avoid dividing by 0.
+    valid_indicies = nth_window['p-sd'] != 0
+
+    valid_window = nth_window[valid_indicies]
+    initial_B = valid_window['B']
+    sd = valid_window['p-sd']
+    mean = valid_window['p-means']
+    valid_window['final-z-scores-perm'] = (initial_B - mean)/sd
+    #ensure that z score is negative to use cdf -> pvalue
+    valid_window['cdf-perm'] = (-1*abs(valid_window['final-z-scores-perm'])).apply(scipy.stats.norm.cdf)
+    #calculate t-tailed pvalue
+    valid_window['p-value-perm'] = (2*valid_window['cdf-perm'])
+    results_table_pvalues.append(valid_window)
 pdb.set_trace()
 #Research Question: Does rolling regression improve the sensitivity of inference methods? Compare lasso_rolling with regular lasso
 
-#combine 3D panels into one dataframe, consisting of the edge and average rank through windows. rank standard deviation.
+
+
+
+
+
+
+#combine 3D panels into one dataframe, consisting of the edge and average rank through windows.
+
 
 
 #final_model.sort_index(axis=0)
