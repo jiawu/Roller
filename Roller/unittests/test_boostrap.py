@@ -28,9 +28,10 @@ if __name__ == '__main__':
 
     print max_alpha
 
-    boots = 100
+    boots = 1000
     max_random = 0.1
-    alphas = 10
+    n_alphas = 100
+    """
     #alpha_range = [max_alpha/10**aa for aa in range(alphas)]
     alpha_range = np.linspace(0, max_alpha, 100)
     print alpha_range
@@ -65,20 +66,13 @@ if __name__ == '__main__':
     plt.plot(alpha_range, freqs, 'o-')
     plt.legend(['Reg', 'N', 'R', 'N+R'])
     plt.show()
+    """
 
-
-
-
-    sys.exit()
-    alphas, freq_matrix = boot.run_bootstrap(roll_me.overall_width, 1, 100, noise=0)
-    edge_nonzeros = np.sum(boot.bootstrap_matrix[4,0,0] !=0, axis=0)
-    print edge_nonzeros
-    sums = np.sum(freq_matrix, axis=3)
-
-
-    sys.exit()
+    alphas = boot.run_bootstrap(roll_me.overall_width, boots, n_alphas, noise=max_random)
+    sums = np.sum(boot.freq_matrix, axis=3)
+    auc = boot.get_nth_window_auc(0)
     # Graph
-    Grapher.plot_stability(freq_matrix, alphas, 0)
+    Grapher.plot_stability('full_window_bootstrap_auc.png',boot.freq_matrix, alphas, 0, auc)
     sys.exit()
     for ii in range(17):
         Grapher.plot_stability(freq_matrix, alphas, ii)

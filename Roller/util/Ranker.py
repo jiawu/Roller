@@ -4,6 +4,7 @@ __email__ = 'jfinkle@u.northwestern.edu'
 import Roller
 from linear_wrapper import LassoWrapper
 import numpy as np
+from scipy import integrate
 import matplotlib.pyplot as plt
 
 class Bootstrapper(object):
@@ -14,6 +15,8 @@ class Bootstrapper(object):
     def __init__(self, roller_object):
         self.max_alpha = None
         self.bootstrap_matrix = None
+        self.freq_matrix = None
+        self.edge_stability_auc = None
         self.roller_object = roller_object
 
         # Set maximum alpha
@@ -28,8 +31,9 @@ class Bootstrapper(object):
                 empty_shape = list(current_coef.shape) + [len(alpha_range)]
                 self.bootstrap_matrix = np.empty(tuple(empty_shape))
             self.bootstrap_matrix[:, :, :, :, ii] = current_coef
-        frequencies = self.calc_edge_freq(alpha_range)/float(n_bootstraps)
-        return alpha_range, frequencies
+        self.freq_matrix = self.calc_edge_freq(alpha_range)/float(n_bootstraps)
+        self.auc(self.freq_matrix, alpha_range)
+        return alpha_range
 
     def set_max_alpha(self):
         # Get maximum possible alpha for the whole data set
@@ -43,3 +47,14 @@ class Bootstrapper(object):
         edge_exists = self.bootstrap_matrix != 0
         freq_matrix = np.sum(edge_exists, axis=3)
         return freq_matrix
+
+    def auc(self, matrix, xvalues, axis=-1):
+        """
+        Calculate area under the curve
+        :return:
+        """
+        self.edge_stability_auc = integrate.cumtrapz(matrix, xvalues, axis=axis)
+
+    def get_nth_window_auc(self, nth):
+        auc = self.edge_stability_auc[:,:, nth, -1]
+        return auc

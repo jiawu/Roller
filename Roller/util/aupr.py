@@ -32,7 +32,7 @@ def create_link_list(df, w):
     children = edges[:, 1]
     directed_edges = df.values.flatten()
     all_edges = np.abs(directed_edges)
-    ll_array = np.array([parents, children, zip(parents, children), directed_edges, all_edges, w])
+    ll_array = [parents, children, zip(parents, children), directed_edges, all_edges, w]
     link_list = pd.DataFrame(ll_array).transpose()
     link_list.columns = ['Parent', 'Child', 'Edge', 'Directed_Edge', 'Edge_Exists', 'W']
     #link_list.sort(columns='Edge_Exists', ascending=False, inplace=True)
@@ -130,10 +130,10 @@ def calc_roc(ref, pred):
 
 
 if __name__ == '__main__':
-    xls = pd.ExcelFile('goldbetter_model/adjacency_matrix.xlsx')
+    xls = pd.ExcelFile('../../goldbetter_model/adjacency_matrix.xlsx')
     df = xls.parse()
 
-    xls2 = pd.ExcelFile('goldbetter_model/test_matrix.xlsx')
+    xls2 = pd.ExcelFile('../../goldbetter_model/test_matrix.xlsx')
     df2 = xls2.parse()
 
     np.random.seed(8)
