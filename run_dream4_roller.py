@@ -106,7 +106,7 @@ stability_model = utility.create_3D_linked_list(edge_labels, auc, 'stability')
 
 pdb.set_trace()
 #merge panels into one large panel with B, p-means, p-sd, stability, and p-value
-all_panels = [initial_model,permuted_model_means, permuted_model_sd, stability_model]
+call_panels = [initial_model,permuted_model_means, permuted_model_sd, stability_model]
 """
 #save and load results
 saved_location = "test_run.obj"
@@ -140,6 +140,16 @@ for nth_window in results_table:
     valid_window['p-value-perm'] = (2*valid_window['cdf-perm'])
     results_table_pvalues.append(valid_window)
 pdb.set_trace()
+
+#Order and rank tables
+rank_by = "p-value-perm"
+ranked_results = utility.rank_results_3D(results_table_pvalues, rank_by)
+aggr_ranks = utility.average_rank(ranked_results, rank_by+"-rank")
+
+pdb.set_trace()
+
+
+
 #Research Question: Does rolling regression improve the sensitivity of inference methods? Compare lasso_rolling with regular lasso
 
 
