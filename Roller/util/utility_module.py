@@ -41,6 +41,7 @@ def average_rank(ranked_result_list, col_string):
     aggr_ranks['mean-rank'] = mean_col
     aggr_ranks['median-rank'] = median_col
     aggr_ranks['sd-rank'] = sd_col
+    aggr_ranks['regulator-target'] = left_df['regulator-target']
     return(aggr_ranks)
 
 def rank_results_3D(result_list, col_string, ascending = True):

@@ -23,7 +23,7 @@ separator = "\t"
 gene_end = None
 
 roll_me = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
-window_size = 5
+window_size = roll_me.overall_width
 #get only TFs data, window size of 4
 roll_me.set_window(window_size)
 #impute missing values
@@ -75,7 +75,6 @@ initial_model = utility.create_3D_linked_list(edge_labels, coeff_matrix_3d, 'B')
 
 roll_me.reset()
 
-
 print("Running permutation test...")
 #start permutation test
 permuter = Permuter()
@@ -107,11 +106,11 @@ stability_model = utility.create_3D_linked_list(edge_labels, auc, 'stability')
 
 pdb.set_trace()
 #merge panels into one large panel with B, p-means, p-sd, stability, and p-value
-call_panels = [initial_model,permuted_model_means, permuted_model_sd, stability_model]
+all_panels = [initial_model,permuted_model_means, permuted_model_sd, stability_model]
 
 #save and load results
 saved_location = "test_run_max_lasso.obj"
-pickle.dump(all_panels, open(saved_location, "wb"))
+#pickle.dump(all_panels, open(saved_location, "wb"))
 """
 loaded_file = pickle.load(open(saved_location,"rb"))
 all_panels = loaded_file

@@ -1,0 +1,15 @@
+file_path=data/dream4/insilico_size10_1_timeseries.tsv
+gene_start_column=1
+time_label=Time
+separator=\t
+gene_end=None
+window_size=5
+alpha=0.002
+boots=100
+max_random=0.1
+n_alphas=100
+rank_by=p-value-perm
+gold_standard_file=data/dream4/insilico_size10_1_goldstandard.tsv
+gold_standard_sep=\t
+save_file=insilico_size_10_1_timeseries.obj
+load_file=None

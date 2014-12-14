@@ -29,7 +29,7 @@ class TestAUPR(unittest.TestCase):
         precision, recall, aupr = self.evaluator.calc_pr(prediction)
         point = Set(precision).intersection(Set(recall))
         real_point = 1.0
-        tpr, fpr, auroc = self.evaluator.calc_roc(prediction)
+        #tpr, fpr, auroc = self.evaluator.calc_roc(prediction)
         self.assertIn(real_point, point)
 
 if __name__ == '__main__':
