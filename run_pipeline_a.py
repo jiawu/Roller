@@ -10,7 +10,6 @@ from Roller.util import utility_module as utility
 from Roller.util.Ranker import Bootstrapper
 from Roller.util.Evaluator import Evaluator
 import pdb
-import pandas as pd
 import pickle
 import scipy
 import sys
@@ -63,8 +62,10 @@ def main(argv):
 
     pdb.set_trace()
     ### override file pds with command call -- useful for looping through windows ###
-    pd['window_size'] = window_size
-    pd['alpha'] = alpha
+    if pd['window_size'] == '':
+        pd['window_size'] = window_size
+    if pd['alpha'] == '':
+        pd['alpha'] = float(alpha)
 
     ### part 1, create inital model ###
     initial_model, roller, pd = initialize_model(pd)
@@ -107,8 +108,15 @@ def readParams(parameter_file):
     #todo: test if all required parameters are specified
     #further parse parameter types
     param_dict['gene_start_column'] = int(param_dict['gene_start_column'])
+    param_dict['window_size'] = int(param_dict['window_size'])
+    param_dict['alpha'] = float(param_dict['alpha'])
     if param_dict['gene_end'] == "None":
         param_dict['gene_end'] = None
+    if param_dict['gold_standard_sep'] == '\\t':
+        param_dict['gold_standard_sep'] = '\t'
+    if param_dict['separator'] == '\\t':
+        param_dict['separator'] = '\t'
+    #param_dict['separator'] = unicode(param_dict['separator'], 'unicode_escape')
     return(param_dict)
 
 def initialize_model(pd):
@@ -122,6 +130,7 @@ def initialize_model(pd):
 
     roll_me = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
     roll_me.set_window(window_size)
+    pdb.set_trace()
     total_window_number = roll_me.get_n_windows()
 
     imputer = Imputer(missing_values="NaN")

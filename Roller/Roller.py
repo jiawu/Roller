@@ -33,7 +33,7 @@ class Roller:
         self.window_width = 3
         self.step_size = 1
         self.time_label = time_label
-        #pdb.set_trace()
+        pdb.set_trace()
 
         # Get overall width of the time-course
         self.time_vec = self.raw_data[self.time_label].unique()
@@ -53,6 +53,7 @@ class Roller:
         self.current_window = self.get_window()
 
     def get_n_windows(self):
+        pdb.set_trace()
         total_windows = (self.overall_width - self.window_width+1)/(self.step_size)
         return total_windows
 
