@@ -12,7 +12,7 @@ class Bootstrapper(object):
     # Generate n models
     # Keep beta value ranges for each model
     # Count how many times a beta value appears
-    def __init__(self, roller_object):
+    def __init__(self):
         self.max_alpha = None
         self.bootstrap_matrix = None
         self.freq_matrix = None
@@ -55,8 +55,8 @@ class Bootstrapper(object):
         Calculate area under the curve
         :return:
         """
-        self.edge_stability_auc = integrate.cumtrapz(matrix, xvalues, axis=axis)
+        self.edge_stability_auc = integrate.trapz(matrix, xvalues, axis=axis)
 
     def get_nth_window_auc(self, nth):
-        auc = self.edge_stability_auc[:,:, nth, -1]
+        auc = self.edge_stability_auc[:,:, nth]
         return auc
