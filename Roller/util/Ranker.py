@@ -17,12 +17,14 @@ class Bootstrapper(object):
         self.bootstrap_matrix = None
         self.freq_matrix = None
         self.edge_stability_auc = None
-        self.roller_object = roller_object
+        self.roller_object = None
 
-        # Set maximum alpha
+
+    def run_bootstrap(self, roller_object, window_size, n_bootstraps, n_alphas, noise=0.2):
+        # Assign roller object and set maximum alpha
+        self.roller_object = roller_object
         self.set_max_alpha()
 
-    def run_bootstrap(self, window_size, n_bootstraps, n_alphas, noise=0.2):
         alpha_range = np.linspace(0, self.max_alpha, n_alphas)
         self.roller_object.set_window(window_size)
         for ii, alpha in enumerate(alpha_range):

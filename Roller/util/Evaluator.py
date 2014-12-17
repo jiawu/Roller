@@ -98,3 +98,4 @@ def calc_roc(ref, pred):
             tn+=1
 
         if tp ==0 and fn ==0:
+            pass

@@ -9,6 +9,13 @@ from Roller.util import Ranker
 from Roller.util import Grapher
 from scipy import stats
 import matplotlib.pyplot as plt
+import time
+import unittest
+
+class TestPermutations(unittest.TestCase):
+    def setUp(self):
+        self.bootstrapper = Ranker.Bootstrapper()
+
 
 if __name__ == '__main__':
     file_path = "../../data/dream4/insilico_size10_1_timeseries.tsv"
@@ -27,7 +34,7 @@ if __name__ == '__main__':
     max_alpha = lasso.get_max_alpha()
 
     print max_alpha
-
+    tic = time.time()
     boots = 1000
     max_random = 0.1
     n_alphas = 100
@@ -68,9 +75,11 @@ if __name__ == '__main__':
     plt.show()
     """
 
-    alphas = boot.run_bootstrap(roll_me.overall_width, boots, n_alphas, noise=max_random)
+    alphas = boot.run_bootstrap(5, boots, n_alphas, noise=max_random)
     sums = np.sum(boot.freq_matrix, axis=3)
     auc = boot.get_nth_window_auc(0)
+    print time.time()-tic
+    sys.exit()
     # Graph
     Grapher.plot_stability('full_window_bootstrap_auc.png',boot.freq_matrix, alphas, 0, auc)
     sys.exit()
