@@ -7,9 +7,13 @@ class LassoWrapper:
     #I want this to spit out a matrix of coefficients, where row is the gene target and columns are the regulators
 
 
-    def __init__(self, data_frame):
-        #todo: data_frame is really a numpy array. Make a better name
-        self.data = data_frame
+    def __init__(self, X):
+        """
+        :param X: array
+            Numpy array of that data that Lasso will run
+        :return:
+        """
+        self.data = X
 
     def get_coeffs(self, alpha=0.2):
         """returns a 2D array with target as rows and regulators as columns"""
