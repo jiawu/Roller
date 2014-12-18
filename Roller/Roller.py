@@ -161,10 +161,13 @@ class Roller:
 
     def add_noise_to_window(self, window_values, max_random=0.2):
         """
+        Add uniform noise to each value
+        :param window_values: array
 
-        :param window_values:
-        :param max_random:
-        :return:
+        :param max_random: float
+            Amount of noise to add to each value, plus or minus
+        :return: array
+
         """
         noise = np.random.uniform(low=1-max_random, high=1+max_random, size=window_values.shape)
         noisy_values = np.multiply(window_values, noise)
