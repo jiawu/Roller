@@ -28,7 +28,7 @@ class Bootstrapper(object):
         alpha_range = np.linspace(0, self.max_alpha, n_alphas)
         self.roller_object.set_window(window_size)
         for ii, alpha in enumerate(alpha_range):
-            current_coef = self.roller_object.fit(window_size, alpha=alpha, resamples=n_bootstraps, noise=noise)
+            current_coef = self.roller_object.fit_model(window_size, alpha=alpha, resamples=n_bootstraps, noise=noise)
             if ii is 0:
                 empty_shape = list(current_coef.shape) + [len(alpha_range)]
                 self.bootstrap_matrix = np.empty(tuple(empty_shape))

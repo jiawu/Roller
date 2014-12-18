@@ -113,7 +113,7 @@ class Roller:
         beta_coef = lasso.get_coeffs(alpha)
         return beta_coef
 
-    def fit(self, window_size, method='lasso', alpha=0.2, resamples=0, noise=0.2):
+    def fit_model(self, window_size, method='lasso', alpha=0.2, resamples=0, noise=0.2):
         """
         Fit the rolling model
 

@@ -19,7 +19,7 @@ if __name__ == '__main__':
     window_size = roll_me.overall_width
     roll_me.remove_blank_rows()
     alpha=0.003
-    coefs = roll_me.fit(window_size, alpha=alpha)
+    coefs = roll_me.fit_model(window_size, alpha=alpha)
     np.set_printoptions(suppress=True)
     print "Alpha: ", alpha
     print "Number of nonzero Edges:", np.count_nonzero(coefs)

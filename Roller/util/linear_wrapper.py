@@ -27,7 +27,7 @@ class LassoWrapper:
             X_matrix = np.delete(all_data, col_index, axis=1)
             #take out the column so that the gene does not regress on itself
             target_TF = all_data[:,col_index]
-            clf.fit(X_matrix, target_TF)
+            clf.fit_model(X_matrix, target_TF)
             coeffs = clf.coef_
             #artificially add a 0 to where the col_index is
             #to prevent self-edges
