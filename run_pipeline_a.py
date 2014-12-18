@@ -109,6 +109,10 @@ def readParams(parameter_file):
     #further parse parameter types
     param_dict['gene_start_column'] = int(param_dict['gene_start_column'])
     param_dict['window_size'] = int(param_dict['window_size'])
+    param_dict['boots'] = int(param_dict['boots'])
+    param_dict['n_alphas'] = int(param_dict['n_alphas'])
+    param_dict['max_random'] = float(param_dict['max_random'])
+
     param_dict['alpha'] = float(param_dict['alpha'])
     if param_dict['gene_end'] == "None":
         param_dict['gene_end'] = None
