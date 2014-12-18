@@ -159,8 +159,6 @@ class Roller:
 
         return resample_values
 
-
-
     def add_noise_to_window(self, window_values, max_random=0.2):
         """
 
