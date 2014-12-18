@@ -28,7 +28,7 @@ class TestRoller(unittest.TestCase):
 
         # Make sure columns and index values remain the same
         npt.assert_array_equal(window.columns.values, resample_window.columns.values)
-        npt.assert_array_equal(window.index.values, resample_window.index.values)
+        npt.assert_array_equal(window.index.values, resample_window.indexa.values)
 
         window_values = window.values
         resample_window_values = resample_window.values
