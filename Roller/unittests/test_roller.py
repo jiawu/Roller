@@ -37,6 +37,17 @@ class TestRoller(unittest.TestCase):
                                 for column in range(num_columns)]).T
         self.assertTrue(np.all(truth_table))
 
+    def test_add_noise_to_window(self):
+        # Generate test data matrix
+        window_values = np.random.random([10, 5])
+        max_random = 0.3
+
+        # Get noisy values
+        noise_values = self.roller.add_noise_to_window(window_values, max_random=max_random)
+
+        # Make sure noise is within set range
+        noise_magnitude = np.abs((noise_values-window_values)/window_values)
+        self.assertTrue(np.all(noise_magnitude <= max_random))
 
 if __name__ == '__main__':
     unittest.main()
