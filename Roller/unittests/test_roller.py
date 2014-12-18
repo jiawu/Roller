@@ -1,6 +1,7 @@
 import unittest
 import Roller
 import numpy as np
+import pandas as pd
 import numpy.testing as npt
 
 class TestRoller(unittest.TestCase):
@@ -22,8 +23,15 @@ class TestRoller(unittest.TestCase):
 
     def test_resample_window(self):
         # Generate test data matrix
-        window_values = np.random.random([10, 5])
-        resample_window_values = self.roller.resample_window(window_values)
+        window = pd.DataFrame(np.random.random([5, 3]), columns=['a', 'b', 'c'], index=['A', 'B', 'C', 'D', 'E'])
+        resample_window = self.roller.resample_window(window)
+
+        # Make sure columns and index values remain the same
+        npt.assert_array_equal(window.columns.values, resample_window.columns.values)
+        npt.assert_array_equal(window.index.values, resample_window.index.values)
+
+        window_values = window.values
+        resample_window_values = resample_window.values
 
         # Confirm shapes are true
         self.assertTrue(window_values.shape==resample_window_values.shape)
@@ -38,8 +46,8 @@ class TestRoller(unittest.TestCase):
         self.assertTrue(np.all(truth_table))
 
     def test_add_noise_to_window(self):
-        # Generate test data matrix
-        window_values = np.random.random([10, 5])
+        # Generate test data frame
+        window_values = pd.DataFrame(np.random.random([10, 5]))
         max_random = 0.3
 
         # Get noisy values
