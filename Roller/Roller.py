@@ -147,12 +147,10 @@ class Roller:
             for nth_window in range(total_window_number):
                 #loop gets the window, gets the coefficients for that window, then increments the window
                 current_window = self.get_window()
-                filled_matrix = current_window.values
                 for sample in range(resamples):
-                    sample_matrix = self.resample_window(filled_matrix)
-                    noisy_sample = self.add_noise_to_window(sample_matrix, noise)
-                    current_lasso = LassoWrapper(noisy_sample)
-                    coeff_mat = current_lasso.get_coeffs(alpha)
+                    sample_window = self.resample_window(current_window)
+                    noisy_window = self.add_noise_to_window(sample_window, noise)
+                    coeff_mat = self.fit_window(noisy_window, alpha)
                     coeff_matrix_4d[:, :, nth_window, sample] = coeff_mat
                 self.next()
 
