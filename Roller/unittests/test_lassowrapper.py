@@ -6,6 +6,7 @@ from Roller.util.linear_wrapper import LassoWrapper
 import numpy.testing as npt
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 class TestLassoWrapper(unittest.TestCase):
     def setUp(self):
@@ -14,8 +15,6 @@ class TestLassoWrapper(unittest.TestCase):
         df = pd.DataFrame.from_csv(file_path, sep='\t')
         times = df.index.values[~np.isnan(df.index.values)]
         times_set = set(times)
-        genes = df.columns.values
-        replicates = len(times)/float(len(times_set))
         data = df.values
 
         # Remove NaNs from TSV
@@ -23,11 +22,20 @@ class TestLassoWrapper(unittest.TestCase):
         self.lassowrapper = LassoWrapper(data)
 
     def test_get_coef(self):
-        n_samples, n_features = 5, 20
-        X = np.random.randn(n_samples, n_features)
-        coef = 3 * np.random.randn(n_features)
-        inds = np.arange(n_features)
-        y = np.dot(X, coef)
+        #todo: Find a functioning test case
+        coef = np.array([[0,1,1],[1,0,1], [1,1,0]])
+        n_features = len(coef)
+        x_step = np.ones(n_features)
+        data = x_step.copy()
+        n_steps = 100
+        for ii in range(n_steps):
+            x_step = np.dot(coef, x_step)
+            data = np.vstack((data, x_step))
+        n_samples = 50
+        start = np.random.randint(0, len(data)/2)
+        sample = data[start:start+n_samples]
+
+        lasso = LassoWrapper(sample)
 
     def test_get_max_alpha(self):
         alpha_precision = 1e-9
@@ -40,7 +48,6 @@ class TestLassoWrapper(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
 """
 Old test code
 
