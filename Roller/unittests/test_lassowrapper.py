@@ -23,6 +23,13 @@ class TestLassoWrapper(unittest.TestCase):
         data = data[~np.isnan(data).all(axis=1)]
         self.lassowrapper = LassoWrapper(data)
 
+    def test_get_coef(self):
+        n_samples, n_features = 5, 20
+        X = np.random.randn(n_samples, n_features)
+        coef = 3 * np.random.randn(n_features)
+        inds = np.arange(n_features)
+        y = np.dot(X, coef)
+
     def test_get_max_alpha(self):
         alpha_precision = 1e-9
         max_alpha = self.lassowrapper.get_max_alpha()
