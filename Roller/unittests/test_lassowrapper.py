@@ -45,6 +45,24 @@ class TestLassoWrapper(unittest.TestCase):
         self.assertTrue(num_coef_at_max_alpha == 0)
         self.assertTrue(num_coef_less_max_alpha > 0)
 
+    def cross_validate_window_alpha(self, window, alpha, n_folds=3):
+
+        # Set the window size
+        window_values = window.values
+
+        n_elements = len(window_values)
+
+        kf = KFold(n_elements, n_folds)
+
+        for train_index, test_index in kf:
+            x_train = window_values[train_index]
+            y_train = x_train.copy()
+            x_test = window_values[test_index]
+            y_test = x_test.copy()
+
+            # Run Lasso
+            lasso = LassoWrapper(x_train)
+
 
 if __name__ == '__main__':
     unittest.main()
