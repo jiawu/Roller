@@ -188,6 +188,29 @@ class Roller:
         noisy_values = np.multiply(window, noise)
         return noisy_values
 
-    #def cross_validate_window_alpha(self):
+
+    def cross_validate_window_alpha(self, window, alpha, n_folds=3):
+
+        # Set the window size
+        window_values = window.values
+
+        n_elements = len(window_values)
+
+        kf = KFold(n_elements, n_folds)
+
+        for train_index, test_index in kf:
+            x_train = window_values[train_index]
+            y_train = x_train.copy()
+            x_test = window_values[test_index]
+            y_test = x_test.copy()
+
+            # Run Lasso
+            lasso = LassoWrapper(x_train)
+
+
+
+
+
+
 
 

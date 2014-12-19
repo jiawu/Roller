@@ -28,7 +28,7 @@ class TestRoller(unittest.TestCase):
 
         # Make sure columns and index values remain the same
         npt.assert_array_equal(window.columns.values, resample_window.columns.values)
-        npt.assert_array_equal(window.index.values, resample_window.indexa.values)
+        npt.assert_array_equal(window.index.values, resample_window.index.values)
 
         window_values = window.values
         resample_window_values = resample_window.values
@@ -47,15 +47,19 @@ class TestRoller(unittest.TestCase):
 
     def test_add_noise_to_window(self):
         # Generate test data frame
-        window_values = pd.DataFrame(np.random.random([10, 5]))
+        window = pd.DataFrame(np.random.random([10, 5]))
         max_random = 0.3
 
         # Get noisy values
-        noise_values = self.roller.add_noise_to_window(window_values, max_random=max_random)
+        noise_values = self.roller.add_noise_to_window(window, max_random=max_random)
 
         # Make sure noise is within set range
-        noise_magnitude = np.abs((noise_values-window_values)/window_values)
+        noise_magnitude = np.abs((noise_values-window)/window)
         self.assertTrue(np.all(noise_magnitude <= max_random))
+
+    def test_cross_validate_window_alpha(self):
+        window_values = pd.DataFrame(np.random.random([10, 5]))
+        self.roller.cross_validate_window_alpha(window_values)
 
 if __name__ == '__main__':
     unittest.main()
