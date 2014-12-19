@@ -1,7 +1,8 @@
 from sklearn import linear_model
 import numpy as np
+import warnings
 
-#Note: if the optimal alpha value is very small, then another method other than LASSO should be used.
+#Note: if the optimal alpha value is very small, then another method other than LASSO should be used
 
 class LassoWrapper:
     #I want this to spit out a matrix of coefficients, where row is the gene target and columns are the regulators
@@ -53,7 +54,7 @@ class LassoWrapper:
             The smallest alpha value that will return all zero beta values, subject to the precision of min_step_size
 
         """
-
+        warnings.simplefilter("ignore")
         # Get maximum edges, assuming all explanors are also response variables and no self edges
         [n, p] = self.data.shape
         max_edges = p * (p-1)
@@ -94,7 +95,6 @@ class LassoWrapper:
                     # Found a new maximum that eliminates all betas, no need to keep stepping
                     alpha_max = cur_alpha
                     break
-
         return alpha_max
 
 

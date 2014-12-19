@@ -7,7 +7,6 @@ import numpy.testing as npt
 import numpy as np
 import pandas as pd
 
-
 class TestLassoWrapper(unittest.TestCase):
     def setUp(self):
         # Load data
