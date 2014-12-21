@@ -56,16 +56,21 @@ def main(argv):
         elif opt in ("-a", "--alpha"):
             alpha = arg
     print 'The parameter input file is "', parameter_file
+    pd = setup_pipeline(parameter_file)
+    execute(pd)
 
+def setup_pipeline(parameter_file):
     ### read parameters from file ###
     pd = readParams(parameter_file)
 
-    pdb.set_trace()
     ### override file pds with command call -- useful for looping through windows ###
     if pd['window_size'] == '':
         pd['window_size'] = window_size
     if pd['alpha'] == '':
         pd['alpha'] = float(alpha)
+    return(pd)
+
+def execute(pd):
 
     ### part 1, create inital model ###
     initial_model, roller, pd = initialize_model(pd)
@@ -134,7 +139,6 @@ def initialize_model(pd):
 
     roll_me = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
     roll_me.set_window(window_size)
-    pdb.set_trace()
     total_window_number = roll_me.get_n_windows()
 
     imputer = Imputer(missing_values="NaN")
@@ -171,10 +175,10 @@ def initialize_model(pd):
         #plot_figure(coeff_mat,nth_window,gene_names,gene_names,window_size)
         roll_me.next()
 
-##convert coeff model to edge list
-##takes a 3D matrix and gene names list, converts it to a 3D edge list. it assumes that the 3d matrix is symmetric and square.
+    #convert coeff model to edge list
+    #takes a 3D matrix and gene names list, converts it to a 3D edge list. it assumes that the 3d matrix is symmetric and square.
 
-#initial model conversion
+    #initial model conversion
     initial_model = utility.create_3D_linked_list(edge_labels, coeff_matrix_3d, 'B')
     pd['edge_labels'] = edge_labels
     pd['total_window_number'] = total_window_number
