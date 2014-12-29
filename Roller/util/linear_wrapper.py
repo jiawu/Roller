@@ -1,6 +1,9 @@
 from sklearn import linear_model
+import sys
+from sklearn.linear_model import Lasso
 import numpy as np
 import warnings
+from sklearn.cross_validation import KFold
 
 #Note: if the optimal alpha value is very small, then another method other than LASSO should be used
 
@@ -97,7 +100,36 @@ class LassoWrapper:
                     break
         return alpha_max
 
+def cross_validate_alpha(data, alpha, n_folds=3):
+    n_elements = len(data)
+    kf = KFold(n_elements, n_folds)
 
+    press = 0.0
+    ss = 0.0
 
+    for train_index, test_index in kf:
+        x_train = data[train_index]
+        y_train = x_train.copy()
+        x_test = data[test_index]
+        y_test = x_test.copy()
 
+        # Run Lasso
+        lasso = LassoWrapper(x_train)
+        current_coef = lasso.get_coeffs(alpha)
+
+        y_predicted = np.dot(x_test, current_coef)
+
+        # Calculate PRESS and SS
+        current_press = np.sum(np.power(y_predicted-y_test, 2), axis=0)
+        current_ss = sum_of_squares(y_test)
+
+        press += current_press
+        ss += current_ss
+    q_squared = 1-press/ss
+    print q_squared
+
+def sum_of_squares(X):
+    column_mean = np.mean(X, axis=0)
+    ss = np.sum(np.power(X-column_mean,2), axis=0)
+    return ss
 

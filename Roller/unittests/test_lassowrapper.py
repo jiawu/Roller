@@ -3,10 +3,10 @@ __email__ = 'jfinkle@u.northwestern.edu'
 
 import unittest
 from Roller.util.linear_wrapper import LassoWrapper
+from Roller.util import linear_wrapper
 import numpy.testing as npt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 class TestLassoWrapper(unittest.TestCase):
     def setUp(self):
@@ -45,24 +45,16 @@ class TestLassoWrapper(unittest.TestCase):
         self.assertTrue(num_coef_at_max_alpha == 0)
         self.assertTrue(num_coef_less_max_alpha > 0)
 
-    def cross_validate_window_alpha(self, window, alpha, n_folds=3):
+    def test_cross_validate_alpha(self):
+        alpha = self.lassowrapper.get_max_alpha() - 3e-2
+        test_data = self.lassowrapper.data.copy()
+        linear_wrapper.cross_validate_alpha(test_data, alpha)
 
-        # Set the window size
-        window_values = window.values
-
-        n_elements = len(window_values)
-
-        kf = KFold(n_elements, n_folds)
-
-        for train_index, test_index in kf:
-            x_train = window_values[train_index]
-            y_train = x_train.copy()
-            x_test = window_values[test_index]
-            y_test = x_test.copy()
-
-            # Run Lasso
-            lasso = LassoWrapper(x_train)
-
+    def test_sum_of_squares(self):
+        data = np.reshape(np.arange(6), (3,2))
+        expected_ss = np.array([8,8])
+        calc_ss = linear_wrapper.sum_of_squares(data)
+        npt.assert_array_equal(expected_ss, calc_ss)
 
 if __name__ == '__main__':
     unittest.main()

@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.preprocessing import Imputer
 import numpy as np
 from util.linear_wrapper import LassoWrapper
-from sklearn.cross_validation import KFold
+
 
 import pdb
 class Roller:
