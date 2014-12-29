@@ -109,7 +109,6 @@ def cross_validate_alpha(data, alpha, n_folds=3):
 
     for train_index, test_index in kf:
         x_train = data[train_index]
-        y_train = x_train.copy()
         x_test = data[test_index]
         y_test = x_test.copy()
 
@@ -120,16 +119,16 @@ def cross_validate_alpha(data, alpha, n_folds=3):
         y_predicted = np.dot(x_test, current_coef)
 
         # Calculate PRESS and SS
-        current_press = np.sum(np.power(y_predicted-y_test, 2), axis=0)
+        current_press = np.sum(np.power(y_predicted-y_test, 2))
         current_ss = sum_of_squares(y_test)
 
         press += current_press
         ss += current_ss
     q_squared = 1-press/ss
-    print q_squared
+    return q_squared
 
 def sum_of_squares(X):
     column_mean = np.mean(X, axis=0)
-    ss = np.sum(np.power(X-column_mean,2), axis=0)
+    ss = np.sum(np.power(X-column_mean,2))
     return ss
 

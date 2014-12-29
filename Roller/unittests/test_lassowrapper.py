@@ -4,7 +4,7 @@ __email__ = 'jfinkle@u.northwestern.edu'
 import unittest
 from Roller.util.linear_wrapper import LassoWrapper
 from Roller.util import linear_wrapper
-import numpy.testing as npt
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -46,15 +46,17 @@ class TestLassoWrapper(unittest.TestCase):
         self.assertTrue(num_coef_less_max_alpha > 0)
 
     def test_cross_validate_alpha(self):
-        alpha = self.lassowrapper.get_max_alpha() - 3e-2
-        test_data = self.lassowrapper.data.copy()
-        linear_wrapper.cross_validate_alpha(test_data, alpha)
+        data = self.lassowrapper.data.copy()
+        alpha_range = np.linspace(0, self.lassowrapper.get_max_alpha())
+        q_list = [linear_wrapper.cross_validate_alpha(data, alpha) for alpha in alpha_range]
+        plt.plot(alpha_range, q_list)
+        plt.show()
 
     def test_sum_of_squares(self):
         data = np.reshape(np.arange(6), (3,2))
-        expected_ss = np.array([8,8])
+        expected_ss = 16
         calc_ss = linear_wrapper.sum_of_squares(data)
-        npt.assert_array_equal(expected_ss, calc_ss)
+        self.assertEqual(calc_ss, expected_ss)
 
 if __name__ == '__main__':
     unittest.main()
