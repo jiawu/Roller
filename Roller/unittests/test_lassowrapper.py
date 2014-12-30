@@ -48,9 +48,7 @@ class TestLassoWrapper(unittest.TestCase):
     def test_cross_validate_alpha(self):
         data = self.lassowrapper.data.copy()
         alpha_range = np.linspace(0, self.lassowrapper.get_max_alpha())
-        q_list = [linear_wrapper.cross_validate_alpha(data, alpha) for alpha in alpha_range]
-        plt.plot(alpha_range, q_list)
-        plt.show()
+        q_list = [self.lassowrapper.cross_validate_alpha(alpha) for alpha in alpha_range]
 
     def test_sum_of_squares(self):
         data = np.reshape(np.arange(6), (3,2))

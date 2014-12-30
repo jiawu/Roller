@@ -100,32 +100,40 @@ class LassoWrapper:
                     break
         return alpha_max
 
-def cross_validate_alpha(data, alpha, n_folds=3):
-    n_elements = len(data)
-    kf = KFold(n_elements, n_folds)
+    def cross_validate_alpha(self, alpha, n_folds=3):
+        '''
+        Get a Q^2 value for the alpha value
+        :param alpha:
+        :param n_folds: int
+            when number of folds is the same as number of samples this is equivalent to leave-one-out
+        :return:
+        '''
+        data = self.data.copy()
+        n_elements = len(data)
+        kf = KFold(n_elements, n_folds)
 
-    press = 0.0
-    ss = 0.0
+        press = 0.0
+        ss = 0.0
 
-    for train_index, test_index in kf:
-        x_train = data[train_index]
-        x_test = data[test_index]
-        y_test = x_test.copy()
+        for train_index, test_index in kf:
+            x_train = data[train_index]
+            x_test = data[test_index]
+            y_test = x_test.copy()
 
-        # Run Lasso
-        lasso = LassoWrapper(x_train)
-        current_coef = lasso.get_coeffs(alpha)
+            # Run Lasso
+            lasso = LassoWrapper(x_train)
+            current_coef = lasso.get_coeffs(alpha)
 
-        y_predicted = np.dot(x_test, current_coef)
+            y_predicted = np.dot(x_test, current_coef)
 
-        # Calculate PRESS and SS
-        current_press = np.sum(np.power(y_predicted-y_test, 2))
-        current_ss = sum_of_squares(y_test)
+            # Calculate PRESS and SS
+            current_press = np.sum(np.power(y_predicted-y_test, 2))
+            current_ss = sum_of_squares(y_test)
 
-        press += current_press
-        ss += current_ss
-    q_squared = 1-press/ss
-    return q_squared
+            press += current_press
+            ss += current_ss
+        q_squared = 1-press/ss
+        return q_squared
 
 def sum_of_squares(X):
     column_mean = np.mean(X, axis=0)
