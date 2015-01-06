@@ -188,7 +188,11 @@ class Roller:
         noisy_values = np.multiply(window, noise)
         return noisy_values
 
-
+    def cross_validate_window(self, window, n_alphas=50, n_folds=3):
+        lasso = LassoWrapper(window.values)
+        alpha_range = np.linspace(0, lasso.get_max_alpha(), n_alphas)
+        q_squared_array = np.array([lasso.cross_validate_alpha(alpha) for alpha in alpha_range])
+        return q_squared_array
 
 
 

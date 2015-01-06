@@ -3,6 +3,7 @@ import Roller
 import numpy as np
 import pandas as pd
 import numpy.testing as npt
+import matplotlib.pyplot as plt
 
 class TestRoller(unittest.TestCase):
     def setUp(self):
@@ -58,8 +59,8 @@ class TestRoller(unittest.TestCase):
         self.assertTrue(np.all(noise_magnitude <= max_random))
 
     def test_cross_validate_window_alpha(self):
-        window_values = pd.DataFrame(np.random.random([10, 5]))
-        self.roller.cross_validate_window_alpha(window_values)
+        window = pd.DataFrame(np.random.random([10, 5]))
+        q_values = self.roller.cross_validate_window(window)
 
 if __name__ == '__main__':
     unittest.main()
