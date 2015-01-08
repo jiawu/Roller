@@ -58,7 +58,7 @@ def main(argv):
     print 'The parameter input file is "', parameter_file
     pd = setup_pipeline(parameter_file, window_size, alpha)
     results = execute(pd)
-
+    print(results['aupr'])
 
 def setup_pipeline(parameter_file, window_size, alpha):
     ### read parameters from file ###
