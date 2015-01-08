@@ -57,7 +57,8 @@ def main(argv):
             alpha = arg
     print 'The parameter input file is "', parameter_file
     pd = setup_pipeline(parameter_file, window_size, alpha)
-    execute(pd)
+    results = execute(pd)
+
 
 def setup_pipeline(parameter_file, window_size, alpha):
     ### read parameters from file ###
@@ -94,7 +95,7 @@ def execute(pd):
         ### part 4, aggregate data ###
         all_panels = [initial_model,permuted_model_means, permuted_model_sd, stability_model]
 
-        pickle.dump(all_panels, open(pd["load_file"], "wb"))
+        pickle.dump(all_panels, open(pd["save_file"], "wb"))
 
     results_table = aggregate_model(all_panels, pd)
 
@@ -103,6 +104,10 @@ def execute(pd):
 
     ### part 6, calculate AUPR ###
     precision, recall, aupr = score_model(ranked_table, pd)
+
+    ### package results into a dict ###
+    final_result = { 'precision': precision, 'recall':recall, 'aupr': aupr, 'ranked_table':ranked_table, 'results_table': results_table, 'param_dict': pd}
+    return(final_result)
 
 def readParams(parameter_file):
     param_dict = {}
