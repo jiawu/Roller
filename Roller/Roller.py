@@ -140,9 +140,7 @@ class Roller:
 
         else:
             coeff_matrix_4d = np.empty((n_genes, n_genes, total_window_number, resamples))
-            print(total_window_number)
             for nth_window in range(total_window_number):
-                print(nth_window)
                 #loop gets the window, gets the coefficients for that window, then increments the window
                 current_window = self.get_window()
 
@@ -236,10 +234,5 @@ class Roller:
         alpha_range = np.linspace(0, lasso.get_max_alpha(), n_alphas)
         q_squared_array = np.array([lasso.cross_validate_alpha(alpha) for alpha in alpha_range])
         return q_squared_array
-
-
-
-
-
 
 
