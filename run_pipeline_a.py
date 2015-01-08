@@ -15,9 +15,9 @@ import scipy
 import sys
 import getopt
 
-
 def main(argv):
     parameter_file = ''
+
     ### main roller parameters ###
     input_file = ''
     gene_start_column = ''
@@ -203,7 +203,7 @@ def permute_model(roll_me, pd):
 
 def bootstrap_model(roll_me, pd):
     print("Running bootstrapping test...")
-    booter = Bootstrapper(roll_me)
+    booter = Bootstrapper()
     boots = pd['boots']
     max_random = pd['max_random']
     n_alphas = pd['n_alphas']
@@ -211,7 +211,7 @@ def bootstrap_model(roll_me, pd):
     total_window_number = pd['total_window_number']
     edge_labels = pd['edge_labels']
 
-    booted_alphas = booter.run_bootstrap(window_size, boots, n_alphas, noise=max_random)
+    booted_alphas = booter.run_bootstrap(roll_me, window_size, boots, n_alphas, noise=max_random)
     sums = np.sum(booter.freq_matrix,axis=3)
     auc = []
     for nth_window in range(0,total_window_number):
