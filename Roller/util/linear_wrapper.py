@@ -1,15 +1,23 @@
 from sklearn import linear_model
+import sys
+from sklearn.linear_model import Lasso
 import numpy as np
+import warnings
+from sklearn.cross_validation import KFold
 
-#Note: if the optimal alpha value is very small, then another method other than LASSO should be used.
+#Note: if the optimal alpha value is very small, then another method other than LASSO should be used
 
 class LassoWrapper:
     #I want this to spit out a matrix of coefficients, where row is the gene target and columns are the regulators
 
 
-    def __init__(self, data_frame):
-        #todo: data_frame is really a numpy array. Make a better name
-        self.data = data_frame
+    def __init__(self, X):
+        """
+        :param X: array
+            Numpy array of that data that Lasso will run
+        :return:
+        """
+        self.data = X
 
     def get_coeffs(self, alpha=0.2):
         """returns a 2D array with target as rows and regulators as columns"""
@@ -49,7 +57,7 @@ class LassoWrapper:
             The smallest alpha value that will return all zero beta values, subject to the precision of min_step_size
 
         """
-
+        warnings.simplefilter("ignore")
         # Get maximum edges, assuming all explanors are also response variables and no self edges
         [n, p] = self.data.shape
         max_edges = p * (p-1)
@@ -90,10 +98,45 @@ class LassoWrapper:
                     # Found a new maximum that eliminates all betas, no need to keep stepping
                     alpha_max = cur_alpha
                     break
-
         return alpha_max
 
+    def cross_validate_alpha(self, alpha, n_folds=3):
+        '''
+        Get a Q^2 value for the alpha value
+        :param alpha:
+        :param n_folds: int
+            when number of folds is the same as number of samples this is equivalent to leave-one-out
+        :return:
+        '''
+        data = self.data.copy()
+        n_elements = len(data)
+        kf = KFold(n_elements, n_folds)
 
+        press = 0.0
+        ss = 0.0
 
+        for train_index, test_index in kf:
+            x_train = data[train_index]
+            x_test = data[test_index]
+            y_test = x_test.copy()
 
+            # Run Lasso
+            lasso = LassoWrapper(x_train)
+            current_coef = lasso.get_coeffs(alpha)
+
+            y_predicted = np.dot(x_test, current_coef)
+
+            # Calculate PRESS and SS
+            current_press = np.sum(np.power(y_predicted-y_test, 2))
+            current_ss = sum_of_squares(y_test)
+
+            press += current_press
+            ss += current_ss
+        q_squared = 1-press/ss
+        return q_squared
+
+def sum_of_squares(X):
+    column_mean = np.mean(X, axis=0)
+    ss = np.sum(np.power(X-column_mean,2))
+    return ss
 

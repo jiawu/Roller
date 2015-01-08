@@ -168,3 +168,4 @@ if __name__ == '__main__':
     plt.legend(['Test', 'Random'], loc='best')
     print area
     plt.show()
+# Load adjacency matrices

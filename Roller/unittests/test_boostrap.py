@@ -9,7 +9,34 @@ from Roller.util import Ranker
 from Roller.util import Grapher
 from scipy import stats
 import matplotlib.pyplot as plt
+import time
+import unittest
+import numpy.testing as npt
 
+class TestPermutations(unittest.TestCase):
+    def setUp(self):
+        self.bootstrapper = Ranker.Bootstrapper()
+
+    def test_auc(self):
+        x = np.arange(11)
+        y = np.ones(11)
+        expected_area = 10.0
+        self.bootstrapper.auc(y, x)
+        self.assertEquals(expected_area, self.bootstrapper.edge_stability_auc)
+
+    def test_get_nth_window_auc(self):
+        first_window = np.random.random([5,5])
+        second_window = np.random.random([5,5])
+        window = np.dstack((first_window, second_window))
+        self.bootstrapper.edge_stability_auc = window.copy()
+        retrieved_first_window = self.bootstrapper.get_nth_window_auc(0)
+        npt.assert_array_equal(retrieved_first_window, first_window)
+
+if __name__ == '__main__':
+    unittest.main()
+
+'''
+Old testing
 if __name__ == '__main__':
     file_path = "../../data/dream4/insilico_size10_1_timeseries.tsv"
     gene_start_column = 1
@@ -68,9 +95,11 @@ if __name__ == '__main__':
     plt.show()
     """
 
-    alphas = boot.run_bootstrap(roll_me.overall_width, boots, n_alphas, noise=max_random)
+    alphas = boot.run_bootstrap(5, boots, n_alphas, noise=max_random)
     sums = np.sum(boot.freq_matrix, axis=3)
     auc = boot.get_nth_window_auc(0)
+    print time.time()-tic
+    sys.exit()
     # Graph
     Grapher.plot_stability('full_window_bootstrap_auc.png',boot.freq_matrix, alphas, 0, auc)
     sys.exit()

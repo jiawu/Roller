@@ -1,32 +1,31 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
-import pdb
-import Roller
 from linear_wrapper import LassoWrapper
 import numpy as np
 from scipy import integrate
-import matplotlib.pyplot as plt
 
 class Bootstrapper(object):
     # Method specific
     # Generate n models
     # Keep beta value ranges for each model
     # Count how many times a beta value appears
-    def __init__(self, roller_object):
+    def __init__(self):
         self.max_alpha = None
         self.bootstrap_matrix = None
         self.freq_matrix = None
         self.edge_stability_auc = None
-        self.roller_object = roller_object
+        self.roller_object = None
 
-        # Set maximum alpha
+
+    def run_bootstrap(self, roller_object, window_size, n_bootstraps, n_alphas, noise=0.2):
+        # Assign roller object and set maximum alpha
+        self.roller_object = roller_object
         self.set_max_alpha()
 
-    def run_bootstrap(self, window_size, n_bootstraps, n_alphas, noise=0.2):
         alpha_range = np.linspace(0, self.max_alpha, n_alphas)
         self.roller_object.set_window(window_size)
         for ii, alpha in enumerate(alpha_range):
-            current_coef = self.roller_object.fit(window_size, alpha=alpha, resamples=n_bootstraps, noise=noise)
+            current_coef = self.roller_object.fit_model(window_size, alpha=alpha, resamples=n_bootstraps, noise=noise)
             if ii is 0:
                 empty_shape = list(current_coef.shape) + [len(alpha_range)]
                 self.bootstrap_matrix = np.empty(tuple(empty_shape))
@@ -53,8 +52,8 @@ class Bootstrapper(object):
         Calculate area under the curve
         :return:
         """
-        self.edge_stability_auc = integrate.cumtrapz(matrix, xvalues, axis=axis)
+        self.edge_stability_auc = integrate.trapz(matrix, xvalues, axis=axis)
 
     def get_nth_window_auc(self, nth):
-        auc = self.edge_stability_auc[:,:, nth, -1]
+        auc = self.edge_stability_auc[:,:, nth]
         return auc
