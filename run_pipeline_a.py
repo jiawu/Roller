@@ -56,10 +56,10 @@ def main(argv):
         elif opt in ("-a", "--alpha"):
             alpha = arg
     print 'The parameter input file is "', parameter_file
-    pd = setup_pipeline(parameter_file)
+    pd = setup_pipeline(parameter_file, window_size, alpha)
     execute(pd)
 
-def setup_pipeline(parameter_file):
+def setup_pipeline(parameter_file, window_size, alpha):
     ### read parameters from file ###
     pd = readParams(parameter_file)
 

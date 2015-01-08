@@ -5,7 +5,6 @@ import numpy as np
 from util.linear_wrapper import LassoWrapper
 
 
-import pdb
 class Roller:
     """
     A thing that grabs different timepoints of data, can set window and step size.
@@ -34,7 +33,6 @@ class Roller:
         self.window_width = 3
         self.step_size = 1
         self.time_label = time_label
-        pdb.set_trace()
 
         # Get overall width of the time-course
         self.time_vec = self.raw_data[self.time_label].unique()
@@ -54,7 +52,6 @@ class Roller:
         self.current_window = self.get_window()
 
     def get_n_windows(self):
-        pdb.set_trace()
         total_windows = (self.overall_width - self.window_width+1)/(self.step_size)
         return total_windows
 
@@ -148,12 +145,7 @@ class Roller:
                 print(nth_window)
                 #loop gets the window, gets the coefficients for that window, then increments the window
                 current_window = self.get_window()
-<<<<<<< HEAD
-                print(current_window)
-                print(self.get_window_raw())
-                filled_matrix = current_window.values
-=======
->>>>>>> 49b8c041adc845ad1112d8ba8d6f4ccdb981e135
+
                 for sample in range(resamples):
                     sample_window = self.resample_window(current_window)
                     noisy_window = self.add_noise_to_window(sample_window, noise)
@@ -170,11 +162,7 @@ class Roller:
 
         :return: array
         """
-<<<<<<< HEAD
-        #pdb.set_trace()
-=======
         window_values = window.values
->>>>>>> 49b8c041adc845ad1112d8ba8d6f4ccdb981e135
         n, p = window_values.shape
 
         # For each column randomly choose samples
@@ -255,4 +243,3 @@ class Roller:
 
 
 
->>>>>>> 49b8c041adc845ad1112d8ba8d6f4ccdb981e135
