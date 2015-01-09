@@ -95,8 +95,6 @@ def execute(pd):
         ### part 4, aggregate data ###
         all_panels = [initial_model,permuted_model_means, permuted_model_sd, stability_model]
 
-        pickle.dump(all_panels, open(pd["save_file"], "wb"))
-
     results_table = aggregate_model(all_panels, pd)
 
     ### part 5, rank edges ###
@@ -107,6 +105,8 @@ def execute(pd):
 
     ### package results into a dict ###
     final_result = { 'precision': precision, 'recall':recall, 'aupr': aupr, 'ranked_table':ranked_table, 'results_table': results_table, 'param_dict': pd}
+    if existing_data == False:
+        pickle.dump(final_result, open(pd["save_file"], "wb"))
     return(final_result)
 
 def readParams(parameter_file):
@@ -164,7 +164,7 @@ def initialize_model(pd):
 
     #regulator-target labels
     edge_labels = [x for x in itertools.product(gene_names,repeat=2)]
-
+    alpha_list = []
     print("Creating initial model...")
     for nth_window in range(0,total_window_number):
         #loop gets the window, gets the coefficients for that window, then increments the window
@@ -175,7 +175,17 @@ def initialize_model(pd):
         filled_matrix = current_window.values
         #filled_matrix = imputer.fit_transform(current_window)
         current_lasso = LassoWrapper(filled_matrix)
-        coeff_mat = current_lasso.get_coeffs(alpha)
+
+        alpha_range = np.linspace(0, current_lasso.get_max_alpha())
+        q_list = [current_lasso.cross_validate_alpha(a1) for a1 in alpha_range]
+
+        alpha_table = zip(alpha_range, q_list)
+        alpha_list.append(alpha_table)
+        if pd['override-alpha'] == "false":
+            (best_alpha,Qs) = max(alpha_table, key = lambda t: t[1])
+        elif pd['override-alpha'] == "true":
+            best_alpha = alpha
+        coeff_mat = current_lasso.get_coeffs(best_alpha)
         coeff_matrix_3d[:,:,nth_window] = coeff_mat
         #plot_figure(coeff_mat,nth_window,gene_names,gene_names,window_size)
         roll_me.next()
@@ -187,6 +197,8 @@ def initialize_model(pd):
     initial_model = utility.create_3D_linked_list(edge_labels, coeff_matrix_3d, 'B')
     pd['edge_labels'] = edge_labels
     pd['total_window_number'] = total_window_number
+    pd['alpha'] = best_alpha
+    pd['alpha_list'] = alpha_list
     return(initial_model, roll_me, pd)
 
 def permute_model(roll_me, pd):
