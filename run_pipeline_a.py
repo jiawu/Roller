@@ -201,18 +201,6 @@ def initialize_model(pd):
     pd['alpha_list'] = alpha_list
     return(initial_model, roll_me, pd)
 
-def select_alpha(roller, method='max', alpha_list=None):
-    if method is 'max':
-        #q_list = [current_lasso.cross_validate_alpha(a1) for a1 in alpha_range]
-        pass
-    elif method is 'manual':
-        if alpha_list is None:
-            raise ValueError('alpha_list cannot be None when using method "manual"')
-        if len(alpha_list) != roller.get_n_windows():
-            raise ValueError('length of supplied alpha_list (%i) must equal number of windows (%i)' % (
-            len(alpha_list), roller.get_n_windows()))
-
-
 def permute_model(roll_me, pd):
     print("Running permutation test...")
     #start permutation test

@@ -232,7 +232,34 @@ class Roller:
     def cross_validate_window(self, window, n_alphas=50, n_folds=3):
         lasso = LassoWrapper(window.values)
         alpha_range = np.linspace(0, lasso.get_max_alpha(), n_alphas)
-        q_squared_array = np.array([lasso.cross_validate_alpha(alpha) for alpha in alpha_range])
+        q_squared_array = np.array([lasso.cross_validate_alpha(alpha, n_folds) for alpha in alpha_range])
         return q_squared_array
+
+    def select_alpha(window, method='max', alpha_list=None):
+        """
+        Select the alpha values for each window to use for fitting the initial model
+
+        :param roller:
+        :param method: str
+            currently supports methods 'max' and 'manual'. 'max' selects alpha values that maximize the cross validation
+            score for each window. 'manual' is just a dummy method that will pass through the list provided for it after
+            verifying that is the right size.
+        :param alpha_list:
+        :return:
+        """
+        total_window_number = roller.get_n_windows()
+
+        if method is 'max':
+            for nth_window in range(0,total_window_number):
+                current_window = roller.get_window()
+                q_list = roller.cross_validate_window(current_window)
+
+
+        elif method is 'manual':
+            if alpha_list is None:
+                raise ValueError('alpha_list cannot be None when using method "manual"')
+            if len(alpha_list) != total_window_number:
+                raise ValueError('length of supplied alpha_list (%i) must equal number of windows (%i)' % (
+                len(alpha_list), total_window_number))
 
 
