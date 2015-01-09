@@ -5,7 +5,7 @@ import numpy as np
 from util.linear_wrapper import LassoWrapper
 
 
-class Roller:
+class Roller(object):
     """
     A thing that grabs different timepoints of data, can set window and step size.
 
