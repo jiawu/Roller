@@ -41,7 +41,7 @@ def main(argv):
     rank_by = ''
 
     try:
-        opts, args = getopt.getopt(argv,"hi:w:a:",["ifile=","window_size","alpha"])
+        opts, args = getopt.getopt(argv,"hi:w:a:s:",["ifile=","window_size","alpha","save_file"])
     except getopt.GetoptError:
         print 'run_pipeline_a.py -i <parameter-file>'
         sys.exit(2)
@@ -55,18 +55,22 @@ def main(argv):
             window_size = arg
         elif opt in ("-a", "--alpha"):
             alpha = arg
+        elif opt in ("-s", "--save"):
+            save_file = arg
     print 'The parameter input file is "', parameter_file
-    pd = setup_pipeline(parameter_file, window_size, alpha)
+    pd = setup_pipeline(parameter_file, window_size, alpha, save_file)
     results = execute(pd)
     print(results['aupr'])
 
-def setup_pipeline(parameter_file, window_size, alpha):
+def setup_pipeline(parameter_file, window_size, alpha, save_file):
     ### read parameters from file ###
     pd = readParams(parameter_file)
 
     ### override file pds with command call -- useful for looping through windows ###
     if pd['window_size'] == '':
         pd['window_size'] = window_size
+    if pd['save_file'] == '':
+        pd['save_file'] = save_file
     if pd['alpha'] == '':
         pd['alpha'] = float(alpha)
     return(pd)
