@@ -150,15 +150,11 @@ def initialize_model(pd):
     roll_me.set_window(window_size)
     total_window_number = roll_me.get_n_windows()
 
-    imputer = Imputer(missing_values="NaN")
-    mpl.rcParams.update({'font.size':8})
-    mpl.rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
     roll_me.remove_blank_rows()
 
-    #todo: fix the below two lines, I don't need this to get the matrix size...
     current_window = roll_me.get_window()
-    filled_matrix = imputer.fit_transform(current_window)
-    n_genes = filled_matrix.shape[1]
+    #filled_matrix = imputer.fit_transform(current_window)
+    n_genes = current_window.shape[1]
     coeff_matrix_3d = np.empty((n_genes,n_genes,total_window_number))
     gene_names=list(current_window.columns.values)
 
@@ -204,6 +200,18 @@ def initialize_model(pd):
     pd['alpha'] = best_alpha
     pd['alpha_list'] = alpha_list
     return(initial_model, roll_me, pd)
+
+def select_alpha(roller, method='max', alpha_list=None):
+    if method is 'max':
+        #q_list = [current_lasso.cross_validate_alpha(a1) for a1 in alpha_range]
+        pass
+    elif method is 'manual':
+        if alpha_list is None:
+            raise ValueError('alpha_list cannot be None when using method "manual"')
+        if len(alpha_list) != roller.get_n_windows():
+            raise ValueError('length of supplied alpha_list (%i) must equal number of windows (%i)' % (
+            len(alpha_list), roller.get_n_windows()))
+
 
 def permute_model(roll_me, pd):
     print("Running permutation test...")
