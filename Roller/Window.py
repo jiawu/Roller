@@ -27,3 +27,17 @@ class Window(object):
                                        index=self.df.index.values.copy())
 
         return resample_window
+
+    def add_noise_to_window(self, window, max_random=0.2):
+        """
+        Add uniform noise to each value
+        :param window: dataframe
+
+        :param max_random: float
+            Amount of noise to add to each value, plus or minus
+        :return: array
+
+        """
+        noise = np.random.uniform(low=1-max_random, high=1+max_random, size=window.shape)
+        noisy_values = np.multiply(window, noise)
+        return noisy_values
