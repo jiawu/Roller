@@ -7,27 +7,20 @@ from Roller.util.linear_wrapper import LassoWrapper
 
 
 class Window(object):
-    def __init__(self, dataframe, alpha=None):
+    def __init__(self, dataframe):
         self.df = dataframe
-        self.alpha = alpha
         self.window_values = dataframe.values
+        self.samples = dataframe.index.values
+        self.genes = dataframe.index.values
         self.resampled_window = None
         self.noisy_window = None
 
     def fit_window(self, window_values, alpha):
         """
-        Given a window get the lasso coefficients
-        :param window_values: array-like
-            The values to use for the fit
-        :param alpha: float
-            Value to use for lasso regression
-        :return: array
-            Array of lasso beta regression coefficients
+        Fit the window with the specified window
 
         """
-        lasso = LassoWrapper(window_values)
-        beta_coef = lasso.get_coeffs(alpha)
-        return beta_coef
+        pass
 
     def resample_window(self):
         """
@@ -60,3 +53,23 @@ class Window(object):
         noisy_values = np.multiply(window, noise)
         self.noisy_window = noisy_values
         return
+
+class Lasso_Window(Window):
+    def __init__(self, dataframe, alpha=None):
+        super(Lasso_Window, self).__init__(dataframe)
+        self.alpha = alpha
+
+    def fit_window(self, window_values, alpha):
+        """
+        Given a window get the lasso coefficients
+        :param window_values: array-like
+            The values to use for the fit
+        :param alpha: float
+            Value to use for lasso regression
+        :return: array
+            Array of lasso beta regression coefficients
+
+        """
+        lasso = LassoWrapper(window_values)
+        beta_coef = lasso.get_coeffs(alpha)
+        return beta_coef
