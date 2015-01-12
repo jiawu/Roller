@@ -10,6 +10,24 @@ class Window(object):
         self.df = dataframe
         self.alpha = alpha
         self.window_values = dataframe.values
+        self.resampled_window = None
+        self.noisy_window = None
+
+    def fit_window(self, window, alpha):
+        """
+        Given a window get the lasso coefficients
+        :param window: data-frame
+            A roller window
+        :param alpha: float
+            Value to use for lasso regression
+        :return: array
+            Array of lasso beta regression coefficients
+
+        """
+        window_values = window.values
+        lasso = LassoWrapper(window_values)
+        beta_coef = lasso.get_coeffs(alpha)
+        return beta_coef
 
     def resample_window(self):
         """
