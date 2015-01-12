@@ -3,7 +3,7 @@ __email__ = 'jfinkle@u.northwestern.edu'
 
 import numpy as np
 import pandas as pd
-from Roller.util.linear_wrapper import LassoWrapper
+from util.linear_wrapper import LassoWrapper
 
 
 class Window(object):
