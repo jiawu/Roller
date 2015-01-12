@@ -12,8 +12,6 @@ class Window(object):
         self.window_values = dataframe.values
         self.samples = dataframe.index.values
         self.genes = dataframe.index.values
-        self.resampled_window = None
-        self.noisy_window = None
 
     def fit_window(self, window_values, alpha):
         """
@@ -36,10 +34,9 @@ class Window(object):
 
         #resample_window = pd.DataFrame(resample_values, columns=self.df.columns.values.copy(),
         #                               index=self.df.index.values.copy())
-        self.resampled_window = resample_values
-        return
+        return resample_values
 
-    def add_noise_to_window(self, window, max_random=0.2):
+    def add_noise_to_values(self, window_values, max_random=0.2):
         """
         Add uniform noise to each value
         :param window: dataframe
@@ -49,10 +46,10 @@ class Window(object):
         :return: array
 
         """
-        noise = np.random.uniform(low=1-max_random, high=1+max_random, size=window.shape)
-        noisy_values = np.multiply(window, noise)
-        self.noisy_window = noisy_values
-        return
+
+        noise = np.random.uniform(low=1-max_random, high=1+max_random, size=window_values.shape)
+        noisy_values = np.multiply(window_values, noise)
+        return noisy_values
 
 class Lasso_Window(Window):
     def __init__(self, dataframe, alpha=None):
