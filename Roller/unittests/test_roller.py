@@ -60,7 +60,7 @@ class TestRoller(unittest.TestCase):
 
     def test_cross_validate_window_alpha(self):
         window = pd.DataFrame(np.random.random([10, 5]))
-        q_values = self.roller.cross_validate_window(window)
+        q_values, alphas  = self.roller.cross_validate_window(window)
 
 if __name__ == '__main__':
     unittest.main()

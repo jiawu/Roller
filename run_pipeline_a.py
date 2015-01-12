@@ -151,15 +151,11 @@ def initialize_model(pd):
     pdb.set_trace()
     total_window_number = roll_me.get_n_windows()
 
-    imputer = Imputer(missing_values="NaN")
-    mpl.rcParams.update({'font.size':8})
-    mpl.rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
     roll_me.remove_blank_rows()
 
-    #todo: fix the below two lines, I don't need this to get the matrix size...
     current_window = roll_me.get_window()
-    filled_matrix = imputer.fit_transform(current_window)
-    n_genes = filled_matrix.shape[1]
+    #filled_matrix = imputer.fit_transform(current_window)
+    n_genes = current_window.shape[1]
     coeff_matrix_3d = np.empty((n_genes,n_genes,total_window_number))
     gene_names=list(current_window.columns.values)
 

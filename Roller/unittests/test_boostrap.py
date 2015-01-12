@@ -105,3 +105,4 @@ if __name__ == '__main__':
     sys.exit()
     for ii in range(17):
         Grapher.plot_stability(freq_matrix, alphas, ii)
+'''
