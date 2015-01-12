@@ -148,6 +148,7 @@ def initialize_model(pd):
 
     roll_me = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
     roll_me.set_window(window_size)
+    pdb.set_trace()
     total_window_number = roll_me.get_n_windows()
 
     imputer = Imputer(missing_values="NaN")
