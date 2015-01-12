@@ -3,6 +3,7 @@ __email__ = 'jfinkle@u.northwestern.edu'
 
 import numpy as np
 import pandas as pd
+from Roller.util.linear_wrapper import LassoWrapper
 
 
 class Window(object):
@@ -13,18 +14,17 @@ class Window(object):
         self.resampled_window = None
         self.noisy_window = None
 
-    def fit_window(self, window, alpha):
+    def fit_window(self, window_values, alpha):
         """
         Given a window get the lasso coefficients
-        :param window: data-frame
-            A roller window
+        :param window_values: array-like
+            The values to use for the fit
         :param alpha: float
             Value to use for lasso regression
         :return: array
             Array of lasso beta regression coefficients
 
         """
-        window_values = window.values
         lasso = LassoWrapper(window_values)
         beta_coef = lasso.get_coeffs(alpha)
         return beta_coef
@@ -41,10 +41,10 @@ class Window(object):
         # For each column randomly choose samples
         resample_values = np.array([np.random.choice(self.window_values[:, ii], size=n) for ii in range(p)]).T
 
-        resample_window = pd.DataFrame(resample_values, columns=self.df.columns.values.copy(),
-                                       index=self.df.index.values.copy())
-
-        return resample_window
+        #resample_window = pd.DataFrame(resample_values, columns=self.df.columns.values.copy(),
+        #                               index=self.df.index.values.copy())
+        self.resampled_window = resample_values
+        return
 
     def add_noise_to_window(self, window, max_random=0.2):
         """
@@ -58,4 +58,5 @@ class Window(object):
         """
         noise = np.random.uniform(low=1-max_random, high=1+max_random, size=window.shape)
         noisy_values = np.multiply(window, noise)
-        return noisy_values
+        self.noisy_window = noisy_values
+        return
