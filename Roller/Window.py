@@ -111,9 +111,6 @@ class Lasso_Window(Window):
     def get_null_alpha(self):
         pass
 
-    def cross_validate_alpha(self):
-        pass
-
     def fit_window(self):
         print "This method needs to override the super class"
 
@@ -130,7 +127,7 @@ class Lasso_Window(Window):
         """returns a 2D array with target as rows and regulators as columns"""
         clf = linear_model.Lasso(alpha)
         #loop that iterates through the target genes
-        all_data = self.data
+        all_data = self.window_values
         coeff_matrix = np.array([],dtype=np.float_).reshape(0, all_data.shape[1])
 
         for col_index,column in enumerate(all_data.T):
@@ -166,7 +163,7 @@ class Lasso_Window(Window):
         """
         warnings.simplefilter("ignore")
         # Get maximum edges, assuming all explanors are also response variables and no self edges
-        [n, p] = self.data.shape
+        [n, p] = self.window_values.shape
         max_edges = p * (p-1)
 
         # Raise exception if Lasso doesn't converge with alpha == 0
@@ -215,7 +212,7 @@ class Lasso_Window(Window):
             when number of folds is the same as number of samples this is equivalent to leave-one-out
         :return:
         '''
-        data = self.data.copy()
+        data = self.window_values.copy()
         n_elements = len(data)
         kf = KFold(n_elements, n_folds)
 
@@ -242,7 +239,7 @@ class Lasso_Window(Window):
         q_squared = 1-press/ss
         return q_squared
 
-    def sum_of_squares(X):
+    def sum_of_squares(self, X):
         column_mean = np.mean(X, axis=0)
         ss = np.sum(np.power(X-column_mean,2))
         return ss
