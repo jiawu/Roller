@@ -4,7 +4,6 @@ __email__ = 'jfinkle@u.northwestern.edu'
 import unittest
 import numpy as np
 import Roller
-from Roller import Window
 import pandas as pd
 import numpy.testing as npt
 
@@ -17,8 +16,8 @@ class TestWindow(unittest.TestCase):
         gene_end = None
 
         self.roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
-        self.test_window = Window(self.roller.current_window)
-        self.assertTrue(type(self.test_window) == Window)
+        self.test_window = Roller.Window(self.roller.current_window)
+        self.assertTrue(type(self.test_window) == Roller.Window)
 
     def test_resample_window(self):
 
@@ -50,6 +49,17 @@ class TestWindow(unittest.TestCase):
         self.assertTrue(np.all(noise_magnitude <= max_random))
 
 
+class TestLasso_Window(unittest.TestCase):
+    def setUp(self):
+        file_path = "../../data/dream4/insilico_size10_1_timeseries.tsv"
+        gene_start_column = 1
+        time_label = "Time"
+        separator = "\t"
+        gene_end = None
+
+        self.roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
+        self.test_window = Lasso(self.roller.current_window)
+        self.assertTrue(type(self.test_window) == Window)
 
 if __name__ == '__main__':
     unittest.main()
