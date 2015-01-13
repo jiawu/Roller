@@ -12,8 +12,9 @@ class Window(object):
         self.window_values = dataframe.values
         self.samples = dataframe.index.values
         self.genes = dataframe.index.values
+        self.edge_table = pd.DataFrame()
 
-    def fit_window(self, window_values, alpha):
+    def fit_window(self):
         """
         Fit the window with the specified window
 
@@ -51,6 +52,18 @@ class Window(object):
         noisy_values = np.multiply(window_values, noise)
         return noisy_values
 
+    def permutation_test(self):
+        pass
+
+    def bootstrap(self):
+        pass
+
+    def rank_edges(self, method):
+        pass
+
+    def initialize_params(self):
+        pass
+
 class Lasso_Window(Window):
     def __init__(self, dataframe, alpha=None):
         super(Lasso_Window, self).__init__(dataframe)
@@ -70,3 +83,21 @@ class Lasso_Window(Window):
         lasso = LassoWrapper(window_values)
         beta_coef = lasso.get_coeffs(alpha)
         return beta_coef
+
+    def get_null_alpha(self):
+        pass
+
+    def cross_validate_alpha(self):
+        pass
+
+    def fit_window(self):
+        print "This method needs to override the super class"
+
+    def permutation_test(self):
+        print "This method needs to override the super class"
+
+    def bootstrap(self):
+        print "This method needs to override the super class"
+
+    def initialize_params(self):
+        print "This method needs to override the super class"
