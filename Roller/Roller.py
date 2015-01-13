@@ -257,6 +257,6 @@ class Roller(object):
                 (best_alpha,Qs) = max(alpha_table, key = lambda t: t[1])
             elif pd['override-alpha'] == "true":
                 best_alpha = alpha
-            coeff_mat = current_lasso.get_coeffs(best_alpha)
+            coeff_mat = current_lasso.fit_window(best_alpha)
 
 

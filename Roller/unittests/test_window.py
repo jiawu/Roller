@@ -59,17 +59,17 @@ class TestLasso_Window(unittest.TestCase):
         self.roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
         self.test_lasso_window = Roller.Lasso_Window(self.roller.current_window)
 
-    def test_get_max_alpha(self):
+    def test_get_null_alpha(self):
         alpha_precision = 1e-9
-        max_alpha = self.test_lasso_window.get_max_alpha()
-        num_coef_at_max_alpha = np.count_nonzero(self.test_lasso_window.get_coeffs(max_alpha))
-        num_coef_less_max_alpha = np.count_nonzero(self.test_lasso_window.get_coeffs(max_alpha-alpha_precision))
+        max_alpha = self.test_lasso_window.get_null_alpha()
+        num_coef_at_max_alpha = np.count_nonzero(self.test_lasso_window.fit_window(max_alpha))
+        num_coef_less_max_alpha = np.count_nonzero(self.test_lasso_window.fit_window(max_alpha-alpha_precision))
         self.assertTrue(num_coef_at_max_alpha == 0)
         self.assertTrue(num_coef_less_max_alpha > 0)
 
     def test_cross_validate_alpha(self):
         data = self.test_lasso_window.window_values
-        alpha_range = np.linspace(0, self.test_lasso_window.get_max_alpha())
+        alpha_range = np.linspace(0, self.test_lasso_window.get_null_alpha())
         q_list = [self.test_lasso_window.cross_validate_alpha(alpha) for alpha in alpha_range]
 
     def test_sum_of_squares(self):
@@ -77,6 +77,10 @@ class TestLasso_Window(unittest.TestCase):
         expected_ss = 16
         calc_ss = self.test_lasso_window.sum_of_squares(data)
         self.assertEqual(calc_ss, expected_ss)
+
+    def test_cv_select_alpha(self):
+        alpha_range = np.linspace(0, 1)
+        self.test_lasso_window.cv_select_alpha(alpha_range)
 
 if __name__ == '__main__':
     unittest.main()

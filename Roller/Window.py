@@ -89,30 +89,12 @@ class Window(object):
         pass
 
 class Lasso_Window(Window):
-    def __init__(self, dataframe, alpha=None):
+    def __init__(self, dataframe):
         super(Lasso_Window, self).__init__(dataframe)
-        self.alpha = alpha
-
-    def fit_window(self, window_values, alpha):
-        """
-        Given a window get the lasso coefficients
-        :param window_values: array-like
-            The values to use for the fit
-        :param alpha: float
-            Value to use for lasso regression
-        :return: array
-            Array of lasso beta regression coefficients
-
-        """
-        lasso = LassoWrapper(window_values)
-        beta_coef = lasso.get_coeffs(alpha)
-        return beta_coef
-
-    def get_null_alpha(self):
-        pass
-
-    def fit_window(self):
-        print "This method needs to override the super class"
+        self.alpha = None
+        self.beta_coefficients = None
+        self.cv_alpha_range = None
+        self.cv_scores = None
 
     def permutation_test(self):
         print "This method needs to override the super class"
@@ -120,10 +102,17 @@ class Lasso_Window(Window):
     def bootstrap(self):
         print "This method needs to override the super class"
 
-    def initialize_params(self):
-        print "This method needs to override the super class"
+    def initialize_params(self, alpha=None):
+        """
+        Choose the value of alpha to use for fitting
+        :param alpha: float, optional
+            The alpha value to use for the window. If none is entered the alpha will be chosen by cross validation
+        :return:
+        """
+        if alpha is None:
+            self.alpha = self.cross_validate_alpha()
 
-    def get_coeffs(self, alpha=0.2):
+    def fit_window(self, alpha=0.2):
         """returns a 2D array with target as rows and regulators as columns"""
         clf = linear_model.Lasso(alpha)
         #loop that iterates through the target genes
@@ -143,7 +132,7 @@ class Lasso_Window(Window):
             coeff_matrix=np.vstack((coeff_matrix,coeffs))
         return coeff_matrix
 
-    def get_max_alpha(self, max_expected_alpha=1e4, min_step_size=1e-9):
+    def get_null_alpha(self, max_expected_alpha=1e4, min_step_size=1e-9):
         """
         Get the smallest value of alpha that returns a lasso coefficient matrix of all zeros
 
@@ -167,11 +156,11 @@ class Lasso_Window(Window):
         max_edges = p * (p-1)
 
         # Raise exception if Lasso doesn't converge with alpha == 0
-        if np.count_nonzero(self.get_coeffs(0)) != max_edges:
+        if np.count_nonzero(self.fit_window(0)) != max_edges:
             raise ValueError('Lasso does not converge with alpha = 0')
 
         # Raise exception if max_expected_alpha does not return all zero betas
-        if np.count_nonzero(self.get_coeffs(max_expected_alpha)) != 0:
+        if np.count_nonzero(self.fit_window(max_expected_alpha)) != 0:
             raise ValueError('max_expected_alpha not high enough, coefficients still exist. Guess higher')
 
         # Set ranges of step sizes, assumed to be powers of 10
@@ -195,7 +184,7 @@ class Lasso_Window(Window):
 
             # In the current range, check when coefficients start popping up
             for cur_alpha in cur_range:
-                num_coef = np.count_nonzero(self.get_coeffs(cur_alpha))
+                num_coef = np.count_nonzero(self.fit_window(cur_alpha))
                 if num_coef > 0:
                     cur_min = cur_alpha
                 elif num_coef == 0:
@@ -203,6 +192,11 @@ class Lasso_Window(Window):
                     alpha_max = cur_alpha
                     break
         return alpha_max
+
+    def cv_select_alpha(self, alpha_range, n_folds=3):
+        self.cv_alpha_range = alpha_range
+        self.cv_scores = [self.cross_validate_alpha(alpha, n_folds) for alpha in alpha_range]
+
 
     def cross_validate_alpha(self, alpha, n_folds=3):
         '''
