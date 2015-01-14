@@ -77,7 +77,7 @@ class TestLasso_Window(unittest.TestCase):
     def test_cross_validate_alpha(self):
         test_alpha = 0.9 * self.test_lasso_window.get_null_alpha()
 
-        q_squared = self.test_lasso_window.cross_validate_alpha(test_alpha)
+        q_squared = self.test_lasso_window.cross_validate_alpha(test_alpha, 3)
 
         # At least make sure there is a q_squared value for each gene
         self.assertTrue(len(q_squared) == len(self.test_lasso_window.genes))

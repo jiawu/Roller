@@ -199,7 +199,7 @@ class Lasso_Window(Window):
         self.cv_scores = [self.cross_validate_alpha(alpha, n_folds) for alpha in alpha_range]
         #print self.cv_scores
 
-    def cross_validate_alpha(self, alpha, n_folds=3):
+    def cross_validate_alpha(self, alpha, n_folds):
         '''
         Get a Q^2 value for each explanatory value (column) at the given alpha value
         :param alpha: float
