@@ -93,8 +93,7 @@ class Lasso_Window(Window):
         super(Lasso_Window, self).__init__(dataframe)
         self.alpha = None
         self.beta_coefficients = None
-        self.cv_alpha_range = None
-        self.cv_scores = None
+        self.cv_table = None
 
         # Try set the null alpha value using default parameters.
         try:
@@ -200,11 +199,43 @@ class Lasso_Window(Window):
                     break
         return alpha_max
 
-    def cv_select_alpha(self, alpha_range, n_folds=3):
-        pass
-        #self.cv_alpha_range = alpha_range
-        #self.cv_scores = [self.cross_validate_alpha(alpha, n_folds) for alpha in alpha_range]
-        #print self.cv_scores
+    def cv_select_alpha(self, alpha_range=None, method='modelQ2', n_folds=3):
+        """
+        Calculate the cross-validation metrics for a range of alpha values and select the best one based on the chosen
+        method
+        :param alpha_range: list, optional
+            A range of alpha values to test. Default is a linspace of 50 alpha values from 0.0 to null_alpha
+        :param method: str, optional
+            The method to use to set the alpha value. Current methods are 'modelQ2' and 'max_posQ2'. 'modelQ2' uses the
+            alpha that has the highest Q-squared value for the whole model. 'max_posQ2' uses the alpha that has the
+            maximum number of genes with positive Q-squared values. Default is modelQ2
+        :param n_folds: int, optional
+            The number of folds to use during cross validation. Default is 3. If n_folds equals the number of samples
+            this is equivalent to leave-one-out-validation
+        :return:
+            Set the attribute cv_table
+        """
+
+        if alpha_range is None:
+            alpha_range = np.linspace(0, self.null_alpha)
+
+        # Calculate the cv_table values
+        cv_results = np.array([self.cross_validate_alpha(alpha, n_folds, True) for alpha in alpha_range])
+        column_labels = np.append(self.genes+"_Q^2", ["Model_Q^2", "positive_q2"])
+        df = pd.DataFrame(cv_results, columns=column_labels)
+
+        # Insert the alpha range as the first column
+        df.insert(0, 'alpha', alpha_range)
+
+        if method == 'modelQ2':
+            # Set the window alpha to the alpha that produced the highest Q^2 value
+            self.alpha = alpha_range[df["Model_Q^2"].idxmax(1)]
+
+        elif method == 'max_posQ2':
+            self.alpha = alpha_range[df["positive_q2"].idxmax(1)]
+
+        return
+
 
     def cross_validate_alpha(self, alpha, n_folds, condensed=False):
         '''
