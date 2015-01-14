@@ -245,7 +245,7 @@ class Lasso_Window(Window):
         model_q_squared = 1 - np.sum(press)/np.sum(ss)
 
         if condensed:
-            return np.append(q_squared, model_q_squared)
+            return np.append(q_squared, [model_q_squared, np.sum(q_squared > 0)])
         else:
             return q_squared, model_q_squared
 

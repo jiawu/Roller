@@ -87,7 +87,7 @@ class TestLasso_Window(unittest.TestCase):
         folds = 3
         cv_results = np.array(
             [self.test_lasso_window.cross_validate_alpha(alpha, folds, True) for alpha in alpha_range])
-        column_labels = np.append(self.test_lasso_window.genes+"_Q^2", "Model_Q^2")
+        column_labels = np.append(self.test_lasso_window.genes+"_Q^2", ["Model_Q^2", "positive_q2"])
         df = pd.DataFrame(cv_results, columns=column_labels)
         df.insert(0, 'alpha', alpha_range)
         print df.head()
