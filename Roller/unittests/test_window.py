@@ -83,8 +83,10 @@ class TestLasso_Window(unittest.TestCase):
         self.assertTrue(len(q_squared) == len(self.test_lasso_window.genes))
 
     def test_cv_select_alpha(self):
-        self.test_lasso_window.cv_select_alpha(method='max_posQ2')
         self.test_lasso_window.cv_select_alpha()
+
+        # Make sure alpha and cv_table are no longer none
+        self.assertTrue(self.test_lasso_window.alpha is not None and self.test_lasso_window.cv_table is not None)
 
 if __name__ == '__main__':
     unittest.main()

@@ -222,10 +222,15 @@ class Lasso_Window(Window):
         # Calculate the cv_table values
         cv_results = np.array([self.cross_validate_alpha(alpha, n_folds, True) for alpha in alpha_range])
         column_labels = np.append(self.genes+"_Q^2", ["Model_Q^2", "positive_q2"])
+
+        # Put the results into a dataframe
         df = pd.DataFrame(cv_results, columns=column_labels)
 
         # Insert the alpha range as the first column
         df.insert(0, 'alpha', alpha_range)
+
+        # Set Lasso_Window attributes with results
+        self.cv_table = df.copy()
 
         if method == 'modelQ2':
             # Set the window alpha to the alpha that produced the highest Q^2 value
