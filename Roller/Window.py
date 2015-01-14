@@ -236,8 +236,13 @@ class Lasso_Window(Window):
 
             press += current_press
             ss += current_ss
+
+        # Calculate the Q^2 value of each gene
         q_squared = 1-press/ss
-        return q_squared
+
+        # Calculate the Q^2 of the whole model. This is different than averaging the individual q_squared values
+        model_q_squared = 1 - np.sum(press)/np.sum(ss)
+        return q_squared, model_q_squared
 
     def sum_of_squares(self, X):
         """
