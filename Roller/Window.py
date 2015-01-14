@@ -92,10 +92,16 @@ class Lasso_Window(Window):
     def __init__(self, dataframe):
         super(Lasso_Window, self).__init__(dataframe)
         self.alpha = None
-        self.null_alpha = None
         self.beta_coefficients = None
         self.cv_alpha_range = None
         self.cv_scores = None
+
+        # Try set the null alpha value using default parameters.
+        try:
+            self.null_alpha = self.get_null_alpha()
+        except ValueError:
+            warnings.warn("Could not set null_alpha with default parameters. Set manually")
+            self.null_alpha = None
 
     def permutation_test(self):
         print "This method needs to override the super class"
