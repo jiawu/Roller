@@ -83,8 +83,15 @@ class TestLasso_Window(unittest.TestCase):
         self.assertTrue(len(q_squared) == len(self.test_lasso_window.genes))
 
     def test_cv_select_alpha(self):
-        alpha_range = np.linspace(0, self.test_lasso_window.get_null_alpha())
-        self.test_lasso_window.cv_select_alpha(alpha_range)
+        alpha_range = np.linspace(0, self.test_lasso_window.null_alpha)
+        folds = 3
+        cv_results = np.array(
+            [self.test_lasso_window.cross_validate_alpha(alpha, folds, True) for alpha in alpha_range])
+        column_labels = np.append(self.test_lasso_window.genes+"_Q^2", "Model_Q^2")
+        df = pd.DataFrame(cv_results, columns=column_labels)
+        df.insert(0, 'alpha', alpha_range)
+        print df.head()
+        #self.test_lasso_window.cv_select_alpha(alpha_range)
 
 if __name__ == '__main__':
     unittest.main()

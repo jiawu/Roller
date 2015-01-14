@@ -201,11 +201,12 @@ class Lasso_Window(Window):
         return alpha_max
 
     def cv_select_alpha(self, alpha_range, n_folds=3):
-        self.cv_alpha_range = alpha_range
-        self.cv_scores = [self.cross_validate_alpha(alpha, n_folds) for alpha in alpha_range]
+        pass
+        #self.cv_alpha_range = alpha_range
+        #self.cv_scores = [self.cross_validate_alpha(alpha, n_folds) for alpha in alpha_range]
         #print self.cv_scores
 
-    def cross_validate_alpha(self, alpha, n_folds):
+    def cross_validate_alpha(self, alpha, n_folds, condensed=False):
         '''
         Get a Q^2 value for each explanatory value (column) at the given alpha value
         :param alpha: float
@@ -242,7 +243,11 @@ class Lasso_Window(Window):
 
         # Calculate the Q^2 of the whole model. This is different than averaging the individual q_squared values
         model_q_squared = 1 - np.sum(press)/np.sum(ss)
-        return q_squared, model_q_squared
+
+        if condensed:
+            return np.append(q_squared, model_q_squared)
+        else:
+            return q_squared, model_q_squared
 
     def sum_of_squares(self, X):
         """
