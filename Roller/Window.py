@@ -14,7 +14,7 @@ class Window(object):
         self.df = dataframe
         self.window_values = dataframe.values
         self.samples = dataframe.index.values
-        self.genes = dataframe.index.values
+        self.genes = dataframe.columns.values
         self.edge_table = pd.DataFrame()
 
     def fit_window(self):
@@ -92,6 +92,7 @@ class Lasso_Window(Window):
     def __init__(self, dataframe):
         super(Lasso_Window, self).__init__(dataframe)
         self.alpha = None
+        self.null_alpha = None
         self.beta_coefficients = None
         self.cv_alpha_range = None
         self.cv_scores = None
@@ -196,12 +197,12 @@ class Lasso_Window(Window):
     def cv_select_alpha(self, alpha_range, n_folds=3):
         self.cv_alpha_range = alpha_range
         self.cv_scores = [self.cross_validate_alpha(alpha, n_folds) for alpha in alpha_range]
-
+        #print self.cv_scores
 
     def cross_validate_alpha(self, alpha, n_folds=3):
         '''
-        Get a Q^2 value for the alpha value
-        :param alpha:
+        Get a Q^2 value for each explanatory value (column) at the given alpha value
+        :param alpha: float
         :param n_folds: int
             when number of folds is the same as number of samples this is equivalent to leave-one-out
         :return:
@@ -219,13 +220,12 @@ class Lasso_Window(Window):
             y_test = x_test.copy()
 
             # Run Lasso
-            lasso = LassoWrapper(x_train)
-            current_coef = lasso.get_coeffs(alpha)
+            current_coef = self.get_coeffs(x_train, alpha)
 
             y_predicted = np.dot(x_test, current_coef)
 
             # Calculate PRESS and SS
-            current_press = np.sum(np.power(y_predicted-y_test, 2))
+            current_press = np.sum(np.power(y_predicted-y_test, 2), axis=0)
             current_ss = self.sum_of_squares(y_test)
 
             press += current_press
@@ -234,6 +234,34 @@ class Lasso_Window(Window):
         return q_squared
 
     def sum_of_squares(self, X):
+        """
+        Calculate the sum of the squares for each column
+        :param X: array-like
+            The data matrix for which the sum of squares is taken
+        :return: float or array-like
+            The sum of squares, columnwise or total
+        """
         column_mean = np.mean(X, axis=0)
-        ss = np.sum(np.power(X-column_mean,2))
+        ss = np.sum(np.power(X-column_mean, 2), axis=0)
         return ss
+
+    def get_coeffs(self, data, alpha):
+        """returns a 2D array with target as rows and regulators as columns"""
+        clf = linear_model.Lasso(alpha)
+        #loop that iterates through the target genes
+        all_data = data.copy()
+        coeff_matrix = np.array([],dtype=np.float_).reshape(0, all_data.shape[1])
+
+        for col_index,column in enumerate(all_data.T):
+            #delete the column that is currently being tested
+            X_matrix = np.delete(all_data, col_index, axis=1)
+            #take out the column so that the gene does not regress on itself
+            target_TF = all_data[:,col_index]
+            clf.fit(X_matrix, target_TF)
+            coeffs = clf.coef_
+            #artificially add a 0 to where the col_index is
+            #to prevent self-edges
+            coeffs = np.insert(coeffs,col_index,0)
+            coeff_matrix=np.vstack((coeff_matrix,coeffs))
+
+        return coeff_matrix
