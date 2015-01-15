@@ -15,7 +15,7 @@ import numpy.testing as npt
 
 class TestPermutations(unittest.TestCase):
     def setUp(self):
-        self.bootstrapper = Ranker.Bootstrapper()
+        self.bootstrapper = Ranker.LassoBootstrapper()
 
     def test_auc(self):
         x = np.arange(11)

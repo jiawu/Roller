@@ -4,7 +4,9 @@ from linear_wrapper import LassoWrapper
 import numpy as np
 from scipy import integrate
 
-class Bootstrapper(object):
+#todo: Make a general object
+
+class LassoBootstrapper(object):
     # Method specific
     # Generate n models
     # Keep beta value ranges for each model

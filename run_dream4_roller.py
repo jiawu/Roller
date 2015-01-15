@@ -7,7 +7,7 @@ import matplotlib as mpl
 from Roller.util.permutation_test import Permuter
 import itertools
 from Roller.util import utility_module as utility
-from Roller.util.Ranker import Bootstrapper
+from Roller.util.Ranker import LassoBootstrapper
 from Roller.util.Evaluator import Evaluator
 import pdb
 import pandas as pd
@@ -91,7 +91,7 @@ permuted_model_sd = utility.create_3D_linked_list(edge_labels, perm_sd, 'p-sd')
 
 roll_me.reset()
 print("Running bootstrapping test...")
-booter = Bootstrapper(roll_me)
+booter = LassoBootstrapper(roll_me)
 boots = 100
 max_random = 0.1
 n_alphas = 100
