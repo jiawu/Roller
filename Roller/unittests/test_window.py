@@ -100,5 +100,12 @@ class TestLasso_Window(unittest.TestCase):
         # Make sure alpha and cv_table are correct types
         self.assertTrue(type(calc_alpha) is np.float64 and type(calc_cv_table) is pd.DataFrame)
 
+    def test_get_coeffs(self):
+        # With alpha at 0 everything should be nonzero except the diagonal values
+        expected_non_zero = len(self.test_lasso_window.genes)**2-len(self.test_lasso_window.genes)
+        calc_coeffs = self.test_lasso_window.get_coeffs(self.test_lasso_window.window_values, 0)
+        calc_non_zero = np.count_nonzero(calc_coeffs)
+        self.assertTrue(expected_non_zero == calc_non_zero)
+
 if __name__ == '__main__':
     unittest.main()
