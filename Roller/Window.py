@@ -295,7 +295,14 @@ class LassoWindow(Window):
         return ss
 
     def get_coeffs(self, alpha, data=None):
-        """returns a 2D array with target as rows and regulators as columns"""
+        """
+        returns a 2D array with target as rows and regulators as columns
+        :param alpha: float
+            value to use for lasso fitting
+        :param data: array-like, optional
+            Data to fit. If none, will use the window values. Default is None
+        :return:
+        """
         clf = linear_model.Lasso(alpha)
         #loop that iterates through the target genes
         if data is None:
