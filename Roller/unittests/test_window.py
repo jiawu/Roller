@@ -64,12 +64,13 @@ class TestLasso_Window(unittest.TestCase):
         """ Test parameter initialization with default arguments """
         expected_alpha = self.test_lasso_window.cv_select_alpha()
         self.test_lasso_window.initialize_params()
-        print self.test_lasso_window.alpha
+        self.assertTrue(expected_alpha, self.test_lasso_window.alpha)
 
-    def test_initialize_params_default(self):
-        """ Test parameter initialization with default arguments """
-        self.test_lasso_window.initialize_params()
-        print self.test_lasso_window.alpha
+    def test_initialize_params_manual_alpha(self):
+        """ Test parameter initialization if passed an alpha value """
+        expected_alpha = 5
+        self.test_lasso_window.initialize_params(expected_alpha)
+        self.assertTrue(expected_alpha, self.test_lasso_window.alpha)
 
     def test_sum_of_squares(self):
         data = np.reshape(np.arange(6), (3, 2))
