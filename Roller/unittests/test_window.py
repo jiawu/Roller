@@ -60,6 +60,17 @@ class TestLasso_Window(unittest.TestCase):
         self.roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
         self.test_lasso_window = Roller.Lasso_Window(self.roller.current_window)
 
+    def test_initialize_params_default(self):
+        """ Test parameter initialization with default arguments """
+        expected_alpha = self.test_lasso_window.cv_select_alpha()
+        self.test_lasso_window.initialize_params()
+        print self.test_lasso_window.alpha
+
+    def test_initialize_params_default(self):
+        """ Test parameter initialization with default arguments """
+        self.test_lasso_window.initialize_params()
+        print self.test_lasso_window.alpha
+
     def test_sum_of_squares(self):
         data = np.reshape(np.arange(6), (3, 2))
         expected_ss = np.array([8, 8])
@@ -83,10 +94,10 @@ class TestLasso_Window(unittest.TestCase):
         self.assertTrue(len(q_squared) == len(self.test_lasso_window.genes))
 
     def test_cv_select_alpha(self):
-        self.test_lasso_window.cv_select_alpha()
+        calc_alpha, calc_cv_table = self.test_lasso_window.cv_select_alpha()
 
-        # Make sure alpha and cv_table are no longer none
-        self.assertTrue(self.test_lasso_window.alpha is not None and self.test_lasso_window.cv_table is not None)
+        # Make sure alpha and cv_table are correct types
+        self.assertTrue(type(calc_alpha) is np.float64 and type(calc_cv_table) is pd.DataFrame)
 
 if __name__ == '__main__':
     unittest.main()

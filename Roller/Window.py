@@ -116,7 +116,13 @@ class Lasso_Window(Window):
         :return:
         """
         if alpha is None:
-            self.alpha = self.cross_validate_alpha()
+            "Select alpha with default parameters"
+            self.alpha, self.cv_table = self.cv_select_alpha()
+        elif alpha >= 0:
+            self.alpha = alpha
+        else:
+            raise ValueError("alpha must be float or None")
+        return
 
     def fit_window(self, alpha=0.2):
         """returns a 2D array with target as rows and regulators as columns"""
@@ -212,8 +218,8 @@ class Lasso_Window(Window):
         :param n_folds: int, optional
             The number of folds to use during cross validation. Default is 3. If n_folds equals the number of samples
             this is equivalent to leave-one-out-validation
-        :return:
-            Set the attribute cv_table
+        :return: tuple
+            (alpha, cv_table)
         """
 
         if alpha_range is None:
@@ -229,17 +235,17 @@ class Lasso_Window(Window):
         # Insert the alpha range as the first column
         df.insert(0, 'alpha', alpha_range)
 
-        # Set Lasso_Window attributes with results
-        self.cv_table = df.copy()
-
         if method == 'modelQ2':
             # Set the window alpha to the alpha that produced the highest Q^2 value
-            self.alpha = alpha_range[df["Model_Q^2"].idxmax(1)]
+            cv_selected_alpha = alpha_range[df["Model_Q^2"].idxmax(1)]
 
         elif method == 'max_posQ2':
-            self.alpha = alpha_range[df["positive_q2"].idxmax(1)]
+            cv_selected_alpha = alpha_range[df["positive_q2"].idxmax(1)]
 
-        return
+        else:
+            raise ValueError("User entered method %s is not valid" %method)
+
+        return cv_selected_alpha, df.copy()
 
 
     def cross_validate_alpha(self, alpha, n_folds, condensed=False):
