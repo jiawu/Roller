@@ -88,9 +88,9 @@ class Window(object):
         """
         pass
 
-class Lasso_Window(Window):
+class LassoWindow(Window):
     def __init__(self, dataframe):
-        super(Lasso_Window, self).__init__(dataframe)
+        super(LassoWindow, self).__init__(dataframe)
         self.alpha = None
         self.beta_coefficients = None
         self.cv_table = None
@@ -124,25 +124,16 @@ class Lasso_Window(Window):
             raise ValueError("alpha must be float or None")
         return
 
-    def fit_window(self, alpha=0.2):
-        """returns a 2D array with target as rows and regulators as columns"""
-        clf = linear_model.Lasso(alpha)
-        #loop that iterates through the target genes
-        all_data = self.window_values
-        coeff_matrix = np.array([],dtype=np.float_).reshape(0, all_data.shape[1])
+    def fit_window(self):
+        """
+        Set the attributes of the window using expected pipeline procedure and calculate beta values
+        :return:
+        """
+        # Make sure an alpha value has been selected to use for fitting the window
+        if self.alpha is None:
+            raise ValueError("window alpha value must be set before the window can be fit")
 
-        for col_index,column in enumerate(all_data.T):
-            #delete the column that is currently being tested
-            X_matrix = np.delete(all_data, col_index, axis=1)
-            #take out the column so that the gene does not regress on itself
-            target_TF = all_data[:,col_index]
-            clf.fit(X_matrix, target_TF)
-            coeffs = clf.coef_
-            #artificially add a 0 to where the col_index is
-            #to prevent self-edges
-            coeffs = np.insert(coeffs,col_index,0)
-            coeff_matrix=np.vstack((coeff_matrix,coeffs))
-        return coeff_matrix
+        self.beta_coefficients = self.get_coeffs(self.alpha)
 
     def get_null_alpha(self, max_expected_alpha=1e4, min_step_size=1e-9):
         """
@@ -168,11 +159,11 @@ class Lasso_Window(Window):
         max_edges = p * (p-1)
 
         # Raise exception if Lasso doesn't converge with alpha == 0
-        if np.count_nonzero(self.fit_window(0)) != max_edges:
+        if np.count_nonzero(self.get_coeffs(0)) != max_edges:
             raise ValueError('Lasso does not converge with alpha = 0')
 
         # Raise exception if max_expected_alpha does not return all zero betas
-        if np.count_nonzero(self.fit_window(max_expected_alpha)) != 0:
+        if np.count_nonzero(self.get_coeffs(max_expected_alpha)) != 0:
             raise ValueError('max_expected_alpha not high enough, coefficients still exist. Guess higher')
 
         # Set ranges of step sizes, assumed to be powers of 10
@@ -196,7 +187,7 @@ class Lasso_Window(Window):
 
             # In the current range, check when coefficients start popping up
             for cur_alpha in cur_range:
-                num_coef = np.count_nonzero(self.fit_window(cur_alpha))
+                num_coef = np.count_nonzero(self.get_coeffs(cur_alpha))
                 if num_coef > 0:
                     cur_min = cur_alpha
                 elif num_coef == 0:
@@ -240,13 +231,13 @@ class Lasso_Window(Window):
             cv_selected_alpha = alpha_range[df["Model_Q^2"].idxmax(1)]
 
         elif method == 'max_posQ2':
+            #todo: an secondary criteria needs to be employed if this is used because there will likely be multiple alphas with the same number of positive Q2
             cv_selected_alpha = alpha_range[df["positive_q2"].idxmax(1)]
 
         else:
             raise ValueError("User entered method %s is not valid" %method)
 
         return cv_selected_alpha, df.copy()
-
 
     def cross_validate_alpha(self, alpha, n_folds, condensed=False):
         '''
@@ -269,7 +260,7 @@ class Lasso_Window(Window):
             y_test = x_test.copy()
 
             # Run Lasso
-            current_coef = self.get_coeffs(x_train, alpha)
+            current_coef = self.get_coeffs(alpha, x_train)
 
             y_predicted = np.dot(x_test, current_coef)
 
@@ -303,11 +294,15 @@ class Lasso_Window(Window):
         ss = np.sum(np.power(X-column_mean, 2), axis=0)
         return ss
 
-    def get_coeffs(self, data, alpha):
+    def get_coeffs(self, alpha, data=None):
         """returns a 2D array with target as rows and regulators as columns"""
         clf = linear_model.Lasso(alpha)
         #loop that iterates through the target genes
-        all_data = data.copy()
+        if data is None:
+            all_data = self.window_values.copy()
+        else:
+            all_data = data.copy()
+
         coeff_matrix = np.array([],dtype=np.float_).reshape(0, all_data.shape[1])
 
         for col_index,column in enumerate(all_data.T):
