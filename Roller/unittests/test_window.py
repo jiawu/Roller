@@ -107,5 +107,24 @@ class TestLassoWindow(unittest.TestCase):
         calc_non_zero = np.count_nonzero(calc_coeffs)
         self.assertTrue(expected_non_zero == calc_non_zero)
 
+    def test_bootstrap_alpha(self):
+        # The model must first be initialized
+        self.test_lassoWindow.initialize_params()
+        self.test_lassoWindow.fit_window()
+        n_genes = len(self.test_lassoWindow.genes)
+        n_boots = 100
+        test_boot = self.test_lassoWindow.bootstrap_alpha(0.02, n_boots, 0.2)
+        self.assertTrue(test_boot.shape == (n_genes, n_genes, n_boots))
+
+    def test_run_bootstrap(self):
+        # The model must first be initialized
+        self.test_lassoWindow.initialize_params()
+        self.test_lassoWindow.fit_window()
+        n_boots = 13
+        n_alphas = 20
+        n_genes = len(self.test_lassoWindow.genes)
+        self.test_lassoWindow.run_bootstrap(n_boots, n_alphas)
+        self.assertTrue(self.test_lassoWindow.bootstrap_matrix.shape == (n_genes, n_genes, n_boots, n_alphas))
+
 if __name__ == '__main__':
     unittest.main()
