@@ -235,28 +235,4 @@ class Roller(object):
         q_squared_array = np.array([lasso.cross_validate_alpha(alpha, n_folds) for alpha in alpha_range])
         return alpha_range, q_squared_array
 
-    def select_alpha(self, window, method='max', alpha_list=None):
-        """
-        Select the alpha values for each window to use for fitting the initial model
-
-        :param window:
-        :param method: str
-            currently supports methods 'max' and 'manual'. 'max' selects alpha values that maximize the cross validation
-            score for each window. 'manual' is just a dummy method that will pass through the list provided for it after
-            verifying that is the right size.
-        :param alpha_list:
-        :return:
-        """
-        total_window_number = self.get_n_windows()
-        #todo: determine where alpha overrides should be
-        if method is 'max':
-            alpha_range, q_list = self.cross_validate_window(window)
-            alpha_table = zip(alpha_range, q_list)
-            alpha_list.append(alpha_table)
-            if pd['override-alpha'] == "false":
-                (best_alpha,Qs) = max(alpha_table, key = lambda t: t[1])
-            elif pd['override-alpha'] == "true":
-                best_alpha = alpha
-            coeff_mat = current_lasso.fit_window(best_alpha)
-
 
