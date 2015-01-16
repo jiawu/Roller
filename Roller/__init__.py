@@ -1,3 +1,4 @@
 from .Roller import Roller
-from .Window import *
+from .Window import Window
+from .LassoWindow import LassoWindow
 
