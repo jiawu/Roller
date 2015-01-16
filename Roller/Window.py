@@ -88,6 +88,14 @@ class Window(object):
         """
         pass
 
+    def get_coeffs(self, *args):
+        """
+        Get the beta coefficients
+        :param args:
+        :return:
+        """
+        pass
+
 class LassoWindow(Window):
     def __init__(self, dataframe):
         super(LassoWindow, self).__init__(dataframe)
