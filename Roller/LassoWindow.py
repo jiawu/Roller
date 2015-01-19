@@ -53,67 +53,6 @@ class LassoWindow(Window):
         self.permutation_means[:,:,nth_window] = result['mean'].copy()
         self.permutation_sd[:,:,nth_window] = result['variance'].copy()
 
-    def permute_data(self, array):
-        """Warning: Modifies data in place. also remember the """
-        new_array = array.copy()
-        _ = [np.random.shuffle(i) for i in new_array]
-        return new_array
-
-    def update_variance_1D(self, prev_result, new_samples):
-        """
-        incremental calculation of means: accepts new_samples, which is a list of samples. then calculates a new mean.
-        this is a useful function for calculating the means of large arrays
-        """
-
-        n = float(prev_result["n"])
-        mean = float(prev_result["mean"])
-        sum_squares = float(prev_result["ss"])
-
-        for x in new_samples:
-            n = n + 1
-            #delta = float(x) - mean
-            old_mean = mean
-            mean = old_mean + (float(x)-old_mean)/n
-            sum_squares = sum_squares + (float(x)-mean)*(float(x)-old_mean)
-
-        if (n < 2):
-            return 0
-
-        variance = sum_squares/(n-1)
-        result = {  "mean": mean,
-                    "ss": sum_squares,
-                    "variance": variance,
-                    "n": n}
-        return result
-
-    def update_variance_2D(self, prev_result, new_samples):
-        """incremental calculation of means: accepts new_samples, which is a list of samples. then calculates a new mean. this is a useful function for calculating the means of large arrays"""
-        n = prev_result["n"] #2D numpy array with all zeros or watev
-        mean = prev_result["mean"] #2D numpy array
-        sum_squares = prev_result["ss"] #2D numpy array
-
-        #new_samples is a list of arrays
-        #x is a 2D array
-        for x in new_samples:
-            n = n + 1
-            #delta = float(x) - mean
-            old_mean = mean.copy()
-            mean = old_mean + np.divide( (x-old_mean) , n)
-            sum_squares = sum_squares + np.multiply((x-mean),(x-old_mean))
-
-        if (n[0,0] < 2):
-            result = {  "mean": mean,
-                        "ss": sum_squares,
-                        "n": n}
-            return result
-
-        variance = np.divide(sum_squares,(n-1))
-        result = {  "mean": mean,
-                    "ss": sum_squares,
-                    "variance": variance,
-                    "n": n}
-        return result
-
     def run_bootstrap(self, n_bootstraps=1000, n_alphas=20, noise=0.2):
         alpha_range = np.linspace(0, self.null_alpha, n_alphas)
         self.bootstrap_matrix = np.empty((self.n_genes, self.n_genes, n_bootstraps, n_alphas))
