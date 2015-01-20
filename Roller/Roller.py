@@ -69,15 +69,6 @@ class Roller(object):
         data = self.raw_data[self.raw_data[self.time_label].isin(time_window)]
         return data
 
-    def next(self):
-        end_index = self.current_step + self.window_width
-        if end_index <= self.overall_width:
-            self.current_step += self.step_size
-            self.current_window = self.get_window(self.current_step)
-            return self.current_window
-        else:
-            return "end"
-
     def set_window(self, width):
         self.window_width = width
 

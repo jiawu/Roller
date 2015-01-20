@@ -7,28 +7,26 @@ import matplotlib.pyplot as plt
 
 class TestRoller(unittest.TestCase):
     def setUp(self):
-        self.roller = Roller.Roller('../../data/emt/compressed_katrina_data.txt', 5, None, "time", " ")
+        # Setup a different roller
+        file_path = "../../data/dream4/insilico_size10_1_timeseries.tsv"
+        gene_start_column = 1
+        time_label = "Time"
+        separator = "\t"
+        gene_end = None
 
-    def test_next(self):
-        self.roller.next()
-        window = self.roller.get_window_raw(self.roller.current_step)
-        time_slice = window['time'].unique()
-        correct_window = [1,2,3]
-        self.assertTrue(np.array_equal(correct_window, time_slice))
+        self.dream_roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
 
     def test_get_only_genes(self):
-        only_genes = self.roller.get_window(self.roller.current_step)
+        only_genes = self.dream_roller.get_window(self.dream_roller.current_step)
         header = only_genes.columns.values
-        correct_header = ['AP1', 'AP2', 'AP3', 'AP4', 'AR', 'Bcat', 'Brachyury', 'cmyc', 'CRE', 'E2F', 'ELK1', 'ER',
-                          'ETS1', 'FOXA', 'FOXO3A', 'GATA1', 'GATA2', 'GATA3', 'GLI', 'GR', 'HIF1', 'HNF1A', 'HOXA1',
-                          'HSE', 'KLF4', 'LHX8', 'MEF2', 'MNX', 'MNX1', 'MYB', 'NANOG', 'NFAT', 'NFKb', 'NOBOX',
-                          'Notch1', 'OCT', 'P53', 'PAX1', 'PEA3', 'PR', 'PTTG', 'RAR', 'RUNX1', 'RUNX2', 'SMAD1',
-                          'SMAD3', 'SOX', 'SP1', 'SRF', 'STAT1', 'STAT3', 'STAT4', 'STAT5', 'VDR', 'WT1', 'YY1']
+        correct_header = ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9', 'G10']
         self.assertTrue(np.array_equal(correct_header, header))
 
     def test_create_windows(self):
-        self.roller.create_windows()
-        print self.roller.window_list
+        self.dream_roller.create_windows()
+        correct_n_windows = self.dream_roller.get_n_windows()
+        n_windows = len(self.dream_roller.window_list)
+        self.assertTrue(correct_n_windows == n_windows)
 
 if __name__ == '__main__':
     unittest.main()
