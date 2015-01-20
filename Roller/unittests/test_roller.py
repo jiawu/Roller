@@ -36,6 +36,14 @@ class TestRoller(unittest.TestCase):
         self.dream_roller.initialize_windows()
         for window in self.dream_roller.window_list:
             self.assertTrue(window.alpha is not None)
+            self.assertTrue(window.beta_coefficients is not None)
+
+    def test_rank_windows(self):
+        self.dream_roller.create_windows()
+        self.dream_roller.initialize_windows()
+        self.dream_roller.rank_windows()
+        for window in self.dream_roller.window_list:
+            self.assertTrue(window.edge_table is not None)
 
 if __name__ == '__main__':
     unittest.main()

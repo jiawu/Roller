@@ -53,7 +53,7 @@ class LassoWindow(Window):
         return temp_edge_table['Edge'].values
 
 
-    def run_permutation_test(self, permutation_n=1000):
+    def run_permutation_test(self, n_permutations=1000):
         #initialize permutation results array
         self.permutation_means = np.empty((self.n_genes, self.n_genes))
         self.permutation_sd = np.empty((self.n_genes, self.n_genes))
@@ -62,9 +62,9 @@ class LassoWindow(Window):
         #initialize running calculation
         result = {'n':zeros.copy(), 'mean':zeros.copy(), 'ss':zeros.copy()}
         #inner loop: permute the window N number of times
-        for nth_perm in range(0, permutation_n):
-            if (nth_perm % 200 == 0):
-                print 'Perm Run: ' +str(nth_perm)
+        for nth_perm in range(0, n_permutations):
+            #if (nth_perm % 200 == 0):
+                #print 'Perm Run: ' +str(nth_perm)
 
             #permute data
             permuted_data = self.permute_data(self.window_values)

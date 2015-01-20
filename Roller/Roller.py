@@ -96,6 +96,13 @@ class Roller(object):
     def initialize_windows(self):
         for window in self.window_list:
             window.initialize_params()
+            window.fit_window()
+
+    def rank_windows(self, n_permutes=1000, n_bootstraps=1000, n_alphas=20, noise=0.2):
+        for window in self.window_list:
+            window.run_permutation_test(n_permutes)
+            window.run_bootstrap(n_bootstraps, n_alphas, noise)
+            window.make_edge_table()
 
     def zscore_all_data(self):
         #zscores all the data
