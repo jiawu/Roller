@@ -16,6 +16,9 @@ class TestRoller(unittest.TestCase):
 
         self.dream_roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
 
+        # Only make 2 windows, so that that testing doesn't take forever
+        self.dream_roller.set_window(self.dream_roller.overall_width-1)
+
     def test_get_only_genes(self):
         only_genes = self.dream_roller.get_window(self.dream_roller.current_step)
         header = only_genes.columns.values
@@ -27,6 +30,12 @@ class TestRoller(unittest.TestCase):
         correct_n_windows = self.dream_roller.get_n_windows()
         n_windows = len(self.dream_roller.window_list)
         self.assertTrue(correct_n_windows == n_windows)
+
+    def test_initialize_windows(self):
+        self.dream_roller.create_windows()
+        self.dream_roller.initialize_windows()
+        for window in self.dream_roller.window_list:
+            self.assertTrue(window.alpha is not None)
 
 if __name__ == '__main__':
     unittest.main()

@@ -93,6 +93,9 @@ class Roller(object):
                        for index in range(self.get_n_windows())]
         self.window_list = window_list
 
+    def initialize_windows(self):
+        for window in self.window_list:
+            window.initialize_params()
 
     def zscore_all_data(self):
         #zscores all the data
