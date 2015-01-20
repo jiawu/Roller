@@ -7,6 +7,7 @@ import pandas as pd
 from sklearn import linear_model
 from sklearn.cross_validation import KFold
 from scipy import integrate
+from scipy import stats
 
 from Window import Window
 
@@ -29,6 +30,16 @@ class LassoWindow(Window):
         except ValueError:
             warnings.warn("Could not set null_alpha with default parameters. Set manually")
             self.null_alpha = None
+
+    def make_edge_table(self):
+        if self.permutation_p_values is None:
+            raise ValueError("p values must be set before making the edge table. Use method run_permutation test")
+
+        if self.edge_stability_auc is None:
+            raise ValueError("edge stability values must be set before making the edge table. "
+                             "Use method run_permutation test")
+        self.edge_table["P_Value"] = self.permutation_p_values.flatten()
+        self.edge_table["Stability"] = self.edge_stability_auc.flatten()
 
     def run_permutation_test(self, permutation_n=1000):
         #initialize permutation results array
@@ -54,7 +65,21 @@ class LassoWindow(Window):
             result = self.update_variance_2D(result, dummy_list)
 
         self.permutation_means = result['mean'].copy()
-        self.permutation_sd = result['variance'].copy()
+        self.permutation_sd = np.sqrt(result['variance'].copy())
+        self.permutation_p_values = self.calc_p_value()
+
+    def calc_p_value(self, value=None, mean=None, sd=None):
+        if value is None:
+            value = self.beta_coefficients.copy()
+        if mean is None:
+            mean = self.permutation_means.copy()
+        if sd is None:
+            sd = self.permutation_sd.copy()
+
+        z_scores = (value - mean)/sd
+        p_values = (1-stats.norm.cdf(z_scores))*2
+        return p_values
+
 
     def run_bootstrap(self, n_bootstraps=1000, n_alphas=20, noise=0.2):
         alpha_range = np.linspace(0, self.null_alpha, n_alphas)

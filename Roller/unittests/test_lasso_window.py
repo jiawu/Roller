@@ -89,10 +89,19 @@ class TestLassoWindow(unittest.TestCase):
         # The model must first be initialized
         self.test_lassoWindow.initialize_params()
         self.test_lassoWindow.fit_window()
-        self.test_lassoWindow.run_permutation_test()
+        self.test_lassoWindow.run_permutation_test(100)
         n_genes = len(self.test_lassoWindow.genes)
         self.assertTrue(self.test_lassoWindow.permutation_means.shape == (n_genes, n_genes))
         self.assertTrue(self.test_lassoWindow.permutation_sd.shape == (n_genes, n_genes))
 
+    def test_make_edge_table(self):
+        self.test_lassoWindow.initialize_params()
+        self.test_lassoWindow.fit_window()
+        self.test_lassoWindow.run_permutation_test(1000)
+        n_boots = 13
+        n_alphas = 20
+        self.test_lassoWindow.run_bootstrap(n_boots, n_alphas)
+        self.test_lassoWindow.make_edge_table()
+        #todo come up with a working test...
 if __name__ == '__main__':
     unittest.main()
