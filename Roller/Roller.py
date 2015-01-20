@@ -51,7 +51,8 @@ class Roller(object):
 
         self.gene_list = self.raw_data.columns.values[self.gene_start:self.gene_end]
 
-        self.current_window = self.get_window()
+        self.current_window = self.get_window(self.current_step)
+        self.window_list = None
 
     def get_n_windows(self):
         total_windows = (self.overall_width - self.window_width+1)/(self.step_size)
@@ -72,7 +73,7 @@ class Roller(object):
         end_index = self.current_step + self.window_width
         if end_index <= self.overall_width:
             self.current_step += self.step_size
-            self.current_window = self.get_window()
+            self.current_window = self.get_window(self.current_step)
             return self.current_window
         else:
             return "end"
@@ -97,13 +98,9 @@ class Roller(object):
         return(len(self.raw_data.columns) -1)
 
     def create_windows(self):
-        window_list
-        for index in range(self.get_n_windows()):
-            end_index = index + self.window_width
-            if end_index <= self.overall_width:
-                current_window = self.get_window(index)
-            else:
-                return "end"
+        window_list = [LassoWindow(self.get_window(index)) if (index + self.window_width <= self.overall_width) else ''
+                       for index in range(self.get_n_windows())]
+        self.window_list = window_list
 
 
     def zscore_all_data(self):
