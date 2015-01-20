@@ -41,6 +41,18 @@ class LassoWindow(Window):
         self.edge_table["P_Value"] = self.permutation_p_values.flatten()
         self.edge_table["Stability"] = self.edge_stability_auc.flatten()
 
+    def rank_edges(self, method="p_value"):
+        if self.edge_table is None:
+            raise ValueError("The edge table must be created before getting edges")
+        temp_edge_table = self.edge_table.copy()
+        if method == "p_value":
+            temp_edge_table.sort(columns=['P_Value', 'Stability'], ascending=[True, False], inplace=True)
+        elif method == "stability":
+            temp_edge_table.sort(columns=['Stability', 'P_Value'], ascending=[False, True], inplace=True)
+
+        return temp_edge_table['Edge'].values
+
+
     def run_permutation_test(self, permutation_n=1000):
         #initialize permutation results array
         self.permutation_means = np.empty((self.n_genes, self.n_genes))
