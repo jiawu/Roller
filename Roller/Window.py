@@ -16,8 +16,10 @@ class Window(object):
         self.edge_table = pd.DataFrame()
 
         self.edge_list = self.possible_edge_list(self.genes, self.genes)
+        # Add edge list to edge table
+        self.edge_table['Edge'] = self.edge_list
 
-    def possible_edge_list(self, parents, children, self_edges=False):
+    def possible_edge_list(self, parents, children, self_edges=True):
         """
         Create a list of all the possible edges between parents and children
 
@@ -25,6 +27,7 @@ class Window(object):
             labels for parents
         :param children: array
             labels for children
+        :param self_edges:
         :return: array, length = parents * children
             array of parent, child combinations for all possible edges
         """
