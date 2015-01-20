@@ -85,5 +85,14 @@ class TestLassoWindow(unittest.TestCase):
         self.test_lassoWindow.run_bootstrap(n_boots, n_alphas)
         self.assertTrue(self.test_lassoWindow.bootstrap_matrix.shape == (n_genes, n_genes, n_boots, n_alphas))
 
+    def test_run_permutation_test(self):
+        # The model must first be initialized
+        self.test_lassoWindow.initialize_params()
+        self.test_lassoWindow.fit_window()
+        self.test_lassoWindow.run_permutation_test()
+        n_genes = len(self.test_lassoWindow.genes)
+        self.assertTrue(self.test_lassoWindow.permutation_means.shape == (n_genes, n_genes))
+        self.assertTrue(self.test_lassoWindow.permutation_sd.shape == (n_genes, n_genes))
+
 if __name__ == '__main__':
     unittest.main()

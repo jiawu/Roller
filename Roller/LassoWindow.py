@@ -21,6 +21,7 @@ class LassoWindow(Window):
         self.edge_stability_auc = None
         self.permutation_means = None
         self.permutation_sd = None
+        self.permutation_p_values = None
 
         # Try set the null alpha value using default parameters.
         try:
@@ -29,7 +30,7 @@ class LassoWindow(Window):
             warnings.warn("Could not set null_alpha with default parameters. Set manually")
             self.null_alpha = None
 
-    def permutation_test(self, permutation_n=1000):
+    def run_permutation_test(self, permutation_n=1000):
         #initialize permutation results array
         self.permutation_means = np.empty((self.n_genes, self.n_genes))
         self.permutation_sd = np.empty((self.n_genes, self.n_genes))
@@ -41,17 +42,19 @@ class LassoWindow(Window):
         for nth_perm in range(0, permutation_n):
             if (nth_perm % 200 == 0):
                 print 'Perm Run: ' +str(nth_perm)
+
             #permute data
-            self.permute_data(permuted_window.values)
+            permuted_data = self.permute_data(self.window_values)
+
             #fit the data and get coefficients
-            current_lasso = LassoWrapper(permuted_window.values)
-            permuted_coeffs = current_lasso.get_coeffs(alpha)
+
+            permuted_coeffs = self.get_coeffs(self.alpha, permuted_data)
             dummy_list = []
             dummy_list.append(permuted_coeffs)
-            result = self.update_variance_2D(result,dummy_list)
+            result = self.update_variance_2D(result, dummy_list)
 
-        self.permutation_means[:,:,nth_window] = result['mean'].copy()
-        self.permutation_sd[:,:,nth_window] = result['variance'].copy()
+        self.permutation_means = result['mean'].copy()
+        self.permutation_sd = result['variance'].copy()
 
     def run_bootstrap(self, n_bootstraps=1000, n_alphas=20, noise=0.2):
         alpha_range = np.linspace(0, self.null_alpha, n_alphas)

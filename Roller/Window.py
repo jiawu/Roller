@@ -15,6 +15,33 @@ class Window(object):
         self.n_genes = len(self.genes)
         self.edge_table = pd.DataFrame()
 
+        self.edge_list = self.possible_edge_list(self.genes, self.genes)
+
+    def possible_edge_list(self, parents, children, self_edges=False):
+        """
+        Create a list of all the possible edges between parents and children
+
+        :param parents: array
+            labels for parents
+        :param children: array
+            labels for children
+        :return: array, length = parents * children
+            array of parent, child combinations for all possible edges
+        """
+        parent_index = range(len(parents))
+        child_index = range(len(children))
+        a, b = np.meshgrid(parent_index, child_index)
+        parent_list = parents[a.flatten()]
+        child_list = children[b.flatten()]
+        possible_edge_list = None
+        if self_edges:
+            possible_edge_list = zip(parent_list, child_list)
+
+        elif not self_edges:
+            possible_edge_list = zip(parent_list[parent_list != child_list], child_list[parent_list != child_list])
+
+        return possible_edge_list
+
     def fit_window(self):
         """
         Fit the window with the specified window
@@ -53,7 +80,7 @@ class Window(object):
         noisy_values = np.multiply(window_values, noise)
         return noisy_values
 
-    def permutation_test(self):
+    def run_permutation_test(self):
         """
         Run the permutation test and update the edge_table with p values. It is expected that this method will vary
         depending on the type of method used by the window

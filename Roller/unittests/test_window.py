@@ -20,6 +20,11 @@ class TestWindow(unittest.TestCase):
         self.roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
         self.test_window = Roller.Window(self.roller.current_window)
 
+    def test_possible_edge_list(self):
+        expected_edges = self.test_window.n_genes**2-self.test_window.n_genes
+        num_edges = len(self.test_window.edge_list)
+        self.assertTrue(expected_edges == num_edges)
+
     def test_resample_window(self):
 
         resampled_values = self.test_window.resample_window()
