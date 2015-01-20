@@ -3,6 +3,8 @@ import numpy as np
 from sklearn.preprocessing import Imputer
 import numpy as np
 from util.linear_wrapper import LassoWrapper
+import Window
+from LassoWindow import LassoWindow
 
 
 class Roller(object):
@@ -55,13 +57,12 @@ class Roller(object):
         total_windows = (self.overall_width - self.window_width+1)/(self.step_size)
         return total_windows
 
-    def get_window(self):
-        raw_window = self.get_window_raw()
+    def get_window(self, start_index):
+        raw_window = self.get_window_raw(start_index)
         only_genes = raw_window.iloc[:, self.gene_start:self.gene_end]
         return only_genes
 
-    def get_window_raw(self):
-        start_index = self.current_step
+    def get_window_raw(self, start_index):
         end_index = start_index + self.window_width
         time_window = self.time_vec[start_index:end_index]
         data = self.raw_data[self.raw_data[self.time_label].isin(time_window)]
@@ -94,6 +95,15 @@ class Roller(object):
 
     def get_n_genes(self):
         return(len(self.raw_data.columns) -1)
+
+    def create_windows(self):
+        window_list
+        for index in range(self.get_n_windows()):
+            end_index = index + self.window_width
+            if end_index <= self.overall_width:
+                current_window = self.get_window(index)
+            else:
+                return "end"
 
 
     def zscore_all_data(self):

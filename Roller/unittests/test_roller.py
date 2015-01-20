@@ -22,5 +22,8 @@ class TestRoller(unittest.TestCase):
         correct_header = ['AP1','AP2','AP3','AP4', 'AR', 'Bcat', 'Brachyury', 'cmyc', 'CRE', 'E2F','ELK1', 'ER', 'ETS1', 'FOXA', 'FOXO3A', 'GATA1', 'GATA2', 'GATA3','GLI', 'GR', 'HIF1', 'HNF1A', 'HOXA1', 'HSE', 'KLF4', 'LHX8','MEF2', 'MNX', 'MNX1', 'MYB', 'NANOG', 'NFAT', 'NFKb', 'NOBOX','Notch1', 'OCT', 'P53', 'PAX1', 'PEA3', 'PR', 'PTTG', 'RAR','RUNX1', 'RUNX2', 'SMAD1', 'SMAD3', 'SOX', 'SP1', 'SRF', 'STAT1','STAT3', 'STAT4', 'STAT5', 'VDR', 'WT1', 'YY1']
         self.assertTrue(np.array_equal(correct_header, header))
 
+    def test_create_windows(self):
+        self.roller.create_windows()
+
 if __name__ == '__main__':
     unittest.main()
