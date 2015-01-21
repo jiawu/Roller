@@ -33,25 +33,26 @@ class LassoWindow(Window):
         #initialize permutation results array
         self.permutation_means = np.empty((self.n_genes, self.n_genes))
         self.permutation_sd = np.empty((self.n_genes, self.n_genes))
-
+        nth_window = self.nth_window
         zeros = np.zeros((self.n_genes, self.n_genes))
         #initialize running calculation
         result = {'n':zeros.copy(), 'mean':zeros.copy(), 'ss':zeros.copy()}
         #inner loop: permute the window N number of times
+        permuted_window = self.df.copy()
+
         for nth_perm in range(0, permutation_n):
             if (nth_perm % 200 == 0):
                 print('Perm Window: '+ str(nth_window) + ' Perm Run: ' +str(nth_perm))
             #permute data
             self.permute_data(permuted_window.values)
             #fit the data and get coefficients
-            current_lasso = LassoWrapper(permuted_window.values)
-            permuted_coeffs = current_lasso.get_coeffs(alpha)
+            permuted_coeffs = self.get_coeffs(alpha=self.alpha, data=permuted_window)
             dummy_list = []
             dummy_list.append(permuted_coeffs)
             result = self.update_variance_2D(result,dummy_list)
 
-        self.permutation_means[:,:,nth_window] = result['mean'].copy()
-        self.permutation_sd[:,:,nth_window] = result['variance'].copy()
+        self.permutation_means = result['mean'].copy()
+        self.permutation_sd= result['variance'].copy()
 
     def run_bootstrap(self, n_bootstraps=1000, n_alphas=20, noise=0.2):
         alpha_range = np.linspace(0, self.null_alpha, n_alphas)

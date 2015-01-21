@@ -61,6 +61,7 @@ class Roller(object):
         window_info = {"time_label":self.time_label, "gene_start":self.gene_start,"gene_end":self.gene_end}
 
         for nth_window in range(total_window_number):
+            window_info['nth_window'] = nth_window
             current_window = self.get_window_raw()
             self.window_list.append(LassoWindow(current_window, window_info))
             print(self.current_step)

@@ -10,6 +10,7 @@ class Window(object):
         self.time_label = window_info['time_label']
         self.gene_start = window_info['gene_start']
         self.gene_end = window_info['gene_end']
+        self.nth_window = window_info['nth_window']
         self.raw_data = raw_dataframe
         dataframe =raw_dataframe.iloc[:,self.gene_start:self.gene_end]
         self.df = dataframe
@@ -56,6 +57,11 @@ class Window(object):
         #resample_window = pd.DataFrame(resample_values, columns=self.df.columns.values.copy(),
         #                               index=self.df.index.values.copy())
         return resample_values
+
+    def permute_data(self, array):
+        """Warning: modifies data in place."""
+        _ = [np.random.shuffle(i) for i in array]
+        return array
 
     def add_noise_to_values(self, window_values, max_random=0.2):
         """
