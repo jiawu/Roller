@@ -7,7 +7,7 @@ import matplotlib as mpl
 from Roller.util.permutation_test import Permuter
 import itertools
 from Roller.util import utility_module as utility
-from Roller.util.Ranker import Bootstrapper
+from Roller.util.Ranker import LassoBootstrapper
 from Roller.util.Evaluator import Evaluator
 import pdb
 import pickle
@@ -221,7 +221,7 @@ def permute_model(roll_me, pd):
 
 def bootstrap_model(roll_me, pd):
     print("Running bootstrapping test...")
-    booter = Bootstrapper()
+    booter = LassoBootstrapper()
     boots = pd['boots']
     max_random = pd['max_random']
     n_alphas = pd['n_alphas']

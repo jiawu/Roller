@@ -4,7 +4,9 @@ from linear_wrapper import LassoWrapper
 import numpy as np
 from scipy import integrate
 
-class Bootstrapper(object):
+#todo: Make a general object
+
+class LassoBootstrapper(object):
     # Method specific
     # Generate n models
     # Keep beta value ranges for each model
@@ -30,7 +32,7 @@ class Bootstrapper(object):
                 empty_shape = list(current_coef.shape) + [len(alpha_range)]
                 self.bootstrap_matrix = np.empty(tuple(empty_shape))
             self.bootstrap_matrix[:, :, :, :, ii] = current_coef
-        self.freq_matrix = self.calc_edge_freq(alpha_range)/float(n_bootstraps)
+        self.freq_matrix = self.calc_edge_freq()/float(n_bootstraps)
         self.auc(self.freq_matrix, alpha_range)
         return alpha_range
 
@@ -41,7 +43,7 @@ class Bootstrapper(object):
         lasso = LassoWrapper(current_window.values)
         self.max_alpha = lasso.get_max_alpha()
 
-    def calc_edge_freq(self, alpha_array):
+    def calc_edge_freq(self):
         "This is agnostic to the edge sign, only whether it exists"
         edge_exists = self.bootstrap_matrix != 0
         freq_matrix = np.sum(edge_exists, axis=3)

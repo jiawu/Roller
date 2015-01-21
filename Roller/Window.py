@@ -1,19 +1,21 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
+
 import numpy as np
 import pandas as pd
-from util.linear_wrapper import LassoWrapper
-
 
 class Window(object):
     def __init__(self, dataframe):
         self.df = dataframe
         self.window_values = dataframe.values
         self.samples = dataframe.index.values
-        self.genes = dataframe.index.values
+        self.n_samples = len(self.samples)
+        self.genes = dataframe.columns.values
+        self.n_genes = len(self.genes)
+        self.edge_table = pd.DataFrame()
 
-    def fit_window(self, window_values, alpha):
+    def fit_window(self):
         """
         Fit the window with the specified window
 
@@ -51,22 +53,43 @@ class Window(object):
         noisy_values = np.multiply(window_values, noise)
         return noisy_values
 
-class Lasso_Window(Window):
-    def __init__(self, dataframe, alpha=None):
-        super(Lasso_Window, self).__init__(dataframe)
-        self.alpha = alpha
-
-    def fit_window(self, window_values, alpha):
+    def permutation_test(self):
         """
-        Given a window get the lasso coefficients
-        :param window_values: array-like
-            The values to use for the fit
-        :param alpha: float
-            Value to use for lasso regression
-        :return: array
-            Array of lasso beta regression coefficients
-
+        Run the permutation test and update the edge_table with p values. It is expected that this method will vary
+        depending on the type of method used by the window
+        :return:
         """
-        lasso = LassoWrapper(window_values)
-        beta_coef = lasso.get_coeffs(alpha)
-        return beta_coef
+        pass
+
+    def run_bootstrap(self, n_bootstraps):
+        """
+        Run bootstrapping and update the edge_table with stability values. It is expected that this method will vary
+        depending on the type of method used by the window
+        :return:
+        """
+        pass
+
+    def rank_edges(self, method):
+        """
+        Rank the edges in the edge table. This may eventually be window type specific.
+
+        :param method: The method to use for ranking the edges in edge_table
+        :return: list of tuples
+            Sorted list [(regulator1, target1), (regulator2, target2)...] that can be scored with aupr or auroc
+        """
+        pass
+
+    def initialize_params(self):
+        """
+        Initialize a model for the window and calculate the necessary parameters
+        :return:
+        """
+        pass
+
+    def get_coeffs(self, *args):
+        """
+        Get the beta coefficients
+        :param args:
+        :return:
+        """
+        pass
