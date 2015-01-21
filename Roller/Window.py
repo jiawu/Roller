@@ -6,7 +6,12 @@ import numpy as np
 import pandas as pd
 
 class Window(object):
-    def __init__(self, dataframe):
+    def __init__(self, raw_dataframe, window_info):
+        self.time_label = window_info['time_label']
+        self.gene_start = window_info['gene_start']
+        self.gene_end = window_info['gene_end']
+        self.raw_data = raw_dataframe
+        dataframe =raw_dataframe.iloc[:,self.gene_start:self.gene_end]
         self.df = dataframe
         self.window_values = dataframe.values
         self.samples = dataframe.index.values
@@ -14,6 +19,20 @@ class Window(object):
         self.genes = dataframe.columns.values
         self.n_genes = len(self.genes)
         self.edge_table = pd.DataFrame()
+    def get_window_stats(self):
+        """for each window, get a dict:
+            N : the number of datapoints in this window,
+            time_labels: the names of the timepoints in a roller model
+            step_size: the step-size of the current model
+            window_size: the size of the window of the current model
+            total_windows: the number of windows total
+            window_index: the index of the window. counts start at 0. ie if the window index is 0 it is the 1st window. if the window index is 12, it is the 12th window in the series."""
+
+        window_stats = {'n_samples': self.n_samples,
+                        'n_genes': self.n_genes}
+        return window_stats
+
+
 
     def fit_window(self):
         """

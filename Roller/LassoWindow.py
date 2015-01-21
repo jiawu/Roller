@@ -11,8 +11,8 @@ from scipy import integrate
 from Window import Window
 
 class LassoWindow(Window):
-    def __init__(self, dataframe):
-        super(LassoWindow, self).__init__(dataframe)
+    def __init__(self, dataframe, window_info):
+        super(LassoWindow, self).__init__(dataframe, window_info)
         self.alpha = None
         self.beta_coefficients = None
         self.cv_table = None
