@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from LassoWindow import LassoWindow
+import pdb
 
 class Roller(object):
     """
@@ -130,7 +131,9 @@ class Roller(object):
     def rank_edges(self):
         for window in self.window_list:
             window.permutation_test()
+            print("Running bootstrap...")
             window.run_bootstrap()
+        pdb.set_trace()
         return(self.window_list)
 
     def zscore_all_data(self):
