@@ -20,10 +20,10 @@ if __name__ == "__main__":
 
     roller.create_windows(width=window_size)
     roller.optimize_params()
-    for alpha in roller.window_list[0].cv_table['alpha'][10:12]:
+    for alpha in roller.window_list[0].cv_table['alpha']:
         print("current alpha: " + str(alpha))
         roller.fit_windows(alpha=alpha)
-        roller.rank_edges(n_bootstraps=100, permutation_n = 200)
+        roller.rank_edges(n_bootstraps=200, permutation_n = 200)
         roller.average_rank(rank_by='stability', ascending = True)
         #score some edge lists
         #first score the sorted average edge list
