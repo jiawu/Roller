@@ -4,7 +4,7 @@ import pandas as pd
 from sklearn import linear_model
 from sklearn.cross_validation import KFold
 from scipy import integrate
-
+import scipy
 from Window import Window
 
 class LassoWindow(Window):
@@ -18,6 +18,7 @@ class LassoWindow(Window):
         self.edge_stability_auc = None
         self.permutation_means = None
         self.permutation_sd = None
+        self.permutation_pvalues = None
 
         # Try set the null alpha value using default parameters.
         try:
@@ -25,6 +26,37 @@ class LassoWindow(Window):
         except ValueError:
             warnings.warn("Could not set null_alpha with default parameters. Set manually")
             self.null_alpha = None
+
+    def generate_results_table(self):
+
+        #generate edges for initial model
+        initial_edges = self.create_linked_list(self.beta_coefficients, 'B')
+        #permutation edges
+        permutation_mean_edges =self.create_linked_list(self.permutation_means, 'p-means')
+        permutation_sd_edges = self.create_linked_list(self.permutation_sd, 'p-sd')
+        stability_edges = self.create_linked_list(self.edge_stability_auc, 'stability')
+
+        aggregated_edges = initial_edges.merge(permutation_mean_edges, on='regulator-target').merge(permutation_sd_edges, on='regulator-target').merge(stability_edges, on='regulator-target')
+
+        #sorry, it is a little messy to do the p-value calculations for permutation tests here...
+        valid_indices = aggregated_edges['B'] != 0
+        valid_window = aggregated_edges[valid_indices]
+        initial_B = valid_window['B']
+        sd = valid_window['p-sd']
+        mean = valid_window['p-means']
+        valid_window['final-z-scores-perm']=(initial_B - mean)/sd
+        valid_window['cdf-perm'] = (-1*abs(valid_window['final-z-scores-perm'])).apply(scipy.stats.norm.cdf)
+        #calculate t-tailed pvalue
+        valid_window['p-value-perm'] = (2*valid_window['cdf-perm'])
+        self.results_table = valid_window
+        return(self.results_table)
+
+    def rank_results(self, rank_by):
+        rank_column_name = rank_by + "-rank"
+        self.results_table[rank_column_name] = self.results_table[rank_by].rank(method="dense",ascending = True)
+        self.results_table = self.results_table.sort(columns=rank_column_name, axis = 0)
+
+        return(self.results_table)
 
     def permutation_test(self, permutation_n=1000):
         #initialize permutation results array
