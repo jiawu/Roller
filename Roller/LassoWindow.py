@@ -276,7 +276,7 @@ class LassoWindow(Window):
         """
 
         if alpha_range is None:
-            alpha_range = np.linspace(0, self.null_alpha)
+            alpha_range = np.linspace(0, self.null_alpha, num=25)
 
         # Calculate the cv_table values
         cv_results = np.array([self.cross_validate_alpha(alpha, n_folds, True) for alpha in alpha_range])
