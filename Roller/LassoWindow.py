@@ -52,9 +52,19 @@ class LassoWindow(Window):
         self.results_table = valid_window
         return(self.results_table)
 
-    def rank_results(self, rank_by):
+    def rank_results(self, rank_by, ascending=False):
         rank_column_name = rank_by + "-rank"
-        self.results_table[rank_column_name] = self.results_table[rank_by].rank(method="dense",ascending = True)
+        ##rank edges with an actual beta value first until further notice ##
+        valid_indices = self.results_table['B'] != 0
+        valid_window = self.results_table[valid_indices]
+        valid_window[rank_column_name] = valid_window[rank_by].rank(method="dense",ascending = ascending)
+        edge_n=len(valid_window.index)
+
+        invalid_indices = self.results_table['B'] == 0
+        invalid_window = self.results_table[invalid_indices]
+        invalid_window[rank_column_name] = invalid_window[rank_by].rank(method="dense",ascending = ascending)
+        invalid_window[rank_column_name] = invalid_window[rank_column_name] + edge_n
+        self.results_table = valid_window.append(invalid_window)
         self.results_table = self.results_table.sort(columns=rank_column_name, axis = 0)
 
         return(self.results_table)
@@ -111,7 +121,7 @@ class LassoWindow(Window):
                     "variance": variance,
                     "n": n}
         return result
-    def run_bootstrap(self, n_bootstraps=1000, n_alphas=20, noise=0.2):
+    def run_bootstrap(self, n_bootstraps=1000, n_alphas=20, noise=0.1):
         alpha_range = np.linspace(0, self.null_alpha, n_alphas)
         self.bootstrap_matrix = np.empty((self.n_genes, self.n_genes, n_bootstraps, n_alphas))
         for ii, alpha in enumerate(alpha_range):
