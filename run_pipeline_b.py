@@ -14,15 +14,15 @@ if __name__ == "__main__":
     roller.create_windows(width=21)
     roller.optimize_params()
     roller.fit_windows()
-    roller.rank_edges(n_bootstraps=100)
-    roller.average_rank(rank_by='p-value-perm')
+    roller.rank_edges(n_bootstraps=200)
+    roller.average_rank(rank_by='stability')
     #score some edge lists
     #first score the sorted average edge list
-    averaged_aupr = roller.score(roller.averaged_ranks, gold_standard)
+    averaged_score_dict = roller.score(roller.averaged_ranks, gold_standard)
     #next score each individual edge list
-    aupr_list = []
+    score_list = []
     for window in roller.window_list:
-        aupr = roller.score(window.results_table,gold_standard)
-        aupr_list.append(aupr)
+        score_dict = roller.score(window.results_table,gold_standard)
+        score_list.append(score_dict)
     pdb.set_trace()
 

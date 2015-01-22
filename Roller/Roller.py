@@ -154,7 +154,8 @@ class Roller(object):
     def score(self, sorted_edge_list, gold_standard_file):
         evaluator = Evaluator(gold_standard_file, sep='\t')
         prediction, recall, aupr = evaluator.calc_pr(sorted_edge_list)
-        return(aupr)
+        score_dict = {"prediction":prediction,"recall":recall,"aupr":aupr}
+        return(score_dict)
 
     def zscore_all_data(self):
         #zscores all the data

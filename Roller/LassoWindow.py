@@ -39,7 +39,8 @@ class LassoWindow(Window):
         aggregated_edges = initial_edges.merge(permutation_mean_edges, on='regulator-target').merge(permutation_sd_edges, on='regulator-target').merge(stability_edges, on='regulator-target')
 
         #sorry, it is a little messy to do the p-value calculations for permutation tests here...
-        valid_indices = aggregated_edges['B'] != 0
+        valid_indices = aggregated_edges['p-sd'] != 0
+        #valid_indices = aggregated_edges['B'] != 0
         valid_window = aggregated_edges[valid_indices]
         initial_B = valid_window['B']
         sd = valid_window['p-sd']
