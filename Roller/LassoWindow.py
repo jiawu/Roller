@@ -4,12 +4,9 @@ import pandas as pd
 from sklearn import linear_model
 from sklearn.cross_validation import KFold
 from scipy import integrate
-<<<<<<< HEAD
 from scipy import stats
-
-=======
 import scipy
->>>>>>> ee816977f737a3f91ece644e0e5f4dba2c27f4eb
+
 from Window import Window
 
 class LassoWindow(Window):
@@ -23,11 +20,8 @@ class LassoWindow(Window):
         self.edge_stability_auc = None
         self.permutation_means = None
         self.permutation_sd = None
-<<<<<<< HEAD
         self.permutation_p_values = None
-=======
         self.permutation_pvalues = None
->>>>>>> ee816977f737a3f91ece644e0e5f4dba2c27f4eb
 
         # Try set the null alpha value using default parameters.
         try:
@@ -36,7 +30,6 @@ class LassoWindow(Window):
             warnings.warn("Could not set null_alpha with default parameters. Set manually")
             self.null_alpha = None
 
-<<<<<<< HEAD
     def make_edge_table(self):
         if self.permutation_p_values is None:
             raise ValueError("p values must be set before making the edge table. Use method run_permutation test")
@@ -58,9 +51,6 @@ class LassoWindow(Window):
 
         return temp_edge_table['Edge'].values
 
-
-    def run_permutation_test(self, n_permutations=1000):
-=======
     def generate_results_table(self):
 
         #generate edges for initial model
@@ -103,8 +93,7 @@ class LassoWindow(Window):
 
         return(self.results_table)
 
-    def permutation_test(self, permutation_n=1000):
->>>>>>> ee816977f737a3f91ece644e0e5f4dba2c27f4eb
+    def run_permutation_test(self, n_permutations=1000):
         #initialize permutation results array
         self.permutation_means = np.empty((self.n_genes, self.n_genes))
         self.permutation_sd = np.empty((self.n_genes, self.n_genes))
@@ -128,7 +117,6 @@ class LassoWindow(Window):
             result = self.update_variance_2D(result, dummy_list)
 
         self.permutation_means = result['mean'].copy()
-<<<<<<< HEAD
         self.permutation_sd = np.sqrt(result['variance'].copy())
         self.permutation_p_values = self.calc_p_value()
 
@@ -143,10 +131,6 @@ class LassoWindow(Window):
         z_scores = (value - mean)/sd
         p_values = (1-stats.norm.cdf(z_scores))*2
         return p_values
-
-    def run_bootstrap(self, n_bootstraps=1000, n_alphas=20, noise=0.2):
-=======
-        self.permutation_sd= result['variance'].copy()
 
     def update_variance_2D(self, prev_result, new_samples):
         """incremental calculation of means: accepts new_samples, which is a list of samples. then calculates a new mean. this is a useful function for calculating the means of large arrays"""
@@ -175,8 +159,7 @@ class LassoWindow(Window):
                     "variance": variance,
                     "n": n}
         return result
-    def run_bootstrap(self, n_bootstraps=1000, n_alphas=20, noise=0.1):
->>>>>>> ee816977f737a3f91ece644e0e5f4dba2c27f4eb
+    def run_bootstrap(self, n_bootstraps=1000, n_alphas=20, noise=0.2):
         alpha_range = np.linspace(0, self.null_alpha, n_alphas)
         self.bootstrap_matrix = np.empty((self.n_genes, self.n_genes, n_bootstraps, n_alphas))
         for ii, alpha in enumerate(alpha_range):

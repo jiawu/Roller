@@ -23,9 +23,13 @@ class Window(object):
         self.edge_table = pd.DataFrame()
         self.edge_labels = [x for x in itertools.product(self.genes,repeat=2)]
 
+        self.edge_list = self.possible_edge_list(self.genes, self.genes)
+        # Add edge list to edge table
+        self.edge_table['Edge'] = self.edge_list
+
     def create_linked_list(self,numpy_array_2D, value_label):
         """labels and array should be in row-major order"""
-        linked_list = pd.DataFrame({'regulator-target':self.edge_labels, value_label:numpy_array_2D.flatten()})
+        linked_list = pd.DataFrame({'regulator-target': self.edge_labels, value_label: numpy_array_2D.flatten()})
         return linked_list
 
     def aggregate(self):
@@ -44,11 +48,6 @@ class Window(object):
                         'n_genes': self.n_genes}
         return window_stats
 
-
-
-        self.edge_list = self.possible_edge_list(self.genes, self.genes)
-        # Add edge list to edge table
-        self.edge_table['Edge'] = self.edge_list
 
     def possible_edge_list(self, parents, children, self_edges=True):
         """

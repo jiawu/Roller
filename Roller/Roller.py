@@ -15,7 +15,7 @@ class Roller(object):
         -accept different table formats
 
         -add permute_window()
-        -add bootstrape_window()
+        -add bootstrap_window()
     """
     def __init__(self, file_path, gene_start=None, gene_end=None, time_label="Time", separator = "\t"):
         """
@@ -61,7 +61,7 @@ class Roller(object):
         self.step_size = step_size
         total_window_number = self.get_n_windows()
 
-        window_info = {"time_label":self.time_label, "gene_start":self.gene_start,"gene_end":self.gene_end}
+        window_info = {"time_label": self.time_label, "gene_start": self.gene_start, "gene_end": self.gene_end}
 
         for nth_window in range(total_window_number):
             window_info['nth_window'] = nth_window
@@ -112,7 +112,7 @@ class Roller(object):
         return(len(self.raw_data.columns) -1)
 
     def create_windows_no_next(self):
-        window_list = [LassoWindow(self.get_window(index)) if (index + self.window_width <= self.overall_width) else ''
+        window_list = [LassoWindow(self.get_window(index), {"time_label": self.time_label, "gene_start": self.gene_start, "gene_end": self.gene_end,'nth_window': index}) if (index + self.window_width <= self.overall_width) else ''
                        for index in range(self.get_n_windows())]
         self.window_list = window_list
 
@@ -141,13 +141,13 @@ class Roller(object):
 
     def rank_edges(self, n_bootstraps= 1000, permutation_n = 1000):
         for window in self.window_list:
-            window.permutation_test(permutation_n = permutation_n)
+            window.run_permutation_test(n_permutations = permutation_n)
             print("Running bootstrap...")
             window.run_bootstrap(n_bootstraps = n_bootstraps)
             window.generate_results_table()
         return(self.window_list)
 
-    def average_rank(self,rank_by, ascending):
+    def average_rank(self, rank_by, ascending):
         ranked_result_list = []
         for window in self.window_list:
             ranked_result = window.rank_results(rank_by, ascending)
