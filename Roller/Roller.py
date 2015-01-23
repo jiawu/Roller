@@ -1,11 +1,8 @@
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import Imputer
-import numpy as np
-from util.linear_wrapper import LassoWrapper
 import Window
 from LassoWindow import LassoWindow
-
+import pdb
 
 class Roller(object):
     """
@@ -52,7 +49,30 @@ class Roller(object):
         self.gene_list = self.raw_data.columns.values[self.gene_start:self.gene_end]
 
         self.current_window = self.get_window(self.current_step)
-        self.window_list = None
+        self.window_list = []
+
+    def create_windows(self, start_index=0, width=3, step_size=1):
+        self.window_list = []
+
+        self.current_step = start_index
+        self.window_width = width
+        self.step_size = step_size
+        total_window_number = self.get_n_windows()
+
+        window_info = {"time_label":self.time_label, "gene_start":self.gene_start,"gene_end":self.gene_end}
+
+        for nth_window in range(total_window_number):
+            window_info['nth_window'] = nth_window
+            current_window = self.get_window_raw()
+            self.window_list.append(LassoWindow(current_window, window_info))
+            print(self.current_step)
+            self.next()
+
+        self.reset()
+
+        # determine total number of windows
+        # loop to add windows to list
+        return(self.window_list)
 
     def get_n_windows(self):
         total_windows = (self.overall_width - self.window_width+1)/(self.step_size)
@@ -78,6 +98,7 @@ class Roller(object):
     def reset(self):
         self.current_step = 0
 
+    # need to do something about this method. keep for now, but currently need a "preprocess" method.
     def remove_blank_rows(self):
         """calculates sum of rows. if sum is NAN, then remove row"""
         coln = len(self.raw_data.columns)
@@ -88,7 +109,7 @@ class Roller(object):
     def get_n_genes(self):
         return(len(self.raw_data.columns) -1)
 
-    def create_windows(self):
+    def create_windows_no_next(self):
         window_list = [LassoWindow(self.get_window(index)) if (index + self.window_width <= self.overall_width) else ''
                        for index in range(self.get_n_windows())]
         self.window_list = window_list
@@ -103,6 +124,26 @@ class Roller(object):
             window.run_permutation_test(n_permutes)
             window.run_bootstrap(n_bootstraps, n_alphas, noise)
             window.make_edge_table()
+
+    def optimize_params(self):
+        for window in self.window_list:
+            window.initialize_params()
+        return(self.window_list)
+
+    def fit_windows(self, alpha=None):
+        for window in self.window_list:
+            if alpha != None:
+                window.alpha = alpha
+            window.fit_window()
+        return(self.window_list)
+
+    def rank_edges(self):
+        for window in self.window_list:
+            window.permutation_test()
+            print("Running bootstrap...")
+            window.run_bootstrap()
+        pdb.set_trace()
+        return(self.window_list)
 
     def zscore_all_data(self):
         #zscores all the data
@@ -147,5 +188,3 @@ class Roller(object):
                         'total_windows': self.get_n_windows(),
                         'window_index': window_index}
         return window_stats
-
-

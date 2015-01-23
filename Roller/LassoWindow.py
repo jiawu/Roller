@@ -1,6 +1,3 @@
-__author__ = 'Justin Finkle'
-__email__ = 'jfinkle@u.northwestern.edu'
-
 import warnings
 import numpy as np
 import pandas as pd
@@ -12,8 +9,8 @@ from scipy import stats
 from Window import Window
 
 class LassoWindow(Window):
-    def __init__(self, dataframe):
-        super(LassoWindow, self).__init__(dataframe)
+    def __init__(self, dataframe, window_info):
+        super(LassoWindow, self).__init__(dataframe, window_info)
         self.alpha = None
         self.beta_coefficients = None
         self.cv_table = None
@@ -57,21 +54,33 @@ class LassoWindow(Window):
         #initialize permutation results array
         self.permutation_means = np.empty((self.n_genes, self.n_genes))
         self.permutation_sd = np.empty((self.n_genes, self.n_genes))
-
+        nth_window = self.nth_window
         zeros = np.zeros((self.n_genes, self.n_genes))
         #initialize running calculation
         result = {'n':zeros.copy(), 'mean':zeros.copy(), 'ss':zeros.copy()}
         #inner loop: permute the window N number of times
+<<<<<<< HEAD
         for nth_perm in range(0, n_permutations):
             #if (nth_perm % 200 == 0):
                 #print 'Perm Run: ' +str(nth_perm)
 
+=======
+        permuted_window = self.df.copy()
+
+        for nth_perm in range(0, permutation_n):
+            if (nth_perm % 200 == 0):
+                print('Perm Window: '+ str(nth_window) + ' Perm Run: ' +str(nth_perm))
+>>>>>>> 6222d66e12a31ee64f851b05f75cb956bb4e7e1a
             #permute data
             permuted_data = self.permute_data(self.window_values)
 
             #fit the data and get coefficients
+<<<<<<< HEAD
 
             permuted_coeffs = self.get_coeffs(self.alpha, permuted_data)
+=======
+            permuted_coeffs = self.get_coeffs(alpha=self.alpha, data=permuted_window.values)
+>>>>>>> 6222d66e12a31ee64f851b05f75cb956bb4e7e1a
             dummy_list = []
             dummy_list.append(permuted_coeffs)
             result = self.update_variance_2D(result, dummy_list)
@@ -92,7 +101,40 @@ class LassoWindow(Window):
         p_values = (1-stats.norm.cdf(z_scores))*2
         return p_values
 
+<<<<<<< HEAD
 
+=======
+        self.permutation_means = result['mean'].copy()
+        self.permutation_sd= result['variance'].copy()
+
+    def update_variance_2D(self, prev_result, new_samples):
+        """incremental calculation of means: accepts new_samples, which is a list of samples. then calculates a new mean. this is a useful function for calculating the means of large arrays"""
+        n = prev_result["n"] #2D numpy array with all zeros or watev
+        mean = prev_result["mean"] #2D numpy array
+        sum_squares = prev_result["ss"] #2D numpy array
+
+        #new_samples is a list of arrays
+        #x is a 2D array
+        for x in new_samples:
+            n = n + 1
+            #delta = float(x) - mean
+            old_mean = mean.copy()
+            mean = old_mean + np.divide( (x-old_mean) , n)
+            sum_squares = sum_squares + np.multiply((x-mean),(x-old_mean))
+
+        if (n[0,0] < 2):
+            result = {  "mean": mean,
+                        "ss": sum_squares,
+                        "n": n}
+            return result
+
+        variance = np.divide(sum_squares,(n-1))
+        result = {  "mean": mean,
+                    "ss": sum_squares,
+                    "variance": variance,
+                    "n": n}
+        return result
+>>>>>>> 6222d66e12a31ee64f851b05f75cb956bb4e7e1a
     def run_bootstrap(self, n_bootstraps=1000, n_alphas=20, noise=0.2):
         alpha_range = np.linspace(0, self.null_alpha, n_alphas)
         self.bootstrap_matrix = np.empty((self.n_genes, self.n_genes, n_bootstraps, n_alphas))
