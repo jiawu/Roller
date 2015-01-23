@@ -2,10 +2,11 @@ __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
 import unittest
-import numpy as np
 import Roller
 import pandas as pd
+import numpy as np
 import numpy.testing as npt
+
 
 class TestLassoWindow(unittest.TestCase):
     def setUp(self):
@@ -83,6 +84,27 @@ class TestLassoWindow(unittest.TestCase):
         n_genes = len(self.test_lassoWindow.genes)
         self.test_lassoWindow.run_bootstrap(n_boots, n_alphas)
         self.assertTrue(self.test_lassoWindow.bootstrap_matrix.shape == (n_genes, n_genes, n_boots, n_alphas))
+
+    def test_run_permutation_test(self):
+        # The model must first be initialized
+        self.test_lassoWindow.initialize_params()
+        self.test_lassoWindow.fit_window()
+        self.test_lassoWindow.run_permutation_test(100)
+        n_genes = len(self.test_lassoWindow.genes)
+        self.assertTrue(self.test_lassoWindow.permutation_means.shape == (n_genes, n_genes))
+        self.assertTrue(self.test_lassoWindow.permutation_sd.shape == (n_genes, n_genes))
+
+    def test_make_edge_table(self):
+        self.test_lassoWindow.initialize_params()
+        self.test_lassoWindow.fit_window()
+        self.test_lassoWindow.run_permutation_test(1000)
+        n_boots = 13
+        n_alphas = 20
+        self.test_lassoWindow.run_bootstrap(n_boots, n_alphas)
+        self.test_lassoWindow.make_edge_table()
+        original_edge_order = self.test_lassoWindow.edge_list
+        new_edge_order = self.test_lassoWindow.rank_edges()
+        #todo: need a way to assert that these lists are not equal
 
 if __name__ == '__main__':
     unittest.main()

@@ -4,7 +4,9 @@ import pandas as pd
 from sklearn import linear_model
 from sklearn.cross_validation import KFold
 from scipy import integrate
+from scipy import stats
 import scipy
+
 from Window import Window
 
 class LassoWindow(Window):
@@ -18,6 +20,7 @@ class LassoWindow(Window):
         self.edge_stability_auc = None
         self.permutation_means = None
         self.permutation_sd = None
+        self.permutation_p_values = None
         self.permutation_pvalues = None
 
         # Try set the null alpha value using default parameters.
@@ -26,6 +29,27 @@ class LassoWindow(Window):
         except ValueError:
             warnings.warn("Could not set null_alpha with default parameters. Set manually")
             self.null_alpha = None
+
+    def make_edge_table(self):
+        if self.permutation_p_values is None:
+            raise ValueError("p values must be set before making the edge table. Use method run_permutation test")
+
+        if self.edge_stability_auc is None:
+            raise ValueError("edge stability values must be set before making the edge table. "
+                             "Use method run_permutation test")
+        self.edge_table["P_Value"] = self.permutation_p_values.flatten()
+        self.edge_table["Stability"] = self.edge_stability_auc.flatten()
+
+    def rank_edges(self, method="p_value"):
+        if self.edge_table is None:
+            raise ValueError("The edge table must be created before getting edges")
+        temp_edge_table = self.edge_table.copy()
+        if method == "p_value":
+            temp_edge_table.sort(columns=['P_Value', 'Stability'], ascending=[True, False], inplace=True)
+        elif method == "stability":
+            temp_edge_table.sort(columns=['Stability', 'P_Value'], ascending=[False, True], inplace=True)
+
+        return temp_edge_table['Edge'].values
 
     def generate_results_table(self):
 
@@ -69,7 +93,7 @@ class LassoWindow(Window):
 
         return(self.results_table)
 
-    def permutation_test(self, permutation_n=1000):
+    def run_permutation_test(self, n_permutations=1000):
         #initialize permutation results array
         self.permutation_means = np.empty((self.n_genes, self.n_genes))
         self.permutation_sd = np.empty((self.n_genes, self.n_genes))
@@ -78,21 +102,35 @@ class LassoWindow(Window):
         #initialize running calculation
         result = {'n':zeros.copy(), 'mean':zeros.copy(), 'ss':zeros.copy()}
         #inner loop: permute the window N number of times
-        permuted_window = self.df.copy()
+        for nth_perm in range(0, n_permutations):
+            #if (nth_perm % 200 == 0):
+                #print 'Perm Run: ' +str(nth_perm)
 
-        for nth_perm in range(0, permutation_n):
-            if (nth_perm % 200 == 0):
-                print('Perm Window: '+ str(nth_window) + ' Perm Run: ' +str(nth_perm))
             #permute data
-            self.permute_data(permuted_window.values)
+            permuted_data = self.permute_data(self.window_values)
+
             #fit the data and get coefficients
-            permuted_coeffs = self.get_coeffs(alpha=self.alpha, data=permuted_window.values)
+
+            permuted_coeffs = self.get_coeffs(self.alpha, permuted_data)
             dummy_list = []
             dummy_list.append(permuted_coeffs)
-            result = self.update_variance_2D(result,dummy_list)
+            result = self.update_variance_2D(result, dummy_list)
 
         self.permutation_means = result['mean'].copy()
-        self.permutation_sd= result['variance'].copy()
+        self.permutation_sd = np.sqrt(result['variance'].copy())
+        self.permutation_p_values = self.calc_p_value()
+
+    def calc_p_value(self, value=None, mean=None, sd=None):
+        if value is None:
+            value = self.beta_coefficients.copy()
+        if mean is None:
+            mean = self.permutation_means.copy()
+        if sd is None:
+            sd = self.permutation_sd.copy()
+
+        z_scores = (value - mean)/sd
+        p_values = (1-stats.norm.cdf(z_scores))*2
+        return p_values
 
     def update_variance_2D(self, prev_result, new_samples):
         """incremental calculation of means: accepts new_samples, which is a list of samples. then calculates a new mean. this is a useful function for calculating the means of large arrays"""
@@ -121,7 +159,7 @@ class LassoWindow(Window):
                     "variance": variance,
                     "n": n}
         return result
-    def run_bootstrap(self, n_bootstraps=1000, n_alphas=20, noise=0.1):
+    def run_bootstrap(self, n_bootstraps=1000, n_alphas=20, noise=0.2):
         alpha_range = np.linspace(0, self.null_alpha, n_alphas)
         self.bootstrap_matrix = np.empty((self.n_genes, self.n_genes, n_bootstraps, n_alphas))
         for ii, alpha in enumerate(alpha_range):
