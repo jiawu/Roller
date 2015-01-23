@@ -88,11 +88,6 @@ class Window(object):
         #                               index=self.df.index.values.copy())
         return resample_values
 
-    def permute_data(self, array):
-        """Warning: modifies data in place."""
-        _ = [np.random.shuffle(i) for i in array]
-        return array
-
     def add_noise_to_values(self, window_values, max_random=0.2):
         """
         Add uniform noise to each value
@@ -148,7 +143,6 @@ class Window(object):
         :return:
         """
         pass
-<<<<<<< HEAD
 
     def permute_data(self, array):
         """Warning: Modifies data in place. also remember the """
@@ -210,5 +204,3 @@ class Window(object):
                     "variance": variance,
                     "n": n}
         return result
-=======
->>>>>>> 6222d66e12a31ee64f851b05f75cb956bb4e7e1a
