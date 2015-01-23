@@ -4,6 +4,7 @@ __email__ = 'jfinkle@u.northwestern.edu'
 
 import numpy as np
 import pandas as pd
+import itertools
 
 class Window(object):
     def __init__(self, raw_dataframe, window_info):
@@ -20,6 +21,16 @@ class Window(object):
         self.genes = dataframe.columns.values
         self.n_genes = len(self.genes)
         self.edge_table = pd.DataFrame()
+        self.edge_labels = [x for x in itertools.product(self.genes,repeat=2)]
+
+    def create_linked_list(self,numpy_array_2D, value_label):
+        """labels and array should be in row-major order"""
+        linked_list = pd.DataFrame({'regulator-target':self.edge_labels, value_label:numpy_array_2D.flatten()})
+        return linked_list
+
+    def aggregate(self):
+        pass
+
     def get_window_stats(self):
         """for each window, get a dict:
             N : the number of datapoints in this window,

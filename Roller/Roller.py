@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import Window
 from LassoWindow import LassoWindow
+from util import utility_module as utility
+from util.Evaluator import Evaluator
 import pdb
 
 class Roller(object):
@@ -137,13 +139,33 @@ class Roller(object):
             window.fit_window()
         return(self.window_list)
 
-    def rank_edges(self):
+    def rank_edges(self, n_bootstraps= 1000, permutation_n = 1000):
         for window in self.window_list:
-            window.permutation_test()
+            window.permutation_test(permutation_n = permutation_n)
             print("Running bootstrap...")
-            window.run_bootstrap()
-        pdb.set_trace()
+            window.run_bootstrap(n_bootstraps = n_bootstraps)
+            window.generate_results_table()
         return(self.window_list)
+
+    def average_rank(self,rank_by, ascending):
+        ranked_result_list = []
+        for window in self.window_list:
+            ranked_result = window.rank_results(rank_by, ascending)
+            ranked_result_list.append(ranked_result)
+
+        aggr_ranks = utility.average_rank(ranked_result_list, rank_by+"-rank")
+        #sort tables by mean rank in ascending order
+        mean_sorted_edge_list = aggr_ranks.sort(columns="mean-rank", axis = 0)
+        self.averaged_ranks = mean_sorted_edge_list
+        return(self.averaged_ranks)
+
+    #todo: this method sucks. sorry.
+    def score(self, sorted_edge_list, gold_standard_file):
+        evaluator = Evaluator(gold_standard_file, sep='\t')
+        edge_cutoff=len(evaluator.gs_flat)
+        precision, recall, aupr = evaluator.calc_pr(sorted_edge_list[1:edge_cutoff])
+        score_dict = {"precision":precision,"recall":recall,"aupr":aupr}
+        return(score_dict)
 
     def zscore_all_data(self):
         #zscores all the data

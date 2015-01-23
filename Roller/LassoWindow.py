@@ -4,8 +4,12 @@ import pandas as pd
 from sklearn import linear_model
 from sklearn.cross_validation import KFold
 from scipy import integrate
+<<<<<<< HEAD
 from scipy import stats
 
+=======
+import scipy
+>>>>>>> ee816977f737a3f91ece644e0e5f4dba2c27f4eb
 from Window import Window
 
 class LassoWindow(Window):
@@ -19,7 +23,11 @@ class LassoWindow(Window):
         self.edge_stability_auc = None
         self.permutation_means = None
         self.permutation_sd = None
+<<<<<<< HEAD
         self.permutation_p_values = None
+=======
+        self.permutation_pvalues = None
+>>>>>>> ee816977f737a3f91ece644e0e5f4dba2c27f4eb
 
         # Try set the null alpha value using default parameters.
         try:
@@ -28,6 +36,7 @@ class LassoWindow(Window):
             warnings.warn("Could not set null_alpha with default parameters. Set manually")
             self.null_alpha = None
 
+<<<<<<< HEAD
     def make_edge_table(self):
         if self.permutation_p_values is None:
             raise ValueError("p values must be set before making the edge table. Use method run_permutation test")
@@ -51,6 +60,51 @@ class LassoWindow(Window):
 
 
     def run_permutation_test(self, n_permutations=1000):
+=======
+    def generate_results_table(self):
+
+        #generate edges for initial model
+        initial_edges = self.create_linked_list(self.beta_coefficients, 'B')
+        #permutation edges
+        permutation_mean_edges =self.create_linked_list(self.permutation_means, 'p-means')
+        permutation_sd_edges = self.create_linked_list(self.permutation_sd, 'p-sd')
+        stability_edges = self.create_linked_list(self.edge_stability_auc, 'stability')
+
+        aggregated_edges = initial_edges.merge(permutation_mean_edges, on='regulator-target').merge(permutation_sd_edges, on='regulator-target').merge(stability_edges, on='regulator-target')
+
+        #sorry, it is a little messy to do the p-value calculations for permutation tests here...
+        valid_indices = aggregated_edges['p-sd'] != 0
+        #valid_indices = aggregated_edges['B'] != 0
+        valid_window = aggregated_edges[valid_indices]
+        initial_B = valid_window['B']
+        sd = valid_window['p-sd']
+        mean = valid_window['p-means']
+        valid_window['final-z-scores-perm']=(initial_B - mean)/sd
+        valid_window['cdf-perm'] = (-1*abs(valid_window['final-z-scores-perm'])).apply(scipy.stats.norm.cdf)
+        #calculate t-tailed pvalue
+        valid_window['p-value-perm'] = (2*valid_window['cdf-perm'])
+        self.results_table = valid_window
+        return(self.results_table)
+
+    def rank_results(self, rank_by, ascending=False):
+        rank_column_name = rank_by + "-rank"
+        ##rank edges with an actual beta value first until further notice ##
+        valid_indices = self.results_table['B'] != 0
+        valid_window = self.results_table[valid_indices]
+        valid_window[rank_column_name] = valid_window[rank_by].rank(method="dense",ascending = ascending)
+        edge_n=len(valid_window.index)
+
+        invalid_indices = self.results_table['B'] == 0
+        invalid_window = self.results_table[invalid_indices]
+        invalid_window[rank_column_name] = invalid_window[rank_by].rank(method="dense",ascending = ascending)
+        invalid_window[rank_column_name] = invalid_window[rank_column_name] + edge_n
+        self.results_table = valid_window.append(invalid_window)
+        self.results_table = self.results_table.sort(columns=rank_column_name, axis = 0)
+
+        return(self.results_table)
+
+    def permutation_test(self, permutation_n=1000):
+>>>>>>> ee816977f737a3f91ece644e0e5f4dba2c27f4eb
         #initialize permutation results array
         self.permutation_means = np.empty((self.n_genes, self.n_genes))
         self.permutation_sd = np.empty((self.n_genes, self.n_genes))
@@ -74,6 +128,7 @@ class LassoWindow(Window):
             result = self.update_variance_2D(result, dummy_list)
 
         self.permutation_means = result['mean'].copy()
+<<<<<<< HEAD
         self.permutation_sd = np.sqrt(result['variance'].copy())
         self.permutation_p_values = self.calc_p_value()
 
@@ -90,6 +145,38 @@ class LassoWindow(Window):
         return p_values
 
     def run_bootstrap(self, n_bootstraps=1000, n_alphas=20, noise=0.2):
+=======
+        self.permutation_sd= result['variance'].copy()
+
+    def update_variance_2D(self, prev_result, new_samples):
+        """incremental calculation of means: accepts new_samples, which is a list of samples. then calculates a new mean. this is a useful function for calculating the means of large arrays"""
+        n = prev_result["n"] #2D numpy array with all zeros or watev
+        mean = prev_result["mean"] #2D numpy array
+        sum_squares = prev_result["ss"] #2D numpy array
+
+        #new_samples is a list of arrays
+        #x is a 2D array
+        for x in new_samples:
+            n = n + 1
+            #delta = float(x) - mean
+            old_mean = mean.copy()
+            mean = old_mean + np.divide( (x-old_mean) , n)
+            sum_squares = sum_squares + np.multiply((x-mean),(x-old_mean))
+
+        if (n[0,0] < 2):
+            result = {  "mean": mean,
+                        "ss": sum_squares,
+                        "n": n}
+            return result
+
+        variance = np.divide(sum_squares,(n-1))
+        result = {  "mean": mean,
+                    "ss": sum_squares,
+                    "variance": variance,
+                    "n": n}
+        return result
+    def run_bootstrap(self, n_bootstraps=1000, n_alphas=20, noise=0.1):
+>>>>>>> ee816977f737a3f91ece644e0e5f4dba2c27f4eb
         alpha_range = np.linspace(0, self.null_alpha, n_alphas)
         self.bootstrap_matrix = np.empty((self.n_genes, self.n_genes, n_bootstraps, n_alphas))
         for ii, alpha in enumerate(alpha_range):
@@ -244,7 +331,7 @@ class LassoWindow(Window):
         """
 
         if alpha_range is None:
-            alpha_range = np.linspace(0, self.null_alpha)
+            alpha_range = np.linspace(0, self.null_alpha, num=25)
 
         # Calculate the cv_table values
         cv_results = np.array([self.cross_validate_alpha(alpha, n_folds, True) for alpha in alpha_range])

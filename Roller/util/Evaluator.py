@@ -85,7 +85,7 @@ class Evaluator:
                 precision.append(counts['tp']/(counts['tp']+counts['fp']))
 
             aupr = integrate.cumtrapz(precision, recall)
-        return precision, recall, aupr[-1]
+        return precision, recall, aupr
 
     def _evaluate(self, current_list):
         """ evaluate the list using sets hooray, packs it up in dict """
