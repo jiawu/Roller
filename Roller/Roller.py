@@ -81,7 +81,7 @@ class Roller(object):
         return total_windows
 
     def get_window(self, start_index):
-        raw_window = self.get_window_raw(start_index)
+        raw_window = self.get_window_raw(0)
         only_genes = raw_window.iloc[:, self.gene_start:self.gene_end]
         return only_genes
 
@@ -161,9 +161,11 @@ class Roller(object):
 
     #todo: this method sucks. sorry.
     def score(self, sorted_edge_list, gold_standard_file):
+        if len(sorted_edge_list) < 15:
+          pdb.set_trace()
         evaluator = Evaluator(gold_standard_file, sep='\t')
         edge_cutoff=len(evaluator.gs_flat)
-        precision, recall, aupr = evaluator.calc_pr(sorted_edge_list[1:edge_cutoff])
+        precision, recall, aupr = evaluator.calc_pr(sorted_edge_list[0:edge_cutoff+1])
         score_dict = {"precision":precision,"recall":recall,"aupr":aupr}
         return(score_dict)
 

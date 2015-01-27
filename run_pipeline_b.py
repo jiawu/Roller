@@ -1,9 +1,10 @@
 import Roller
 from pylab import *
+import pdb
 
 if __name__ == "__main__":
     file_path = "data/dream4/insilico_size10_1_timeseries.tsv"
-    gene_start_column = 1
+    gene_start_column = 0
     time_label = "Time"
     separator = "\t"
     gene_end = None
@@ -17,8 +18,8 @@ if __name__ == "__main__":
     #### My goal here is to test the whole range of alphas for the full window ####
     alpha_list = []
     aupr_list = []
-
-    roller.create_windows(width=window_size)
+    roller.set_window(width=window_size)
+    roller.create_windows_no_next()
     roller.optimize_params()
     for alpha in roller.window_list[0].cv_table['alpha']:
         print("current alpha: " + str(alpha))
@@ -27,6 +28,9 @@ if __name__ == "__main__":
         roller.average_rank(rank_by='stability', ascending = True)
         #score some edge lists
         #first score the sorted average edge list
+        #pdb.set_trace()
+        if len(roller.averaged_ranks) < 15:
+          pdb.set_trace()
         averaged_score_dict = roller.score(roller.averaged_ranks, gold_standard)
         #next score each individual edge list
         score_list = []
