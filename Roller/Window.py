@@ -13,7 +13,7 @@ class Window(object):
         self.gene_end = window_info['gene_end']
         self.nth_window = window_info['nth_window']
         self.raw_data = raw_dataframe
-        dataframe =raw_dataframe.iloc[:,self.gene_start:self.gene_end]
+        dataframe = raw_dataframe.iloc[:, self.gene_start:self.gene_end]
         self.df = dataframe
         self.window_values = dataframe.values
         self.samples = dataframe.index.values
