@@ -112,7 +112,10 @@ class Roller(object):
         return(len(self.raw_data.columns) -1)
 
     def create_windows_no_next(self):
-        window_list = [LassoWindow(self.get_window(index), {"time_label": self.time_label, "gene_start": self.gene_start, "gene_end": self.gene_end,'nth_window': index}) if (index + self.window_width <= self.overall_width) else ''
+        window_list = [LassoWindow(self.get_window_raw(index),
+                                   {"time_label": self.time_label, "gene_start": self.gene_start,
+                                    "gene_end": self.gene_end, 'nth_window': index}) if (
+        index + self.window_width <= self.overall_width) else ''
                        for index in range(self.get_n_windows())]
         self.window_list = window_list
 
