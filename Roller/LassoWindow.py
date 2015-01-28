@@ -6,6 +6,7 @@ from sklearn.cross_validation import KFold
 from scipy import integrate
 from scipy import stats
 import scipy
+import pdb
 
 from Window import Window
 
@@ -63,9 +64,9 @@ class LassoWindow(Window):
         aggregated_edges = initial_edges.merge(permutation_mean_edges, on='regulator-target').merge(permutation_sd_edges, on='regulator-target').merge(stability_edges, on='regulator-target')
 
         #sorry, it is a little messy to do the p-value calculations for permutation tests here...
-        valid_indices = aggregated_edges['p-sd'] != 0
+        #valid_indices = aggregated_edges['p-sd'] != 0
         #valid_indices = aggregated_edges['B'] != 0
-        valid_window = aggregated_edges[valid_indices]
+        valid_window = aggregated_edges
         initial_B = valid_window['B']
         sd = valid_window['p-sd']
         mean = valid_window['p-means']
@@ -129,7 +130,8 @@ class LassoWindow(Window):
             sd = self.permutation_sd.copy()
 
         z_scores = (value - mean)/sd
-        p_values = (1-stats.norm.cdf(z_scores))*2
+        cdf = stats.norm.cdf((-1*abs(z_scores)))
+        p_values = 2*cdf
         return p_values
 
     def update_variance_2D(self, prev_result, new_samples):

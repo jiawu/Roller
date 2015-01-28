@@ -11,6 +11,6 @@
 #MSUB -V
 
 workon seqgen
-module load python/anaconda3
+module load python/anaconda
 cd ~/Roller
 python run_pipeline_b.py

@@ -7,10 +7,12 @@
 #MSUB -o /projects/p20519/jia_output/Roller_error.txt
 #MSUB -m bae
 #MSUB -q normal
-#MSUB -N insilico1
+#MSUB -N cluster_g
 #MSUB -V
+
+nwindows=${MOAB_JOBARRAYINDEX}
 
 workon seqgen
 module load python/anaconda
 cd ~/Roller
-python run_pipeline_c.py
+python run_pipeline_g.py ${nwindows}
