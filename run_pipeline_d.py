@@ -57,7 +57,7 @@ if __name__ == "__main__":
     image_save = image_file_path + "w" + str(window_size) + ".png"
     plt.savefig(image_save)
 
-    fig2 = plt.figure(0)
+    fig2 = plt.figure(1)
     plt.plot(window_list, best_aupr_list)
     title_string = file_path + " best window size: " + str(window_size)
     plt.title(title_string)
