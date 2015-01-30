@@ -3,7 +3,8 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import sys
 import Roller
-
+import uuid
+import pickle
 if __name__ == "__main__":
     window_size = int(sys.argv[1])
     plt.ioff()
@@ -22,13 +23,14 @@ if __name__ == "__main__":
     alpha_list = []
     aupr_list = []
 
-    roller.create_windows(width=window_size)
+    roller.set_window(width=window_size)
+    roller.create_windows_no_next()
     roller.optimize_params()
     for alpha in roller.window_list[0].cv_table['alpha']:
         print("current alpha: " + str(alpha))
         roller.fit_windows(alpha=alpha)
-        roller.rank_edges(n_bootstraps=200, permutation_n = 100)
-        roller.average_rank(rank_by='stability', ascending = True)
+        roller.rank_edges(n_bootstraps=500, permutation_n = 500)
+        roller.average_rank(rank_by='stability', ascending = False)
         #score some edge lists
         #first score the sorted average edge list
         averaged_score_dict = roller.score(roller.averaged_ranks, gold_standard)
@@ -48,3 +50,7 @@ if __name__ == "__main__":
     plt.ylabel('aupr')
     image_save = image_file_path + "w" + str(window_size) + ".png"
     fig.savefig(image_save)
+
+    unique_filename = "/projects/p20519/Roller_outputs/"+ str(uuid.uuid4())
+    with open(unique_filename, 'wb') as output:
+      pickle.dump(roller,output, pickle.HIGHEST_PROTOCOL) 

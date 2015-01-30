@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import Window
+from Window  import Window
 from LassoWindow import LassoWindow
 from util import utility_module as utility
 from util.Evaluator import Evaluator
@@ -29,6 +29,7 @@ class Roller(object):
         self.raw_data = pd.read_csv(file_path, sep=separator)
         self.raw_data = self.raw_data.dropna(axis=0, how='all')
 
+        self.file_path = file_path
         # Set roller defaults
         self.current_step = 0
         self.window_width = 3
@@ -81,7 +82,7 @@ class Roller(object):
         return total_windows
 
     def get_window(self, start_index):
-        raw_window = self.get_window_raw(start_index)
+        raw_window = self.get_window_raw(0)
         only_genes = raw_window.iloc[:, self.gene_start:self.gene_end]
         return only_genes
 
@@ -164,9 +165,11 @@ class Roller(object):
 
     #todo: this method sucks. sorry.
     def score(self, sorted_edge_list, gold_standard_file):
+        if len(sorted_edge_list) < 15:
+          pdb.set_trace()
         evaluator = Evaluator(gold_standard_file, sep='\t')
         edge_cutoff=len(evaluator.gs_flat)
-        precision, recall, aupr = evaluator.calc_pr(sorted_edge_list[1:edge_cutoff])
+        precision, recall, aupr = evaluator.calc_pr(sorted_edge_list[0:edge_cutoff+1])
         score_dict = {"precision":precision,"recall":recall,"aupr":aupr}
         return(score_dict)
 
