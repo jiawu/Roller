@@ -1,7 +1,7 @@
 import warnings
 import numpy as np
 import pandas as pd
-from sklearn import linear_model
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.cross_validation import KFold
 from scipy import integrate
 from scipy import stats
@@ -9,9 +9,9 @@ import scipy
 
 from Window import Window
 
-class LassoWindow(Window):
+class RandomForestRegressionWindow(Window):
     def __init__(self, dataframe, window_info):
-        super(LassoWindow, self).__init__(dataframe, window_info)
+        super(RandomForestRegressionWindow, self).__init__(dataframe, window_info)
         self.alpha = None
         self.beta_coefficients = None
         self.cv_table = None
@@ -394,34 +394,35 @@ class LassoWindow(Window):
         ss = np.sum(np.power(X-column_mean, 2), axis=0)
         return ss
 
-    def get_coeffs(self, alpha, data=None):
+    def get_coeffs(self, n_trees, data=None):
         """
-        returns a 2D array with target as rows and regulators as columns
-        :param alpha: float
-            value to use for lasso fitting
-        :param data: array-like, optional
-            Data to fit. If none, will use the window values. Default is None
-        :return:
+
+        :param data:
+        :param n_trees:
+        :return: array-like
+            An array in which the rows are childred and the columns are the parents
         """
-        clf = linear_model.Lasso(alpha)
-        #loop that iterates through the target genes
         if data is None:
-            all_data = self.window_values.copy()
+            all_data = self.data.copy()
         else:
             all_data = data.copy()
 
-        coeff_matrix = np.array([],dtype=np.float_).reshape(0, all_data.shape[1])
+        coeff_matrix = np.array([], dtype=np.float_).reshape(0, all_data.shape[1])
 
-        for col_index,column in enumerate(all_data.T):
+        for col_index, column in enumerate(all_data.T):
+            #print "Inferring parents for gene %i of %i" % (col_index, self.n_labels)
             #delete the column that is currently being tested
             X_matrix = np.delete(all_data, col_index, axis=1)
+
             #take out the column so that the gene does not regress on itself
-            target_TF = all_data[:,col_index]
-            clf.fit(X_matrix, target_TF)
-            coeffs = clf.coef_
+            target_TF = all_data[:, col_index]
+
+            rfr = RandomForestRegressor(n_estimators=n_trees, n_jobs=-1)
+            rfr.fit(X_matrix, target_TF)
+            coeffs = rfr.feature_importances_
             #artificially add a 0 to where the col_index is
             #to prevent self-edges
-            coeffs = np.insert(coeffs,col_index,0)
-            coeff_matrix=np.vstack((coeff_matrix,coeffs))
+            coeffs = np.insert(coeffs, col_index, 0)
+            coeff_matrix = np.vstack((coeff_matrix, coeffs))
 
         return coeff_matrix
