@@ -54,12 +54,12 @@ window_size_list = []
 for dataset in dataset_dict.keys():
   #print aupr and auroc
   #same window size? 
-  for roller_obj in dataset_dict[dataset]:    
-    for window in roller_obj.window_list:
-      #other graphs correlating window size to statistics
+  if dataset == dataset_dict.keys()[1]:
+    for roller_obj in dataset_dict[dataset]:    
       window_size = roller_obj.window_width
-      if window_size == 21:
-        if dataset == dataset_dict.keys()[1]:
+      for window in roller_obj.window_list:
+    #other graphs correlating window size to statistics
+        if window_size == 20:    
           window_size_list.append(window_size)
           current_alpha = window.alpha
           alpha_table = window.cv_table["alpha"]
@@ -84,13 +84,24 @@ for dataset in dataset_dict.keys():
           fpr_list.append(fpr[-1])
           auroc_list.append(auroc)
 
+print(window_size_list)
 
 result_list = [precision_list, recall_list, aupr_list, tpr_list, fpr_list, auroc_list]
 result_titles = ["precision","recall","aupr","tpr","fpr","auroc"]
+fig = plt.figure(100)
+plt.scatter(window_size_list, precision_list)
+title_string = "Window Size 21, One Dataset"
+plt.title(title_string)
+plt.xlabel('Window Size')
+plt.ylabel(result_titles[0])
+image_save = image_file_path + "_windowsize_" + str(result_titles[0]) + ".png"
+fig.savefig(image_save)
+
+
 for count,result in enumerate(result_list):
   fig = plt.figure(count)
   plt.scatter(best_alpha_list, result)
-  title_string = "Window Size 21, All Datasets"
+  title_string = "Window Size 21, One Dataset"
   plt.title(title_string)
   plt.xlabel('Approx Distance from Best Alpha')
   plt.ylabel(result_titles[count])
@@ -100,7 +111,7 @@ for count,result in enumerate(result_list):
 for count,result in enumerate(result_list):
   fig = plt.figure(6+count)
   plt.scatter(window_size_list, result)
-  title_string = "Window Size 21, All Datasets"
+  title_string = "Window Size 21, One Dataset"
   plt.title(title_string)
   plt.xlabel('Window Size')
   plt.ylabel(result_titles[count])

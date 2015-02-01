@@ -44,7 +44,10 @@ if __name__ == "__main__":
             score_list.append(score_dict)
         alpha_list.append(alpha)
         aupr_list.append(max(score_dict['aupr']))
-    #plot aupr and alpha
+        #plot aupr and alpha
+        unique_filename = "/projects/p20519/Roller_outputs/"+ str(uuid.uuid4())
+        with open(unique_filename, 'wb') as output:
+          pickle.dump(roller,output, pickle.HIGHEST_PROTOCOL) 
     fig = plt.figure()
     plt.plot(alpha_list, aupr_list)
     title_string = file_path + " window size: " + str(window_size) + "best alpha" + str(best_alpha)
@@ -54,6 +57,3 @@ if __name__ == "__main__":
     image_save = image_file_path + "w" + str(window_size) + ".png"
     plt.savefig(image_save)
 
-    unique_filename = "/projects/p20519/Roller_outputs/"+ str(uuid.uuid4())
-    with open(unique_filename, 'wb') as output:
-      pickle.dump(roller,output, pickle.HIGHEST_PROTOCOL) 
