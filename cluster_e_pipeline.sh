@@ -1,12 +1,12 @@
 #!/bin/bash
 #MSUB -A p20519
-#MSUB -l walltime=24:00:00
+#MSUB -l walltime=72:00:00
 #MSUB -l nodes=1:ppn=1
 #MSUB -M jiawu@u.northwestern.edu
 #MSUB -j oe
 #MSUB -o /projects/p20519/jia_output/Roller_error.txt
 #MSUB -m bae
-#MSUB -q normal
+#MSUB -q long
 #MSUB -N e_pipeline
 #MSUB -V
 
