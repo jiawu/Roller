@@ -46,9 +46,10 @@ class TestRFRWindow(unittest.TestCase):
         self.test_rfr.fit_window(self.jobs)
         self.test_rfr.run_permutation_test(self.permutes, self.jobs)
         self.test_rfr.make_edge_table()
-        original_edge_order = self.test_rfr.edge_list
-        new_edge_order = self.test_rfr.rank_edges()
-        #todo: need a way to assert that these lists are not equal
+        old_order = self.test_rfr.edge_table['Edge'].values
+        self.test_rfr.rank_edges()
+        new_order = self.test_rfr.edge_table['Edge'].values
+        self.assertFalse(np.array_equal(old_order, new_order))
 
 if __name__ == '__main__':
     unittest.main()

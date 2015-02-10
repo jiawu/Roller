@@ -35,55 +35,11 @@ class RandomForestRegressionWindow(Window):
     def rank_edges(self, method="p_value"):
         if self.edge_table is None:
             raise ValueError("The edge table must be created before getting edges")
-        temp_edge_table = self.edge_table.copy()
         if method == "p_value":
-            temp_edge_table.sort(columns=['P_Value', 'Importance'], ascending=[True, False], inplace=True)
-        elif method == "Importance":
-            temp_edge_table.sort(columns=['Stability', 'Importance'], ascending=[False, True], inplace=True)
-
-        return temp_edge_table['Edge'].values
-
-    def generate_results_table(self):
-
-        #generate edges for initial model
-        initial_edges = self.create_linked_list(self.edge_importance, 'B')
-        #permutation edges
-        permutation_mean_edges =self.create_linked_list(self.permutation_means, 'p-means')
-        permutation_sd_edges = self.create_linked_list(self.permutation_sd, 'p-sd')
-        stability_edges = self.create_linked_list(self.edge_importance, 'stability')
-
-        aggregated_edges = initial_edges.merge(permutation_mean_edges, on='regulator-target').merge(permutation_sd_edges, on='regulator-target').merge(stability_edges, on='regulator-target')
-
-        #sorry, it is a little messy to do the p-value calculations for permutation tests here...
-        valid_indices = aggregated_edges['p-sd'] != 0
-        #valid_indices = aggregated_edges['B'] != 0
-        valid_window = aggregated_edges[valid_indices]
-        initial_B = valid_window['B']
-        sd = valid_window['p-sd']
-        mean = valid_window['p-means']
-        valid_window['final-z-scores-perm']=(initial_B - mean)/sd
-        valid_window['cdf-perm'] = (-1*abs(valid_window['final-z-scores-perm'])).apply(scipy.stats.norm.cdf)
-        #calculate t-tailed pvalue
-        valid_window['p-value-perm'] = (2*valid_window['cdf-perm'])
-        self.results_table = valid_window
-        return(self.results_table)
-
-    def rank_results(self, rank_by, ascending=False):
-        rank_column_name = rank_by + "-rank"
-        ##rank edges with an actual beta value first until further notice ##
-        valid_indices = self.results_table['B'] != 0
-        valid_window = self.results_table[valid_indices]
-        valid_window[rank_column_name] = valid_window[rank_by].rank(method="dense",ascending = ascending)
-        edge_n=len(valid_window.index)
-
-        invalid_indices = self.results_table['B'] == 0
-        invalid_window = self.results_table[invalid_indices]
-        invalid_window[rank_column_name] = invalid_window[rank_by].rank(method="dense",ascending = ascending)
-        invalid_window[rank_column_name] = invalid_window[rank_column_name] + edge_n
-        self.results_table = valid_window.append(invalid_window)
-        self.results_table = self.results_table.sort(columns=rank_column_name, axis = 0)
-
-        return(self.results_table)
+            self.edge_table.sort(columns=['P_Value', 'Importance'], ascending=[True, False], inplace=True)
+        elif method == "importance":
+            self.edge_table.sort(columns=['Stability', 'Importance'], ascending=[False, True], inplace=True)
+        return
 
     def run_permutation_test(self, n_permutations=1000, n_jobs=-1):
         #initialize permutation results array
