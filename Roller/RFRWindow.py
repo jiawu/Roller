@@ -12,11 +12,10 @@ from Window import Window
 class RandomForestRegressionWindow(Window):
     def __init__(self, dataframe, window_info):
         super(RandomForestRegressionWindow, self).__init__(dataframe, window_info)
-        self.beta_coefficients = None
+        self.edge_importance = None
         self.n_trees = None
         self.bootstrap_matrix = None
         self.freq_matrix = None
-        self.edge_stability_auc = None
         self.permutation_means = None
         self.permutation_sd = None
         self.permutation_p_values = None
@@ -26,31 +25,32 @@ class RandomForestRegressionWindow(Window):
         if self.permutation_p_values is None:
             raise ValueError("p values must be set before making the edge table. Use method run_permutation test")
 
-        if self.edge_stability_auc is None:
-            raise ValueError("edge stability values must be set before making the edge table. "
+        if self.edge_importance is None:
+            raise ValueError("edge importance values must be set before making the edge table. "
                              "Use method run_permutation test")
         self.edge_table["P_Value"] = self.permutation_p_values.flatten()
-        self.edge_table["Stability"] = self.edge_stability_auc.flatten()
+        self.edge_table["Importance"] = self.edge_importance.flatten()
+
 
     def rank_edges(self, method="p_value"):
         if self.edge_table is None:
             raise ValueError("The edge table must be created before getting edges")
         temp_edge_table = self.edge_table.copy()
         if method == "p_value":
-            temp_edge_table.sort(columns=['P_Value', 'Stability'], ascending=[True, False], inplace=True)
-        elif method == "stability":
-            temp_edge_table.sort(columns=['Stability', 'P_Value'], ascending=[False, True], inplace=True)
+            temp_edge_table.sort(columns=['P_Value', 'Importance'], ascending=[True, False], inplace=True)
+        elif method == "Importance":
+            temp_edge_table.sort(columns=['Stability', 'Importance'], ascending=[False, True], inplace=True)
 
         return temp_edge_table['Edge'].values
 
     def generate_results_table(self):
 
         #generate edges for initial model
-        initial_edges = self.create_linked_list(self.beta_coefficients, 'B')
+        initial_edges = self.create_linked_list(self.edge_importance, 'B')
         #permutation edges
         permutation_mean_edges =self.create_linked_list(self.permutation_means, 'p-means')
         permutation_sd_edges = self.create_linked_list(self.permutation_sd, 'p-sd')
-        stability_edges = self.create_linked_list(self.edge_stability_auc, 'stability')
+        stability_edges = self.create_linked_list(self.edge_importance, 'stability')
 
         aggregated_edges = initial_edges.merge(permutation_mean_edges, on='regulator-target').merge(permutation_sd_edges, on='regulator-target').merge(stability_edges, on='regulator-target')
 
@@ -85,7 +85,7 @@ class RandomForestRegressionWindow(Window):
 
         return(self.results_table)
 
-    def run_permutation_test(self, n_permutations=1000):
+    def run_permutation_test(self, n_permutations=1000, n_jobs=-1):
         #initialize permutation results array
         self.permutation_means = np.empty((self.n_genes, self.n_genes))
         self.permutation_sd = np.empty((self.n_genes, self.n_genes))
@@ -103,7 +103,7 @@ class RandomForestRegressionWindow(Window):
 
             #fit the data and get coefficients
 
-            permuted_coeffs = self.get_coeffs(self.n_trees, permuted_data)
+            permuted_coeffs = self.get_coeffs(self.n_trees, permuted_data, n_jobs=n_jobs)
             dummy_list = []
             dummy_list.append(permuted_coeffs)
             result = self.update_variance_2D(result, dummy_list)
@@ -114,7 +114,7 @@ class RandomForestRegressionWindow(Window):
 
     def calc_p_value(self, value=None, mean=None, sd=None):
         if value is None:
-            value = self.beta_coefficients.copy()
+            value = self.edge_importance.copy()
         if mean is None:
             mean = self.permutation_means.copy()
         if sd is None:
@@ -124,43 +124,8 @@ class RandomForestRegressionWindow(Window):
         p_values = (1-stats.norm.cdf(z_scores))*2
         return p_values
 
-    def bootstrap_alpha(self, alpha, resamples, noise):
-        """
-        Bootstrap a particular alpha, return a stack of beta matrices
-
-        :param alpha:
-        :param resamples:
-        :param noise:
-        :return:
-        """
-        boot_matrix = None
-
-        for ii, sample in enumerate(range(resamples)):
-            sample_window = self.resample_window()
-            noisy_window = self.add_noise_to_values(sample_window, noise)
-            if ii == 0:
-                boot_matrix = self.get_coeffs(alpha, noisy_window)
-            else:
-                boot_matrix = np.dstack((boot_matrix, self.get_coeffs(alpha, noisy_window)))
-
-        return boot_matrix
-
-    def calc_edge_freq(self):
-        "This is agnostic to the edge sign, only whether it exists"
-        edge_exists = self.bootstrap_matrix != 0
-        freq_matrix = np.sum(edge_exists, axis=2)
-        return freq_matrix
-
-    def auc(self, matrix, xvalues, axis=-1):
-        """
-        Calculate area under the curve
-        :return:
-        """
-        edge_auc = integrate.trapz(matrix, xvalues, axis=axis)
-        return edge_auc
-
     def get_nth_window_auc(self, nth):
-        auc = self.edge_stability_auc[:,:, nth]
+        auc = self.edge_importance[:,:, nth]
         return auc
 
     def initialize_params(self, n_trees=None):
@@ -179,7 +144,7 @@ class RandomForestRegressionWindow(Window):
             raise ValueError("Number of trees must be int (>=0) or None")
         return
 
-    def fit_window(self):
+    def fit_window(self, n_jobs=-1):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
@@ -188,9 +153,9 @@ class RandomForestRegressionWindow(Window):
         if self.n_trees is None:
             raise ValueError("window alpha value must be set before the window can be fit")
 
-        self.beta_coefficients = self.get_coeffs(self.n_trees)
+        self.edge_importance = self.get_coeffs(self.n_trees, n_jobs=n_jobs)
 
-    def get_coeffs(self, n_trees, data=None):
+    def get_coeffs(self, n_trees, data=None, n_jobs=-1):
         """
 
         :param data:
@@ -213,7 +178,7 @@ class RandomForestRegressionWindow(Window):
             #take out the column so that the gene does not regress on itself
             target_TF = all_data[:, col_index]
 
-            rfr = RandomForestRegressor(n_estimators=n_trees, n_jobs=-1)
+            rfr = RandomForestRegressor(n_estimators=n_trees, n_jobs=n_jobs)
             rfr.fit(X_matrix, target_TF)
             coeffs = rfr.feature_importances_
             #artificially add a 0 to where the col_index is
