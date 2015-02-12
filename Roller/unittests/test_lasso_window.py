@@ -16,7 +16,7 @@ class TestLassoWindow(unittest.TestCase):
         separator = "\t"
         gene_end = None
 
-        self.roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
+        self.roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator, window_type = "Lasso")
         self.test_lassoWindow = Roller.LassoWindow(self.roller.current_window)
 
     def test_initialize_params_default(self):

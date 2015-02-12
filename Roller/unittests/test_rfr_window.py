@@ -6,7 +6,7 @@ import Roller
 import pandas as pd
 import numpy as np
 import numpy.testing as npt
-
+import pdb
 
 class TestRFRWindow(unittest.TestCase):
     def setUp(self):
@@ -16,7 +16,7 @@ class TestRFRWindow(unittest.TestCase):
         separator = "\t"
         gene_end = None
 
-        self.roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
+        self.roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator, window_type = "RandomForest")
         index = 0
         window_info = {"time_label": self.roller.time_label, "gene_start": self.roller.gene_start,
                        "gene_end": self.roller.gene_end, 'nth_window': index}
@@ -45,6 +45,7 @@ class TestRFRWindow(unittest.TestCase):
         self.test_rfr.initialize_params(self.trees)
         self.test_rfr.fit_window(self.jobs)
         self.test_rfr.run_permutation_test(self.permutes, self.jobs)
+        pdb.set_trace()
         self.test_rfr.make_edge_table()
         old_order = self.test_rfr.edge_table['Edge'].values
         self.test_rfr.rank_edges()

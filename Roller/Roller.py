@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from Window  import Window
 from LassoWindow import LassoWindow
+from RFRWindow import RandomForestRegressionWindow
 from util import utility_module as utility
 from util.Evaluator import Evaluator
 import pdb
@@ -17,7 +18,7 @@ class Roller(object):
         -add permute_window()
         -add bootstrap_window()
     """
-    def __init__(self, file_path, gene_start=None, gene_end=None, time_label="Time", separator = "\t"):
+    def __init__(self, file_path, gene_start=None, gene_end=None, time_label="Time", separator = "\t", window_type = "Lasso"):
         """
         Initialize the roller object. Read the file and put it into a pandas dataframe
         :param file_path: file-like object or string
@@ -30,6 +31,7 @@ class Roller(object):
         self.raw_data = self.raw_data.dropna(axis=0, how='all')
 
         self.file_path = file_path
+        self.window_type = window_type
         # Set roller defaults
         self.current_step = 0
         self.window_width = 3
@@ -55,6 +57,7 @@ class Roller(object):
         self.window_list = []
 
     def create_windows(self, start_index=0, width=3, step_size=1):
+        """todo: deprecated. remove next refactor""" 
         self.window_list = []
 
         self.current_step = start_index
@@ -62,12 +65,14 @@ class Roller(object):
         self.step_size = step_size
         total_window_number = self.get_n_windows()
 
-        window_info = {"time_label": self.time_label, "gene_start": self.gene_start, "gene_end": self.gene_end}
+        window_info = { "time_label": self.time_label, 
+                        "gene_start": self.gene_start, 
+                        "gene_end": self.gene_end}
 
         for nth_window in range(total_window_number):
             window_info['nth_window'] = nth_window
             current_window = self.get_window_raw()
-            self.window_list.append(LassoWindow(current_window, window_info))
+            self.window_list.append(self.get_window_object(current_window, window_info))
             print(self.current_step)
             self.next()
 
@@ -113,12 +118,19 @@ class Roller(object):
         return(len(self.raw_data.columns) -1)
 
     def create_windows_no_next(self):
-        window_list = [LassoWindow(self.get_window_raw(index),
-                                   {"time_label": self.time_label, "gene_start": self.gene_start,
-                                    "gene_end": self.gene_end, 'nth_window': index}) if (
-        index + self.window_width <= self.overall_width) else ''
-                       for index in range(self.get_n_windows())]
+        window_list = [self.get_window_object(self.get_window_raw(index),
+                                   { "time_label": self.time_label, 
+                                     "gene_start": self.gene_start,
+                                     "gene_end": self.gene_end, 
+                                     "nth_window": index}) if (index + self.window_width <= self.overall_width) else '' for index in range(self.get_n_windows())]
         self.window_list = window_list
+
+    def get_window_object(self, dataframe, window_info_dict):
+        if self.window_type == "Lasso":
+            window_obj = LassoWindow(dataframe, window_info_dict)
+        if self.window_type == "RandomForest":
+            window_obj = RandomForestRegressionWindow(dataframe,window_info_dict)
+        return window_obj        
 
     def initialize_windows(self):
         for window in self.window_list:
@@ -136,26 +148,42 @@ class Roller(object):
             window.initialize_params()
         return(self.window_list)
 
-    def fit_windows(self, alpha=None):
+    def fit_windows(self, alpha=None, n_trees=None):
         for window in self.window_list:
-            if alpha != None:
-                window.alpha = alpha
+            if self.window_type == "Lasso":
+                if alpha != None:
+                    window.alpha = alpha
+            if self.window_type == "RandomForest":
+                if n_trees != None:
+                    window.n_trees = n_trees
             window.fit_window()
         return(self.window_list)
 
     def rank_edges(self, n_bootstraps= 1000, permutation_n = 1000):
-        for window in self.window_list:
-            window.run_permutation_test(n_permutations = permutation_n)
-            print("Running bootstrap...")
-            window.run_bootstrap(n_bootstraps = n_bootstraps)
-            window.generate_results_table()
+        if self.window_type == "Lasso":
+            for window in self.window_list:
+                window.run_permutation_test(n_permutations = permutation_n)
+                print("Running bootstrap...")
+                window.run_bootstrap(n_bootstraps = n_bootstraps)
+                window.generate_results_table()
+        if self.window_type == "RandomForest":
+            for window in self.window_list:
+                print("Running permutation...")
+                window.run_permutation_test(n_permutations = permutation_n)
+                window.make_edge_table()
         return(self.window_list)
 
     def average_rank(self, rank_by, ascending):
-        ranked_result_list = []
-        for window in self.window_list:
-            ranked_result = window.rank_results(rank_by, ascending)
-            ranked_result_list.append(ranked_result)
+        if self.window_type == "Lasso":
+            ranked_result_list = []
+            for window in self.window_list:
+                ranked_result = window.rank_results(rank_by, ascending)
+                ranked_result_list.append(ranked_result)
+        if self.window_type == "RandomForest":
+            ranked_result_list = []
+            for window in self.window_list:
+                ranked_result = window.rank_edges(rank_by)
+                ranked_result_list.append(ranked_result)
 
         aggr_ranks = utility.average_rank(ranked_result_list, rank_by+"-rank")
         #sort tables by mean rank in ascending order
