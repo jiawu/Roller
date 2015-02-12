@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from Window  import Window
 from LassoWindow import LassoWindow
 from util import utility_module as utility
 from util.Evaluator import Evaluator
@@ -14,7 +15,7 @@ class Roller(object):
         -accept different table formats
 
         -add permute_window()
-        -add bootstrape_window()
+        -add bootstrap_window()
     """
     def __init__(self, file_path, gene_start=None, gene_end=None, time_label="Time", separator = "\t"):
         """
@@ -28,6 +29,7 @@ class Roller(object):
         self.raw_data = pd.read_csv(file_path, sep=separator)
         self.raw_data = self.raw_data.dropna(axis=0, how='all')
 
+        self.file_path = file_path
         # Set roller defaults
         self.current_step = 0
         self.window_width = 3
@@ -49,8 +51,7 @@ class Roller(object):
 
         self.gene_list = self.raw_data.columns.values[self.gene_start:self.gene_end]
 
-        self.current_window = self.get_window()
-        # Initialize window-list
+        self.current_window = self.get_window(self.current_step)
         self.window_list = []
 
     def create_windows(self, start_index=0, width=3, step_size=1):
@@ -61,7 +62,7 @@ class Roller(object):
         self.step_size = step_size
         total_window_number = self.get_n_windows()
 
-        window_info = {"time_label":self.time_label, "gene_start":self.gene_start,"gene_end":self.gene_end}
+        window_info = {"time_label": self.time_label, "gene_start": self.gene_start, "gene_end": self.gene_end}
 
         for nth_window in range(total_window_number):
             window_info['nth_window'] = nth_window
@@ -80,26 +81,16 @@ class Roller(object):
         total_windows = (self.overall_width - self.window_width+1)/(self.step_size)
         return total_windows
 
-    def get_window(self):
-        raw_window = self.get_window_raw()
-        only_genes = raw_window.iloc[:,self.gene_start:self.gene_end]
+    def get_window(self, start_index):
+        raw_window = self.get_window_raw(0)
+        only_genes = raw_window.iloc[:, self.gene_start:self.gene_end]
         return only_genes
 
-    def get_window_raw(self):
-        start_index = self.current_step
+    def get_window_raw(self, start_index):
         end_index = start_index + self.window_width
         time_window = self.time_vec[start_index:end_index]
         data = self.raw_data[self.raw_data[self.time_label].isin(time_window)]
         return data
-
-    def next(self):
-        end_index = self.current_step + self.window_width
-        if end_index <= self.overall_width:
-            self.current_step += self.step_size
-            self.current_window = self.get_window()
-            return self.current_window
-        else:
-            return "end"
 
     def set_window(self, width):
         self.window_width = width
@@ -118,6 +109,28 @@ class Roller(object):
         ind = np.where(np.isnan(sums))[0]
         self.raw_data.iloc[:,ind]=0
 
+    def get_n_genes(self):
+        return(len(self.raw_data.columns) -1)
+
+    def create_windows_no_next(self):
+        window_list = [LassoWindow(self.get_window_raw(index),
+                                   {"time_label": self.time_label, "gene_start": self.gene_start,
+                                    "gene_end": self.gene_end, 'nth_window': index}) if (
+        index + self.window_width <= self.overall_width) else ''
+                       for index in range(self.get_n_windows())]
+        self.window_list = window_list
+
+    def initialize_windows(self):
+        for window in self.window_list:
+            window.initialize_params()
+            window.fit_window()
+
+    def rank_windows(self, n_permutes=1000, n_bootstraps=1000, n_alphas=20, noise=0.2):
+        for window in self.window_list:
+            window.run_permutation_test(n_permutes)
+            window.run_bootstrap(n_bootstraps, n_alphas, noise)
+            window.make_edge_table()
+
     def optimize_params(self):
         for window in self.window_list:
             window.initialize_params()
@@ -132,13 +145,13 @@ class Roller(object):
 
     def rank_edges(self, n_bootstraps= 1000, permutation_n = 1000):
         for window in self.window_list:
-            window.permutation_test(permutation_n = permutation_n)
+            window.run_permutation_test(n_permutations = permutation_n)
             print("Running bootstrap...")
             window.run_bootstrap(n_bootstraps = n_bootstraps)
             window.generate_results_table()
         return(self.window_list)
 
-    def average_rank(self,rank_by, ascending):
+    def average_rank(self, rank_by, ascending):
         ranked_result_list = []
         for window in self.window_list:
             ranked_result = window.rank_results(rank_by, ascending)
@@ -152,9 +165,11 @@ class Roller(object):
 
     #todo: this method sucks. sorry.
     def score(self, sorted_edge_list, gold_standard_file):
+        if len(sorted_edge_list) < 15:
+          pdb.set_trace()
         evaluator = Evaluator(gold_standard_file, sep='\t')
         edge_cutoff=len(evaluator.gs_flat)
-        precision, recall, aupr = evaluator.calc_pr(sorted_edge_list[1:edge_cutoff])
+        precision, recall, aupr = evaluator.calc_pr(sorted_edge_list[0:edge_cutoff+1])
         score_dict = {"precision":precision,"recall":recall,"aupr":aupr}
         return(score_dict)
 
@@ -201,4 +216,3 @@ class Roller(object):
                         'total_windows': self.get_n_windows(),
                         'window_index': window_index}
         return window_stats
-

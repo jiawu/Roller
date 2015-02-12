@@ -1,5 +1,7 @@
 setup.py
+Roller/LassoWindow.py
 Roller/Roller.py
+Roller/Window.py
 Roller/__init__.py
 Roller/test_correlations.py
 Roller.egg-info/PKG-INFO

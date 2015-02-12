@@ -138,8 +138,7 @@ class Evaluator:
                 tpr.append(counts['tp']/total_p)
 
             auroc = integrate.cumtrapz(fpr, tpr)
-        pdb.set_trace()
-        return tpr, fpr, auroc[-1]
+        return tpr, fpr, auroc
 
 if __name__ == '__main__':
     xls = pd.ExcelFile('../../goldbetter_model/adjacency_matrix.xlsx')

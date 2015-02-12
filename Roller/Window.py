@@ -13,7 +13,7 @@ class Window(object):
         self.gene_end = window_info['gene_end']
         self.nth_window = window_info['nth_window']
         self.raw_data = raw_dataframe
-        dataframe =raw_dataframe.iloc[:,self.gene_start:self.gene_end]
+        dataframe = raw_dataframe.iloc[:, self.gene_start:self.gene_end]
         self.df = dataframe
         self.window_values = dataframe.values
         self.samples = dataframe.index.values
@@ -23,9 +23,13 @@ class Window(object):
         self.edge_table = pd.DataFrame()
         self.edge_labels = [x for x in itertools.product(self.genes,repeat=2)]
 
+        self.edge_list = self.possible_edge_list(self.genes, self.genes)
+        # Add edge list to edge table
+        self.edge_table['Edge'] = self.edge_list
+
     def create_linked_list(self,numpy_array_2D, value_label):
         """labels and array should be in row-major order"""
-        linked_list = pd.DataFrame({'regulator-target':self.edge_labels, value_label:numpy_array_2D.flatten()})
+        linked_list = pd.DataFrame({'regulator-target': self.edge_labels, value_label: numpy_array_2D.flatten()})
         return linked_list
 
     def aggregate(self):
@@ -45,6 +49,31 @@ class Window(object):
         return window_stats
 
 
+    def possible_edge_list(self, parents, children, self_edges=True):
+        """
+        Create a list of all the possible edges between parents and children
+
+        :param parents: array
+            labels for parents
+        :param children: array
+            labels for children
+        :param self_edges:
+        :return: array, length = parents * children
+            array of parent, child combinations for all possible edges
+        """
+        parent_index = range(len(parents))
+        child_index = range(len(children))
+        a, b = np.meshgrid(parent_index, child_index)
+        parent_list = parents[a.flatten()]
+        child_list = children[b.flatten()]
+        possible_edge_list = None
+        if self_edges:
+            possible_edge_list = zip(parent_list, child_list)
+
+        elif not self_edges:
+            possible_edge_list = zip(parent_list[parent_list != child_list], child_list[parent_list != child_list])
+
+        return possible_edge_list
 
     def fit_window(self):
         """
@@ -69,11 +98,6 @@ class Window(object):
         #                               index=self.df.index.values.copy())
         return resample_values
 
-    def permute_data(self, array):
-        """Warning: modifies data in place."""
-        _ = [np.random.shuffle(i) for i in array]
-        return array
-
     def add_noise_to_values(self, window_values, max_random=0.2):
         """
         Add uniform noise to each value
@@ -89,7 +113,7 @@ class Window(object):
         noisy_values = np.multiply(window_values, noise)
         return noisy_values
 
-    def permutation_test(self):
+    def run_permutation_test(self):
         """
         Run the permutation test and update the edge_table with p values. It is expected that this method will vary
         depending on the type of method used by the window
@@ -129,3 +153,64 @@ class Window(object):
         :return:
         """
         pass
+
+    def permute_data(self, array):
+        """Warning: Modifies data in place. also remember the """
+        new_array = array.copy()
+        _ = [np.random.shuffle(i) for i in new_array]
+        return new_array
+
+    def update_variance_1D(self, prev_result, new_samples):
+        """
+        incremental calculation of means: accepts new_samples, which is a list of samples. then calculates a new mean.
+        this is a useful function for calculating the means of large arrays
+        """
+
+        n = float(prev_result["n"])
+        mean = float(prev_result["mean"])
+        sum_squares = float(prev_result["ss"])
+
+        for x in new_samples:
+            n = n + 1
+            #delta = float(x) - mean
+            old_mean = mean
+            mean = old_mean + (float(x)-old_mean)/n
+            sum_squares = sum_squares + (float(x)-mean)*(float(x)-old_mean)
+
+        if (n < 2):
+            return 0
+
+        variance = sum_squares/(n-1)
+        result = {  "mean": mean,
+                    "ss": sum_squares,
+                    "variance": variance,
+                    "n": n}
+        return result
+
+    def update_variance_2D(self, prev_result, new_samples):
+        """incremental calculation of means: accepts new_samples, which is a list of samples. then calculates a new mean. this is a useful function for calculating the means of large arrays"""
+        n = prev_result["n"] #2D numpy array with all zeros or watev
+        mean = prev_result["mean"] #2D numpy array
+        sum_squares = prev_result["ss"] #2D numpy array
+
+        #new_samples is a list of arrays
+        #x is a 2D array
+        for x in new_samples:
+            n = n + 1
+            #delta = float(x) - mean
+            old_mean = mean.copy()
+            mean = old_mean + np.divide( (x-old_mean) , n)
+            sum_squares = sum_squares + np.multiply((x-mean),(x-old_mean))
+
+        if (n[0,0] < 2):
+            result = {  "mean": mean,
+                        "ss": sum_squares,
+                        "n": n}
+            return result
+
+        variance = np.divide(sum_squares,(n-1))
+        result = {  "mean": mean,
+                    "ss": sum_squares,
+                    "variance": variance,
+                    "n": n}
+        return result
