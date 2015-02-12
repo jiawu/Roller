@@ -36,7 +36,10 @@ window_size_list = []
 for file in filenames:
   full_path = path + file
   print(full_path)
-  roller_obj = pd.read_pickle(full_path)
+  try:
+    roller_obj = pd.read_pickle(full_path)
+  except EOFError:
+    continue
   attributes = dir(roller_obj)
   if any("file_path" in attribute for attribute in attributes):
     counter += 1
