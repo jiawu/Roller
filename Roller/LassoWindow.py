@@ -50,7 +50,7 @@ class LassoWindow(Window):
         elif method == "stability":
             temp_edge_table.sort(columns=['Stability', 'P_Value'], ascending=[False, True], inplace=True)
 
-        return temp_edge_table['Edge'].values
+        return temp_edge_table['regulator-target'].values
 
     def generate_results_table(self):
 

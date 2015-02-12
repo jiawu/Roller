@@ -25,7 +25,7 @@ class Window(object):
 
         self.edge_list = self.possible_edge_list(self.genes, self.genes)
         # Add edge list to edge table
-        self.edge_table['Edge'] = self.edge_list
+        self.edge_table['regulator-target'] = self.edge_list
 
     def create_linked_list(self,numpy_array_2D, value_label):
         """labels and array should be in row-major order"""

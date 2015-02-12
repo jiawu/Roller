@@ -94,7 +94,7 @@ class RandomForestRegressionWindow(Window):
         """
         if n_trees is None:
             # Select number of trees with default parameters
-            self.n_trees = 100
+            self.n_trees = 10
         elif n_trees >= 0 and type(n_trees) == int:
             self.n_trees = n_trees
         else:
