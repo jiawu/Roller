@@ -77,7 +77,8 @@ class RandomForestRegressionWindow(Window):
             sd = self.permutation_sd.copy()
 
         z_scores = (value - mean)/sd
-        p_values = (1-stats.norm.cdf(z_scores))*2
+        cdf = stats.norm.cdf((-1*abs(z_scores)))
+        p_values = 2*cdf
         return p_values
 
     def get_nth_window_auc(self, nth):
