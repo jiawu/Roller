@@ -20,12 +20,12 @@ class Window(object):
         self.n_samples = len(self.samples)
         self.genes = dataframe.columns.values
         self.n_genes = len(self.genes)
-        self.edge_table = pd.DataFrame()
+        self.results_table = pd.DataFrame()
         self.edge_labels = [x for x in itertools.product(self.genes,repeat=2)]
 
         self.edge_list = self.possible_edge_list(self.genes, self.genes)
         # Add edge list to edge table
-        self.edge_table['regulator-target'] = self.edge_list
+        self.results_table['regulator-target'] = self.edge_list
 
     def create_linked_list(self,numpy_array_2D, value_label):
         """labels and array should be in row-major order"""

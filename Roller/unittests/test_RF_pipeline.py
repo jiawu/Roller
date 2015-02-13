@@ -14,11 +14,13 @@ class TestRFPipeline(unittest.TestCase):
         self.roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator,window_type = "RandomForest")
 
     def test_crap(self):
+        self.roller.set_window(20)
         self.roller.create_windows_no_next()
         self.roller.optimize_params()
         self.roller.fit_windows()
-        self.roller.rank_edges(permutation_n=100)
-        self.roller.average_rank(rank_by='p-value', ascending=False)
+        self.roller.rank_edges(permutation_n=10)
+        pdb.set_trace()
+        self.roller.average_rank(rank_by='p_value', ascending=False)
         #score some edge lists
         #first score the sorted average edge list
         gold_standard = "../../data/dream4/insilico_size10_1_goldstandard.tsv"

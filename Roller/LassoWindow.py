@@ -38,17 +38,17 @@ class LassoWindow(Window):
         if self.edge_stability_auc is None:
             raise ValueError("edge stability values must be set before making the edge table. "
                              "Use method run_permutation test")
-        self.edge_table["P_Value"] = self.permutation_p_values.flatten()
-        self.edge_table["Stability"] = self.edge_stability_auc.flatten()
+        self.edge_table["p_value"] = self.permutation_p_values.flatten()
+        self.edge_table["stability"] = self.edge_stability_auc.flatten()
 
     def rank_edges(self, method="p_value"):
         if self.edge_table is None:
             raise ValueError("The edge table must be created before getting edges")
         temp_edge_table = self.edge_table.copy()
         if method == "p_value":
-            temp_edge_table.sort(columns=['P_Value', 'Stability'], ascending=[True, False], inplace=True)
+            temp_edge_table.sort(columns=['p_value', 'stability'], ascending=[True, False], inplace=True)
         elif method == "stability":
-            temp_edge_table.sort(columns=['Stability', 'P_Value'], ascending=[False, True], inplace=True)
+            temp_edge_table.sort(columns=['stability', 'p_value'], ascending=[False, True], inplace=True)
 
         return temp_edge_table['regulator-target'].values
 

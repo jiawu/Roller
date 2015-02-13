@@ -28,18 +28,22 @@ class RandomForestRegressionWindow(Window):
         if self.edge_importance is None:
             raise ValueError("edge importance values must be set before making the edge table. "
                              "Use method run_permutation test")
-        self.edge_table["P_Value"] = self.permutation_p_values.flatten()
-        self.edge_table["Importance"] = self.edge_importance.flatten()
+        self.results_table["p_value"] = self.permutation_p_values.flatten()
+        self.results_table["importance"] = self.edge_importance.flatten()
 
 
-    def rank_edges(self, method="p_value"):
-        if self.edge_table is None:
+    def rank_edges(self, rank_by):
+        rank_column_name = rank_by + "-rank"  
+        if self.results_table is None:
             raise ValueError("The edge table must be created before getting edges")
-        if method == "p_value":
-            self.edge_table.sort(columns=['P_Value', 'Importance'], ascending=[True, False], inplace=True)
-        elif method == "importance":
-            self.edge_table.sort(columns=['Stability', 'Importance'], ascending=[False, True], inplace=True)
-        return
+        if rank_by == "p_value":
+            self.results_table.sort(columns=['p_value', 'importance'], ascending=[True, False], inplace=True)
+        elif rank_by == "importance":
+            self.results_table.sort(columns=['stability', 'importance'], ascending=[False, True], inplace=True)
+        valid_window = self.results_table
+        valid_window[rank_column_name] = valid_window[rank_by].rank(method="dense",ascending=False)
+        self.results_table = self.results_table.sort(columns=rank_column_name, axis=0)
+        return self.results_table
 
     def run_permutation_test(self, n_permutations=1000, n_jobs=-1):
         #initialize permutation results array
@@ -94,7 +98,7 @@ class RandomForestRegressionWindow(Window):
         """
         if n_trees is None:
             # Select number of trees with default parameters
-            self.n_trees = 10
+            self.n_trees = 100
         elif n_trees >= 0 and type(n_trees) == int:
             self.n_trees = n_trees
         else:

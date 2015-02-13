@@ -32,8 +32,8 @@ if __name__ == "__main__":
       roller.create_windows_no_next()
       roller.optimize_params()
       roller.fit_windows()
-      roller.rank_edges(permutation_n = 500)
-      roller.average_rank(rank_by='p-value', ascending = False)
+      roller.rank_edges(permutation_n = 200)
+      roller.average_rank(rank_by='p_value', ascending = False)
       #score some edge lists
       #first score the sorted average edge list
       averaged_score_dict = roller.score(roller.averaged_ranks, gold_standard)

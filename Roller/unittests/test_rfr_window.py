@@ -46,10 +46,10 @@ class TestRFRWindow(unittest.TestCase):
         self.test_rfr.fit_window(self.jobs)
         self.test_rfr.run_permutation_test(self.permutes, self.jobs)
         pdb.set_trace()
-        self.test_rfr.make_edge_table()
-        old_order = self.test_rfr.edge_table['regulator-target'].values
+        self.test_rfr.make_results_table()
+        old_order = self.test_rfr.results_table['regulator-target'].values
         self.test_rfr.rank_edges()
-        new_order = self.test_rfr.edge_table['regulator-target'].values
+        new_order = self.test_rfr.results_table['regulator-target'].values
         self.assertFalse(np.array_equal(old_order, new_order))
 
 if __name__ == '__main__':
