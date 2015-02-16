@@ -84,7 +84,7 @@ class Evaluator:
             else:
                 precision.append(counts['tp']/(counts['tp']+counts['fp']))
 
-            aupr = integrate.cumtrapz(precision, recall)
+            aupr = integrate.cumtrapz(y=precision, x=recall)
         return precision, recall, aupr
 
     def _evaluate(self, current_list):
@@ -137,7 +137,7 @@ class Evaluator:
             else:
                 tpr.append(counts['tp']/total_p)
 
-            auroc = integrate.cumtrapz(fpr, tpr)
+            auroc = integrate.cumtrapz(x=fpr, y=tpr)
         return tpr, fpr, auroc
 
 if __name__ == '__main__':

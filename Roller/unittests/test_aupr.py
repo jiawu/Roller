@@ -19,6 +19,7 @@ class TestAUPR(unittest.TestCase):
     def test_perfect_pr(self):
         prediction = self.evaluator.gs_data
         precision, recall, aupr = self.evaluator.calc_pr(prediction)
+        pdb.set_trace()
         #lazy unit testing. check if first 14 are not 1.0s in recall, check if others are all 1.0s
         check = Set([1.0 for x in xrange(14)])
         not_ones =Set(recall[0:14]) - check
@@ -27,10 +28,21 @@ class TestAUPR(unittest.TestCase):
     def test_if_perfect_case(self):
         prediction = self.evaluator.gs_data
         precision, recall, aupr = self.evaluator.calc_pr(prediction)
+        pdb.set_trace()
         point = Set(precision).intersection(Set(recall))
         real_point = 1.0
         #tpr, fpr, auroc = self.evaluator.calc_roc(prediction)
         self.assertIn(real_point, point)
+    
+    def test_perfect_auroc(self):
+        prediction = self.evaluator.gs_data
+        tpr, fpr, auroc = self.evaluator.calc_roc(prediction)
+        pdb.set_trace()
+        #lazy unit testing. check if first 14 are not 1.0s in recall, check if others are all 1.0s
+        check = Set([1.0 for x in xrange(14)])
+        not_ones =Set(tpr[0:14]) - check
+        self.assertEqual(len(not_ones),14)
+        #one more lazy unit test. check if there is one point where P = R = 1.0
 
 if __name__ == '__main__':
     unittest.main()

@@ -42,7 +42,6 @@ if __name__ == "__main__":
       for window in roller.window_list:
           score_dict = roller.score(window.results_table,gold_standard)
           score_list.append(score_dict)
-      alpha_list.append(alpha)
       aupr_list.append(max(score_dict['aupr']))
       unique_filename = "/projects/p20519/Roller_outputs_RF/"+ str(uuid.uuid4())
       with open(unique_filename, 'wb') as output:

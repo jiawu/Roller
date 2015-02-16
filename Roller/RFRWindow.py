@@ -139,7 +139,7 @@ class RandomForestRegressionWindow(Window):
             #take out the column so that the gene does not regress on itself
             target_TF = all_data[:, col_index]
 
-            rfr = RandomForestRegressor(n_estimators=n_trees, n_jobs=n_jobs)
+            rfr = RandomForestRegressor(n_estimators=n_trees, n_jobs=n_jobs, max_features="sqrt")
             rfr.fit(X_matrix, target_TF)
             coeffs = rfr.feature_importances_
             #artificially add a 0 to where the col_index is
