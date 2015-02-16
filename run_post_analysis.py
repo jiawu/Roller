@@ -52,6 +52,11 @@ for file in filenames:
       window_size = roller_obj.window_width
       roller_obj.average_rank(rank_by='p_value', ascending = False)
       for nwindow,window in enumerate(roller_obj.window_list):
+      # 
+        
+        
+        
+        pdb.set_trace()
         print(nwindow)
     #other graphs correlating window size to statistics
           #have to redefine gold standard here because it wasn't saved in the object
@@ -77,7 +82,8 @@ for file in filenames:
         tpr_list2.append(tpr[14])
         fpr_list2.append(fpr[14])
         auroc_list2.append(auroc[-1])
-      pdb.set_trace()
+
+
 print(window_size_list)
 
 result_list = [precision_list, recall_list, aupr_list, tpr_list, fpr_list, auroc_list]
