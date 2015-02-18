@@ -15,6 +15,17 @@ class TestAUPR(unittest.TestCase):
     def setUp(self):
         gold_standard_file = "../../data/dream4/insilico_size10_1_goldstandard.tsv"
         self.evaluator = Evaluator(gold_standard_file, sep = '\t')
+        gold_standard_file_yeast = "../../data/dream4/yeast_size100_1_goldstandard.tsv"
+        self.evaluator_yeast = Evaluator(gold_standard_file_yeast, sep = '\t')
+
+    def test_perfect_roc_yeast(self):
+        prediction = self.evaluator_yeast.gs_data
+        tpr, fpr, auroc = self.evaluator_yeast.calc_roc(prediction)
+        pdb.set_trace()
+        #lazy unit testing. check if first 14 are not 1.0s in recall, check if others are all 1.0s
+        check = Set([1.0 for x in xrange(14)])
+        not_ones =Set(tpr[0:14]) - check
+        self.assertEqual(len(not_ones),14)
 
     def test_perfect_pr(self):
         prediction = self.evaluator.gs_data
