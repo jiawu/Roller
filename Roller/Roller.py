@@ -57,32 +57,6 @@ class Roller(object):
         self.current_window = self.get_window(self.current_step)
         self.window_list = []
 
-    def create_windows(self, start_index=0, width=3, step_size=1):
-        """todo: deprecated. remove next refactor""" 
-        self.window_list = []
-
-        self.current_step = start_index
-        self.window_width = width
-        self.step_size = step_size
-        total_window_number = self.get_n_windows()
-
-        window_info = { "time_label": self.time_label, 
-                        "gene_start": self.gene_start, 
-                        "gene_end": self.gene_end}
-
-        for nth_window in range(total_window_number):
-            window_info['nth_window'] = nth_window
-            current_window = self.get_window_raw()
-            self.window_list.append(self.get_window_object(current_window, window_info))
-            print(self.current_step)
-            self.next()
-
-        self.reset()
-
-        # determine total number of windows
-        # loop to add windows to list
-        return(self.window_list)
-
     def get_n_windows(self):
         total_windows = (self.overall_width - self.window_width+1)/(self.step_size)
         return total_windows
