@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import integrate
 from sets import Set
-
+import pandas as pd
 import pdb
 
 class Evaluator:
@@ -15,7 +15,17 @@ class Evaluator:
         self.gs_data['regulator-target'] = zip(self.gs_data.regulator, self.gs_data.target)
         self.interaction_label = interaction_label
         self.gs_flat = self.gs_data[self.gs_data['exists'] > 0]['regulator-target']
-        self.full_list = self.gs_data['regulator-target']
+        #more robust version of defining the full list
+        all_regulators = self.gs_data['regulator'].unique().tolist()
+        all_targets = self.gs_data['target'].unique().tolist()
+        all_regulators.extend(all_targets)
+        all_regulators = np.array(list(set(all_regulators)))
+        
+        self.full_list = tuple(map(tuple,self.possible_edges(all_regulators,
+          all_regulators)))
+        #remove self edges
+        self.full_list = [ x for x in self.full_list if x[0] != x[1] ]
+        self.full_list = pd.Series(self.full_list)
 
     def possible_edges(self,parents, children):
         """
