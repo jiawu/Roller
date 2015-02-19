@@ -32,6 +32,7 @@ class Roller(object):
 
         self.file_path = file_path
         self.window_type = window_type
+
         # Set roller defaults
         self.current_step = 0
         self.window_width = 3
@@ -119,9 +120,9 @@ class Roller(object):
 
     def create_windows_no_next(self):
         window_list = [self.get_window_object(self.get_window_raw(index),
-                                   { "time_label": self.time_label, 
+                                   { "time_label": self.time_label,
                                      "gene_start": self.gene_start,
-                                     "gene_end": self.gene_end, 
+                                     "gene_end": self.gene_end,
                                      "nth_window": index}) if (index + self.window_width <= self.overall_width) else '' for index in range(self.get_n_windows())]
         self.window_list = window_list
 

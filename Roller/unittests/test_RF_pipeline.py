@@ -19,7 +19,7 @@ class TestRFPipeline(unittest.TestCase):
         self.roller.optimize_params()
         self.roller.fit_windows()
         self.roller.rank_edges(permutation_n=10)
-        pdb.set_trace()
+        #pdb.set_trace()
         self.roller.average_rank(rank_by='p_value', ascending=False)
         #score some edge lists
         #first score the sorted average edge list
@@ -30,6 +30,6 @@ class TestRFPipeline(unittest.TestCase):
         for window in self.roller.window_list:
             aupr = self.roller.score(window.results_table,gold_standard)
             aupr_list.append(aupr)
-        pdb.set_trace()
+        #pdb.set_trace()
 if __name__ == '__main__':
     unittest.main()
