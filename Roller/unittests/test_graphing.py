@@ -32,6 +32,20 @@ class TestRFGrapher(unittest.TestCase):
         window_size = roller.window_width
         window_start_list = []
         auroc_list = []
+        gp_left = 0.2
+        gp_bottom = 0.1
+        gp_width = 0.7
+        gp_height = 0.2
+        
+        padding = 0.01
+        numTFs = 20
+        dm_left = gp_left
+        dm_bottom = gp_bottom+gp_height+3*padding
+        dm_width = gp_width
+        box_height =0.03
+        dm_height = box_height*numTFs
+
+
         for window in roller.window_list:
             window_size = roller.window_width
             min_time = min(window.raw_data['Time'].unique())
@@ -44,11 +58,10 @@ class TestRFGrapher(unittest.TestCase):
             tpr,fpr, auroc = evaluator.calc_roc(sorted_edge_list)
             auroc_list.append(auroc[-1])
             
-        pdb.set_trace()
-        f = plt.figure()
-        axarr1 = plt.subplot2grid((3,1),(0,0), rowspan=2)
-        axarr2 = plt.subplot2grid((3,1),(2,0), sharex = axarr1)
-        f.set_tight_layout(True)
+        f = plt.figure(figsize=(10,10))
+        axarr2 = f.add_axes([gp_left, gp_bottom, gp_width, gp_height])
+        axarr1 = f.add_axes([dm_left, dm_bottom, dm_width, dm_height])
+
         #figure, heatmap = Grapher.generate_heatmap_from_df(self.roller_results.raw_data)
         #axarr1 = figure
         time_vector = raw_data['Time'].unique()
@@ -66,7 +79,7 @@ class TestRFGrapher(unittest.TestCase):
             target_set = sorted[sorted['Time']==time].drop(['Time','Group'],1)
             vector = target_set.values.flatten()
             heatmap_values[time] = vector
-        my_axis =axarr1.imshow(heatmap_values,interpolation='nearest',cmap=matplotlib.cm.RdBu)
+        my_axis =axarr1.matshow(heatmap_values,cmap=matplotlib.cm.RdBu,aspect='auto')
         my_axi = my_axis.get_axes()
         axarr1.set_yticks(np.arange(heatmap_values.shape[0]))
         axarr1.yaxis.set_ticks_position('left')
@@ -81,21 +94,21 @@ class TestRFGrapher(unittest.TestCase):
             label.set_fontsize(8)
         for l in axarr1.get_xticklines() + axarr1.get_yticklines():
             l.set_markersize(0)
-        
-        
-        
-        
-        heatmapGS = matplotlib.gridspec.GridSpec(2,1,height_ratios=[2,0.25])
-        axarr2.scatter(map(int,window_start_list), auroc_list)
+                
+        axarr2.plot(map(int,window_start_list), auroc_list, 'bo', linestyle='-')
+        axarr2.plot(map(int,window_start_list), [x+0.3 for x in auroc_list],
+            'o', linestyle='-', color = 'r')
+        axarr2.xaxis.set_ticks_position('bottom')
+        axarr2.xaxis.set_ticks(np.arange(0,1050,50))
         xlabels = axarr2.get_xticklabels()
         ylabels = axarr2.get_yticklabels()
-
         for label in xlabels:
             label.set_rotation(90)
             label.set_fontsize(8)
-        for label in ylabels:
+        for label in (axarr2.get_yticklabels()):
             label.set_fontsize(8)
-        plt.tight_layout()
+        for l in axarr2.get_xticklines() + axarr2.get_yticklines():
+            l.set_markersize(0)
         #f.subplots_adjust(wspace=0.001,hspace=0.001,top=None,bottom=None)
         f.savefig("/home/jjw036/Roller/yeast_heatmap2.png")
 if __name__ == '__main__':
