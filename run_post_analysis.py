@@ -12,24 +12,23 @@ import numpy as np
 import kdpee
 
 #get all pickle files
-path="/projects/p20519/Roller_outputs_RF_yeast100/"
+path="/projects/p20519/Roller_outputs_RF/"
 filenames = next(os.walk(path))[2]
 nfiles = len(filenames)
 #organize pickled objects by dataset analyzed
 obj_list = []
 counter = 0
-image_file_path = "/home/jjw036/Roller/aggregated_yeast_"
+image_file_path = "/home/jjw036/Roller/aggregated"
 
-target_dataset =  "data/dream4/yeast_size100_1_timeseries.tsv"
+target_dataset =  "data/dream4/insilico_size10_1_timeseries.tsv"
+
+#todo: calculate distance between two edge lists
+#average models: calculate AUROC between averaged models
+#single line graph: window size, auroc
+
 
 dataset_dict = {}
 best_alpha_list = []
-aupr_list = []
-auroc_list = []
-tpr_list = []
-fpr_list = []
-precision_list = []
-recall_list = []
 aupr_list2 = []
 auroc_list2 = []
 tpr_list2 = []
@@ -37,6 +36,17 @@ fpr_list2 = []
 precision_list2 = []
 recall_list2 = []
 entropies = []
+window_start_list = []
+window_end_list = []
+window_auroc = []
+
+a_aupr_list = []
+a_auroc_list = []
+a_tpr_list = []
+a_fpr_list = []
+a_precision_list = []
+a_recall_list = []
+a_window_size_list =[]
 
 window_size_list = []
 fig = plt.figure()
@@ -57,14 +67,26 @@ for file in filenames:
     key = roller_obj.file_path
     if key == target_dataset:
       window_size = roller_obj.window_width
-      roller_obj.average_rank(rank_by='p_value', ascending = False)
+      averaged_edge_list = roller_obj.average_rank(rank_by='p_value', ascending = False)
+      averaged_edge_list.sort(['mean-rank'], ascending=[False], inplace=True)
+      averaged_edge_list = averaged_edge_list[np.isfinite(averaged_edge_list['mean-rank'])]
+      gold_standard = roller_obj.file_path.replace("timeseries.tsv","goldstandard.tsv")
+      evaluator = Evaluator(gold_standard, sep="\t")
       pdb.set_trace()
+      a_precision, a_recall, a_aupr = evaluator.calc_pr(averaged_edge_list)
+      a_tpr, a_fpr, a_auroc = evaluator.calc_roc(averaged_edge_list)
+      
+      a_window_size_list.append(window_size)
+      a_precision_list.append(a_precision[14])
+      a_recall_list.append(a_recall[14])
+      a_aupr_list.append(a_aupr[-1])
+      a_tpr_list.append(a_tpr[14])
+      a_fpr_list.append(a_fpr[14])
+      a_auroc_list.append(a_auroc[-1])
+
       # create barplots for each Roller of a certain window size
       # window size = bar plot
       # then group all barplots into a 3D bar plot
-      window_start_list = []
-      window_end_list = []
-      window_auroc = []
       if window_size not in window_size_list:
         for nwindow,window in enumerate(roller_obj.window_list):
           min_time = min(window.raw_data['Time'].unique())
@@ -72,20 +94,12 @@ for file in filenames:
           max_time = max(window.raw_data['Time'].unique())
       #other graphs correlating window size to statistics
             #have to redefine gold standard here because it wasn't saved in the object
-          gold_standard = roller_obj.file_path.replace("timeseries.tsv","goldstandard.tsv")
-          evaluator = Evaluator(gold_standard, sep="\t")
           edge_cutoff = len(evaluator.gs_flat)
           sorted_edge_list = window.results_table
           sorted_edge_list.sort(['p_value'], ascending=[True], inplace=True)
           sorted_edge_list = sorted_edge_list[np.isfinite(sorted_edge_list['p_value'])]
           precision, recall, aupr = evaluator.calc_pr(sorted_edge_list)
           tpr, fpr, auroc = evaluator.calc_roc(sorted_edge_list)
-          precision_list.append(precision[14])
-          recall_list.append(recall[14])
-          aupr_list.append(aupr[-1])
-          tpr_list.append(tpr[14])
-          fpr_list.append(fpr[14])
-          auroc_list.append(auroc[-1])
           
           window_auroc.append(auroc[-1])
 
@@ -117,18 +131,16 @@ fig.savefig(image_save)
 
 beforenorm = pd.read_csv(roller_obj.file_path, sep='\t')
 beforenorm = beforenorm.dropna(axis=0,how='all')
-ax3 = beforenorm.plot(x='Time',y="YCR097W",kind="scatter")
+ax3 = beforenorm.plot(x='Time',y="G1",kind="scatter")
 fig3 = ax3.get_figure()
 image_save = image_file_path + "_time_series.png"
 fig3.savefig(image_save)
 
-ax2 = roller_obj.raw_data.plot(x='Time', y="YCR097W", kind="scatter")
+ax2 = roller_obj.raw_data.plot(x='Time', y="G1", kind="scatter")
 fig2 = ax2.get_figure()
 image_save = image_file_path + "_time_series_zscore.png"
 fig2.savefig(image_save)
 
-result_list = [precision_list, recall_list, aupr_list, tpr_list, fpr_list,
-    auroc_list, entropies]
 result_titles = ["precision","recall","aupr","tpr","fpr","auroc", "entropy"]
 
 result_list2 = [precision_list2, recall_list2, aupr_list2, tpr_list2, fpr_list2,
