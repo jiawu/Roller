@@ -12,7 +12,7 @@ import numpy as np
 import kdpee
 
 #get all pickle files
-path="/projects/p20519/Roller_outputs_RF/"
+path="/projects/p20519/Roller_outputs_lasso/"
 filenames = next(os.walk(path))[2]
 nfiles = len(filenames)
 #organize pickled objects by dataset analyzed
@@ -21,7 +21,7 @@ counter = 0
 image_file_path = "/home/jjw036/Roller/aggregated"
 
 target_dataset =  "data/dream4/insilico_size10_5_timeseries.tsv"
-
+img_suffix = "5"
 gp_left = 0.2
 gp_bottom = 0.1
 gp_width = 0.7
@@ -71,7 +71,7 @@ raw_data_list = []
 
 for file in filenames:
   full_path = path + file
-  print(full_path)
+  #print(full_path)
   try:
     roller_obj = pd.read_pickle(full_path)
   except EOFError:
@@ -79,11 +79,13 @@ for file in filenames:
   attributes = dir(roller_obj)
   if any("file_path" in attribute for attribute in attributes):
     counter += 1
-    print(str(counter) + " out of " + str(nfiles))
+    #print(str(counter) + " out of " + str(nfiles))
     key = roller_obj.file_path
     if key == target_dataset:
       window_size = roller_obj.window_width
-      roller_obj.average_rank(rank_by='p_value', ascending = False)
+      raw_data_list.append(roller_obj.raw_data)
+      raw_data = roller_obj.raw_data
+      roller_obj.average_rank(rank_by='stability-rank', ascending = False)
       # create barplots for each Roller of a certain window size
       # window size = bar plot
       # then group all barplots into a 3D bar plot
@@ -98,8 +100,8 @@ for file in filenames:
           evaluator = Evaluator(gold_standard, sep="\t")
           edge_cutoff = len(evaluator.gs_flat)
           sorted_edge_list = window.results_table
-          sorted_edge_list.sort(['p_value'], ascending=[True], inplace=True)
-          sorted_edge_list = sorted_edge_list[np.isfinite(sorted_edge_list['p_value'])]
+          sorted_edge_list.sort(['stability-rank'], ascending=[True], inplace=True)
+          sorted_edge_list = sorted_edge_list[np.isfinite(sorted_edge_list['stability-rank'])]
           precision, recall, aupr = evaluator.calc_pr(sorted_edge_list)
           tpr, fpr, auroc = evaluator.calc_roc(sorted_edge_list)
           
@@ -116,17 +118,17 @@ for file in filenames:
           window_transposed = window.df.values.transpose()
           window_entropy = kdpee.kdpee(window_transposed)
           entropies.append(window_entropy)
-        print(max_time-min_time)
-        print(window_size)
-        print(window_auroc)
-        print(window_start_list)
+        #print(max_time-min_time)
+        #print(window_size)
+        #print(window_auroc)
+        #print(window_start_list)
         #ax.bar(window_start_list, window_auroc, zs=window_size,zorder=window_size, zdir='y',alpha=0.8,width=(max_time-min_time), color = plt.cm.RdYlBu(colors[window_size]))
 
-raw_data_list.append(roller_obj.raw_data)
-raw_data = roller_obj.raw_data
 
-print(window_size_list)
+#print(window_size_list)
 size_to_auroc = zip(window_size_list,window_start_list, window_auroc)
+size_to_aupr = zip(window_size_list,window_start_list, aupr_list2)
+
 f = plt.figure(figsize=(10,10))
 axarr2 = f.add_axes([gp_left, gp_bottom, gp_width, gp_height])
 axarr1 = f.add_axes([dm_left, dm_bottom, dm_width, dm_height])
@@ -198,6 +200,17 @@ axarr2.set_position([box.x0, box.y0 + box.height * 0.2,
 axarr2.legend(fontsize=8,bbox_to_anchor=(0.5, -0.2), loc='upper center',ncol=7,fancybox=True, shadow=True)
 axarr1.set_ylabel('Genes (multiple perturbations)')
 axarr2.set_ylabel('AUROC')
-image_save = image_file_path + "_windowsize_RF_heatmap_" + str(counter) + ".png"
-f.savefig(image_save)
+image_save = image_file_path + "_windowsize_lasso_heatmap_" + img_suffix + ".png"
+f.savefig(image_save,format="png")
+print("AUROC:")
+size_to_auroc.sort(key=lambda tup:tup[0],reverse=True)
+print(size_to_auroc[0:5])
+size_to_auroc.sort(key=lambda tup:tup[2],reverse=True)
+print(size_to_auroc[0:5])
+print("AUPR:")
+
+size_to_aupr.sort(key=lambda tup:tup[0],reverse=True)
+print(size_to_aupr[0:5])
+size_to_aupr.sort(key=lambda tup:tup[2],reverse=True)
+print(size_to_aupr[0:5])
 
