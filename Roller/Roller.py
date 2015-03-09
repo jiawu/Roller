@@ -12,12 +12,6 @@ class Roller(object):
     """
     A thing that grabs different timepoints of data, can set window and step size.
 
-    To do list:
-        -i need to make two modules: a file processing module and a rolling module.
-        -accept different table formats
-
-        -add permute_window()
-        -add bootstrap_window()
     """
     def __init__(self, file_path, gene_start=None, gene_end=None, time_label="Time", separator = "\t", window_type = "RandomForest"):
         """
@@ -59,21 +53,55 @@ class Roller(object):
         self.window_list = []
 
     def get_n_windows(self):
+        """
+        Calculate the number of windows
+
+        Called by:
+            create_windows_no_next
+            get_window_stats
+
+        :return: int
+        """
         total_windows = (self.overall_width - self.window_width+1)/(self.step_size)
         return total_windows
 
     def get_window(self, start_index):
+        #todo: start_index should be used
+        """
+        Select a window from the full data set, only keeping the data corresponding to genes
+
+        Called by:
+            __init__
+
+        :param start_index: int
+            The start of the window
+
+        :return: data-frame
+        """
         raw_window = self.get_window_raw(0)
         only_genes = raw_window.iloc[:, self.gene_start:self.gene_end]
         return only_genes
 
-    def get_window_raw(self, start_index, random_time = False):
+    def get_window_raw(self, start_index, random_time=False):
+        """
+        Select a window from the full data set. This is fancy data-frame slicing
+
+        Called by:
+            create_windows_no_ext
+            get_window_stats
+            get_window
+
+        :param start_index: int
+            The start of the window
+        :param random_time: bool, optional
+        :return: data-frame
+        """
         if random_time:
             #select three random timepoints
             pdb.set_trace()
             time_window = self.time_vec[start_index]
             choices = self.time_vec
-            choices = np.delete(choices,start_index)
+            choices = np.delete(choices, start_index)
             for x in range(0, self.window_width):
                 chosen_time = random.choice(choices) 
                 time_window = np.append(time_window, chosen_time)
@@ -86,16 +114,51 @@ class Roller(object):
         return data
 
     def set_window(self, width):
+        """
+        Set the window width
+
+        Called by:
+            pipeline
+
+        :param width: int
+
+        :return:
+        """
         self.window_width = width
 
     def set_step(self, step):
+        """
+        Set the window step size
+
+        Called by:
+
+
+        :param step:
+        :return:
+        """
+
         self.step_size = step
 
     def reset(self):
+        """
+        Reset the window to the beggining of time
+
+        Called by:
+
+        :return:
+        """
         self.current_step = 0
 
     # need to do something about this method. keep for now, but currently need a "preprocess" method.
     def remove_blank_rows(self):
+        """
+        Removes a row if the sum of that row is NaN
+
+        Called by:
+
+
+        :return:
+        """
         """calculates sum of rows. if sum is NAN, then remove row"""
         coln = len(self.raw_data.columns)
         sums = [self.raw_data.iloc[:,x].sum() for x in range(0,coln)]
@@ -103,10 +166,27 @@ class Roller(object):
         self.raw_data.iloc[:,ind]=0
 
     def get_n_genes(self):
+        """
+        Calculate the number of genes in the data set
+
+        Called by:
+
+
+        :return:
+        """
+
         return(len(self.raw_data.columns) -1)
 
     def create_windows_no_next(self):
-        window_list = [self.get_window_object(self.get_window_raw(index,random_time=False),
+        """
+        Create window objects for the roller to use
+
+        Called by:
+            pipeline
+
+        :return:
+        """
+        window_list = [self.get_window_object(self.get_window_raw(index, random_time=False),
                                    { "time_label": self.time_label,
                                      "gene_start": self.gene_start,
                                      "gene_end": self.gene_end,
@@ -114,6 +194,17 @@ class Roller(object):
         self.window_list = window_list
 
     def get_window_object(self, dataframe, window_info_dict):
+        """
+        Return a window object from a data-frame
+
+        Called by:
+            create_windows_no_next
+
+        :param dataframe: data-frame
+        :param window_info_dict: dict
+            Dictionary containing information needed for window initialization
+        :return:
+        """
         if self.window_type == "Lasso":
             window_obj = LassoWindow(dataframe, window_info_dict)
         if self.window_type == "RandomForest":
@@ -121,22 +212,69 @@ class Roller(object):
         return window_obj        
 
     def initialize_windows(self):
+        """
+        Initialize window parameters and do a preliminary fit
+
+        Called by:
+
+
+        :return:
+        """
         for window in self.window_list:
             window.initialize_params()
             window.fit_window()
 
     def rank_windows(self, n_permutes=1000, n_bootstraps=1000, n_alphas=20, noise=0.2):
+        """
+        Run tests to score and rank windows
+
+        Called by:
+
+
+        :param n_permutes: int, optional
+            Number of permutes to run. Default is 1,000
+        :param n_bootstraps: int, optional
+            Number of bootstraps to run. Default is 1,000
+        :param n_alphas: int, optional
+            Number of alpha values to test if using Lasso. Default is 20
+        :param noise: float ([0,1]), optional
+            The amount of noise to add to bootstrapped windows. Default is 0.2
+
+        :return:
+        """
         for window in self.window_list:
             window.run_permutation_test(n_permutes)
             window.run_bootstrap(n_bootstraps, n_alphas, noise)
             window.make_edge_table()
 
     def optimize_params(self):
+        """
+        Optimize window fit parameters
+
+        Called by:
+            pipeline
+
+
+        :return:
+        """
+
         for window in self.window_list:
             window.initialize_params()
-        return(self.window_list)
+        return self.window_list
 
     def fit_windows(self, alpha=None, n_trees=None):
+
+        """
+        Fit each window in the list
+
+        Called by:
+            pipeline
+
+        :param alpha:
+        :param n_trees:
+        :return:
+        """
+
         for window in self.window_list:
             if self.window_type == "Lasso":
                 if alpha != None:
@@ -147,7 +285,18 @@ class Roller(object):
             window.fit_window()
         return(self.window_list)
 
-    def rank_edges(self, n_bootstraps= 1000, permutation_n = 1000):
+    def rank_edges(self, n_bootstraps=1000, permutation_n=1000):
+        """
+        Run tests to rank edges in windows
+
+        Called by:
+            pipeline
+
+        :param n_bootstraps:
+        :param permutation_n:
+        :return:
+        """
+
         if self.window_type == "Lasso":
             for window in self.window_list:
                 window.run_permutation_test(n_permutations = permutation_n)
@@ -162,6 +311,18 @@ class Roller(object):
         return(self.window_list)
 
     def average_rank(self, rank_by, ascending):
+        """
+        Average window edge ranks
+
+        Called by:
+            pipeline
+
+
+        :param rank_by: string
+            The parameter to rank edges by
+        :param ascending: Bool
+        :return:
+        """
         if self.window_type == "Lasso":
             ranked_result_list = []
             for window in self.window_list:
@@ -181,6 +342,14 @@ class Roller(object):
 
     #todo: this method sucks. sorry.
     def score(self, sorted_edge_list, gold_standard_file):
+        """
+        Scores some stuff, I think...
+        Called by:
+            pipeline
+        :param sorted_edge_list:
+        :param gold_standard_file:
+        :return:
+        """
         if len(sorted_edge_list) < 15:
           pdb.set_trace()
         evaluator = Evaluator(gold_standard_file, sep='\t')
@@ -190,6 +359,14 @@ class Roller(object):
         return(score_dict)
 
     def zscore_all_data(self):
+        """
+        Zscore the data in a data-frame
+
+        Called by:
+            pipeline
+
+        :return:
+        """
         #zscores all the data
         dataframe =  self.raw_data
 
@@ -201,6 +378,21 @@ class Roller(object):
         self.raw_data = dataframe
 
     def get_window_stats(self):
+        """
+        Generate a dictionary of relevant information from a window
+            N : the number of data points in this window,
+            time_labels: the names of the time points in a roller model
+            step_size: the step-size of the current model
+            window_size: the size of the window of the current model
+            total_windows: the number of windows total
+            window_index: the index of the window. counts start at 0. ie if the window index is 0 it is the 1st window.
+            If the window index is 12, it is the 12th window in the series.
+
+        Called by:
+
+
+        :return: dict
+        """
         """for each window, get a dict:
             N : the number of datapoints in this window,
             time_labels: the names of the timepoints in a roller model
