@@ -47,7 +47,7 @@ if __name__ == "__main__":
           alpha_list.append(alpha)
           aupr_list.append(max(score_dict['aupr']))
           
-          unique_filename = "/projects/p20519/Roller_outputs/"+ str(uuid.uuid4())
+          unique_filename = "/projects/p20519/Roller_outputs_moretrees/"+ str(uuid.uuid4())
           with open(unique_filename, 'wb') as output:
             pickle.dump(roller,output, pickle.HIGHEST_PROTOCOL) 
       

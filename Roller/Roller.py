@@ -6,6 +6,7 @@ from RFRWindow import RandomForestRegressionWindow
 from util import utility_module as utility
 from util.Evaluator import Evaluator
 import pdb
+import random
 
 class Roller(object):
     """
@@ -18,7 +19,7 @@ class Roller(object):
         -add permute_window()
         -add bootstrap_window()
     """
-    def __init__(self, file_path, gene_start=None, gene_end=None, time_label="Time", separator = "\t", window_type = "Lasso"):
+    def __init__(self, file_path, gene_start=None, gene_end=None, time_label="Time", separator = "\t", window_type = "RandomForest"):
         """
         Initialize the roller object. Read the file and put it into a pandas dataframe
         :param file_path: file-like object or string
@@ -66,9 +67,21 @@ class Roller(object):
         only_genes = raw_window.iloc[:, self.gene_start:self.gene_end]
         return only_genes
 
-    def get_window_raw(self, start_index):
-        end_index = start_index + self.window_width
-        time_window = self.time_vec[start_index:end_index]
+    def get_window_raw(self, start_index, random_time = False):
+        if random_time:
+            #select three random timepoints
+            pdb.set_trace()
+            time_window = self.time_vec[start_index]
+            choices = self.time_vec
+            choices = np.delete(choices,start_index)
+            for x in range(0, self.window_width):
+                chosen_time = random.choice(choices) 
+                time_window = np.append(time_window, chosen_time)
+                chosen_index = np.where(choices == chosen_time)
+                choices = np.delete(choices,chosen_index)
+        else:          
+            end_index = start_index + self.window_width
+            time_window = self.time_vec[start_index:end_index]
         data = self.raw_data[self.raw_data[self.time_label].isin(time_window)]
         return data
 
@@ -93,7 +106,7 @@ class Roller(object):
         return(len(self.raw_data.columns) -1)
 
     def create_windows_no_next(self):
-        window_list = [self.get_window_object(self.get_window_raw(index),
+        window_list = [self.get_window_object(self.get_window_raw(index,random_time=False),
                                    { "time_label": self.time_label,
                                      "gene_start": self.gene_start,
                                      "gene_end": self.gene_end,

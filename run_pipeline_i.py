@@ -43,7 +43,7 @@ if __name__ == "__main__":
           score_dict = roller.score(window.results_table,gold_standard)
           score_list.append(score_dict)
       aupr_list.append(max(score_dict['aupr']))
-      unique_filename = "/projects/p20519/Roller_outputs_RF_yeast100_2/"+ str(uuid.uuid4())
+      unique_filename = "/projects/p20519/Roller_outputs_RF_yeast100_2_moretrees/"+ str(uuid.uuid4())
       with open(unique_filename, 'wb') as output:
         pickle.dump(roller,output, pickle.HIGHEST_PROTOCOL) 
       

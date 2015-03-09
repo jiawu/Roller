@@ -32,7 +32,7 @@ if __name__ == "__main__":
       roller.create_windows_no_next()
       roller.optimize_params()
       roller.fit_windows()
-      roller.rank_edges(permutation_n = 200)
+      roller.rank_edges(permutation_n = 500)
       roller.average_rank(rank_by='p_value', ascending = False)
       #score some edge lists
       #first score the sorted average edge list
@@ -43,7 +43,7 @@ if __name__ == "__main__":
           score_dict = roller.score(window.results_table,gold_standard)
           score_list.append(score_dict)
       aupr_list.append(max(score_dict['aupr']))
-      unique_filename = "/projects/p20519/Roller_outputs_RF/"+ str(uuid.uuid4())
+      unique_filename = "/projects/p20519/Roller_outputs_RF_moretrees/"+ str(uuid.uuid4())
       with open(unique_filename, 'wb') as output:
         pickle.dump(roller,output, pickle.HIGHEST_PROTOCOL) 
       
