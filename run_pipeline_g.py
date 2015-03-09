@@ -29,7 +29,7 @@ if __name__ == "__main__":
       aupr_list = []
 
       roller.set_window(width=window_size)
-      roller.create_windows_no_next()
+      roller.create_windows()
       roller.optimize_params()
       for alpha in roller.window_list[0].cv_table['alpha']:
           print("current alpha: " + str(alpha))

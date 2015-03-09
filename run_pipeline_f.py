@@ -29,7 +29,7 @@ if __name__ == "__main__":
       aupr_list = []
 
       roller.set_window(width=window_size)
-      roller.create_windows_no_next()
+      roller.create_windows()
       roller.optimize_params()
       roller.fit_windows()
       roller.rank_edges(n_bootstraps=500, permutation_n = 500)

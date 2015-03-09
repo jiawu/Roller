@@ -23,7 +23,7 @@ if __name__ == "__main__":
     alpha_list = []
     aupr_list = []
     roller.set_window(width=window_size)
-    roller.create_windows_no_next()
+    roller.create_windows()
     roller.optimize_params()
     best_alpha = roller.window_list[0].alpha
     print("best alpha: "+str(best_alpha))

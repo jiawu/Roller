@@ -15,7 +15,7 @@ class TestRFPipeline(unittest.TestCase):
 
     def test_crap(self):
         self.roller.set_window(20)
-        self.roller.create_windows_no_next()
+        self.roller.create_windows()
         self.roller.optimize_params()
         self.roller.fit_windows()
         self.roller.rank_edges(permutation_n=10)

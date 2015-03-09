@@ -57,7 +57,7 @@ class Roller(object):
         Calculate the number of windows
 
         Called by:
-            create_windows_no_next
+            create_windows
             get_window_stats
 
         :return: int
@@ -87,7 +87,7 @@ class Roller(object):
         Select a window from the full data set. This is fancy data-frame slicing
 
         Called by:
-            create_windows_no_ext
+            create_windows
             get_window_stats
             get_window
 
@@ -177,7 +177,7 @@ class Roller(object):
 
         return(len(self.raw_data.columns) -1)
 
-    def create_windows_no_next(self):
+    def create_windows(self):
         """
         Create window objects for the roller to use
 
@@ -198,7 +198,7 @@ class Roller(object):
         Return a window object from a data-frame
 
         Called by:
-            create_windows_no_next
+            create_windows
 
         :param dataframe: data-frame
         :param window_info_dict: dict

@@ -22,7 +22,7 @@ class TestRFGrapher(unittest.TestCase):
         self.roller_results = pd.read_pickle(roller_result_path)
     def test_heatmap(self):
         self.roller.set_window(20)
-        self.roller.create_windows_no_next()
+        self.roller.create_windows()
         raw_data=self.roller.raw_data
         figure,ax1 = Grapher.generate_heatmap_from_df(raw_data)
 

@@ -34,20 +34,20 @@ class TestRoller(unittest.TestCase):
         self.assertTrue(np.array_equal(correct_header, header))
 
     def test_create_windows(self):
-        self.dream_roller.create_windows_no_next()
+        self.dream_roller.create_windows()
         correct_n_windows = self.dream_roller.get_n_windows()
         n_windows = len(self.dream_roller.window_list)
         self.assertTrue(correct_n_windows == n_windows)
 
     def test_initialize_windows(self):
-        self.dream_roller.create_windows_no_next()
+        self.dream_roller.create_windows()
         self.dream_roller.initialize_windows()
         for window in self.dream_roller.window_list:
             self.assertTrue(window.alpha is not None)
             self.assertTrue(window.beta_coefficients is not None)
 
     def test_rank_windows(self):
-        self.dream_roller.create_windows_no_next()
+        self.dream_roller.create_windows()
         self.dream_roller.initialize_windows()
         self.dream_roller.rank_windows(10, 10)
         for window in self.dream_roller.window_list:

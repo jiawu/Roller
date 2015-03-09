@@ -14,7 +14,7 @@ class TestPipeline(unittest.TestCase):
         self.roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator,window_type = "Lasso")
 
     def test_crap(self):
-        self.roller.create_windows_no_next()
+        self.roller.create_windows()
         self.roller.optimize_params()
         self.roller.fit_windows()
         self.roller.rank_edges(n_bootstraps=10, permutation_n=100)
