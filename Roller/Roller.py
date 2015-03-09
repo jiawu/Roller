@@ -102,12 +102,12 @@ class Roller(object):
             time_window = self.time_vec[start_index]
             choices = self.time_vec
             choices = np.delete(choices, start_index)
-            for x in range(0, self.window_width):
-                chosen_time = random.choice(choices) 
+            for x in range(0, self.window_width-1):
+                chosen_time = random.choice(choices)
                 time_window = np.append(time_window, chosen_time)
                 chosen_index = np.where(choices == chosen_time)
                 choices = np.delete(choices,chosen_index)
-        else:          
+        else:
             end_index = start_index + self.window_width
             time_window = self.time_vec[start_index:end_index]
         data = self.raw_data[self.raw_data[self.time_label].isin(time_window)]
@@ -209,7 +209,7 @@ class Roller(object):
             window_obj = LassoWindow(dataframe, window_info_dict)
         if self.window_type == "RandomForest":
             window_obj = RandomForestRegressionWindow(dataframe,window_info_dict)
-        return window_obj        
+        return window_obj
 
     def initialize_windows(self):
         """
