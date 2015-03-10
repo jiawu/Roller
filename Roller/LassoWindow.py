@@ -10,7 +10,12 @@ import pdb
 
 from Window import Window
 
+
 class LassoWindow(Window):
+    """
+    A window that runs Lasso regression as the network inference method
+    """
+
     def __init__(self, dataframe, window_info):
         super(LassoWindow, self).__init__(dataframe, window_info)
         self.alpha = None
