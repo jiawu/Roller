@@ -1,13 +1,26 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
-
 import numpy as np
 import pandas as pd
 import itertools
 
+
 class Window(object):
+    """
+    A window object is a snapshot created from the full data. Windows operate independently from each other. Windows
+    should be sub-classed to have network inference specific features and methods.
+    """
+
     def __init__(self, raw_dataframe, window_info):
+        """
+        Initialize a window object. Extract information from the passed data-frame. Generate edge list.
+
+        :param raw_dataframe: pandas data-frame
+        :param window_info: dict
+            Dictionary that provides data that can be used to uniquely identify a window
+        :return:
+        """
         self.time_label = window_info['time_label']
         self.gene_start = window_info['gene_start']
         self.gene_end = window_info['gene_end']
@@ -21,13 +34,13 @@ class Window(object):
         self.genes = dataframe.columns.values
         self.n_genes = len(self.genes)
         self.results_table = pd.DataFrame()
-        self.edge_labels = [x for x in itertools.product(self.genes,repeat=2)]
+        self.edge_labels = [x for x in itertools.product(self.genes, repeat=2)]
 
         self.edge_list = self.possible_edge_list(self.genes, self.genes)
         # Add edge list to edge table
         self.results_table['regulator-target'] = self.edge_list
 
-    def create_linked_list(self,numpy_array_2D, value_label):
+    def create_linked_list(self, numpy_array_2D, value_label):
         """labels and array should be in row-major order"""
         linked_list = pd.DataFrame({'regulator-target': self.edge_labels, value_label: numpy_array_2D.flatten()})
         return linked_list
@@ -94,7 +107,7 @@ class Window(object):
         # For each column randomly choose samples
         resample_values = np.array([np.random.choice(self.window_values[:, ii], size=n) for ii in range(p)]).T
 
-        #resample_window = pd.DataFrame(resample_values, columns=self.df.columns.values.copy(),
+        # resample_window = pd.DataFrame(resample_values, columns=self.df.columns.values.copy(),
         #                               index=self.df.index.values.copy())
         return resample_values
 
@@ -109,7 +122,7 @@ class Window(object):
 
         """
 
-        noise = np.random.uniform(low=1-max_random, high=1+max_random, size=window_values.shape)
+        noise = np.random.uniform(low=1 - max_random, high=1 + max_random, size=window_values.shape)
         noisy_values = np.multiply(window_values, noise)
         return noisy_values
 
@@ -172,45 +185,46 @@ class Window(object):
 
         for x in new_samples:
             n = n + 1
-            #delta = float(x) - mean
+            # delta = float(x) - mean
             old_mean = mean
-            mean = old_mean + (float(x)-old_mean)/n
-            sum_squares = sum_squares + (float(x)-mean)*(float(x)-old_mean)
+            mean = old_mean + (float(x) - old_mean) / n
+            sum_squares = sum_squares + (float(x) - mean) * (float(x) - old_mean)
 
         if (n < 2):
             return 0
 
-        variance = sum_squares/(n-1)
-        result = {  "mean": mean,
-                    "ss": sum_squares,
-                    "variance": variance,
-                    "n": n}
+        variance = sum_squares / (n - 1)
+        result = {"mean": mean,
+                  "ss": sum_squares,
+                  "variance": variance,
+                  "n": n}
         return result
 
     def update_variance_2D(self, prev_result, new_samples):
-        """incremental calculation of means: accepts new_samples, which is a list of samples. then calculates a new mean. this is a useful function for calculating the means of large arrays"""
-        n = prev_result["n"] #2D numpy array with all zeros or watev
-        mean = prev_result["mean"] #2D numpy array
-        sum_squares = prev_result["ss"] #2D numpy array
+        """incremental calculation of means: accepts new_samples, which is a list of samples.
+        then calculates a new mean. this is a useful function for calculating the means of large arrays"""
+        n = prev_result["n"]  # 2D numpy array with all zeros or watev
+        mean = prev_result["mean"]  # 2D numpy array
+        sum_squares = prev_result["ss"]  # 2D numpy array
 
-        #new_samples is a list of arrays
+        # new_samples is a list of arrays
         #x is a 2D array
         for x in new_samples:
-            n = n + 1
+            n += 1
             #delta = float(x) - mean
             old_mean = mean.copy()
-            mean = old_mean + np.divide( (x-old_mean) , n)
-            sum_squares = sum_squares + np.multiply((x-mean),(x-old_mean))
+            mean = old_mean + np.divide((x - old_mean), n)
+            sum_squares = sum_squares + np.multiply((x - mean), (x - old_mean))
 
-        if (n[0,0] < 2):
-            result = {  "mean": mean,
-                        "ss": sum_squares,
-                        "n": n}
+        if n[0, 0] < 2:
+            result = {"mean": mean,
+                      "ss": sum_squares,
+                      "n": n}
             return result
 
-        variance = np.divide(sum_squares,(n-1))
-        result = {  "mean": mean,
-                    "ss": sum_squares,
-                    "variance": variance,
-                    "n": n}
+        variance = np.divide(sum_squares, (n - 1))
+        result = {"mean": mean,
+                  "ss": sum_squares,
+                  "variance": variance,
+                  "n": n}
         return result
