@@ -49,7 +49,6 @@ class Roller(object):
 
         self.gene_list = self.raw_data.columns.values[self.gene_start:self.gene_end]
 
-        self.current_window = self.get_window(self.current_step)
         self.window_list = []
 
     def get_n_windows(self):
@@ -72,6 +71,9 @@ class Roller(object):
 
         Called by:
             __init__
+            set_max_alpha in Ranker.py (necessary)
+            permutation_test.py (deprecated)
+
 
         :param start_index: int
             The start of the window
@@ -213,11 +215,12 @@ class Roller(object):
 
     def initialize_windows(self):
         """
-        Initialize window parameters and do a preliminary fit
+        deprecated - Initialize window parameters and do a preliminary fit
 
         Called by:
+        Currently only called by unittest Roller/unittests/test_roller.py
 
-
+        todo: delete
         :return:
         """
         for window in self.window_list:
