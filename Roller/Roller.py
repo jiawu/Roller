@@ -179,7 +179,7 @@ class Roller(object):
 
         return(len(self.raw_data.columns) -1)
 
-    def create_windows(self):
+    def create_windows(self, random_time=False):
         """
         Create window objects for the roller to use
 
@@ -188,7 +188,7 @@ class Roller(object):
 
         :return:
         """
-        window_list = [self.get_window_object(self.get_window_raw(index, random_time=False),
+        window_list = [self.get_window_object(self.get_window_raw(index, random_time),
                                    { "time_label": self.time_label,
                                      "gene_start": self.gene_start,
                                      "gene_end": self.gene_end,
