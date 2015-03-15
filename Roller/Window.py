@@ -228,3 +228,13 @@ class Window(object):
                   "variance": variance,
                   "n": n}
         return result
+    
+    def get_rates(self):
+      return max_rates
+
+    def get_linearity(self):
+      return max_rates
+
+    def get_average(self):
+      return averages
+
