@@ -15,7 +15,9 @@ class TestWindow(unittest.TestCase):
         gene_end = None
 
         self.roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator, window_type = "Lasso")
-        self.test_window = Roller.Window(self.roller.current_window)
+        self.roller.set_window(width=4)
+        self.roller.create_windows()
+        self.test_window = self.roller.window_list[0]
 
     def test_possible_edge_list_self(self):
         expected_edges = self.test_window.n_genes**2
