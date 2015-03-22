@@ -41,11 +41,15 @@ class TestAggrStats(unittest.TestCase):
         #should get 5 lists
         #shape should be 19, 10
         test_data = rates_list[0]
+        pdb.set_trace()
         self.assertTrue(test_data.shape == (19,10))
 
     def test_rate_analysis(self):
         rate_dict = self.test_window.get_rate_analysis(1)
         self.assertTrue(rate_dict['all_rates'].shape == (95,10))
+
+    def test_get_average(self):
+        averages = self.test_window.get_average()
         pdb.set_trace()
 if __name__ == '__main__':
     unittest.main()
