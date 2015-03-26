@@ -12,6 +12,10 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import scipy.cluster.hierarchy as sch
 from scipy.stats import pearsonr
+from scipy import stats
+from sklearn.cluster import AffinityPropagation
+from sklearn import metrics
+from sklearn.cluster import KMeans
 
 def load_roller_pickles(pickle_path):
     '''
@@ -102,11 +106,46 @@ if __name__ == '__main__':
     #roller_dict, roller_list = load_roller_pickles(path)
     #pd.to_pickle(roller_dict, "../../output/results_pickles/Roller_outputs_RF.pickle")
 
-    roller_dict = pd.read_pickle("../../output/results_pickles/Roller_outputs_RF.pickle")
+    #roller_dict = pd.read_pickle("../../output/results_pickles/Roller_outputs_RF.pickle")
+    roller_dict = pd.read_pickle("../../output/results_pickles/Roller_outputs_RF_moretrees.pickle")
 
     #print len(roller_dict.keys())
-    for df in roller_dict.itervalues():
+    for dataset, df in roller_dict.iteritems():
+        print dataset
+        gs = '../../' + dataset.replace("timeseries.tsv","goldstandard.tsv")
         current_frame = df['results_frame']
+        roller_obj = df['roller_list'][0]
+        roller_data = roller_obj.raw_data
+        #x = roller_data.columns.values
+        x = np.arange(0,10)
+        y = roller_data.Time.values
+        z = roller_data.values[:, 1:]
+        samples = 5
+        data = z[:21, :]
+        for ii in range(2, samples+1):
+            data = np.hstack((data, z[21*(ii-1):21*ii, :]))
+        column_order = np.array([np.arange(0,50,10)+jj for jj in range(10)]).flatten()
+        data = data[:, column_order].T
+        times = y[:21]
+        data_diff = np.diff(data)
+        time_diff = np.diff(times)
+        rates = data_diff/time_diff
+
+        plt.pcolor(data, cmap=cm.RdBu)
+        plt.colorbar()
+        plt.xlim([0,21])
+
+        plt.figure()
+        plt.pcolor(rates, cmap=cm.RdBu)
+        plt.colorbar()
+        plt.xlim([0,20])
+
+        plt.figure()
+        plt.plot(times[:-1], rates[0], 'o')
+        plt.plot(times[:-1], rates[1], 'o')
+        plt.plot(times[:-1], rates[2], 'o')
+        plt.plot(times[:-1], rates[3], 'o')
+
         sort_indices= np.argsort(current_frame['AUROC'].values)[::-1]
         sorted_auroc = current_frame['AUROC'].values[sort_indices]
         sorted_auroc_difference = df['auroc_difference'][sort_indices]
@@ -118,6 +157,36 @@ if __name__ == '__main__':
 
 
         rankings = np.array([list(ranking) for ranking in current_frame['Edge_ranking'].values])
+        print "Max AUROC: ", max(sorted_auroc)
+
+        plt.show()
+        sys.exit()
+        '''
+        cluster_range = range(2,11)
+        for n_clusters in cluster_range:
+            print n_clusters
+            n_restarts = 1000
+            k = KMeans(n_clusters=n_clusters, n_init=n_restarts).fit(rankings)
+            silo = metrics.silhouette_score(rankings, k.labels_, metric='canberra')
+            #print len(set(k.labels_))
+            print("Silhouette Coefficient: %0.3f" % silo)
+        '''
+        n_clusters = 4
+        n_restarts = 100
+        tic = time.time()
+        print "Clustering"
+        k = KMeans(n_clusters=n_clusters, n_init=n_restarts).fit(rankings)
+        new_ranking = np.argsort(k.cluster_centers_[0])
+        edge_list = current_frame.Edges.loc[0]
+        new_model = pd.DataFrame()
+        new_model['regulator-target'] = edge_list
+        new_model['rank'] = new_ranking
+        new_model.sort('rank', inplace=True)
+        evaluator = Evaluator(gs, '\t')
+        tpr, fpr, auroc = evaluator.calc_roc(new_model)
+        print auroc[-1]
+        #print time.time()-tic
+        sys.exit()
         sort_indices = new_sort
         sorted_rankings = rankings[sort_indices]
 
@@ -154,8 +223,16 @@ if __name__ == '__main__':
         axcolor.tick_params(labelsize=12, labeltop=True, labelbottom=True)
 
         auc_ax = fig.add_axes([0.06, 0.6, 0.9, 0.1])
-        auc_ax.bar(range(len(sorted_auroc)), sorted_auroc, width=1)
+        auc_diff = sorted_auroc-max(sorted_auroc)
+        auc_ax.bar(range(len(sorted_auroc)), auc_diff, color='b', width=1, align='center')
         auc_ax.set_xlim([0, len(sorted_auroc)])
+        auc_ax.set_ylim([min(auc_diff), abs(min(auc_diff))])
+        can_ax = auc_ax.twinx()
+        current_can = sorted_canberra[0][new_sort]
+        normalized_can = current_can/max(current_can)
+        can_ax.bar(range(len(sorted_auroc)), current_can, color='r', width=1, align='center')
+        can_ax.set_ylim([-max(current_can), max(current_can)])
+        can_ax.set_xlim([0, len(sorted_auroc)])
 
         width_ax = fig.add_axes([0.06, 0.73, 0.9, 0.1])
         #sorted_w = current_frame['Width'].values[sort_indices]
@@ -168,8 +245,14 @@ if __name__ == '__main__':
         sorted_start = current_frame['Start'].values[index]
         start_ax.bar(range(len(sorted_start)), sorted_start, width=1)
         start_ax.set_xlim([0, len(sorted_start)])
+
+        plt.figure()
+        plt.scatter(normalized_can[1:], auc_diff[1:])
+        print pearsonr(normalized_can[1:], auc_diff[1:])
+
+        can_cutoff = 0.5
         plt.show()
-        sys.exit()
+        #sys.exit()
 
     sys.exit()
     results_frame = make_window_table(roller_list)
