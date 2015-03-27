@@ -131,6 +131,7 @@ if __name__ == '__main__':
         time_diff = np.diff(times)
         rates = data_diff/time_diff
 
+        '''
         plt.pcolor(data, cmap=cm.RdBu)
         plt.colorbar()
         plt.xlim([0,21])
@@ -145,6 +146,7 @@ if __name__ == '__main__':
         plt.plot(times[:-1], rates[1], 'o')
         plt.plot(times[:-1], rates[2], 'o')
         plt.plot(times[:-1], rates[3], 'o')
+        '''
 
         sort_indices= np.argsort(current_frame['AUROC'].values)[::-1]
         sorted_auroc = current_frame['AUROC'].values[sort_indices]
@@ -157,8 +159,42 @@ if __name__ == '__main__':
 
 
         rankings = np.array([list(ranking) for ranking in current_frame['Edge_ranking'].values])
-        print "Max AUROC: ", max(sorted_auroc)
 
+        print "Max AUROC: ", max(sorted_auroc)
+        sorted_rankings = rankings[sort_indices]
+        edge_list = current_frame.Edges.loc[0]
+        rank_df = pd.DataFrame(sorted_rankings.T, index=edge_list)
+        evaluator = Evaluator(gs, '\t')
+        n_edges = len(edge_list)
+        print sorted_rankings.shape
+        for rank in range(1,n_edges+1):
+            matching_rank = np.sum(sorted_rankings==rank, axis=0).tolist()
+            print edge_list[matching_rank.index(max(matching_rank))]
+            raw_input()
+        sys.exit()
+        true_edges = set(evaluator.gs_flat.values.tolist())
+        n_top15 = np.sum(sorted_rankings.T==2, axis=1)
+        rank_df.insert(0, 'n_top15', n_top15)
+        print rank_df.n_top15
+        top_hits = set(rank_df.n_top15[rank_df.n_top15>5].index.values)
+        print top_hits
+        print max(rank_df.n_top15).index
+        print len(top_hits)
+        print len(true_edges.intersection(top_hits))
+
+
+        sys.exit()
+        best_ranking = sorted_rankings[0]
+        edge_list = current_frame.Edges.loc[0]
+        best_edge_list = edge_list[np.argsort(best_ranking)].tolist()
+
+        evaluator = Evaluator(gs, '\t')
+        true_edges = evaluator.gs_flat[:15].values.tolist()
+        true_edge_ranks_in_best_list = [best_edge_list.index(edge) for edge in true_edges]
+        true_edge_ranks_in_best_list.sort()
+        print true_edge_ranks_in_best_list
+
+        sys.exit()
         plt.show()
         sys.exit()
         '''
