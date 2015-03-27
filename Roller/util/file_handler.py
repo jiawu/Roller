@@ -202,6 +202,28 @@ def show_window_results(data_frame, org='max_auroc'):
 
     plt.show()
 
+def explore_rankings(data_frame):
+    '''
+    The goal here is to see which windows need to be combined to get perfect network reconstruction...
+    if that is even possible
+
+    :param data_frame:
+    :return:
+    '''
+    sort_indices = np.argsort(current_frame['AUROC'].values)[::-1]
+    rankings = np.array([list(ranking) for ranking in current_frame['Edge_ranking'].values])
+    sorted_rankings = rankings[sort_indices]
+
+    best_ranking = sorted_rankings[0]
+    edge_list = current_frame.Edges.loc[0]
+    best_edge_list = edge_list[np.argsort(best_ranking)].tolist()
+
+    evaluator = Evaluator(gs, '\t')
+    true_edges = evaluator.gs_flat[:15].values.tolist()
+    true_edge_ranks_in_best_list = [best_edge_list.index(edge) for edge in true_edges]
+    true_edge_ranks_in_best_list.sort()
+    print true_edge_ranks_in_best_list
+
 if __name__ == '__main__':
     #path = "../../output/Roller_outputs_RF_moretrees/"
     #roller_dict, roller_list = load_roller_pickles(path)
@@ -215,21 +237,10 @@ if __name__ == '__main__':
         print dataset
         gs = '../../' + dataset.replace("timeseries.tsv","goldstandard.tsv")
         current_frame = df['results_frame']
+        explore_rankings(current_frame)
         #visualize_raw_data(df['roller_list'][0])
         #show_window_results(df)
+        sys.exit()
 
-        sort_indices = np.argsort(current_frame['AUROC'].values)[::-1]
-        rankings = np.array([list(ranking) for ranking in current_frame['Edge_ranking'].values])
-        sorted_rankings = rankings[sort_indices]
-
-        best_ranking = sorted_rankings[0]
-        edge_list = current_frame.Edges.loc[0]
-        best_edge_list = edge_list[np.argsort(best_ranking)].tolist()
-
-        evaluator = Evaluator(gs, '\t')
-        true_edges = evaluator.gs_flat[:15].values.tolist()
-        true_edge_ranks_in_best_list = [best_edge_list.index(edge) for edge in true_edges]
-        true_edge_ranks_in_best_list.sort()
-        print true_edge_ranks_in_best_list
 
         #sys.exit()
