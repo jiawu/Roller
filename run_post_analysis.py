@@ -143,8 +143,7 @@ fig2.savefig(image_save)
 
 result_titles = ["precision","recall","aupr","tpr","fpr","auroc", "entropy"]
 
-result_list2 = [precision_list2, recall_list2, aupr_list2, tpr_list2, fpr_list2,
-    auroc_list2, entropies]
+result_list2 = [precision_list2, recall_list2, aupr_list2, tpr_list2, fpr_list2,auroc_list2, entropies]
 
 for count,result in enumerate(result_list2):
   print(window_size_list)

@@ -7,7 +7,7 @@
 #MSUB -o /projects/p20519/jia_output/Roller_error.txt
 #MSUB -m bae
 #MSUB -q normal
-#MSUB -N post_analysis
+#MSUB -N post_analysis_correlation
 #MSUB -V
 
 nwindows=${MOAB_JOBARRAYINDEX}
@@ -15,4 +15,4 @@ nwindows=${MOAB_JOBARRAYINDEX}
 workon seqgen
 module load python/anaconda
 cd ~/Roller
-python run_post_analysis_heatmap2.py
+python run_post_analysis_correlation.py

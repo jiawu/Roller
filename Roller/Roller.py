@@ -100,7 +100,6 @@ class Roller(object):
         """
         if random_time:
             #select three random timepoints
-            pdb.set_trace()
             time_window = self.time_vec[start_index]
             choices = self.time_vec
             choices = np.delete(choices, start_index)

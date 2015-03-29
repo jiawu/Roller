@@ -271,7 +271,7 @@ class Window(object):
         return rate_dict
 
     def get_linearity(self):
-        n_genes = window_values.shape[1]
+        n_genes = self.window_values.shape[1]
         linearity = []
         for gene_index in range(0,n_genes):
             xi = self.raw_data[self.time_label].unique()
@@ -281,7 +281,6 @@ class Window(object):
         return linearity
 
     def get_average(self):
-        averages = np.average(self.window_values,)
-      
+        averages = self.window_values.mean(axis=0)      
         return averages
 

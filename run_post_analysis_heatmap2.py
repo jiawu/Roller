@@ -12,13 +12,13 @@ import numpy as np
 import kdpee
 import seaborn
 #get all pickle files
-path="/projects/p20519/Roller_outputs_lasso/"
+path="/projects/p20519/Roller_outputs_lasso_random/"
 filenames = next(os.walk(path))[2]
 nfiles = len(filenames)
 #organize pickled objects by dataset analyzed
 obj_list = []
 counter = 0
-image_file_path = "/home/jjw036/Roller/aggregated"
+image_file_path = "/home/jjw036/Roller/aggregated_random"
 
 
 #todo: calculate distance between two edge lists
@@ -79,6 +79,8 @@ overall_df = pd.DataFrame()
 
 target_dataset =  "data/dream4/insilico_size10_1_timeseries.tsv"
 img_suffix = "5"
+#dataset_list = ["1"]
+
 dataset_list = ["1","2","3","4","5"]
 for dataset_counter in dataset_list:
   img_suffix = str(dataset_counter)
@@ -184,7 +186,7 @@ result_titles = ["precision","recall","aupr","tpr","fpr","auroc", "entropy"]
 result_list2 = [a_precision_list, a_recall_list, a_aupr_list, a_tpr_list, a_fpr_list,
     a_auroc_list]
 
-for count,result in enumerate(result_list2):
+"""for count,result in enumerate(result_list2):
     print(a_window_size_list)
     print(result)
     fig = plt.figure(6+count)
@@ -197,6 +199,7 @@ for count,result in enumerate(result_list2):
     fig.savefig(image_save)
 
 print(window_size_list)
+"""
 size_to_auroc = zip(window_size_list,window_start_list, window_auroc)
 f = plt.figure(figsize=(10,10))
 axarr2 = f.add_axes([gp_left, gp_bottom, gp_width, gp_height])
@@ -204,6 +207,7 @@ axarr1 = f.add_axes([dm_left, dm_bottom, dm_width, dm_height])
 
 #figure, heatmap = Grapher.generate_heatmap_from_df(self.roller_results.raw_data)
 #axarr1 = figure
+raw_data= roller_obj.raw_data
 time_vector = raw_data['Time'].unique()
 nrow,ncol=raw_data.shape
 nrepeats = nrow/len(time_vector)
@@ -222,6 +226,8 @@ for time in time_vector:
 my_axis =axarr1.matshow(heatmap_values,cmap=matplotlib.cm.RdBu,aspect='auto')
 my_axi = my_axis.get_axes()
 axarr1.set_xlabel('Time')
+axarr1.grid("off")
+axarr2.grid("off")
 axarr1.xaxis.set_label_coords(0.5, 1.08)
 
 axarr1.set_yticks(np.arange(heatmap_values.shape[0]))
