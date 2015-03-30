@@ -8,7 +8,6 @@ from Roller.util.Evaluator import Evaluator
 import pdb
 import numpy as np
 import kdpee
-import seaborn
 from scipy.stats.stats import pearsonr
 #get all pickle files
 path="/projects/p20519/Roller_outputs_RF_moretrees/"
@@ -40,12 +39,12 @@ img_suffix = "5"
 #dataset_list = ["5"]
 dataset_list = ["1","2","3","4","5"]
 
-window_start_list = []
-auroc_list = []
-rate_list = []
-average_list = []
 
 for dataset_counter in dataset_list:
+  window_start_list = []
+  auroc_list = []
+  rate_list = []
+  average_list = []
   img_suffix = str(dataset_counter)
   target_dataset =  "data/dream4/insilico_size10_"+dataset_counter+"_timeseries.tsv"
   for file in filenames:
@@ -62,11 +61,11 @@ for dataset_counter in dataset_list:
         key = roller_obj.file_path
         if key == target_dataset:
           window_size = roller_obj.window_width
-
+          target_roller = roller_obj
           for window in roller_obj.window_list:
             min_time = min(window.raw_data['Time'].unique())
             window_start_list.append(min_time)
-            gold_standard = roller_obj.file_path.replace("timeseries.tsv","goldstandard.tsv")
+            gold_standard = target_roller.file_path.replace("timeseries.tsv","goldstandard.tsv")
             evaluator = Evaluator(gold_standard,sep="\t")
             sorted_edge_list = window.results_table
             sorted_edge_list.sort(['importance'], ascending=[False], inplace=True)
@@ -124,6 +123,7 @@ for dataset_counter in dataset_list:
   #rates_list = window.get_rates(1)
   
   heatmap_values['all'] = all_vector
+  pdb.set_trace()
   f = plt.figure(figsize=(10,10))
   axarr1 = f.add_axes([dm_left, dm_bottom, dm_width, dm_height])
   my_axis = axarr1.matshow(heatmap_values,cmap=matplotlib.cm.RdBu,aspect='auto', vmin=-1, vmax=1)
@@ -140,13 +140,13 @@ for dataset_counter in dataset_list:
       label.set_fontsize(8)
   for label in (axarr1.get_yticklabels()):
       label.set_fontsize(8)
-  pdb.set_trace()
   axarr1.set_xticks(np.arange(heatmap_values.shape[1]))
   axarr1.set_yticks(np.arange(heatmap_values.shape[0]))
   axarr1.grid("off")
   for l in axarr1.get_xticklines() + axarr1.get_yticklines():
       l.set_markersize(0)
 
-  image_save = "test_heat_map"+img_suffix+".png"
+
+  image_save = "test_heat_map"+dataset_counter+".png"
   f.savefig(image_save,format="png")
 

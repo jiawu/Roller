@@ -20,7 +20,7 @@ obj_list = []
 counter = 0
 image_file_path = "/home/jjw036/Roller/aggregated"
 
-target_dataset =  "data/dream4/insilico_size10_1_timeseries.tsv"
+target_dataset =  "data/dream4/insilico_size10_5_timeseries.tsv"
 
 #todo: calculate distance between two edge lists
 #average models: calculate AUROC between averaged models
@@ -72,7 +72,6 @@ for file in filenames:
       averaged_edge_list = averaged_edge_list[np.isfinite(averaged_edge_list['mean-rank'])]
       gold_standard = roller_obj.file_path.replace("timeseries.tsv","goldstandard.tsv")
       evaluator = Evaluator(gold_standard, sep="\t")
-      #pdb.set_trace()
       a_precision, a_recall, a_aupr = evaluator.calc_pr(averaged_edge_list)
       a_tpr, a_fpr, a_auroc = evaluator.calc_roc(averaged_edge_list)
       
@@ -143,7 +142,8 @@ fig2.savefig(image_save)
 
 result_titles = ["precision","recall","aupr","tpr","fpr","auroc", "entropy"]
 
-result_list2 = [precision_list2, recall_list2, aupr_list2, tpr_list2, fpr_list2,auroc_list2, entropies]
+result_list2 = [precision_list2, recall_list2, aupr_list2, tpr_list2, fpr_list2,
+    auroc_list2, entropies]
 
 for count,result in enumerate(result_list2):
   print(window_size_list)
