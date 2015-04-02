@@ -7,7 +7,7 @@
 #MSUB -o /projects/p20519/jia_output/Roller_error.txt
 #MSUB -m bae
 #MSUB -q normal
-#MSUB -N cluster_f
+#MSUB -N cluster_f_normal
 #MSUB -V
 
 nwindows=${MOAB_JOBARRAYINDEX}
