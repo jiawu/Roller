@@ -252,8 +252,8 @@ if __name__ == '__main__':
     #roller_dict, roller_list = load_roller_pickles(path)
     #pd.to_pickle(roller_dict, "../../output/results_pickles/Roller_outputs_RF.pickle")
 
-    #roller_dict = pd.read_pickle("../../output/results_pickles/Roller_outputs_RF.pickle")
-    roller_dict = pd.read_pickle("../../output/results_pickles/Roller_outputs_RF_moretrees.pickle")
+    roller_dict = pd.read_pickle("../../output/results_pickles/Roller_outputs_RF.pickle")
+    #roller_dict = pd.read_pickle("../../output/results_pickles/Roller_outputs_RF_moretrees.pickle")
 
     #print len(roller_dict.keys())
     for dataset, df in roller_dict.iteritems():
@@ -263,7 +263,4 @@ if __name__ == '__main__':
         #explore_rankings(current_frame)
         #visualize_raw_data(df['roller_list'][0])
         show_window_results(df)
-        #sys.exit()
-
-
-        #sys.exit()
+        sys.exit()
