@@ -246,8 +246,7 @@ def explore_rankings(data_frame):
         plt.hist(rows_for_dict.AUROC.values)
         plt.show()
 
-    #plt.show()
-
+    #plt.show()    
 if __name__ == '__main__':
     #path = "../../output/Roller_outputs_RF_moretrees/"
     #roller_dict, roller_list = load_roller_pickles(path)

@@ -5,7 +5,7 @@ from matplotlib.colors import colorConverter
 import matplotlib.pyplot as plt
 import numpy as np
 import pdb
-
+import pandas as pd
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 
@@ -65,4 +65,11 @@ ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
 
+plt.show()
+
+pdb.set_trace()
+ts = pd.Series(np.random.randn(1000), index=pd.date_range('1/1/2000', periods=1000))
+df = pd.DataFrame(np.random.randn(1000, 4), index=ts.index, columns=list('ABCD'))
+df = df.cumsum()
+plt.figure(); df.plot();
 plt.show()
