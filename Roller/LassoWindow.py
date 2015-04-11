@@ -424,6 +424,11 @@ class LassoWindow(Window):
             X_matrix = np.delete(all_data, col_index, axis=1)
             #take out the column so that the gene does not regress on itself
             target_TF = all_data[:,col_index]
+            model_params = {'col_index':col_index,
+                            'response':target_TF,
+                            'predictor':X_matrix,
+                            'model':clf}
+            self.model.append(model_params)
             clf.fit(X_matrix, target_TF)
             coeffs = clf.coef_
             #artificially add a 0 to where the col_index is
