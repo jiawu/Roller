@@ -33,7 +33,7 @@ class RandomForestRegressionWindow(Window):
 
 
     def rank_edges(self, rank_by):
-        rank_column_name = rank_by + "-rank"  
+        rank_column_name = rank_by + "-rank"
         if self.results_table is None:
             raise ValueError("The edge table must be created before getting edges")
         if rank_by == "p_value":
@@ -141,6 +141,11 @@ class RandomForestRegressionWindow(Window):
 
             rfr = RandomForestRegressor(n_estimators=n_trees, n_jobs=n_jobs, max_features="sqrt")
             rfr.fit(X_matrix, target_TF)
+            model_params = {'col_index':col_index,
+                            'response':target_TF,
+                            'predictor':X_matrix,
+                            'model':rfr}
+            self.model.append(model_params)
             coeffs = rfr.feature_importances_
             #artificially add a 0 to where the col_index is
             #to prevent self-edges
