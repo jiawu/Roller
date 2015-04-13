@@ -21,6 +21,7 @@ class Window(object):
             Dictionary that provides data that can be used to uniquely identify a window
         :return:
         """
+        self.model = []
         self.time_label = window_info['time_label']
         self.gene_start = window_info['gene_start']
         self.gene_end = window_info['gene_end']
@@ -228,7 +229,7 @@ class Window(object):
                   "variance": variance,
                   "n": n}
         return result
-    
+
     def pack_values(self, df):
         #pack the values into separate time series. It outputs a list of pandasdataframes such that each series can be analyzed separately.
         #this is important because otherwise the algorithm will combine calculations from separate time series
@@ -241,7 +242,7 @@ class Window(object):
             series = df[i*time_n:(i*time_n)+time_n]
             time_series_list.append(series)
         return time_series_list
-    
+
     def get_rates(self, n=1):
         series_list = self.pack_values(self.df)
         rates_list = []
@@ -249,7 +250,7 @@ class Window(object):
             rise = np.diff(series, n, axis = 0)
             time = self.raw_data[self.time_label].unique()
             rrun = np.array([j-i for i,j in zip(time[:-1], time[1:])])
-            #the vector represents the scalars used to divide each row 
+            #the vector represents the scalars used to divide each row
             rates = rise/rrun[:,None]
             rates_list.append(rates)
 
@@ -260,7 +261,7 @@ class Window(object):
         # get max rates
         rates = self.get_rates(n)
         all_rates = np.vstack(rates)
-        
+
         rate_dict = {}
         rate_dict['max'] = all_rates.max(axis=0)
         rate_dict['min'] = all_rates.min(axis=0)
@@ -281,6 +282,7 @@ class Window(object):
         return linearity
 
     def get_average(self):
-        averages = self.window_values.mean(axis=0)      
+        averages = self.window_values.mean(axis=0)
         return averages
+
 
