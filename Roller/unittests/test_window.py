@@ -19,7 +19,7 @@ class TestWindow(unittest.TestCase):
         self.roller.create_windows()
         self.test_window = self.roller.window_list[0]
 
- 
+
     def test_possible_edge_list_self(self):
         expected_edges = self.test_window.n_genes**2
         num_edges = len(self.test_window.edge_list)
