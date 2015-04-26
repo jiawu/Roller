@@ -256,11 +256,31 @@ if __name__ == '__main__':
     #roller_dict = pd.read_pickle("../../output/results_pickles/Roller_outputs_RF_moretrees.pickle")
 
     #print len(roller_dict.keys())
+    window_size_array = None
+    best_scores_array = None
     for dataset, df in roller_dict.iteritems():
         print dataset
         gs = '../../' + dataset.replace("timeseries.tsv","goldstandard.tsv")
         current_frame = df['results_frame']
+
+        window_size_list = current_frame.Width.values
+        window_score_list = current_frame.AUROC.values
+        window_size_set = np.array(list(set(window_size_list)))
+        best_scores = np.array([max(window_score_list[window_size_list==size]) for size in window_size_set])
+        if window_size_array is None:
+            window_size_array = window_size_set
+        else:
+            window_size_array = np.vstack((window_size_array, window_size_set))
+        if best_scores_array is None:
+            best_scores_array = best_scores
+        else:
+            best_scores_array = np.vstack((best_scores_array, best_scores))
+
         #explore_rankings(current_frame)
         #visualize_raw_data(df['roller_list'][0])
-        show_window_results(df)
-        sys.exit()
+        #show_window_results(df)
+
+        #sys.exit()
+    np.save("../../output/results_pickles/window_size", window_size_array.T)
+    np.save("../../output/results_pickles/best_scores", best_scores_array.T)
+
