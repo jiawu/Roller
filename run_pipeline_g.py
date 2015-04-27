@@ -10,15 +10,15 @@ if __name__ == "__main__":
     plt.ioff()
     
     for file_path_index in range(1,6):
-      file_path = "data/dream4/insilico_size100_" + str(file_path_index) + "_timeseries.tsv"
+      file_path = "data/dream4/insilico_size10_" + str(file_path_index) + "_timeseries.tsv"
       #file_path = "data/dream4/insilico_size10_1_timeseries.tsv"
       gene_start_column = 1
       time_label = "Time"
       separator = "\t"
       gene_end = None
-      gold_standard = "data/dream4/insilico_size100_" + str(file_path_index) + "_goldstandard.tsv"
+      gold_standard = "data/dream4/insilico_size10_" + str(file_path_index) + "_goldstandard.tsv"
       #gold_standard = "data/dream4/insilico_size10_1_goldstandard.tsv"
-      image_file_path = "insilico_size100_" + str(file_path_index) + "_alphas"
+      image_file_path = "insilico_size10_" + str(file_path_index) + "_alphas"
       #image_file_path = "insilico_size10_1_alphas"
       roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
       print("Overall Width: " + str(roller.overall_width))
@@ -29,7 +29,7 @@ if __name__ == "__main__":
       aupr_list = []
 
       roller.set_window(width=window_size)
-      roller.create_windows()
+      roller.create_windows(random_time=False)
       roller.optimize_params()
       for alpha in roller.window_list[0].cv_table['alpha']:
           print("current alpha: " + str(alpha))
@@ -47,7 +47,7 @@ if __name__ == "__main__":
           alpha_list.append(alpha)
           aupr_list.append(max(score_dict['aupr']))
           
-          unique_filename = "/projects/p20519/Roller_outputs_moretrees/"+ str(uuid.uuid4())
+          unique_filename = "/projects/p20519/Roller_outputs_lasso_random/"+ str(uuid.uuid4())
           with open(unique_filename, 'wb') as output:
             pickle.dump(roller,output, pickle.HIGHEST_PROTOCOL) 
       

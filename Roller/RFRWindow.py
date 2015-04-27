@@ -39,7 +39,7 @@ class RandomForestRegressionWindow(Window):
         if rank_by == "p_value":
             self.results_table.sort(columns=['p_value', 'importance'], ascending=[True, False], inplace=True)
         elif rank_by == "importance":
-            self.results_table.sort(columns=['stability', 'importance'], ascending=[False, True], inplace=True)
+            self.results_table.sort(columns=['p_value', 'importance'], ascending=[False, True], inplace=True)
         valid_window = self.results_table
         valid_window[rank_column_name] = valid_window[rank_by].rank(method="dense",ascending=False)
         self.results_table = self.results_table.sort(columns=rank_column_name, axis=0)
@@ -98,7 +98,7 @@ class RandomForestRegressionWindow(Window):
         """
         if n_trees is None:
             # Select number of trees with default parameters
-            self.n_trees = 1500
+            self.n_trees = 300
         elif n_trees >= 0 and type(n_trees) == int:
             self.n_trees = n_trees
         else:

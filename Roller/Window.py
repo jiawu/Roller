@@ -4,7 +4,7 @@ __email__ = 'jfinkle@u.northwestern.edu'
 import numpy as np
 import pandas as pd
 import itertools
-
+import pdb
 
 class Window(object):
     """
@@ -228,3 +228,59 @@ class Window(object):
                   "variance": variance,
                   "n": n}
         return result
+    
+    def pack_values(self, df):
+        #pack the values into separate time series. It outputs a list of pandasdataframes such that each series can be analyzed separately.
+        #this is important because otherwise the algorithm will combine calculations from separate time series
+        time = self.raw_data[self.time_label].unique()
+        time_n = len(time)
+        series_n = len(self.raw_data[self.time_label])/len(time)
+        time_series_list = []
+        for i in range(0, series_n):
+            #get data[first time point : last timepoint]
+            series = df[i*time_n:(i*time_n)+time_n]
+            time_series_list.append(series)
+        return time_series_list
+    
+    def get_rates(self, n=1):
+        series_list = self.pack_values(self.df)
+        rates_list = []
+        for series in series_list:
+            rise = np.diff(series, n, axis = 0)
+            time = self.raw_data[self.time_label].unique()
+            rrun = np.array([j-i for i,j in zip(time[:-1], time[1:])])
+            #the vector represents the scalars used to divide each row 
+            rates = rise/rrun[:,None]
+            rates_list.append(rates)
+
+        return rates_list
+
+
+    def get_rate_analysis(self, n=1):
+        # get max rates
+        rates = self.get_rates(n)
+        all_rates = np.vstack(rates)
+        
+        rate_dict = {}
+        rate_dict['max'] = all_rates.max(axis=0)
+        rate_dict['min'] = all_rates.min(axis=0)
+        rate_dict['mean'] = all_rates.mean(axis=0)
+        rate_dict['median'] = np.median(all_rates,axis=0)
+        rate_dict['std'] = all_rates.std(axis=0, ddof=1)
+        rate_dict['all_rates'] = all_rates
+        return rate_dict
+
+    def get_linearity(self):
+        n_genes = self.window_values.shape[1]
+        linearity = []
+        for gene_index in range(0,n_genes):
+            xi = self.raw_data[self.time_label].unique()
+            y = self.window_values[gene_index,:]
+            slope, intercept, r_value, p_value, std_er = stats.linregress(xi, y)
+        linearity.append(r_value)
+        return linearity
+
+    def get_average(self):
+        averages = self.window_values.mean(axis=0)      
+        return averages
+

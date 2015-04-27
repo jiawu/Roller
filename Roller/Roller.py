@@ -49,7 +49,6 @@ class Roller(object):
 
         self.gene_list = self.raw_data.columns.values[self.gene_start:self.gene_end]
 
-        self.current_window = self.get_window(self.current_step)
         self.window_list = []
 
     def get_n_windows(self):
@@ -72,6 +71,9 @@ class Roller(object):
 
         Called by:
             __init__
+            set_max_alpha in Ranker.py (necessary)
+            permutation_test.py (deprecated)
+
 
         :param start_index: int
             The start of the window
@@ -98,7 +100,6 @@ class Roller(object):
         """
         if random_time:
             #select three random timepoints
-            pdb.set_trace()
             time_window = self.time_vec[start_index]
             choices = self.time_vec
             choices = np.delete(choices, start_index)
@@ -177,7 +178,7 @@ class Roller(object):
 
         return(len(self.raw_data.columns) -1)
 
-    def create_windows(self):
+    def create_windows(self, random_time=False):
         """
         Create window objects for the roller to use
 
@@ -186,7 +187,7 @@ class Roller(object):
 
         :return:
         """
-        window_list = [self.get_window_object(self.get_window_raw(index, random_time=False),
+        window_list = [self.get_window_object(self.get_window_raw(index, random_time),
                                    { "time_label": self.time_label,
                                      "gene_start": self.gene_start,
                                      "gene_end": self.gene_end,
@@ -213,11 +214,12 @@ class Roller(object):
 
     def initialize_windows(self):
         """
-        Initialize window parameters and do a preliminary fit
+        deprecated - Initialize window parameters and do a preliminary fit
 
         Called by:
+        Currently only called by unittest Roller/unittests/test_roller.py
 
-
+        todo: delete
         :return:
         """
         for window in self.window_list:
