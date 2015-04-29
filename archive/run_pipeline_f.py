@@ -5,22 +5,29 @@ import sys
 import Roller
 import uuid
 import pickle
+"""
+This pipeline scans a range of
+"""
+
+
+
+
 if __name__ == "__main__":
     window_size = int(sys.argv[1])
     plt.ioff()
-    
-    for file_path_index in range(1,2):
-      file_path = "data/dream4/yeast_size100_" + str(file_path_index) + "_timeseries.tsv"
-      #file_path = "data/dream4/yeast_size100_1_timeseries.tsv"
+
+    for file_path_index in range(1,6):
+      file_path = "data/dream4/insilico_size100_" + str(file_path_index) + "_timeseries.tsv"
+      #file_path = "data/dream4/insilico_size10_1_timeseries.tsv"
       gene_start_column = 1
       time_label = "Time"
       separator = "\t"
       gene_end = None
-      gold_standard = "data/dream4/yeast_size100_" + str(file_path_index) + "_goldstandard.tsv"
-      #gold_standard = "data/dream4/yeast_size100_1_goldstandard.tsv"
-      image_file_path = "yeast_size100_" + str(file_path_index) + "_alphas"
-      #image_file_path = saaaas"yeast_size100_1_alphas"
-      roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label,separator,window_type="RandomForest")
+      gold_standard = "data/dream4/insilico_size100_" + str(file_path_index) + "_goldstandard.tsv"
+      #gold_standard = "data/dream4/insilico_size10_1_goldstandard.tsv"
+      image_file_path = "insilico_size100_" + str(file_path_index) + "_alphas"
+      #image_file_path = "insilico_size10_1_alphas"
+      roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
       print("Overall Width: " + str(roller.overall_width))
       roller.zscore_all_data()
 
@@ -32,8 +39,8 @@ if __name__ == "__main__":
       roller.create_windows()
       roller.optimize_params()
       roller.fit_windows()
-      roller.rank_edges(permutation_n = 200)
-      roller.average_rank(rank_by='p_value', ascending = False)
+      roller.rank_edges(n_bootstraps=500, permutation_n = 500)
+      roller.average_rank(rank_by='stability', ascending = False)
       #score some edge lists
       #first score the sorted average edge list
       averaged_score_dict = roller.score(roller.averaged_ranks, gold_standard)
@@ -43,7 +50,6 @@ if __name__ == "__main__":
           score_dict = roller.score(window.results_table,gold_standard)
           score_list.append(score_dict)
       aupr_list.append(max(score_dict['aupr']))
-      unique_filename = "/projects/p20519/Roller_outputs_RF_yeast100_2_moretrees/"+ str(uuid.uuid4())
+      unique_filename = "/projects/p20519/Roller_outputs_L_yeast100/"+ str(uuid.uuid4())
       with open(unique_filename, 'wb') as output:
-        pickle.dump(roller,output, pickle.HIGHEST_PROTOCOL) 
-      
+        pickle.dump(roller,output, pickle.HIGHEST_PROTOCOL)
