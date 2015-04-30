@@ -16,8 +16,8 @@ class LassoWindow(Window):
     A window that runs Lasso regression as the network inference method
     """
 
-    def __init__(self, dataframe, window_info):
-        super(LassoWindow, self).__init__(dataframe, window_info)
+    def __init__(self, dataframe, window_info, roller_data):
+        super(LassoWindow, self).__init__(dataframe, window_info, roller_data)
         self.alpha = None
         self.beta_coefficients = None
         self.cv_table = None
@@ -419,21 +419,28 @@ class LassoWindow(Window):
 
         coeff_matrix = np.array([],dtype=np.float_).reshape(0, all_data.shape[1])
 
+        model_list = []
+
         for col_index,column in enumerate(all_data.T):
             #delete the column that is currently being tested
             X_matrix = np.delete(all_data, col_index, axis=1)
             #take out the column so that the gene does not regress on itself
             target_TF = all_data[:,col_index]
+            clf.fit(X_matrix, target_TF)
             model_params = {'col_index':col_index,
                             'response':target_TF,
                             'predictor':X_matrix,
                             'model':clf}
-            self.model.append(model_params)
-            clf.fit(X_matrix, target_TF)
+            model_list.append(model_params)
             coeffs = clf.coef_
             #artificially add a 0 to where the col_index is
             #to prevent self-edges
             coeffs = np.insert(coeffs,col_index,0)
             coeff_matrix=np.vstack((coeff_matrix,coeffs))
+
+            #scoping issues
+            training_scores, test_scores = self.crag_window(model_params)
+            self.training_scores.append(training_scores)
+            self.test_scores.append(test_scores)
 
         return coeff_matrix
