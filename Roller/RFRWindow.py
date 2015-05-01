@@ -10,8 +10,8 @@ import scipy
 from Window import Window
 
 class RandomForestRegressionWindow(Window):
-    def __init__(self, dataframe, window_info):
-        super(RandomForestRegressionWindow, self).__init__(dataframe, window_info)
+    def __init__(self, dataframe, window_info, roller_data):
+        super(RandomForestRegressionWindow, self).__init__(dataframe, window_info, roller_data)
         self.edge_importance = None
         self.n_trees = None
         self.bootstrap_matrix = None
@@ -131,6 +131,7 @@ class RandomForestRegressionWindow(Window):
 
         coeff_matrix = np.array([], dtype=np.float_).reshape(0, all_data.shape[1])
 
+        model_list = []
         for col_index, column in enumerate(all_data.T):
             #print "Inferring parents for gene %i of %i" % (col_index, self.n_labels)
             #delete the column that is currently being tested
@@ -145,11 +146,15 @@ class RandomForestRegressionWindow(Window):
                             'response':target_TF,
                             'predictor':X_matrix,
                             'model':rfr}
-            self.model.append(model_params)
+            model_list.append(model_params)
             coeffs = rfr.feature_importances_
             #artificially add a 0 to where the col_index is
             #to prevent self-edges
             coeffs = np.insert(coeffs, col_index, 0)
             coeff_matrix = np.vstack((coeff_matrix, coeffs))
+            # there's some scoping issues here. cragging needs the roller's raw data but the window does not know what roller contains (outside scope). have to pass in the roller's raw data and save it somehow :/
+            training_scores, test_scores = self.crag_window(model_params)
+            self.training_scores.append(training_scores)
+            self.test_scores.append(test_scores)
 
         return coeff_matrix
