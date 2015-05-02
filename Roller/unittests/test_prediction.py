@@ -5,6 +5,8 @@ import random
 from random import randint
 import numpy.testing as npt
 import pdb
+import sklearn.metrics as skmet
+import Roller.util.utility_module as Rutil
 
 class TestWindow(unittest.TestCase):
     def setUp(self):
@@ -24,9 +26,29 @@ class TestWindow(unittest.TestCase):
         n_genes = self.test_window.n_genes
         self.assertTrue(len(model_list),n_genes)
 
-
     def test_prediction(self):
+        model_list = self.test_window.model
+        model = model_list[0]['model']
+        response_train = model_list[0]['response']
+        predictor_train = model_list[0]['predictor']
 
+        #get training scores
+        training_scores = Rutil.get_cragging_scores(model, predictor_train, response_train)
+
+        #get test set from the roller model
+        test_data = Rutil.get_test_set(self.test_window.raw_data, self.roller.raw_data)
+        response_col = 0
+        response_test = test_data.ix[:,response_col].values
+        predictor_test = test_data.drop(test_data.columns[response_col],1).values
+
+        #get prediction scores
+        test_scores = Rutil.get_cragging_scores(model, predictor_test, response_test)
+
+    def test_fit(self):
+        self.roller.optimize_params()
+        self.roller.fit_windows()
+        self.test_window.fit_window()
+        pdb.set_trace()
 if __name__ == '__main__':
     unittest.main()
 
