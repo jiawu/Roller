@@ -1,5 +1,25 @@
 import pandas as pd
 import scipy.stats as ss
+import sklearn.metrics as skmet
+import numpy as np
+
+def get_test_set(window_raw_data, roller_raw_data):
+    roller_vec = roller_raw_data['Time'].unique()
+    window_vec = window_raw_data['Time'].unique()
+    test_set_vec = np.setdiff1d(roller_vec,window_vec)
+    test_data = roller_raw_data.loc[roller_raw_data['Time'].isin(test_set_vec)].drop('Time',1)
+    return(test_data)
+
+
+def get_cragging_scores(model, predictor, response_true):
+    response_pred = model.predict(predictor)
+    scores = {}
+    scores['ev'] = skmet.explained_variance_score(response_true, response_pred)
+    scores['mae'] = skmet.mean_absolute_error(response_true, response_pred)
+    scores['mse'] = skmet.mean_squared_error(response_true, response_pred)
+    #scores['medae'] = skmet.median_absolute_error(response_true, response_pred)
+    scores['r2'] = skmet.r2_score(response_true, response_pred)
+    return(scores)
 
 def create_3D_linked_list(labels, numpy_array_3D, value_label):
     """returns a panel with interaction (x-axis) - value (y axis) - time (Z axis)"""
