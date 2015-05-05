@@ -207,9 +207,9 @@ class Roller(object):
         :return:
         """
         if self.window_type == "Lasso":
-            window_obj = LassoWindow(dataframe, window_info_dict)
+            window_obj = LassoWindow(dataframe, window_info_dict, self.raw_data)
         if self.window_type == "RandomForest":
-            window_obj = RandomForestRegressionWindow(dataframe,window_info_dict)
+            window_obj = RandomForestRegressionWindow(dataframe,window_info_dict, self.raw_data)
         return window_obj
 
     def initialize_windows(self):
@@ -285,6 +285,7 @@ class Roller(object):
                 if n_trees != None:
                     window.n_trees = n_trees
             window.fit_window()
+
         return(self.window_list)
 
     def rank_edges(self, n_bootstraps=1000, permutation_n=1000):
