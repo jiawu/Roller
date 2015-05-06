@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import itertools
 import pdb
+import util.utility_module as Rutil
 
 class Window(object):
     """
@@ -12,7 +13,7 @@ class Window(object):
     should be sub-classed to have network inference specific features and methods.
     """
 
-    def __init__(self, raw_dataframe, window_info):
+    def __init__(self, raw_dataframe, window_info, roller_raw_data):
         """
         Initialize a window object. Extract information from the passed data-frame. Generate edge list.
 
@@ -40,6 +41,13 @@ class Window(object):
         self.edge_list = self.possible_edge_list(self.genes, self.genes)
         # Add edge list to edge table
         self.results_table['regulator-target'] = self.edge_list
+        self.roller_raw = roller_raw_data
+
+        # The training score is a list of descriptors for how well the model fit the training data for each response variable for the current window
+        # the test score is a list of descriptors for how well the model fit the test data for each response variable for the current window.
+        self.training_scores = []
+        self.test_scores = []
+
 
     def create_linked_list(self, numpy_array_2D, value_label):
         """labels and array should be in row-major order"""
@@ -284,5 +292,19 @@ class Window(object):
     def get_average(self):
         averages = self.window_values.mean(axis=0)
         return averages
+
+    def crag_window(self, model_params):
+        model = model_params['model']
+        response_train = model_params['response']
+        predictor_train = model_params['predictor']
+        response_col = model_params['col_index']
+        training_scores = Rutil.get_cragging_scores(model, predictor_train, response_train)
+        test_data = Rutil.get_test_set(self.raw_data, self.roller_raw)
+
+        response_test = test_data.ix[:,response_col].values
+        predictor_test = test_data.drop(test_data.columns[response_col],1).values
+
+        test_scores = Rutil.get_cragging_scores(model,predictor_test, response_test)
+        return((training_scores, test_scores))
 
 
