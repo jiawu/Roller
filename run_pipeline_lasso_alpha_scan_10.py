@@ -50,6 +50,6 @@ if __name__ == "__main__":
           averaged_score_dict = roller.score(roller.averaged_ranks, gold_standard)
           #next score each individual edge list
 
-          unique_filename = OUTPUT_PATH+ network_index + "/" + str(uuid.uuid4())
+          unique_filename = OUTPUT_PATH+ str(network_index) + "/" + str(uuid.uuid4())
           with open(unique_filename, 'wb') as output:
             pickle.dump(roller,output, pickle.HIGHEST_PROTOCOL)
