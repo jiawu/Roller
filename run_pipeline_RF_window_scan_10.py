@@ -14,8 +14,8 @@ This is the 10 node variation of it.
 """
 INPUT_PATH = "data/dream4/insilico_size10_"
 INF_METHOD = "RandomForest"
-#OUTPUT_PATH = "/projects/p20519/roller_output/optimizing_window_size/" + INF_METHOD + "/insilico_size10_"
-OUTPUT_PATH = "Roller/unittests"
+OUTPUT_PATH = "/projects/p20519/roller_output/optimizing_window_size/" + INF_METHOD + "/insilico_size10_"
+#OUTPUT_PATH = "Roller/unittests"
 UNIQUE_NAME  = INF_METHOD + "insilico_size10_"
 N_BOOT = 20
 N_PERM = 20
@@ -44,12 +44,10 @@ if __name__ == "__main__":
       roller.fit_windows()
       roller.rank_edges(permutation_n = N_PERM)
 
-      #roller.run_crag()
-
       unique_filename = OUTPUT_PATH + "/" + str(uuid.uuid4()) + ".pkl"
       #unique_filename = OUTPUT_PATH + str(network_index) + "/" + str(uuid.uuid4()) + ".joblib"
-      #with open(unique_filename, 'wb') as output:
-      with gzip.GzipFile(unique_filename,'w') as output:
+      with open(unique_filename, 'wb') as output:
+      #with gzip.GzipFile(unique_filename,'w') as output:
         pickle.dump(roller,output, pickle.HIGHEST_PROTOCOL)
       #joblib.dump(roller, unique_filename)
 
