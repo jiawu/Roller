@@ -12,7 +12,10 @@ import numpy as np
 import kdpee
 
 #get all pickle files
-path="/projects/p20519/Roller_outputs_lasso/"
+path="/projects/p20519/roller_output/optimizing_window_size/RandomForest/insilico_size10_1/"
+#path="/projects/p20519/archived_rollers/Roller_outputs_RF_moretrees/"
+#path="/projects/p20519/archived_rollers/"
+#path="/projects/p20519/Roller_outputs_RF/"
 filenames = next(os.walk(path))[2]
 nfiles = len(filenames)
 #organize pickled objects by dataset analyzed
@@ -20,8 +23,8 @@ obj_list = []
 counter = 0
 image_file_path = "/home/jjw036/Roller/aggregated"
 
-target_dataset =  "data/dream4/insilico_size10_5_timeseries.tsv"
-img_suffix = "5"
+target_dataset =  "data/dream4/insilico_size10_1_timeseries.tsv"
+img_suffix = "1"
 gp_left = 0.2
 gp_bottom = 0.1
 gp_width = 0.7
@@ -85,7 +88,9 @@ for file in filenames:
       window_size = roller_obj.window_width
       raw_data_list.append(roller_obj.raw_data)
       raw_data = roller_obj.raw_data
-      roller_obj.average_rank(rank_by='stability-rank', ascending = False)
+      #roller_obj.average_rank(rank_by='stability', ascending = False)
+#      roller_obj.average_rank(rank_by='importance', ascending = True)
+      
       # create barplots for each Roller of a certain window size
       # window size = bar plot
       # then group all barplots into a 3D bar plot
@@ -100,8 +105,11 @@ for file in filenames:
           evaluator = Evaluator(gold_standard, sep="\t")
           edge_cutoff = len(evaluator.gs_flat)
           sorted_edge_list = window.results_table
-          sorted_edge_list.sort(['stability-rank'], ascending=[True], inplace=True)
-          sorted_edge_list = sorted_edge_list[np.isfinite(sorted_edge_list['stability-rank'])]
+          #sorted_edge_list.sort(['stability'], ascending=[True], inplace=True)
+          sorted_edge_list.sort(['p_value'], ascending=[True], inplace=True)
+          #sorted_edge_list = sorted_edge_list[np.isfinite(sorted_edge_list['p-means'])]
+          sorted_edge_list = sorted_edge_list[np.isfinite(sorted_edge_list['p_value'])]
+          #pdb.set_trace()
           precision, recall, aupr = evaluator.calc_pr(sorted_edge_list)
           tpr, fpr, auroc = evaluator.calc_roc(sorted_edge_list)
           
@@ -170,18 +178,19 @@ for l in axarr1.get_xticklines() + axarr1.get_yticklines():
     l.set_markersize(0)
 unique_window_sizes = list(set(window_size_list))
 for color_index,window_size in enumerate(unique_window_sizes):
-    if window_size == max(unique_window_sizes):
-        #add horizontal line instead of adding dot plot
-        line_start_list = [min(time_vector), max(time_vector)]
-        line_auroc = [item[2] for item in size_to_auroc if item[0] == window_size]
-        line_auroc = [line_auroc[0],line_auroc[0]]
-        axarr2.plot(map(int,line_start_list), line_auroc, linestyle='--',color =
-            tableau20[color_index], label = "WS "+str(window_size))
-    else:
-        line_start_list = [item[1] for item in size_to_auroc if item[0] == window_size]
-        line_auroc = [item[2] for item in size_to_auroc if item[0] == window_size]
-        axarr2.plot(map(int,line_start_list), line_auroc, 'o', linestyle='-',color =
-            tableau20[color_index], label = "WS "+str(window_size))
+    if window_size == 15:  
+      if window_size == max(unique_window_sizes):
+          #add horizontal line instead of adding dot plot
+          line_start_list = [min(time_vector), max(time_vector)]
+          line_auroc = [item[2] for item in size_to_auroc if item[0] == window_size]
+          line_auroc = [line_auroc[0],line_auroc[0]]
+          axarr2.plot(map(int,line_start_list), line_auroc, linestyle='--',color =
+              tableau20[color_index], label = "WS "+str(window_size))
+      else:
+          line_start_list = [item[1] for item in size_to_auroc if item[0] == window_size]
+          line_auroc = [item[2] for item in size_to_auroc if item[0] == window_size]
+          axarr2.plot(map(int,line_start_list), line_auroc, 'o', linestyle='-',color =
+              tableau20[color_index], label = "WS "+str(window_size))
 axarr2.xaxis.set_ticks_position('bottom')
 axarr2.xaxis.set_ticks(np.arange(0,1050,50))
 xlabels = axarr2.get_xticklabels()
