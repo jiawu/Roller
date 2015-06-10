@@ -44,8 +44,8 @@ if __name__ == "__main__":
       roller.fit_windows()
       roller.rank_edges(permutation_n = N_PERM)
 
-      unique_filename = OUTPUT_PATH + "/" + str(uuid.uuid4()) + ".pkl"
-      #unique_filename = OUTPUT_PATH + str(network_index) + "/" + str(uuid.uuid4()) + ".joblib"
+      #unique_filename = OUTPUT_PATH + "/" + str(uuid.uuid4()) + ".pkl"
+      unique_filename = OUTPUT_PATH + str(network_index) + "/" + str(uuid.uuid4())
       with open(unique_filename, 'wb') as output:
       #with gzip.GzipFile(unique_filename,'w') as output:
         pickle.dump(roller,output, pickle.HIGHEST_PROTOCOL)
