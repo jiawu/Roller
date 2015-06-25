@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import itertools
 import pdb
+from scipy import stats
 import util.utility_module as Rutil
 
 class Window(object):
