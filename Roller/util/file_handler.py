@@ -8,6 +8,10 @@ import pandas as pd
 import numpy as np
 from Evaluator import Evaluator
 from sklearn.neighbors import DistanceMetric
+from matplotlib import rcParams
+rcParams['font.family'] = 'sans-serif'
+rcParams['font.sans-serif'] = ['Arial']
+from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import scipy.cluster.hierarchy as sch
@@ -252,12 +256,28 @@ if __name__ == '__main__':
     #roller_dict, roller_list = load_roller_pickles(path)
     #pd.to_pickle(roller_dict, "../../output/results_pickles/Roller_outputs_RF.pickle")
 
-    roller_dict = pd.read_pickle("../../output/results_pickles/Roller_outputs_RF.pickle")
+    #roller_dict = pd.read_pickle("../../output/results_pickles/Roller_outputs_RF.pickle")
     #roller_dict = pd.read_pickle("../../output/results_pickles/Roller_outputs_RF_moretrees.pickle")
 
     #print len(roller_dict.keys())
-    window_size_array = None
-    best_scores_array = None
+    window_size_array = np.load("../../output/results_pickles/window_size.npy")
+    best_scores_array = np.load("../../output/results_pickles/best_scores.npy")
+    with PdfPages("../../output/results_pickles/figure.pdf") as pdf:
+        fig = plt.figure(figsize=(11,9))
+        ax = fig.add_subplot(111)
+        ax.plot(window_size_array, best_scores_array, 'o-', linewidth=5, markersize=10)
+        plt.xlabel('Test', size=20, style='italic')
+        plt.ylabel('Ylabel', size=20)
+        plt.xlim([1,22])
+        plt.grid(color='k', linestyle='-', linewidth=1)
+        ax.set_axisbelow(True)
+        legend_names = ['in silico network 1', 'in silico network 2', 'in silico network 3', 'in silico network 4', 'in silico network 5']
+        plt.legend(legend_names, bbox_to_anchor=(-0.1, 0.55, 1., .102))
+
+        pdf.savefig()
+        plt.close()
+
+    sys.exit()
     for dataset, df in roller_dict.iteritems():
         print dataset
         gs = '../../' + dataset.replace("timeseries.tsv","goldstandard.tsv")
@@ -281,6 +301,4 @@ if __name__ == '__main__':
         #show_window_results(df)
 
         #sys.exit()
-    np.save("../../output/results_pickles/window_size", window_size_array.T)
-    np.save("../../output/results_pickles/best_scores", best_scores_array.T)
 
