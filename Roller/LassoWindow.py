@@ -410,7 +410,6 @@ class LassoWindow(Window):
             Data to fit. If none, will use the window values. Default is None
         :return:
         """
-        clf = linear_model.Lasso(alpha)
         #loop that iterates through the target genes
         if data is None:
             all_data = self.window_values.copy()
@@ -422,6 +421,9 @@ class LassoWindow(Window):
         model_list = []
 
         for col_index,column in enumerate(all_data.T):
+            #Instantiate a new Lasso object
+            clf = linear_model.Lasso(alpha)
+
             #delete the column that is currently being tested
             X_matrix = np.delete(all_data, col_index, axis=1)
             #take out the column so that the gene does not regress on itself

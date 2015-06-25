@@ -1,7 +1,9 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
-from dionesus.pls_nipals import vipp
+from util.pls_nipals import vipp
+from scipy import stats
+from sklearn.cross_decomposition import PLSRegression
 import numpy as np
 from Window import Window
 
@@ -200,7 +202,7 @@ class DionesusWindow(Window):
         ss = np.sum(np.power(X-column_mean, 2), axis=0)
         return ss
 
-    def get_coeffs(self, alpha, data=None):
+    def get_coeffs(self, num_pcs=3, data=None):
         """
         returns a 2D array with target as rows and regulators as columns
         :param alpha: float
@@ -209,7 +211,7 @@ class DionesusWindow(Window):
             Data to fit. If none, will use the window values. Default is None
         :return:
         """
-        clf = linear_model.Lasso(alpha)
+
         #loop that iterates through the target genes
         if data is None:
             all_data = self.window_values.copy()
@@ -221,15 +223,19 @@ class DionesusWindow(Window):
         model_list = []
 
         for col_index,column in enumerate(all_data.T):
+            # Instantiate a new PLSR object
+            pls = PLSRegression(num_pcs, False)
+
             #delete the column that is currently being tested
             X_matrix = np.delete(all_data, col_index, axis=1)
+
             #take out the column so that the gene does not regress on itself
             target_TF = all_data[:,col_index]
-            clf.fit(X_matrix, target_TF)
+            pls.fit(X_matrix, target_TF)
             model_params = {'col_index':col_index,
                             'response':target_TF,
                             'predictor':X_matrix,
-                            'model':clf}
+                            'model':pls}
             model_list.append(model_params)
             coeffs = clf.coef_
             #artificially add a 0 to where the col_index is
