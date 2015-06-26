@@ -60,12 +60,13 @@ class Window(object):
 
     def get_window_stats(self):
         """for each window, get a dict:
-            N : the number of datapoints in this window,
-            time_labels: the names of the timepoints in a roller model
-            step_size: the step-size of the current model
-            window_size: the size of the window of the current model
-            total_windows: the number of windows total
-            window_index: the index of the window. counts start at 0. ie if the window index is 0 it is the 1st window. if the window index is 12, it is the 12th window in the series."""
+            N :             the number of datapoints in this window,
+            time_labels:    the names of the timepoints in a roller model
+            step_size:      the step-size of the current model
+            window_size:    the size of the window of the current model
+            total_windows:  the number of windows total
+            window_index:   the index of the window. counts start at 0. ie if the window index is 0 it is the 1st window
+                            if the window index is 12, it is the 12th window in the series."""
 
         window_stats = {'n_samples': self.n_samples,
                         'n_genes': self.n_genes}

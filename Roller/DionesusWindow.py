@@ -7,6 +7,7 @@ from sklearn.cross_decomposition import PLSRegression
 import numpy as np
 from Window import Window
 
+
 class DionesusWindow(Window):
     """
     A window that runs Dionesus as the network inference algorithm. The PLSR function is from sci-kit learn for
@@ -55,45 +56,47 @@ class DionesusWindow(Window):
 
     def generate_results_table(self):
 
-        #generate edges for initial model
+        # generate edges for initial model
         initial_edges = self.create_linked_list(self.beta_coefficients, 'B')
-        #permutation edges
-        permutation_mean_edges =self.create_linked_list(self.permutation_means, 'p-means')
+
+        # permutation edges
+        permutation_mean_edges = self.create_linked_list(self.permutation_means, 'p-means')
         permutation_sd_edges = self.create_linked_list(self.permutation_sd, 'p-sd')
         stability_edges = self.create_linked_list(self.edge_stability_auc, 'stability')
 
-        aggregated_edges = initial_edges.merge(permutation_mean_edges, on='regulator-target').merge(permutation_sd_edges, on='regulator-target').merge(stability_edges, on='regulator-target')
+        aggregated_edges = initial_edges.merge(permutation_mean_edges, on='regulator-target').merge(
+            permutation_sd_edges, on='regulator-target').merge(stability_edges, on='regulator-target')
 
-        #sorry, it is a little messy to do the p-value calculations for permutation tests here...
-        #valid_indices = aggregated_edges['p-sd'] != 0
-        #valid_indices = aggregated_edges['B'] != 0
+        # sorry, it is a little messy to do the p-value calculations for permutation tests here...
+        # valid_indices = aggregated_edges['p-sd'] != 0
+        # valid_indices = aggregated_edges['B'] != 0
         valid_window = aggregated_edges
         initial_B = valid_window['B']
         sd = valid_window['p-sd']
         mean = valid_window['p-means']
-        valid_window['final-z-scores-perm']=(initial_B - mean)/sd
-        valid_window['cdf-perm'] = (-1*abs(valid_window['final-z-scores-perm'])).apply(scipy.stats.norm.cdf)
-        #calculate t-tailed pvalue
-        valid_window['p-value-perm'] = (2*valid_window['cdf-perm'])
+        valid_window['final-z-scores-perm'] = (initial_B - mean) / sd
+        valid_window['cdf-perm'] = (-1 * abs(valid_window['final-z-scores-perm'])).apply(stats.norm.cdf)
+        # calculate t-tailed pvalue
+        valid_window['p-value-perm'] = (2 * valid_window['cdf-perm'])
         self.results_table = valid_window
-        return(self.results_table)
+        return (self.results_table)
 
     def rank_results(self, rank_by, ascending=False):
         rank_column_name = rank_by + "-rank"
-        ##rank edges with an actual beta value first until further notice ##
+        # rank edges with an actual beta value first until further notice ##
         valid_indices = self.results_table['B'] != 0
         valid_window = self.results_table[valid_indices]
-        valid_window[rank_column_name] = valid_window[rank_by].rank(method="dense",ascending = ascending)
-        edge_n=len(valid_window.index)
+        valid_window[rank_column_name] = valid_window[rank_by].rank(method="dense", ascending=ascending)
+        edge_n = len(valid_window.index)
 
         invalid_indices = self.results_table['B'] == 0
         invalid_window = self.results_table[invalid_indices]
-        invalid_window[rank_column_name] = invalid_window[rank_by].rank(method="dense",ascending = ascending)
-        invalid_window[rank_column_name] = invalid_window[rank_column_name] + edge_n
+        invalid_window[rank_column_name] = invalid_window[rank_by].rank(method="dense", ascending=ascending)
+        invalid_window[rank_column_name] += edge_n
         self.results_table = valid_window.append(invalid_window)
-        self.results_table = self.results_table.sort(columns=rank_column_name, axis = 0)
+        self.results_table = self.results_table.sort(columns=rank_column_name, axis=0)
 
-        return(self.results_table)
+        return (self.results_table)
 
     def run_permutation_test(self, n_permutations=1000):
 
@@ -108,8 +111,8 @@ class DionesusWindow(Window):
 
         # inner loop: permute the window N number of times
         for nth_perm in range(0, n_permutations):
-            #if (nth_perm % 200 == 0):
-                #print 'Perm Run: ' +str(nth_perm)
+            # if (nth_perm % 200 == 0):
+            # print 'Perm Run: ' +str(nth_perm)
 
             # permute data
             permuted_data = self.permute_data(self.window_values)
@@ -133,37 +136,37 @@ class DionesusWindow(Window):
         if sd is None:
             sd = self.permutation_sd.copy()
 
-        z_scores = (value - mean)/sd
-        cdf = stats.norm.cdf((-1*abs(z_scores)))
-        p_values = 2*cdf
+        z_scores = (value - mean) / sd
+        cdf = stats.norm.cdf((-1 * abs(z_scores)))
+        p_values = 2 * cdf
         return p_values
 
     def update_variance_2D(self, prev_result, new_samples):
         """incremental calculation of means: accepts new_samples, which is a list of samples. then calculates a new mean. this is a useful function for calculating the means of large arrays"""
-        n = prev_result["n"] #2D numpy array with all zeros or watev
-        mean = prev_result["mean"] #2D numpy array
-        sum_squares = prev_result["ss"] #2D numpy array
+        n = prev_result["n"]  # 2D numpy array with all zeros or watev
+        mean = prev_result["mean"]  # 2D numpy array
+        sum_squares = prev_result["ss"]  # 2D numpy array
 
-        #new_samples is a list of arrays
-        #x is a 2D array
+        # new_samples is a list of arrays
+        # x is a 2D array
         for x in new_samples:
             n = n + 1
-            #delta = float(x) - mean
+            # delta = float(x) - mean
             old_mean = mean.copy()
-            mean = old_mean + np.divide( (x-old_mean) , n)
-            sum_squares = sum_squares + np.multiply((x-mean),(x-old_mean))
+            mean = old_mean + np.divide((x - old_mean), n)
+            sum_squares = sum_squares + np.multiply((x - mean), (x - old_mean))
 
-        if (n[0,0] < 2):
-            result = {  "mean": mean,
-                        "ss": sum_squares,
-                        "n": n}
+        if (n[0, 0] < 2):
+            result = {"mean": mean,
+                      "ss": sum_squares,
+                      "n": n}
             return result
 
-        variance = np.divide(sum_squares,(n-1))
-        result = {  "mean": mean,
-                    "ss": sum_squares,
-                    "variance": variance,
-                    "n": n}
+        variance = np.divide(sum_squares, (n - 1))
+        result = {"mean": mean,
+                  "ss": sum_squares,
+                  "variance": variance,
+                  "n": n}
         return result
 
     def initialize_params(self):
@@ -182,7 +185,6 @@ class DionesusWindow(Window):
 
         self.beta_coefficients, self.vip = self.get_coeffs(pcs)
 
-
     def sum_of_squares(self, X):
         """
         Calculate the sum of the squares for each column
@@ -192,7 +194,7 @@ class DionesusWindow(Window):
             The sum of squares, columnwise or total
         """
         column_mean = np.mean(X, axis=0)
-        ss = np.sum(np.power(X-column_mean, 2), axis=0)
+        ss = np.sum(np.power(X - column_mean, 2), axis=0)
         return ss
 
     def get_coeffs(self, num_pcs=3, data=None):
@@ -205,18 +207,18 @@ class DionesusWindow(Window):
         :return:
         """
 
-        #loop that iterates through the target genes
+        # loop that iterates through the target genes
         if data is None:
             all_data = self.window_values.copy()
         else:
             all_data = data.copy()
 
-        coeff_matrix = np.array([],dtype=np.float_).reshape(0, all_data.shape[1])
-        vip_matrix = np.array([],dtype=np.float_).reshape(0, all_data.shape[1])
+        coeff_matrix = np.array([], dtype=np.float_).reshape(0, all_data.shape[1])
+        vip_matrix = np.array([], dtype=np.float_).reshape(0, all_data.shape[1])
 
         model_list = []
 
-        for col_index,  column in enumerate(all_data.T):
+        for col_index, column in enumerate(all_data.T):
             # Instantiate a new PLSR object
             pls = PLSRegression(num_pcs, False)
 
@@ -224,12 +226,12 @@ class DionesusWindow(Window):
             X_matrix = np.delete(all_data, col_index, axis=1)
 
             # take out the column so that the gene does not regress on itself
-            target_TF = all_data[:,col_index]
+            target_TF = all_data[:, col_index]
             pls.fit(X_matrix, target_TF)
-            model_params = {'col_index':col_index,
-                            'response':target_TF,
-                            'predictor':X_matrix,
-                            'model':pls}
+            model_params = {'col_index': col_index,
+                            'response': target_TF,
+                            'predictor': X_matrix,
+                            'model': pls}
 
             model_list.append(model_params)
 
