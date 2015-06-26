@@ -9,7 +9,8 @@ from Window import Window
 
 class DionesusWindow(Window):
     """
-    A window that runs Dionesus as the network inference algorithm
+    A window that runs Dionesus as the network inference algorithm. The PLSR function is from sci-kit learn for
+    implementation consistency between window types
 
     For more information about Dionesus see:
 
