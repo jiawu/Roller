@@ -222,7 +222,7 @@ class DionesusWindow(Window):
 
         model_list = []
 
-        for col_index,column in enumerate(all_data.T):
+        for col_index,  column in enumerate(all_data.T):
             # Instantiate a new PLSR object
             pls = PLSRegression(num_pcs, False)
 
@@ -236,12 +236,13 @@ class DionesusWindow(Window):
                             'response':target_TF,
                             'predictor':X_matrix,
                             'model':pls}
+
             model_list.append(model_params)
-            coeffs = clf.coef_
+            coeffs = pls.coef_
             #artificially add a 0 to where the col_index is
             #to prevent self-edges
-            coeffs = np.insert(coeffs,col_index,0)
-            coeff_matrix=np.vstack((coeff_matrix,coeffs))
+            coeffs = np.insert(coeffs, col_index, 0)
+            coeff_matrix=np.vstack((coeff_matrix, coeffs))
 
             #scoping issues
             training_scores, test_scores = self.crag_window(model_params)
