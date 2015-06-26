@@ -3,6 +3,7 @@ import numpy as np
 from Window  import Window
 from LassoWindow import LassoWindow
 from RFRWindow import RandomForestRegressionWindow
+from DionesusWindow import DionesusWindow
 from util import utility_module as utility
 from util.Evaluator import Evaluator
 import pdb
@@ -208,8 +209,11 @@ class Roller(object):
         """
         if self.window_type == "Lasso":
             window_obj = LassoWindow(dataframe, window_info_dict, self.raw_data)
-        if self.window_type == "RandomForest":
-            window_obj = RandomForestRegressionWindow(dataframe,window_info_dict, self.raw_data)
+        elif self.window_type == "RandomForest":
+            window_obj = RandomForestRegressionWindow(dataframe, window_info_dict, self.raw_data)
+        elif self.window_type == "Dionesus":
+            window_obj = DionesusWindow(dataframe, window_info_dict, self.raw_data)
+
         return window_obj
 
     def initialize_windows(self):

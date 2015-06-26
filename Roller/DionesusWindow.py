@@ -21,8 +21,8 @@ class DionesusWindow(Window):
 
     def __init__(self, dataframe, window_info, roller_data):
         super(DionesusWindow, self).__init__(dataframe, window_info, roller_data)
-        self.alpha = None
         self.beta_coefficients = None
+        self.vip = None
         self.cv_table = None
         self.bootstrap_matrix = None
         self.freq_matrix = None
@@ -96,24 +96,27 @@ class DionesusWindow(Window):
         return(self.results_table)
 
     def run_permutation_test(self, n_permutations=1000):
-        #initialize permutation results array
+
+        # initialize permutation results array
         self.permutation_means = np.empty((self.n_genes, self.n_genes))
         self.permutation_sd = np.empty((self.n_genes, self.n_genes))
         nth_window = self.nth_window
         zeros = np.zeros((self.n_genes, self.n_genes))
-        #initialize running calculation
-        result = {'n':zeros.copy(), 'mean':zeros.copy(), 'ss':zeros.copy()}
-        #inner loop: permute the window N number of times
+
+        # initialize running calculation
+        result = {'n': zeros.copy(), 'mean': zeros.copy(), 'ss': zeros.copy()}
+
+        # inner loop: permute the window N number of times
         for nth_perm in range(0, n_permutations):
             #if (nth_perm % 200 == 0):
                 #print 'Perm Run: ' +str(nth_perm)
 
-            #permute data
+            # permute data
             permuted_data = self.permute_data(self.window_values)
 
-            #fit the data and get coefficients
+            # fit the data and get coefficients
 
-            permuted_coeffs = self.get_coeffs(self.alpha, permuted_data)
+            permuted_coeffs, permuted_vip = self.get_coeffs(data=permuted_data)
             dummy_list = []
             dummy_list.append(permuted_coeffs)
             result = self.update_variance_2D(result, dummy_list)
@@ -163,32 +166,21 @@ class DionesusWindow(Window):
                     "n": n}
         return result
 
-    def initialize_params(self, alpha=None):
+    def initialize_params(self):
         """
-        Choose the value of alpha to use for fitting
-        :param alpha: float, optional
-            The alpha value to use for the window. If none is entered the alpha will be chosen by cross validation
+        Nothing to initialize for Dionesus
         :return:
         """
-        if alpha is None:
-            "Select alpha with default parameters"
-            self.alpha, self.cv_table = self.cv_select_alpha()
-        elif alpha >= 0:
-            self.alpha = alpha
-        else:
-            raise ValueError("alpha must be float (>=0) or None")
-        return
+        pass
 
-    def fit_window(self):
+    def fit_window(self, pcs=3):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
+
         :return:
         """
-        # Make sure an alpha value has been selected to use for fitting the window
-        if self.alpha is None:
-            raise ValueError("window alpha value must be set before the window can be fit")
 
-        self.beta_coefficients = self.get_coeffs(self.alpha)
+        self.beta_coefficients, self.vip = self.get_coeffs(pcs)
 
 
     def sum_of_squares(self, X):
@@ -220,6 +212,7 @@ class DionesusWindow(Window):
             all_data = data.copy()
 
         coeff_matrix = np.array([],dtype=np.float_).reshape(0, all_data.shape[1])
+        vip_matrix = np.array([],dtype=np.float_).reshape(0, all_data.shape[1])
 
         model_list = []
 
@@ -227,10 +220,10 @@ class DionesusWindow(Window):
             # Instantiate a new PLSR object
             pls = PLSRegression(num_pcs, False)
 
-            #delete the column that is currently being tested
+            # delete the column that is currently being tested
             X_matrix = np.delete(all_data, col_index, axis=1)
 
-            #take out the column so that the gene does not regress on itself
+            # take out the column so that the gene does not regress on itself
             target_TF = all_data[:,col_index]
             pls.fit(X_matrix, target_TF)
             model_params = {'col_index':col_index,
@@ -239,15 +232,20 @@ class DionesusWindow(Window):
                             'model':pls}
 
             model_list.append(model_params)
-            coeffs = pls.coef_
-            #artificially add a 0 to where the col_index is
-            #to prevent self-edges
-            coeffs = np.insert(coeffs, col_index, 0)
-            coeff_matrix=np.vstack((coeff_matrix, coeffs))
 
-            #scoping issues
+            # artificially add a 0 to where the col_index is to prevent self-edges
+            coeffs = pls.coefs
+            coeffs = np.insert(coeffs, col_index, 0)
+            coeff_matrix = np.vstack((coeff_matrix, coeffs))
+
+            # Calculate and store VIP scores
+            vips = vipp(X_matrix, target_TF, pls.x_scores_, pls.x_weights_)
+            vips = np.insert(vips, col_index, 0)
+            vip_matrix = np.vstack((vip_matrix, vips))
+
+            # scoping issues
             training_scores, test_scores = self.crag_window(model_params)
             self.training_scores.append(training_scores)
             self.test_scores.append(test_scores)
 
-        return coeff_matrix
+        return coeff_matrix, vip_matrix
