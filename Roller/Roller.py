@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from Window  import Window
+from Window import Window
 from LassoWindow import LassoWindow
 from RFRWindow import RandomForestRegressionWindow
 from DionesusWindow import DionesusWindow
@@ -9,12 +9,15 @@ from util.Evaluator import Evaluator
 import pdb
 import random
 
+
 class Roller(object):
     """
     A thing that grabs different timepoints of data, can set window and step size.
 
     """
-    def __init__(self, file_path, gene_start=None, gene_end=None, time_label="Time", separator = "\t", window_type = "RandomForest"):
+
+    def __init__(self, file_path, gene_start=None, gene_end=None, time_label="Time", separator="\t",
+                 window_type="RandomForest"):
         """
         Initialize the roller object. Read the file and put it into a pandas dataframe
         :param file_path: file-like object or string
@@ -62,11 +65,11 @@ class Roller(object):
 
         :return: int
         """
-        total_windows = (self.overall_width - self.window_width+1)/(self.step_size)
+        total_windows = (self.overall_width - self.window_width + 1) / (self.step_size)
         return total_windows
 
     def get_window(self, start_index):
-        #todo: start_index should be used
+        # todo: start_index should be used
         """
         Select a window from the full data set, only keeping the data corresponding to genes
 
@@ -100,15 +103,15 @@ class Roller(object):
         :return: data-frame
         """
         if random_time:
-            #select three random timepoints
+            # select three random timepoints
             time_window = self.time_vec[start_index]
             choices = self.time_vec
             choices = np.delete(choices, start_index)
-            for x in range(0, self.window_width-1):
+            for x in range(0, self.window_width - 1):
                 chosen_time = random.choice(choices)
                 time_window = np.append(time_window, chosen_time)
                 chosen_index = np.where(choices == chosen_time)
-                choices = np.delete(choices,chosen_index)
+                choices = np.delete(choices, chosen_index)
         else:
             end_index = start_index + self.window_width
             time_window = self.time_vec[start_index:end_index]
@@ -163,9 +166,9 @@ class Roller(object):
         """
         """calculates sum of rows. if sum is NAN, then remove row"""
         coln = len(self.raw_data.columns)
-        sums = [self.raw_data.iloc[:,x].sum() for x in range(0,coln)]
+        sums = [self.raw_data.iloc[:, x].sum() for x in range(0, coln)]
         ind = np.where(np.isnan(sums))[0]
-        self.raw_data.iloc[:,ind]=0
+        self.raw_data.iloc[:, ind] = 0
 
     def get_n_genes(self):
         """
@@ -177,7 +180,7 @@ class Roller(object):
         :return:
         """
 
-        return(len(self.raw_data.columns) -1)
+        return len(self.raw_data.columns) - 1
 
     def create_windows(self, random_time=False):
         """
@@ -189,10 +192,11 @@ class Roller(object):
         :return:
         """
         window_list = [self.get_window_object(self.get_window_raw(index, random_time),
-                                   { "time_label": self.time_label,
-                                     "gene_start": self.gene_start,
-                                     "gene_end": self.gene_end,
-                                     "nth_window": index}) if (index + self.window_width <= self.overall_width) else '' for index in range(self.get_n_windows())]
+                                              {"time_label": self.time_label,
+                                               "gene_start": self.gene_start,
+                                               "gene_end": self.gene_end,
+                                               "nth_window": index}) if (
+        index + self.window_width <= self.overall_width) else '' for index in range(self.get_n_windows())]
         self.window_list = window_list
 
     def get_window_object(self, dataframe, window_info_dict):
@@ -290,7 +294,7 @@ class Roller(object):
                     window.n_trees = n_trees
             window.fit_window()
 
-        return(self.window_list)
+        return self.window_list
 
     def rank_edges(self, n_bootstraps=1000, permutation_n=1000):
         """
@@ -306,16 +310,16 @@ class Roller(object):
 
         if self.window_type == "Lasso":
             for window in self.window_list:
-                window.run_permutation_test(n_permutations = permutation_n)
+                window.run_permutation_test(n_permutations=permutation_n)
                 print("Running bootstrap...")
-                window.run_bootstrap(n_bootstraps = n_bootstraps)
+                window.run_bootstrap(n_bootstraps=n_bootstraps)
                 window.generate_results_table()
         if self.window_type == "RandomForest":
             for window in self.window_list:
                 print("Running permutation...")
-                window.run_permutation_test(n_permutations = permutation_n)
+                window.run_permutation_test(n_permutations=permutation_n)
                 window.make_edge_table()
-        return(self.window_list)
+        return self.window_list
 
     def average_rank(self, rank_by, ascending):
         """
@@ -341,13 +345,13 @@ class Roller(object):
                 ranked_result = window.rank_edges(rank_by)
                 ranked_result_list.append(ranked_result)
 
-        aggr_ranks = utility.average_rank(ranked_result_list, rank_by+"-rank")
-        #sort tables by mean rank in ascending order
-        mean_sorted_edge_list = aggr_ranks.sort(columns="mean-rank", axis = 0)
+        aggr_ranks = utility.average_rank(ranked_result_list, rank_by + "-rank")
+        # sort tables by mean rank in ascending order
+        mean_sorted_edge_list = aggr_ranks.sort(columns="mean-rank", axis=0)
         self.averaged_ranks = mean_sorted_edge_list
-        return(self.averaged_ranks)
+        return self.averaged_ranks
 
-    #todo: this method sucks. sorry.
+    # todo: this method sucks. sorry.
     def score(self, sorted_edge_list, gold_standard_file):
         """
         Scores some stuff, I think...
@@ -358,12 +362,12 @@ class Roller(object):
         :return:
         """
         if len(sorted_edge_list) < 15:
-          pdb.set_trace()
+            pdb.set_trace()
         evaluator = Evaluator(gold_standard_file, sep='\t')
-        edge_cutoff=len(evaluator.gs_flat)
-        precision, recall, aupr = evaluator.calc_pr(sorted_edge_list[0:edge_cutoff+1])
-        score_dict = {"precision":precision,"recall":recall,"aupr":aupr}
-        return(score_dict)
+        edge_cutoff = len(evaluator.gs_flat)
+        precision, recall, aupr = evaluator.calc_pr(sorted_edge_list[0:edge_cutoff + 1])
+        score_dict = {"precision": precision, "recall": recall, "aupr": aupr}
+        return score_dict
 
     def zscore_all_data(self):
         """
@@ -374,14 +378,14 @@ class Roller(object):
 
         :return:
         """
-        #zscores all the data
-        dataframe =  self.raw_data
+        # zscores all the data
+        dataframe = self.raw_data
 
-        #for each column, calculate the zscore
-        #zscore is calculated as X - meanX / std(ddof = 1)
+        # for each column, calculate the zscore
+        # zscore is calculated as X - meanX / std(ddof = 1)
         for item in dataframe.columns:
             if item != self.time_label:
-                dataframe[item] = (dataframe[item] - dataframe[item].mean())/dataframe[item].std(ddof=1)
+                dataframe[item] = (dataframe[item] - dataframe[item].mean()) / dataframe[item].std(ddof=1)
         self.raw_data = dataframe
 
     def get_window_stats(self):
@@ -411,18 +415,17 @@ class Roller(object):
 
         """calculate the window index. todo: move into own function later"""
         min_time = np.amin(current_window[self.time_label])
-        window_index = np.where(self.time_vec == min_time)/self.step_size
+        window_index = np.where(self.time_vec == min_time) / self.step_size
         # to calculate the nth window, time vector
         # index of the time-vector, step size of 2? window 4, step size 2
         #
-        #total windows = total width (10) - window_width (2) +1 / step size
+        # total windows = total width (10) - window_width (2) +1 / step size
         # 10 time points 0 1 2 3 4 5 6 7 8 9
-        #width is 2: 0 and 1
+        # width is 2: 0 and 1
         # step size is 2
         # 01, 12, 23, 34, 45, 56, 67, 78, 89
 
-        #todo: so the issue is that total windows (get n windows) is the true number of windows, and window index is the nth -1 window... it would be great to consolidate these concepts but no big deal if they can't be.
-
+        # todo: so the issue is that total windows (get n windows) is the true number of windows, and window index is the nth -1 window... it would be great to consolidate these concepts but no big deal if they can't be.
 
         window_stats = {'N': len(current_window.index),
                         'time_labels': current_window[self.time_label].unique(),
