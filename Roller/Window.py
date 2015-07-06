@@ -15,6 +15,7 @@ class Window(object):
     """
 
     def __init__(self, raw_dataframe, window_info, roller_raw_data):
+        #todo: unclear if roller_raw_data is necessary
         """
         Initialize a window object. Extract information from the passed data-frame. Generate edge list.
 
@@ -153,7 +154,7 @@ class Window(object):
         """
         pass
 
-    def rank_edges(self, method):
+    def sort_edges(self, method):
         """
         Rank the edges in the edge table. This may eventually be window type specific.
 

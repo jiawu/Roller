@@ -103,7 +103,7 @@ class TestLassoWindow(unittest.TestCase):
         self.test_lassoWindow.run_bootstrap(n_boots, n_alphas)
         self.test_lassoWindow.make_edge_table()
         original_edge_order = self.test_lassoWindow.edge_list
-        new_edge_order = self.test_lassoWindow.rank_edges()
+        new_edge_order = self.test_lassoWindow.sort_edges()
         #todo: need a way to assert that these lists are not equal
 
 if __name__ == '__main__':

@@ -17,7 +17,18 @@ class LassoWindow(Window):
     """
 
     def __init__(self, dataframe, window_info, roller_data):
+        #todo: unclear if roller_data is necessary
+        """
+        Initialize a LassoWindow with necessary data
+        :param dataframe: pandas data-frame
+        :param window_info: dict
+            Dictionary contain the parameters of the window
+        :param roller_data:
+        :return:
+        """
         super(LassoWindow, self).__init__(dataframe, window_info, roller_data)
+
+        # Initialize window attributes
         self.alpha = None
         self.beta_coefficients = None
         self.cv_table = None
@@ -37,6 +48,14 @@ class LassoWindow(Window):
             self.null_alpha = None
 
     def make_edge_table(self):
+        """
+        Make the edge table the includes the optimized model data
+        :return: pandas data-frame
+
+        Called by:
+            Roller.rank_windows()
+
+        """
         if self.permutation_p_values is None:
             raise ValueError("p values must be set before making the edge table. Use method run_permutation test")
 
@@ -46,7 +65,16 @@ class LassoWindow(Window):
         self.edge_table["p_value"] = self.permutation_p_values.flatten()
         self.edge_table["stability"] = self.edge_stability_auc.flatten()
 
-    def rank_edges(self, method="p_value"):
+    def sort_edges(self, method="p_value"):
+        """
+        Sort the edge table based on the selected edge ranking method
+        :param method: str
+            Which method to use for ranking the edges
+        :return:
+
+        Called by:
+            Roller.average_rank()
+        """
         if self.edge_table is None:
             raise ValueError("The edge table must be created before getting edges")
         temp_edge_table = self.edge_table.copy()
@@ -58,7 +86,13 @@ class LassoWindow(Window):
         return temp_edge_table['regulator-target'].values
 
     def generate_results_table(self):
+        """
 
+        :return:
+
+        Called by:
+            Roller.rank_edges()
+        """
         # generate edges for initial model
         initial_edges = self.create_linked_list(self.beta_coefficients, 'B')
         # permutation edges

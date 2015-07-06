@@ -48,7 +48,7 @@ class TestRFRWindow(unittest.TestCase):
         pdb.set_trace()
         self.test_rfr.make_results_table()
         old_order = self.test_rfr.results_table['regulator-target'].values
-        self.test_rfr.rank_edges()
+        self.test_rfr.sort_edges()
         new_order = self.test_rfr.results_table['regulator-target'].values
         self.assertFalse(np.array_equal(old_order, new_order))
 

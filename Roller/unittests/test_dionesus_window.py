@@ -47,7 +47,7 @@ class TestDionesusWindow(unittest.TestCase):
         self.test_dionesus.run_permutation_test(self.permutes)
         self.test_dionesus.generate_results_table()
         old_order = self.test_dionesus.results_table['regulator-target'].values
-        self.test_dionesus.rank_edges()
+        self.test_dionesus.sort_edges()
         new_order = self.test_dionesus.results_table['regulator-target'].values
         self.assertFalse(np.array_equal(old_order, new_order))
 

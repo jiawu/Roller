@@ -43,7 +43,7 @@ class DionesusWindow(Window):
         self.edge_table["p_value"] = self.permutation_p_values.flatten()
         self.edge_table["stability"] = self.edge_stability_auc.flatten()
 
-    def rank_edges(self, method="p_value"):
+    def sort_edges(self, method="p_value"):
         if self.edge_table is None:
             raise ValueError("The edge table must be created before getting edges")
         temp_edge_table = self.edge_table.copy()

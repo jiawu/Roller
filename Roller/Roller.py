@@ -342,7 +342,7 @@ class Roller(object):
         if self.window_type == "RandomForest":
             ranked_result_list = []
             for window in self.window_list:
-                ranked_result = window.rank_edges(rank_by)
+                ranked_result = window.sort_edges(rank_by)
                 ranked_result_list.append(ranked_result)
 
         aggr_ranks = utility.average_rank(ranked_result_list, rank_by + "-rank")

@@ -32,7 +32,7 @@ class RandomForestRegressionWindow(Window):
         self.results_table["importance"] = self.edge_importance.flatten()
 
 
-    def rank_edges(self, rank_by):
+    def sort_edges(self, rank_by):
         rank_column_name = rank_by + "-rank"
         if self.results_table is None:
             raise ValueError("The edge table must be created before getting edges")
