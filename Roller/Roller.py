@@ -370,6 +370,8 @@ class Roller(object):
         return score_dict
 
     def zscore_all_data(self):
+        #todo: this should not replace raw_data, a new feature should be made
+        #todo: scipy.stats.zscore can be used with the correct parameters for 1 line
         """
         Zscore the data in a data-frame
 
