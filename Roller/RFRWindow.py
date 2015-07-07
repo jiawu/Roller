@@ -158,3 +158,8 @@ class RandomForestRegressionWindow(Window):
             self.test_scores.append(test_scores)
 
         return coeff_matrix
+
+class tdRFRWindow(RandomForestRegressionWindow):
+    def __init__(self, dataframe, bin_data, window_info, roller_data):
+        super(tdRFRWindow, self).__init__(dataframe, window_info, roller_data)
+        self.bin_data = bin_data.copy()

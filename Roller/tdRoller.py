@@ -79,6 +79,61 @@ class tdRoller(Roller):
 
         return df
 
+    def create_q_clusters(self, q=None):
+        if q is None:
+            q = int(self.overall_width/2)
+
+        self.set_window(q)
+        self.create_windows()
+        print self.window_list[0].raw_data
+
+    def create_windows(self, random_time=False, ):
+        """
+        Create window objects for the roller to use
+
+        Called by:
+            pipeline
+
+        :return:
+        """
+        window_list = [self.get_window_object(self.get_window_raw(index, random_time),
+                                              {"time_label": self.time_label,
+                                               "gene_start": self.gene_start,
+                                               "gene_end": self.gene_end,
+                                               "nth_window": index}) if (
+        index + self.window_width <= self.overall_width) else '' for index in range(self.get_n_windows())]
+        self.window_list = window_list
+
+    def get_window_raw(self, start_index, random_time=False):
+        """
+        Select a window from the full data set. This is fancy data-frame slicing
+
+        Called by:
+            create_windows
+            get_window_stats
+            get_window
+
+        :param start_index: int
+            The start of the window
+        :param random_time: bool, optional
+        :return: data-frame
+        """
+        if random_time:
+            # select three random timepoints
+            time_window = self.time_vec[start_index]
+            choices = self.time_vec
+            choices = np.delete(choices, start_index)
+            for x in range(0, self.window_width - 1):
+                chosen_time = random.choice(choices)
+                time_window = np.append(time_window, chosen_time)
+                chosen_index = np.where(choices == chosen_time)
+                choices = np.delete(choices, chosen_index)
+        else:
+            end_index = start_index + self.window_width
+            time_window = self.time_vec[start_index:end_index]
+        data = self.raw_data[self.raw_data[self.time_label].isin(time_window)]
+        return data
+
 if __name__ == "__main__":
     file_path = "../data/dream4/insilico_size10_1_timeseries.tsv"
     gene_start_column = 1
@@ -87,3 +142,4 @@ if __name__ == "__main__":
     gene_end = None
 
     tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
+    tdr.create_q_clusters()

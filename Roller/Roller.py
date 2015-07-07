@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from Window import Window
 from LassoWindow import LassoWindow
-from RFRWindow import RandomForestRegressionWindow
+from RFRWindow import RandomForestRegressionWindow, tdRFRWindow
 from DionesusWindow import DionesusWindow
 from util import utility_module as utility
 from util.Evaluator import Evaluator
