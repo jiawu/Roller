@@ -8,6 +8,7 @@ import pandas as pd
 from scipy import stats
 import sys
 import random
+import matplotlib.pyplot as plt
 
 class tdRoller(Roller):
     """
@@ -113,6 +114,7 @@ class tdRoller(Roller):
             else:
                 window.x_data = np.hstack((window.window_values, self.window_list[ww-1].x_data))
                 window.x_labels = np.append(window.raw_data.columns[1:], self.window_list[ww-1].x_labels)
+            window.augmented_edge_list = window.possible_edge_list(window.x_labels, window.raw_data.columns[1:])
 
 if __name__ == "__main__":
     file_path = "../data/dream4/insilico_size10_1_timeseries.tsv"
@@ -124,7 +126,19 @@ if __name__ == "__main__":
 
     tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
     tdr.zscore_all_data()
-    tdr.set_window(10)
+    tdr.set_window(15)
     tdr.create_windows()
     tdr.augment_windows()
-    tdr.fit_windows(n_trees=5)
+    tdr.fit_windows(n_trees=1000)
+    full_edge_list = []
+    full_edge_importance = []
+    for window in tdr.window_list:
+        full_edge_importance += list(window.edge_importance.flatten())
+        full_edge_list += window.augmented_edge_list
+    print len(full_edge_importance)
+    print len(full_edge_list)
+    df = pd.DataFrame([full_edge_list, full_edge_importance], index=['Edge', 'Importance']).T
+    df.sort(columns='Importance', ascending=False, inplace=True)
+    print df.head(50)
+    plt.plot(df.Importance)
+    plt.show()

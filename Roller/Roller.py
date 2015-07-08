@@ -273,7 +273,7 @@ class Roller(object):
         return self.window_list
 
     def fit_windows(self, alpha=None, n_trees=None):
-
+        #todo: need a better way to pass parameters to fit functions
         """
         Fit each window in the list
 

@@ -16,6 +16,7 @@ class RandomForestRegressionWindow(Window):
         super(RandomForestRegressionWindow, self).__init__(dataframe, window_info, roller_data)
         self.edge_importance = None
         self.n_trees = None
+        self.n_jobs = None
         self.bootstrap_matrix = None
         self.freq_matrix = None
         self.permutation_means = None
@@ -166,6 +167,7 @@ class tdRFRWindow(RandomForestRegressionWindow):
         super(tdRFRWindow, self).__init__(dataframe, window_info, roller_data)
         self.x_data = None
         self.x_labels = None
+        self.augmented_edge_list = None
 
     def fit_window(self, n_jobs=1):
         """
@@ -181,17 +183,20 @@ class tdRFRWindow(RandomForestRegressionWindow):
         :param data:
         :param n_trees:
         :return: array-like
-            An array in which the rows are childred and the columns are the parents
+            An array in which the rows are children and the columns are the parents
         """
         if data is None:
             all_data = self.window_values.copy()
         else:
             all_data = data.copy()
 
-        coeff_matrix = np.array([], dtype=np.float_).reshape(0, all_data.shape[1])
+        max_nodes = self.window_values.shape[1]
 
+        coeff_matrix = np.array([], dtype=np.float_).reshape(0, all_data.shape[1])
         model_list = []
         for col_index, column in enumerate(all_data.T):
+            if col_index == max_nodes:
+                break
             #print "Inferring parents for gene %i of %i" % (col_index, self.n_labels)
             #delete the column that is currently being tested
             X_matrix = np.delete(all_data, col_index, axis=1)
@@ -215,3 +220,4 @@ class tdRFRWindow(RandomForestRegressionWindow):
             #training_scores, test_scores = self.crag_window(model_params)
             #self.training_scores.append(training_scores)
             #self.test_scores.append(test_scores)
+        return coeff_matrix
