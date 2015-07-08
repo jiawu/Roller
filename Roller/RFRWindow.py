@@ -162,4 +162,5 @@ class RandomForestRegressionWindow(Window):
 class tdRFRWindow(RandomForestRegressionWindow):
     def __init__(self, dataframe, bin_data, window_info, roller_data):
         super(tdRFRWindow, self).__init__(dataframe, window_info, roller_data)
+        self.time_vec = self.raw_data[self.time_label].unique()
         self.bin_data = bin_data.copy()

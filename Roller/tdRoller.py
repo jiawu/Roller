@@ -2,10 +2,12 @@ __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
 from Roller import Roller
+from RFRWindow import tdRFRWindow
 import numpy as np
 import pandas as pd
 from scipy import stats
 import sys
+import random
 
 class tdRoller(Roller):
     """
@@ -19,11 +21,12 @@ class tdRoller(Roller):
                  window_type)
 
         # Zscore the data
-        self.norm_data = self.zscore_all_data()
+        #self.norm_data = self.zscore_all_data()
 
         # transform the matrix
-        self.binned_data = self.bin_data()
+        #self.binned_data = self.bin_data()
 
+    '''
     def zscore_all_data(self):
         """
         Z-score the data by column
@@ -39,8 +42,12 @@ class tdRoller(Roller):
         # replace time values with original time values
         zscored_datset[self.time_label] = self.raw_data[self.time_label]
         return zscored_datset
+    '''
 
-    def bin_data(self, threshold=1):
+    def average_replicates(self):
+        pass
+
+    def bin_data(self, df, threshold=1):
         """
         Transform the data into O'' then O' using the method described in Liping et. al, Bioinformatics, 2005
 
@@ -55,7 +62,7 @@ class tdRoller(Roller):
         threshold = np.abs(threshold)
 
         # The last datapoint cannot be assessed because there is no t+1 for it
-        o_data = self.norm_data.values.copy() # Ignore the time data
+        o_data = df.values.copy() # Ignore the time data
         o_i_j = o_data[:-1].copy()
         o_i_j_plusone = o_data[1:].copy()
 
@@ -74,10 +81,10 @@ class tdRoller(Roller):
         o_prime[o_doubleprime >= threshold] = 1
         o_prime[o_doubleprime <= -threshold] = -1
 
-        df = pd.DataFrame(o_prime, index=self.raw_data.index[:-1], columns=self.raw_data.columns)
-        df[self.time_label] = self.raw_data[self.time_label]
+        df_new = pd.DataFrame(o_prime, index=df.index[:-1], columns=df.columns)
+        #df_new[self.time_label] = self.raw_data[self.time_label]
 
-        return df
+        return df_new
 
     def create_q_clusters(self, q=None):
         if q is None:
@@ -85,9 +92,8 @@ class tdRoller(Roller):
 
         self.set_window(q)
         self.create_windows()
-        print self.window_list[0].raw_data
 
-    def create_windows(self, random_time=False, ):
+    def create_windows(self, random_time=False):
         """
         Create window objects for the roller to use
 
@@ -97,14 +103,14 @@ class tdRoller(Roller):
         :return:
         """
         window_list = [self.get_window_object(self.get_window_raw(index, random_time),
-                                              {"time_label": self.time_label,
-                                               "gene_start": self.gene_start,
+                                              self.get_window_bin(index, random_time),
+                                              {"time_label": self.time_label, "gene_start": self.gene_start,
                                                "gene_end": self.gene_end,
                                                "nth_window": index}) if (
         index + self.window_width <= self.overall_width) else '' for index in range(self.get_n_windows())]
         self.window_list = window_list
 
-    def get_window_raw(self, start_index, random_time=False):
+    def get_window_bin(self, start_index, random_time=False):
         """
         Select a window from the full data set. This is fancy data-frame slicing
 
@@ -131,8 +137,25 @@ class tdRoller(Roller):
         else:
             end_index = start_index + self.window_width
             time_window = self.time_vec[start_index:end_index]
-        data = self.raw_data[self.raw_data[self.time_label].isin(time_window)]
-        return data
+        binned_data = self.binned_data[self.binned_data[self.time_label].isin(time_window)]
+        return binned_data
+
+    def get_window_object(self, dataframe, binned_data, window_info_dict):
+        """
+        Return a window object from a data-frame
+
+        Called by:
+            create_windows
+
+        :param dataframe: data-frame
+        :param window_info_dict: dict
+            Dictionary containing information needed for window initialization
+        :return:
+        """
+
+        window_obj = tdRFRWindow(dataframe, binned_data, window_info_dict, self.raw_data)
+
+        return window_obj
 
 if __name__ == "__main__":
     file_path = "../data/dream4/insilico_size10_1_timeseries.tsv"
@@ -142,4 +165,14 @@ if __name__ == "__main__":
     gene_end = None
 
     tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
-    tdr.create_q_clusters()
+    tdr.zscore_all_data()
+    if len(tdr.raw_data)%len(tdr.time_vec) == 0:
+        replicates = len(tdr.raw_data)/len(tdr.time_vec)
+    else:
+        raise Exception('There seems to be a problem with the shape of the raw data.')
+
+    a = pd.DataFrame(tdr.raw_data.values[:, 1:], index=[np.repeat(np.arange(replicates), len(tdr.time_vec)), tdr.raw_data[tdr.time_label]], columns=tdr.raw_data.columns[1:])
+    a.index.names = ['rep', tdr.time_label]
+    for rep in range(replicates):
+        print tdr.bin_data(a.loc[rep])
+    #tdr.create_q_clusters()
