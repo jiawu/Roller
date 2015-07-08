@@ -1,4 +1,5 @@
 import warnings
+import sys
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
@@ -6,6 +7,7 @@ from sklearn.cross_validation import KFold
 from scipy import integrate
 from scipy import stats
 import scipy
+
 
 from Window import Window
 
@@ -160,6 +162,56 @@ class RandomForestRegressionWindow(Window):
         return coeff_matrix
 
 class tdRFRWindow(RandomForestRegressionWindow):
-    def __init__(self, dataframe, bin_data, window_info, roller_data):
+    def __init__(self, dataframe, window_info, roller_data):
         super(tdRFRWindow, self).__init__(dataframe, window_info, roller_data)
-        self.time_vec = self.raw_data[self.time_label].unique()
+        self.x_data = None
+        self.x_labels = None
+
+    def fit_window(self, n_jobs=1):
+        """
+        Set the attributes of the window using expected pipeline procedure and calculate beta values
+        :return:
+        """
+        print self.nth_window
+        self.edge_importance = self.get_coeffs(self.n_trees, self.x_data, n_jobs=n_jobs)
+
+    def get_coeffs(self, n_trees, data=None, n_jobs=-1):
+        """
+
+        :param data:
+        :param n_trees:
+        :return: array-like
+            An array in which the rows are childred and the columns are the parents
+        """
+        if data is None:
+            all_data = self.window_values.copy()
+        else:
+            all_data = data.copy()
+
+        coeff_matrix = np.array([], dtype=np.float_).reshape(0, all_data.shape[1])
+
+        model_list = []
+        for col_index, column in enumerate(all_data.T):
+            #print "Inferring parents for gene %i of %i" % (col_index, self.n_labels)
+            #delete the column that is currently being tested
+            X_matrix = np.delete(all_data, col_index, axis=1)
+
+            #take out the column so that the gene does not regress on itself
+            target_TF = all_data[:, col_index]
+
+            rfr = RandomForestRegressor(n_estimators=n_trees, n_jobs=n_jobs, max_features="sqrt")
+            rfr.fit(X_matrix, target_TF)
+            model_params = {'col_index':col_index,
+                            'response':target_TF,
+                            'predictor':X_matrix,
+                            'model':rfr}
+            model_list.append(model_params)
+            coeffs = rfr.feature_importances_
+            #artificially add a 0 to where the col_index is
+            #to prevent self-edges
+            coeffs = np.insert(coeffs, col_index, 0)
+            coeff_matrix = np.vstack((coeff_matrix, coeffs))
+            # there's some scoping issues here. cragging needs the roller's raw data but the window does not know what roller contains (outside scope). have to pass in the roller's raw data and save it somehow :/
+            #training_scores, test_scores = self.crag_window(model_params)
+            #self.training_scores.append(training_scores)
+            #self.test_scores.append(test_scores)
