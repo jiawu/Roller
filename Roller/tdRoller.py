@@ -9,6 +9,7 @@ from scipy import stats
 import sys
 import random
 import matplotlib.pyplot as plt
+from util.Evaluator import Evaluator
 
 class tdRoller(Roller):
     """
@@ -106,6 +107,7 @@ class tdRoller(Roller):
         return data
 
     def augment_windows(self):
+        # todo: should only allow for regression against earlier timepoints
         # Enumerate all of the windows except the first
         for ww, window in enumerate(self.window_list):
             if ww == 0:
@@ -117,7 +119,7 @@ class tdRoller(Roller):
             window.augmented_edge_list = window.possible_edge_list(window.x_labels, window.raw_data.columns[1:])
 
 if __name__ == "__main__":
-    file_path = "../data/dream4/insilico_size10_1_timeseries.tsv"
+    file_path = "../data/dream4/insilico_size100_2_timeseries.tsv"
     gene_start_column = 1
     time_label = "Time"
     separator = "\t"
@@ -126,7 +128,7 @@ if __name__ == "__main__":
 
     tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
     tdr.zscore_all_data()
-    tdr.set_window(15)
+    tdr.set_window(10)
     tdr.create_windows()
     tdr.augment_windows()
     tdr.fit_windows(n_trees=1000)
@@ -137,8 +139,31 @@ if __name__ == "__main__":
         full_edge_list += window.augmented_edge_list
     print len(full_edge_importance)
     print len(full_edge_list)
-    df = pd.DataFrame([full_edge_list, full_edge_importance], index=['Edge', 'Importance']).T
+    parents, children = zip(*full_edge_list)
+    df = pd.DataFrame([list(parents), list(children), full_edge_importance], index=['Parent', 'Child', 'Importance']).T
     df.sort(columns='Importance', ascending=False, inplace=True)
-    print df.head(50)
-    plt.plot(df.Importance)
+    a = df['Parent'].str.split('_').apply(pd.Series,1)
+    b = df['Child'].str.split('_').apply(pd.Series,1)
+    df['Parent'] = a.iloc[:,0]
+    df['P_window'] = a.iloc[:,1]
+    df['Child'] = b.iloc[:,0]
+    df['C_window'] = b.iloc[:,1]
+    df = df[df.P_window != df.C_window]
+    df = df[df.Parent != df.Child]
+    df['Edge'] = zip(df.Parent, df.Child)
+    #print df
+    #print len(df)
+    edge_set = list(set(df.Edge))
+
+    edge_mean_importance = [np.max(df.Importance[df.Edge==edge]) for edge in edge_set]
+    df2 = pd.DataFrame([edge_set, edge_mean_importance], index=['regulator-target', 'mean_imp']).T
+    df2.sort(columns='mean_imp', ascending=False, inplace=True)
+    #ranked_edge_list = df2['Edge'].tolist()
+    current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
+    evaluator = Evaluator(current_gold_standard, '\t')
+    tpr, fpr, auroc = evaluator.calc_roc(df2)
+    print auroc[-1]
+    plt.plot(fpr,tpr)
+    plt.plot(fpr, fpr)
     plt.show()
+
