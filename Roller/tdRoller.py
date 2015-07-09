@@ -107,7 +107,7 @@ class tdRoller(Roller):
         return data
 
     def augment_windows(self):
-        # todo: should only allow for regression against earlier timepoints
+        # todo: should only allow for regression against earlier timepoints? (Testing seems to indicate no, just correct afterward)
         # Enumerate all of the windows except the first
         for ww, window in enumerate(self.window_list):
             if ww == 0:
@@ -146,7 +146,7 @@ def elbow_criteria(x,y):
     return elbow_x, elbow_y
 
 if __name__ == "__main__":
-    file_path = "../data/dream4/insilico_size10_3_timeseries.tsv"
+    file_path = "../data/dream4/yeast_size100_1_timeseries.tsv"
     gene_start_column = 1
     time_label = "Time"
     separator = "\t"
@@ -157,10 +157,11 @@ if __name__ == "__main__":
 
     tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
     tdr.zscore_all_data()
-    tdr.set_window(10)
+    tdr.set_window(5)
     tdr.create_windows()
     tdr.augment_windows()
-    tdr.fit_windows(n_trees=100)
+    tdr.fit_windows(n_trees=5000)
+    #todo: functionalize and speed up this part
     full_edge_list = []
     full_edge_importance = []
     print 'lumping edges'
@@ -204,10 +205,11 @@ if __name__ == "__main__":
     current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
     evaluator = Evaluator(current_gold_standard, '\t')
     tpr, fpr, auroc = evaluator.calc_roc(df2)
-    print "mean", auroc[-1]
+    print "mean", auroc[-1]#+(1-fpr[-1])
     #plt.plot(fpr,tpr)
     #plt.plot(fpr, fpr)
-
+    #plt.show()
+    sys.exit()
     #plt.figure()
     nbins = 15
 
