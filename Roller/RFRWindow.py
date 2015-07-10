@@ -169,7 +169,7 @@ class tdRFRWindow(RandomForestRegressionWindow):
         self.x_labels = None
         self.augmented_edge_list = None
 
-    def fit_window(self, n_jobs=-1):
+    def fit_window(self, n_jobs=1):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
