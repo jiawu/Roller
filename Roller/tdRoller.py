@@ -7,7 +7,9 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 import sys
+import itertools
 import random
+import time
 import matplotlib.pyplot as plt
 from util.Evaluator import Evaluator
 from util.utility_module import elbow_criteria
@@ -22,7 +24,7 @@ class tdRoller(Roller):
 
         super(tdRoller, self).__init__(file_path, gene_start, gene_end, time_label, separator,
                  window_type)
-
+        self.full_edge_list = None
         # Zscore the data
         self.norm_data = self.zscore_all_data()
 
@@ -51,7 +53,7 @@ class tdRoller(Roller):
 
         :return:
         """
-        window_list = [self.get_window_object(self.get_window_raw(index, random_time), index,
+        window_list = [self.get_window_object(self.get_window_raw(index, random_time),
                                               {"time_label": self.time_label+'_'+str(index),
                                                "gene_start": self.gene_start,
                                                "gene_end": self.gene_end,
@@ -59,7 +61,7 @@ class tdRoller(Roller):
         index + self.window_width <= self.overall_width) else '' for index in range(self.get_n_windows())]
         self.window_list = window_list
 
-    def get_window_object(self, dataframe, index, window_info_dict):
+    def get_window_object(self, dataframe, window_info_dict):
         """
         Return a window object from a data-frame
 
@@ -71,8 +73,6 @@ class tdRoller(Roller):
             Dictionary containing information needed for window initialization
         :return:
         """
-
-        dataframe.columns = [(col, str(index)) for col in dataframe.columns]
         window_obj = tdRFRWindow(dataframe, window_info_dict, self.raw_data)
 
         return window_obj
@@ -108,19 +108,50 @@ class tdRoller(Roller):
         return data
 
     def augment_windows(self):
+        """
+        Window data is augmented to include data from previous time points and labeled accordingly
+        :return:
+        """
         # todo: should only allow for regression against earlier timepoints? (Testing seems to indicate no, just correct afterward)
         # Enumerate all of the windows except the first
         for ww, window in enumerate(self.window_list):
             if ww == 0:
                 window.x_data = window.window_values.copy()
                 window.x_labels = window.raw_data.columns[1:]
+                window.x_times = np.array([window.nth_window]*len(window.genes))
+
             else:
                 window.x_data = np.hstack((window.window_values, self.window_list[ww-1].x_data))
                 window.x_labels = np.append(window.raw_data.columns[1:], self.window_list[ww-1].x_labels)
-            window.augmented_edge_list = window.possible_edge_list(window.x_labels, window.raw_data.columns[1:])
+                window.x_times = np.append(np.array([window.nth_window]*len(window.genes)), self.window_list[ww-1].x_times)
 
-    def compile_roller_edges(self):
-        pass
+    def compile_roller_edges(self, self_edges=False):
+        """
+        Edges across all windows will be compiled into a single edge list
+        :return:
+        """
+        for window in self.window_list:
+
+            if window.nth_window == 0:
+                df = window.make_edge_table()
+            else:
+                df = df.append(window.make_edge_table(), ignore_index=True)
+
+        if not self_edges:
+            df = df[df.Parent != df.Child]
+
+        self.full_edge_list = df.copy()
+
+        return
+
+    def make_static_edge_dict(self):
+        """
+        Make a dictionary of edges
+        :return:
+        """
+        static_nodes = np.array(list(set(self.full_edge_list.Parent)))
+        edges = self.window_list[0].possible_edge_list(static_nodes, static_nodes, self_edges=False)
+        print len(edges)
 
 if __name__ == "__main__":
     file_path = "../data/dream4/insilico_size10_1_timeseries.tsv"
@@ -130,14 +161,41 @@ if __name__ == "__main__":
     gene_end = None
     #pd.set_option('display.width', 1000)
 
-    np.random.seed(8)
+    #np.random.seed(8)
 
     tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
     tdr.zscore_all_data()
     tdr.set_window(13)
     tdr.create_windows()
     tdr.augment_windows()
-    tdr.fit_windows(n_trees=10)
+    tdr.fit_windows(n_trees=1000)
+    tdr.compile_roller_edges(self_edges=True)
+    #tdr.make_static_edge_dict()
+    df = tdr.full_edge_list.copy()
+    df = df[df.Parent != df.Child]
+    df['Edge'] = zip(df.Parent, df.Child)
+    #print df
+    #print len(df)
+    edge_set = list(set(df.Edge))
+    x, y = elbow_criteria(range(len(df.Importance)), df.Importance.values.astype(np.float64))
+    #df = df[df.Importance>y]
+
+    print 'calc edge imp'
+    edge_imp_vals = {edge:df.Importance[df.Edge==edge] for edge in edge_set}
+    edge_mean_importance = [np.mean(df.Importance[df.Edge==edge]) for edge in edge_set]
+    #edge_mean_importance = [np.std(df.Importance[df.Edge==edge], ddof=1) for edge in edge_set]
+
+    df2 = pd.DataFrame([edge_set, edge_mean_importance],
+                       index=['regulator-target', 'mean_imp']).T
+    print 'second sort'
+    df2.sort(columns='mean_imp', ascending=False, inplace=True)
+    #ranked_edge_list = df2['Edge'].tolist()
+    current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
+    evaluator = Evaluator(current_gold_standard, '\t')
+    tpr, fpr, auroc = evaluator.calc_roc(df2)
+    print "mean", auroc[-1]+(1-fpr[-1])
+    sys.exit()
+
     #todo: functionalize and speed up this part
     full_edge_list = []
     full_edge_importance = []
@@ -160,8 +218,8 @@ if __name__ == "__main__":
     df['P_window'] = a.iloc[:,1]
     df['Child'] = b.iloc[:,0]
     df['C_window'] = b.iloc[:,1]
-    #df = df[df.P_window != df.C_window]
     df = df[df.Parent != df.Child]
+    #df = df[df.P_window != df.C_window]
     df['Edge'] = zip(df.Parent, df.Child)
     #print df
     #print len(df)

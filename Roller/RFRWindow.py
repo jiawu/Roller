@@ -7,7 +7,7 @@ from sklearn.cross_validation import KFold
 from scipy import integrate
 from scipy import stats
 import scipy
-
+import time
 
 from Window import Window
 
@@ -167,7 +167,8 @@ class tdRFRWindow(RandomForestRegressionWindow):
         super(tdRFRWindow, self).__init__(dataframe, window_info, roller_data)
         self.x_data = None
         self.x_labels = None
-        self.augmented_edge_list = None
+        self.x_times = None
+        self.edge_table = None
 
     def fit_window(self, n_jobs=1):
         """
@@ -175,8 +176,6 @@ class tdRFRWindow(RandomForestRegressionWindow):
         :return:
         """
         self.edge_importance = self.get_coeffs(self.n_trees, self.x_data, n_jobs=n_jobs)
-        print self.edge_importance.index
-        sys.exit()
 
     def get_coeffs(self, n_trees, data=None, n_jobs=-1):
         """
@@ -230,3 +229,29 @@ class tdRFRWindow(RandomForestRegressionWindow):
         importance_dataframe.columns.name = 'Parent'
 
         return importance_dataframe
+
+    def make_edge_table(self):
+        """
+        Make the edge table
+        :return:
+        """
+        # Build indexing method for all possible edges. Length = number of parents * number of children
+        parent_index = range(self.edge_importance.shape[1])
+        child_index = range(self.edge_importance.shape[0])
+        a, b = np.meshgrid(parent_index, child_index)
+
+        # Flatten arrays to be used in link list creation
+        df = pd.DataFrame()
+        df['Parent'] = self.edge_importance.columns.values[a.flatten()]
+        df['Child'] = self.edge_importance.index.values[b.flatten()]
+        df['Importance'] = self.edge_importance.values.flatten()
+        df['P_window'] = self.x_times[a.flatten()]
+        df['C_window'] = self.x_times[b.flatten()]
+
+        # tic = time.time()
+        # df[['Parent', 'P_window']] = df['Parent'].apply(pd.Series)
+        # print "Split1: ", time.time()-tic
+        # tic = time.time()
+        # df[['Child', 'C_window']] = df['Child'].apply(pd.Series)
+        # print "Split2: ", time.time()-tic
+        return df
