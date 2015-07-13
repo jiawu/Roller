@@ -175,6 +175,8 @@ class tdRFRWindow(RandomForestRegressionWindow):
         :return:
         """
         self.edge_importance = self.get_coeffs(self.n_trees, self.x_data, n_jobs=n_jobs)
+        print self.edge_importance.index
+        sys.exit()
 
     def get_coeffs(self, n_trees, data=None, n_jobs=-1):
         """
@@ -195,7 +197,7 @@ class tdRFRWindow(RandomForestRegressionWindow):
 
         model_list = []
         for col_index, column in enumerate(all_data[:,:max_nodes].T):
-            # Once we get go through all the nodes at this timepoint we can stop
+            # Once we get through all the nodes at this timepoint we can stop
             if col_index == max_nodes:
                 break
             #print "Inferring parents for gene %i of %i" % (col_index, self.n_labels)
@@ -223,4 +225,8 @@ class tdRFRWindow(RandomForestRegressionWindow):
             #training_scores, test_scores = self.crag_window(model_params)
             #self.training_scores.append(training_scores)
             #self.test_scores.append(test_scores)
-        return coeff_matrix
+        importance_dataframe = pd.DataFrame(coeff_matrix, index=self.x_labels[:max_nodes], columns=self.x_labels)
+        importance_dataframe.index.name = 'Child'
+        importance_dataframe.columns.name = 'Parent'
+
+        return importance_dataframe

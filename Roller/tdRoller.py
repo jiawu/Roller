@@ -72,7 +72,7 @@ class tdRoller(Roller):
         :return:
         """
 
-        dataframe.columns = [col+'_'+str(index) for col in dataframe.columns]
+        dataframe.columns = [(col, str(index)) for col in dataframe.columns]
         window_obj = tdRFRWindow(dataframe, window_info_dict, self.raw_data)
 
         return window_obj
@@ -118,6 +118,9 @@ class tdRoller(Roller):
                 window.x_data = np.hstack((window.window_values, self.window_list[ww-1].x_data))
                 window.x_labels = np.append(window.raw_data.columns[1:], self.window_list[ww-1].x_labels)
             window.augmented_edge_list = window.possible_edge_list(window.x_labels, window.raw_data.columns[1:])
+
+    def compile_roller_edges(self):
+        pass
 
 if __name__ == "__main__":
     file_path = "../data/dream4/insilico_size10_1_timeseries.tsv"
