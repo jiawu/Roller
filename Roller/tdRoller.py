@@ -10,6 +10,7 @@ import sys
 import random
 import matplotlib.pyplot as plt
 from util.Evaluator import Evaluator
+from util.utility_module import elbow_criteria
 
 class tdRoller(Roller):
     """
@@ -117,33 +118,6 @@ class tdRoller(Roller):
                 window.x_data = np.hstack((window.window_values, self.window_list[ww-1].x_data))
                 window.x_labels = np.append(window.raw_data.columns[1:], self.window_list[ww-1].x_labels)
             window.augmented_edge_list = window.possible_edge_list(window.x_labels, window.raw_data.columns[1:])
-
-def point_slope(x1,y1, x2,y2):
-    slope = (y2-y1)/float(x2-x1)
-    return slope
-
-def elbow_criteria(x,y):
-    x = np.array(x)
-    y = np.array(y)
-    # Slope between elbow endpoints
-    m1 = point_slope(x[0], y[0], x[-1], y[-1])
-    # Intercept
-    b1 = y[0] - m1*x[0]
-
-    # Slope for perpendicular lines
-    m2 = -1/m1
-
-    # Calculate intercepts for perpendicular lines that go through data point
-    b_array = y-m2*x
-    x_perp = (b_array-b1)/(m1-m2)
-    y_perp = m1*x_perp+b1
-
-    # Calculate where the maximum distance to a line connecting endpoints is
-    distances = np.sqrt((x_perp-x)**2+(y_perp-y)**2)
-    index_max = np.where(distances==np.max(distances))[0][0]
-    elbow_x = x[index_max]
-    elbow_y = y[index_max]
-    return elbow_x, elbow_y
 
 if __name__ == "__main__":
     file_path = "../data/dream4/insilico_size10_1_timeseries.tsv"
