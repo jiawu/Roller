@@ -174,8 +174,6 @@ class tdRFRWindow(RandomForestRegressionWindow):
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
         """
-        print self.nth_window
-
         self.edge_importance = self.get_coeffs(self.n_trees, self.x_data, n_jobs=n_jobs)
 
     def get_coeffs(self, n_trees, data=None, n_jobs=-1):
