@@ -292,6 +292,7 @@ class Roller(object):
             if self.window_type == "RandomForest":
                 if n_trees != None:
                     window.n_trees = n_trees
+            print "Fitting window %i of %i" %((window.nth_window+1), len(self.window_list))
             window.fit_window()
 
         return self.window_list

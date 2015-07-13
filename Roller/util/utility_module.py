@@ -73,3 +73,30 @@ def rank_results_3D(result_list, col_string, ascending = True):
 
 def rank_index(vector):
         return [vector.index(x) for x in sorted(range(vector), key=vector.__getitem__)]
+
+def point_slope(x1,y1, x2,y2):
+    slope = (y2-y1)/float(x2-x1)
+    return slope
+
+def elbow_criteria(x,y):
+    x = np.array(x)
+    y = np.array(y)
+    # Slope between elbow endpoints
+    m1 = point_slope(x[0], y[0], x[-1], y[-1])
+    # Intercept
+    b1 = y[0] - m1*x[0]
+
+    # Slope for perpendicular lines
+    m2 = -1/m1
+
+    # Calculate intercepts for perpendicular lines that go through data point
+    b_array = y-m2*x
+    x_perp = (b_array-b1)/(m1-m2)
+    y_perp = m1*x_perp+b1
+
+    # Calculate where the maximum distance to a line connecting endpoints is
+    distances = np.sqrt((x_perp-x)**2+(y_perp-y)**2)
+    index_max = np.where(distances==np.max(distances))[0][0]
+    elbow_x = x[index_max]
+    elbow_y = y[index_max]
+    return elbow_x, elbow_y

@@ -174,7 +174,6 @@ class tdRFRWindow(RandomForestRegressionWindow):
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
         """
-        print self.nth_window
         self.edge_importance = self.get_coeffs(self.n_trees, self.x_data, n_jobs=n_jobs)
 
     def get_coeffs(self, n_trees, data=None, n_jobs=-1):
@@ -193,11 +192,15 @@ class tdRFRWindow(RandomForestRegressionWindow):
         max_nodes = self.window_values.shape[1]
 
         coeff_matrix = np.array([], dtype=np.float_).reshape(0, all_data.shape[1])
+
         model_list = []
-        for col_index, column in enumerate(all_data.T):
+        for col_index, column in enumerate(all_data[:,:max_nodes].T):
+            # Once we get go through all the nodes at this timepoint we can stop
             if col_index == max_nodes:
                 break
             #print "Inferring parents for gene %i of %i" % (col_index, self.n_labels)
+
+
             #delete the column that is currently being tested
             X_matrix = np.delete(all_data, col_index, axis=1)
 

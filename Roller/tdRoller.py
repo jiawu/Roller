@@ -9,6 +9,8 @@ from scipy import stats
 import sys
 import random
 import matplotlib.pyplot as plt
+from util.Evaluator import Evaluator
+from util.utility_module import elbow_criteria
 
 class tdRoller(Roller):
     """
@@ -106,6 +108,7 @@ class tdRoller(Roller):
         return data
 
     def augment_windows(self):
+        # todo: should only allow for regression against earlier timepoints? (Testing seems to indicate no, just correct afterward)
         # Enumerate all of the windows except the first
         for ww, window in enumerate(self.window_list):
             if ww == 0:
@@ -124,21 +127,96 @@ if __name__ == "__main__":
     gene_end = None
     #pd.set_option('display.width', 1000)
 
+    np.random.seed(8)
+
     tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
     tdr.zscore_all_data()
-    tdr.set_window(15)
+    tdr.set_window(13)
     tdr.create_windows()
     tdr.augment_windows()
-    tdr.fit_windows(n_trees=1000)
+    tdr.fit_windows(n_trees=10)
+    #todo: functionalize and speed up this part
     full_edge_list = []
     full_edge_importance = []
-    for window in tdr.window_list:
+    print 'lumping edges'
+    for window in tdr.window_list[1:]:
         full_edge_importance += list(window.edge_importance.flatten())
         full_edge_list += window.augmented_edge_list
     print len(full_edge_importance)
     print len(full_edge_list)
-    df = pd.DataFrame([full_edge_list, full_edge_importance], index=['Edge', 'Importance']).T
+    print 'reverse zip'
+    parents, children = zip(*full_edge_list)
+    df = pd.DataFrame([list(parents), list(children), full_edge_importance], index=['Parent', 'Child', 'Importance']).T
+    print "sort"
     df.sort(columns='Importance', ascending=False, inplace=True)
-    print df.head(50)
-    plt.plot(df.Importance)
-    plt.show()
+    print 'split'
+    a = df['Parent'].str.split('_').apply(pd.Series,1)
+    print 'split'
+    b = df['Child'].str.split('_').apply(pd.Series,1)
+    df['Parent'] = a.iloc[:,0]
+    df['P_window'] = a.iloc[:,1]
+    df['Child'] = b.iloc[:,0]
+    df['C_window'] = b.iloc[:,1]
+    #df = df[df.P_window != df.C_window]
+    df = df[df.Parent != df.Child]
+    df['Edge'] = zip(df.Parent, df.Child)
+    #print df
+    #print len(df)
+    edge_set = list(set(df.Edge))
+    x, y = elbow_criteria(range(len(df.Importance)), df.Importance.values.astype(np.float64))
+    #df = df[df.Importance>y]
+
+    print 'calc edge imp'
+    edge_imp_vals = {edge:df.Importance[df.Edge==edge] for edge in edge_set}
+    edge_mean_importance = [np.mean(df.Importance[df.Edge==edge]) for edge in edge_set]
+    #edge_mean_importance = [np.std(df.Importance[df.Edge==edge], ddof=1) for edge in edge_set]
+
+    df2 = pd.DataFrame([edge_set, edge_mean_importance],
+                       index=['regulator-target', 'mean_imp']).T
+    print 'second sort'
+    df2.sort(columns='mean_imp', ascending=False, inplace=True)
+    #ranked_edge_list = df2['Edge'].tolist()
+    current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
+    evaluator = Evaluator(current_gold_standard, '\t')
+    tpr, fpr, auroc = evaluator.calc_roc(df2)
+    print "mean", auroc[-1]+(1-fpr[-1])
+    #plt.plot(fpr,tpr)
+    #plt.plot(fpr, fpr)
+    #plt.show()
+    sys.exit()
+    #plt.figure()
+    nbins = 15
+
+    top_n = len(df2)
+    #print df2.head(top_n)
+    ks_val = []
+    gene_list = []
+    f, axarr = plt.subplots(top_n)
+    for edge_n in range(top_n):
+        #axarr[edge_n].hist(edge_imp_vals[df2['regulator-target'].iloc[edge_n]].values, bins=nbins, alpha=0.5, label='->'.join(df2['regulator-target'].iloc[edge_n]))
+        data = edge_imp_vals[df2['regulator-target'].iloc[edge_n]].values.astype(np.float64)
+        x = np.linspace(0, np.max(data))
+        params = stats.weibull_min.fit(data)
+        #Parameters returned are shape, location, scale
+        #print params
+        #print np.mean(data)
+        #print df2['regulator-target'].iloc[edge_n]
+        # print 2*params[1]*np.sqrt(2/np.pi)
+        #print stats.kstest(data, 'norm', args=params)
+        gene_list.append(df2['regulator-target'].iloc[edge_n])
+        ks_val.append(stats.kstest(data, 'weibull_min', args=params)[0])
+        #axarr[edge_n].plot(x, stats.norm.pdf(x, *params), lw=3)
+        #axarr[edge_n].legend(loc='upper right')
+    df3 =pd.DataFrame([gene_list, ks_val], index=['regulator-target', 'KS']).T
+    df3.sort(columns='KS', inplace=True)
+    print df3.head(10)
+    tpr, fpr, auroc = evaluator.calc_roc(df3)
+    print "mean", auroc[-1]
+    # plt.hist(edge_imp_vals[df2['regulator-target'].iloc[1]].values, bins=nbins, alpha=0.5, label='->'.join(df2['regulator-target'].iloc[1]))
+    # plt.hist(edge_imp_vals[df2['regulator-target'].iloc[2]].values, bins=nbins, alpha=0.5, label='->'.join(df2['regulator-target'].iloc[2]))
+    # plt.hist(edge_imp_vals[df2['regulator-target'].iloc[3]].values, bins=nbins, alpha=0.5, label='->'.join(df2['regulator-target'].iloc[3]))
+    # plt.hist(edge_imp_vals[df2['regulator-target'].iloc[4]].values, bins=nbins, alpha=0.5, label='->'.join(df2['regulator-target'].iloc[4]))
+
+    #print df2['regulator-target'].iloc[0]
+    #plt.show()
+
