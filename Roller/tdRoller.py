@@ -25,6 +25,8 @@ class tdRoller(Roller):
         super(tdRoller, self).__init__(file_path, gene_start, gene_end, time_label, separator,
                  window_type)
         self.full_edge_list = None
+        self.edge_dict = None
+
         # Zscore the data
         self.norm_data = self.zscore_all_data()
 
@@ -140,18 +142,40 @@ class tdRoller(Roller):
         if not self_edges:
             df = df[df.Parent != df.Child]
 
+        df['Edge'] = zip(df.Parent, df.Child)
         self.full_edge_list = df.copy()
 
         return
 
-    def make_static_edge_dict(self):
+    def make_static_edge_dict(self, self_edges=False):
         """
         Make a dictionary of edges
         :return:
         """
-        static_nodes = np.array(list(set(self.full_edge_list.Parent)))
-        edges = self.window_list[0].possible_edge_list(static_nodes, static_nodes, self_edges=False)
-        print len(edges)
+        df = self.full_edge_list.copy()
+        if not self_edges:
+            df = df[df.Parent != df.Child]
+        edge_set = list(set(df.Edge))
+        self.edge_dict = {}
+
+        for edge in edge_set:
+            current_df = df[df.Edge==edge]
+            self.edge_dict[edge] = {"dataframe":current_df, "mean_importance":np.mean(current_df.Importance)}
+
+        return
+
+    def calc_edge_mean(self, df):
+        """
+        Calculate the mean for each edge
+        :param df: dataframe
+        :return: dataframe
+        """
+        temp_dict = {edge:df[edge]['mean_importance'] for edge in df.keys()}
+        mean_df = pd.DataFrame.from_dict(temp_dict, orient='index')
+        mean_df.columns = ['mean_importance']
+        mean_df.sort('mean_importance', ascending=False, inplace=True)
+        mean_df['regulator-target'] = mean_df.index
+        return mean_df
 
 if __name__ == "__main__":
     file_path = "../data/dream4/insilico_size10_1_timeseries.tsv"
@@ -168,23 +192,39 @@ if __name__ == "__main__":
     tdr.set_window(13)
     tdr.create_windows()
     tdr.augment_windows()
-    tdr.fit_windows(n_trees=1000)
+    tdr.fit_windows(n_trees=10)
     tdr.compile_roller_edges(self_edges=True)
+    tdr.make_static_edge_dict()
+    df2 = tdr.calc_edge_mean(tdr.edge_dict)
+    tdr.score()
+    current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
+    evaluator = Evaluator(current_gold_standard, '\t')
+    tpr, fpr, auroc = evaluator.calc_roc(df2)
+    print "mean", auroc[-1]+(1-fpr[-1])
+    sys.exit()
     #tdr.make_static_edge_dict()
-    df = tdr.full_edge_list.copy()
-    df = df[df.Parent != df.Child]
-    df['Edge'] = zip(df.Parent, df.Child)
+
     #print df
     #print len(df)
-    edge_set = list(set(df.Edge))
-    x, y = elbow_criteria(range(len(df.Importance)), df.Importance.values.astype(np.float64))
+
+    #print len(edge_set)
+    #x, y = elbow_criteria(range(len(df.Importance)), df.Importance.values.astype(np.float64))
     #df = df[df.Importance>y]
 
     print 'calc edge imp'
-    edge_imp_vals = {edge:df.Importance[df.Edge==edge] for edge in edge_set}
-    edge_mean_importance = [np.mean(df.Importance[df.Edge==edge]) for edge in edge_set]
+    edge_dict = {}
+    tic = time.time()
+    for edge in edge_set:
+        current_df = df[df.Edge==edge]
+        edge_dict[edge] = {"dataframe":current_df, "mean_importance":np.mean(current_df.Importance)}
+    print time.time()-tic
+    tic = time.time()
+    edge_mean_dict = {edge:edge_dict[edge]['mean_importance'] for edge in edge_dict.keys()}
+    print time.time()-tic
+    df2 = pd.DataFrame.from_dict(edge_mean_dict, 'index')
+    print df2.head()
     #edge_mean_importance = [np.std(df.Importance[df.Edge==edge], ddof=1) for edge in edge_set]
-
+    sys.exit()
     df2 = pd.DataFrame([edge_set, edge_mean_importance],
                        index=['regulator-target', 'mean_imp']).T
     print 'second sort'
@@ -228,7 +268,7 @@ if __name__ == "__main__":
     #df = df[df.Importance>y]
 
     print 'calc edge imp'
-    edge_imp_vals = {edge:df.Importance[df.Edge==edge] for edge in edge_set}
+    edge_dict = {edge:df.Importance[df.Edge==edge] for edge in edge_set}
     edge_mean_importance = [np.mean(df.Importance[df.Edge==edge]) for edge in edge_set]
     #edge_mean_importance = [np.std(df.Importance[df.Edge==edge], ddof=1) for edge in edge_set]
 
@@ -255,7 +295,7 @@ if __name__ == "__main__":
     f, axarr = plt.subplots(top_n)
     for edge_n in range(top_n):
         #axarr[edge_n].hist(edge_imp_vals[df2['regulator-target'].iloc[edge_n]].values, bins=nbins, alpha=0.5, label='->'.join(df2['regulator-target'].iloc[edge_n]))
-        data = edge_imp_vals[df2['regulator-target'].iloc[edge_n]].values.astype(np.float64)
+        data = edge_dict[df2['regulator-target'].iloc[edge_n]].values.astype(np.float64)
         x = np.linspace(0, np.max(data))
         params = stats.weibull_min.fit(data)
         #Parameters returned are shape, location, scale
