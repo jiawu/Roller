@@ -132,6 +132,7 @@ class tdRoller(Roller):
         Edges across all windows will be compiled into a single edge list
         :return:
         """
+        print "Compiling all model edges...",
         for window in self.window_list:
 
             if window.nth_window == 0:
@@ -144,7 +145,7 @@ class tdRoller(Roller):
 
         df['Edge'] = zip(df.Parent, df.Child)
         self.full_edge_list = df.copy()
-
+        print "[DONE]"
         return
 
     def make_static_edge_dict(self, self_edges=False):
@@ -177,8 +178,40 @@ class tdRoller(Roller):
         mean_df['regulator-target'] = mean_df.index
         return mean_df
 
+    def calc_edge_importance_cutoff(self, df):
+        """
+        Calculate the importance threshold to filter edges on
+        :param df:
+        :return: dict
+        """
+        x, y = elbow_criteria(range(len(df.Importance)), df.Importance.values.astype(np.float64))
+        elbow_dict = {'num_edges':x, 'importance_threshold':y}
+
+        return elbow_dict
+
+    def score(self, sorted_edge_list, gold_standard_file=None):
+        """
+        Scores some stuff, I think...
+        Called by:
+            pipeline
+        :param sorted_edge_list:
+        :param gold_standard_file:
+        :return:
+        """
+        if gold_standard_file is None:
+            current_gold_standard = self.file_path.replace("timeseries.tsv","goldstandard.tsv")
+        else:
+            current_gold_standard = gold_standard_file
+        evaluator = Evaluator(current_gold_standard, '\t')
+        tpr, fpr, auroc = evaluator.calc_roc(sorted_edge_list)
+        auroc_dict = {'tpr':tpr, 'fpr':fpr, 'auroc': auroc}
+        precision, recall, aupr = evaluator.calc_pr(sorted_edge_list)
+        aupr_random = [len(evaluator.gs_flat)/float(len(evaluator.full_list))]*len(recall)
+        aupr_dict = {"precision": precision, "recall": recall, "aupr": aupr, "aupr_random":aupr_random}
+        return auroc_dict, aupr_dict
+
 if __name__ == "__main__":
-    file_path = "../data/dream4/insilico_size10_1_timeseries.tsv"
+    file_path = "../data/dream4/insilico_size10_2_timeseries.tsv"
     gene_start_column = 1
     time_label = "Time"
     separator = "\t"
@@ -196,128 +229,14 @@ if __name__ == "__main__":
     tdr.compile_roller_edges(self_edges=True)
     tdr.make_static_edge_dict()
     df2 = tdr.calc_edge_mean(tdr.edge_dict)
-    tdr.score()
-    current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
-    evaluator = Evaluator(current_gold_standard, '\t')
-    tpr, fpr, auroc = evaluator.calc_roc(df2)
-    print "mean", auroc[-1]+(1-fpr[-1])
+    roc_dict, pr_dict = tdr.score(df2)
+    f, axarr = plt.subplots(2)
+    axarr[0].plot(roc_dict['fpr'], roc_dict['tpr'])
+    axarr[0].plot(roc_dict['fpr'], roc_dict['fpr'])
+    axarr[1].plot(pr_dict['recall'], pr_dict['precision'])
+    axarr[1].plot(pr_dict['recall'], pr_dict['aupr_random'])
+    plt.show()
+
+
     sys.exit()
-    #tdr.make_static_edge_dict()
-
-    #print df
-    #print len(df)
-
-    #print len(edge_set)
-    #x, y = elbow_criteria(range(len(df.Importance)), df.Importance.values.astype(np.float64))
-    #df = df[df.Importance>y]
-
-    print 'calc edge imp'
-    edge_dict = {}
-    tic = time.time()
-    for edge in edge_set:
-        current_df = df[df.Edge==edge]
-        edge_dict[edge] = {"dataframe":current_df, "mean_importance":np.mean(current_df.Importance)}
-    print time.time()-tic
-    tic = time.time()
-    edge_mean_dict = {edge:edge_dict[edge]['mean_importance'] for edge in edge_dict.keys()}
-    print time.time()-tic
-    df2 = pd.DataFrame.from_dict(edge_mean_dict, 'index')
-    print df2.head()
-    #edge_mean_importance = [np.std(df.Importance[df.Edge==edge], ddof=1) for edge in edge_set]
-    sys.exit()
-    df2 = pd.DataFrame([edge_set, edge_mean_importance],
-                       index=['regulator-target', 'mean_imp']).T
-    print 'second sort'
-    df2.sort(columns='mean_imp', ascending=False, inplace=True)
-    #ranked_edge_list = df2['Edge'].tolist()
-    current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
-    evaluator = Evaluator(current_gold_standard, '\t')
-    tpr, fpr, auroc = evaluator.calc_roc(df2)
-    print "mean", auroc[-1]+(1-fpr[-1])
-    sys.exit()
-
-    #todo: functionalize and speed up this part
-    full_edge_list = []
-    full_edge_importance = []
-    print 'lumping edges'
-    for window in tdr.window_list[1:]:
-        full_edge_importance += list(window.edge_importance.flatten())
-        full_edge_list += window.augmented_edge_list
-    print len(full_edge_importance)
-    print len(full_edge_list)
-    print 'reverse zip'
-    parents, children = zip(*full_edge_list)
-    df = pd.DataFrame([list(parents), list(children), full_edge_importance], index=['Parent', 'Child', 'Importance']).T
-    print "sort"
-    df.sort(columns='Importance', ascending=False, inplace=True)
-    print 'split'
-    a = df['Parent'].str.split('_').apply(pd.Series,1)
-    print 'split'
-    b = df['Child'].str.split('_').apply(pd.Series,1)
-    df['Parent'] = a.iloc[:,0]
-    df['P_window'] = a.iloc[:,1]
-    df['Child'] = b.iloc[:,0]
-    df['C_window'] = b.iloc[:,1]
-    df = df[df.Parent != df.Child]
-    #df = df[df.P_window != df.C_window]
-    df['Edge'] = zip(df.Parent, df.Child)
-    #print df
-    #print len(df)
-    edge_set = list(set(df.Edge))
-    x, y = elbow_criteria(range(len(df.Importance)), df.Importance.values.astype(np.float64))
-    #df = df[df.Importance>y]
-
-    print 'calc edge imp'
-    edge_dict = {edge:df.Importance[df.Edge==edge] for edge in edge_set}
-    edge_mean_importance = [np.mean(df.Importance[df.Edge==edge]) for edge in edge_set]
-    #edge_mean_importance = [np.std(df.Importance[df.Edge==edge], ddof=1) for edge in edge_set]
-
-    df2 = pd.DataFrame([edge_set, edge_mean_importance],
-                       index=['regulator-target', 'mean_imp']).T
-    print 'second sort'
-    df2.sort(columns='mean_imp', ascending=False, inplace=True)
-    #ranked_edge_list = df2['Edge'].tolist()
-    current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
-    evaluator = Evaluator(current_gold_standard, '\t')
-    tpr, fpr, auroc = evaluator.calc_roc(df2)
-    print "mean", auroc[-1]+(1-fpr[-1])
-    #plt.plot(fpr,tpr)
-    #plt.plot(fpr, fpr)
-    #plt.show()
-    sys.exit()
-    #plt.figure()
-    nbins = 15
-
-    top_n = len(df2)
-    #print df2.head(top_n)
-    ks_val = []
-    gene_list = []
-    f, axarr = plt.subplots(top_n)
-    for edge_n in range(top_n):
-        #axarr[edge_n].hist(edge_imp_vals[df2['regulator-target'].iloc[edge_n]].values, bins=nbins, alpha=0.5, label='->'.join(df2['regulator-target'].iloc[edge_n]))
-        data = edge_dict[df2['regulator-target'].iloc[edge_n]].values.astype(np.float64)
-        x = np.linspace(0, np.max(data))
-        params = stats.weibull_min.fit(data)
-        #Parameters returned are shape, location, scale
-        #print params
-        #print np.mean(data)
-        #print df2['regulator-target'].iloc[edge_n]
-        # print 2*params[1]*np.sqrt(2/np.pi)
-        #print stats.kstest(data, 'norm', args=params)
-        gene_list.append(df2['regulator-target'].iloc[edge_n])
-        ks_val.append(stats.kstest(data, 'weibull_min', args=params)[0])
-        #axarr[edge_n].plot(x, stats.norm.pdf(x, *params), lw=3)
-        #axarr[edge_n].legend(loc='upper right')
-    df3 =pd.DataFrame([gene_list, ks_val], index=['regulator-target', 'KS']).T
-    df3.sort(columns='KS', inplace=True)
-    print df3.head(10)
-    tpr, fpr, auroc = evaluator.calc_roc(df3)
-    print "mean", auroc[-1]
-    # plt.hist(edge_imp_vals[df2['regulator-target'].iloc[1]].values, bins=nbins, alpha=0.5, label='->'.join(df2['regulator-target'].iloc[1]))
-    # plt.hist(edge_imp_vals[df2['regulator-target'].iloc[2]].values, bins=nbins, alpha=0.5, label='->'.join(df2['regulator-target'].iloc[2]))
-    # plt.hist(edge_imp_vals[df2['regulator-target'].iloc[3]].values, bins=nbins, alpha=0.5, label='->'.join(df2['regulator-target'].iloc[3]))
-    # plt.hist(edge_imp_vals[df2['regulator-target'].iloc[4]].values, bins=nbins, alpha=0.5, label='->'.join(df2['regulator-target'].iloc[4]))
-
-    #print df2['regulator-target'].iloc[0]
-    #plt.show()
 
