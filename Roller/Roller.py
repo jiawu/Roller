@@ -272,7 +272,7 @@ class Roller(object):
             window.initialize_params()
         return self.window_list
 
-    def fit_windows(self, alpha=None, n_trees=None):
+    def fit_windows(self, alpha=None, n_trees=None, show_progress=True):
         #todo: need a better way to pass parameters to fit functions
         """
         Fit each window in the list
@@ -292,7 +292,8 @@ class Roller(object):
             if self.window_type == "RandomForest":
                 if n_trees != None:
                     window.n_trees = n_trees
-            print "Fitting window %i of %i" %((window.nth_window+1), len(self.window_list))
+            if show_progress:
+                print "Fitting window %i of %i" %((window.nth_window+1), len(self.window_list))
             window.fit_window()
 
         return self.window_list
