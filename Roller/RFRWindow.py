@@ -248,10 +248,25 @@ class tdRFRWindow(RandomForestRegressionWindow):
         df['P_window'] = self.x_times[a.flatten()]
         df['C_window'] = self.x_times[b.flatten()]
 
-        # tic = time.time()
-        # df[['Parent', 'P_window']] = df['Parent'].apply(pd.Series)
-        # print "Split1: ", time.time()-tic
-        # tic = time.time()
-        # df[['Child', 'C_window']] = df['Child'].apply(pd.Series)
-        # print "Split2: ", time.time()-tic
         return df
+
+    def run_permutation_test(self, n_permutations=1000, n_jobs=-1):
+        #initialize permutation results array
+        self.permutation_means = np.empty(self.edge_importance.shape)
+        self.permutation_sd = np.empty(self.edge_importance.shape)
+
+        zeros = np.zeros(self.edge_importance.shape)
+
+        #initialize running calculation
+        result = {'n':zeros.copy(), 'mean':zeros.copy(), 'ss':zeros.copy()}
+
+        for nth_perm in range(0, n_permutations):
+            #permute data
+            permuted_data = self.permute_data(self.x_data)
+
+            #fit the data and get coefficients
+
+            permuted_coeffs = self.get_coeffs(self.n_trees, permuted_data, n_jobs=n_jobs)
+            dummy_list = []
+            dummy_list.append(permuted_coeffs)
+            result = self.update_variance_2D(result, dummy_list)

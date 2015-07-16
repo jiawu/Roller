@@ -25,6 +25,7 @@ tdr.set_window(10)
 tdr.create_windows()
 tdr.augment_windows()
 tdr.fit_windows(n_trees=10, show_progress=False)
+tdr.rank_edges(permutation_n=10)
 tdr.compile_roller_edges(self_edges=True)
 #tdr.full_edge_list = tdr.full_edge_list[tdr.full_edge_list.Lag>1]
 tdr.make_static_edge_dict(true_edges)
