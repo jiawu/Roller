@@ -247,10 +247,11 @@ class tdRFRWindow(RandomForestRegressionWindow):
         df['Importance'] = self.edge_importance.values.flatten()
         df['P_window'] = self.x_times[a.flatten()]
         df['C_window'] = self.x_times[b.flatten()]
+        df["p_value"] = self.permutation_p_values.flatten()
 
         return df
 
-    def run_permutation_test(self, n_permutations=1000, n_jobs=-1):
+    def run_permutation_test(self, n_permutations=1000, n_jobs=1):
         #initialize permutation results array
         self.permutation_means = np.empty(self.edge_importance.shape)
         self.permutation_sd = np.empty(self.edge_importance.shape)
@@ -270,3 +271,7 @@ class tdRFRWindow(RandomForestRegressionWindow):
             dummy_list = []
             dummy_list.append(permuted_coeffs)
             result = self.update_variance_2D(result, dummy_list)
+
+        self.permutation_means = result['mean'].copy()
+        self.permutation_sd = np.sqrt(result['variance'].copy())
+        self.permutation_p_values = self.calc_p_value()

@@ -6,6 +6,7 @@ from Roller.util.Evaluator import Evaluator
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import sys
 
 insilico_n = 1
 file_path = "../data/dream4/insilico_size10_%i_timeseries.tsv"%insilico_n
@@ -21,12 +22,13 @@ np.random.seed(8)
 
 tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
 tdr.zscore_all_data()
-tdr.set_window(10)
+tdr.set_window(20)
 tdr.create_windows()
 tdr.augment_windows()
 tdr.fit_windows(n_trees=10, show_progress=False)
 tdr.rank_edges(permutation_n=10)
 tdr.compile_roller_edges(self_edges=True)
+print tdr.full_edge_list.head()
 #tdr.full_edge_list = tdr.full_edge_list[tdr.full_edge_list.Lag>1]
 tdr.make_static_edge_dict(true_edges)
 df2 = tdr.make_sort_df(tdr.edge_dict, 'lag')
