@@ -110,12 +110,11 @@ class tdRoller(Roller):
         data = self.norm_data[self.norm_data[self.time_label].isin(time_window)]
         return data
 
-    def augment_windows(self):
+    def augment_windows(self, min_lag=0, max_lag=None):
         """
         Window data is augmented to include data from previous time points and labeled accordingly
         :return:
         """
-        # todo: should only allow for regression against earlier timepoints? (Testing seems to indicate no, just correct afterward)
         # Enumerate all of the windows except the first
         for ww, window in enumerate(self.window_list):
             if ww == 0:

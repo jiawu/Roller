@@ -247,7 +247,8 @@ class tdRFRWindow(RandomForestRegressionWindow):
         df['Importance'] = self.edge_importance.values.flatten()
         df['P_window'] = self.x_times[a.flatten()]
         df['C_window'] = self.x_times[b.flatten()]
-        df["p_value"] = self.permutation_p_values.flatten()
+        if self.permutation_p_values is not None:
+            df["p_value"] = self.permutation_p_values.flatten()
 
         return df
 
