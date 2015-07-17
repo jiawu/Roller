@@ -169,13 +169,18 @@ class tdRFRWindow(RandomForestRegressionWindow):
         self.x_labels = None
         self.x_times = None
         self.edge_table = None
+        self.include_window = True
+        self.earlier_window_idx = None
 
     def fit_window(self, n_jobs=1):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
         """
-        self.edge_importance = self.get_coeffs(self.n_trees, self.x_data, n_jobs=n_jobs)
+        if self.include_window:
+            print "Regressing window index %i against the following window indices: "%self.nth_window,\
+                self.earlier_window_idx
+            self.edge_importance = self.get_coeffs(self.n_trees, self.x_data, n_jobs=n_jobs)
 
     def get_coeffs(self, n_trees, data=None, n_jobs=-1):
         """
@@ -235,6 +240,10 @@ class tdRFRWindow(RandomForestRegressionWindow):
         Make the edge table
         :return:
         """
+
+        if not self.include_window:
+            return
+
         # Build indexing method for all possible edges. Length = number of parents * number of children
         parent_index = range(self.edge_importance.shape[1])
         child_index = range(self.edge_importance.shape[0])
@@ -253,6 +262,8 @@ class tdRFRWindow(RandomForestRegressionWindow):
         return df
 
     def run_permutation_test(self, n_permutations=1000, n_jobs=1):
+        if not self.include_window:
+            return
         #initialize permutation results array
         self.permutation_means = np.empty(self.edge_importance.shape)
         self.permutation_sd = np.empty(self.edge_importance.shape)

@@ -113,19 +113,37 @@ class tdRoller(Roller):
     def augment_windows(self, min_lag=0, max_lag=None):
         """
         Window data is augmented to include data from previous time points and labeled accordingly
+        :param min_lag: int
+        :param max_lag: int or None
+            if None, all earlier windows will included
         :return:
         """
+        if min_lag>max_lag and max_lag is not None:
+            raise Exception('The minimum lag cannot be greater than the maximum lag')
         # Enumerate all of the windows except the first
-        for ww, window in enumerate(self.window_list):
-            if ww == 0:
-                window.x_data = window.window_values.copy()
-                window.x_labels = window.raw_data.columns[1:]
-                window.x_times = np.array([window.nth_window]*len(window.genes))
-
+        for window in self.window_list:
+            window_idx = window.nth_window
+            if max_lag is None:
+                start_idx = 0
             else:
-                window.x_data = np.hstack((window.window_values, self.window_list[ww-1].x_data))
-                window.x_labels = np.append(window.raw_data.columns[1:], self.window_list[ww-1].x_labels)
-                window.x_times = np.append(np.array([window.nth_window]*len(window.genes)), self.window_list[ww-1].x_times)
+                start_idx = max(window_idx-max_lag,0)
+            end_index = max(window_idx-min_lag+1, 0)
+            earlier_windows = self.window_list[start_idx:end_index]
+            window.earlier_window_idx = [w.nth_window for w in earlier_windows]
+            # Add necessary data from earlier windows
+            for ww, win in enumerate(earlier_windows[::-1]): #Go through the list in reverse because of how the window expects data
+                if ww == 0:
+                    #Initialize values
+                    window.x_data = win.window_values.copy()
+                    window.x_labels = win.raw_data.columns[1:]
+                    window.x_times = np.array([win.nth_window]*len(win.genes))
+                else:
+                    window.x_data = np.hstack((window.x_data, win.window_values))
+                    window.x_labels = np.append(window.x_labels, win.raw_data.columns[1:])
+                    window.x_times = np.append(window.x_times, np.array([win.nth_window]*len(win.genes)))
+            if window.x_data is None:
+                window.include_window = False
+        return
 
     def compile_roller_edges(self, self_edges=False):
         """
@@ -133,12 +151,13 @@ class tdRoller(Roller):
         :return:
         """
         print "Compiling all model edges...",
-        for window in self.window_list:
-
-            if window.nth_window == 0:
-                df = window.make_edge_table()
-            else:
-                df = df.append(window.make_edge_table(), ignore_index=True)
+        df = None
+        for ww, window in enumerate(self.window_list):
+            if window.include_window:
+                if df is None:
+                    df = window.make_edge_table()
+                else:
+                    df = df.append(window.make_edge_table(), ignore_index=True)
 
         if not self_edges:
             df = df[df.Parent != df.Child]
