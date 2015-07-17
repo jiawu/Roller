@@ -7,9 +7,8 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 import sys
-import itertools
+import warnings
 import random
-import time
 import matplotlib.pyplot as plt
 from util.Evaluator import Evaluator
 from util.utility_module import elbow_criteria
@@ -169,7 +168,6 @@ class tdRoller(Roller):
         df['Edge'] = zip(df.Parent, df.Child)
         df['Lag'] = df.C_window - df.P_window
         self.full_edge_list = df.copy()
-        self.lag_set = list(set(self.full_edge_list.Lag))
         print "[DONE]"
         return
 
@@ -180,27 +178,36 @@ class tdRoller(Roller):
         """
         print "Lumping edges...",
         df = self.full_edge_list.copy()
-
         #Only keep edges with importance > 0
         df = df[df['Importance']>0]
-
         if not self_edges:
             df = df[df.Parent != df.Child]
         edge_set = list(set(df.Edge))
+        full_edge_set = set(self.make_possible_edge_list(self.gene_list, self.gene_list, self_edges=self_edges))
+        edge_diff = full_edge_set.difference(edge_set)
         self.edge_dict = {}
         lag_importance_score, lag_lump_method = lag_method.split('_')
         score_method = eval('np.'+lag_importance_score)
         lump_method = eval('np.'+lag_lump_method)
-        for edge in edge_set:
+        for edge in full_edge_set:
+            if edge in edge_diff:
+                self.edge_dict[edge] = {"dataframe": None, "mean_importance": 0, 'real_edge': (edge in true_edges),
+                                        "max_importance": 0, 'max_edge': None, 'lag_importance': 0,
+                                        'lag_method': lag_method}
+                continue
             current_df = df[df.Edge==edge]
             max_idx = current_df['Importance'].idxmax()
-            lag_imp = score_method([lump_method(current_df.Importance[current_df.Lag==lag]) for lag in self.lag_set])
+            lag_set = list(set(current_df.Lag))
+            lag_imp = score_method([lump_method(current_df.Importance[current_df.Lag==lag]) for lag in lag_set])
             self.edge_dict[edge] = {"dataframe":current_df, "mean_importance":np.mean(current_df.Importance),
                                     'real_edge':(edge in true_edges), "max_importance":current_df.Importance[max_idx],
                                     'max_edge':(current_df.P_window[max_idx], current_df.C_window[max_idx]),
                                     'lag_importance': lag_imp, 'lag_method':lag_method}
-
         print "[DONE]"
+        if edge_diff:
+            message = 'The last %i edges had no meaningful importance score' \
+                      ' and were placed at the bottom of the list' %len(edge_diff)
+            warnings.warn(message)
         return
 
     def make_sort_df(self, df, sort_by='mean'):
