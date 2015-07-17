@@ -128,7 +128,7 @@ class tdRoller(Roller):
             else:
                 start_idx = max(window_idx-max_lag,0)
             end_index = max(window_idx-min_lag+1, 0)
-            if (end_index-start_idx)<(max_lag-min_lag+1):
+            if max_lag is not None and (end_index-start_idx)<(max_lag-min_lag+1):
                 window.include_window = False
                 continue
 
