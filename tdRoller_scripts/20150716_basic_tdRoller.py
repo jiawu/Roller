@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import sys
 
-insilico_n = 2
+insilico_n = 5
 file_path = "../data/dream4/insilico_size10_%i_timeseries.tsv"%insilico_n
 gene_start_column = 1
 time_label = "Time"
@@ -23,15 +23,15 @@ np.random.seed(8)
 
 tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
 tdr.zscore_all_data()
-tdr.set_window(11)
+tdr.set_window(10)
 tdr.create_windows()
-tdr.augment_windows(min_lag=0, max_lag=None)
+tdr.augment_windows(min_lag=0, max_lag=5)
 tdr.fit_windows(n_trees=10, show_progress=False)
 tdr.rank_edges(permutation_n=100)
 tdr.compile_roller_edges(self_edges=True)
-tdr.full_edge_list = tdr.full_edge_list[tdr.full_edge_list.p_value<0.05]
+tdr.full_edge_list.loc[tdr.full_edge_list.p_value<0.05, 'Importance'] = 0
 #tdr.full_edge_list = tdr.full_edge_list[tdr.full_edge_list.Lag>1]
-tdr.make_static_edge_dict(true_edges)
+tdr.make_static_edge_dict(true_edges, lag_method='max_median')
 df2 = tdr.make_sort_df(tdr.edge_dict, 'lag')
 print len(df2)
 roc_dict, pr_dict = tdr.score(df2)

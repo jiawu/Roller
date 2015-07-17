@@ -318,9 +318,10 @@ class Roller(object):
                 window.generate_results_table()
         if self.window_type == "RandomForest":
             for window in self.window_list:
-                print("Running permutation...")
-                window.run_permutation_test(n_permutations=permutation_n)
-                window.make_edge_table()
+                if window.include_window == True:
+                    print("Running permutation on window %i...")%window.nth_window
+                    window.run_permutation_test(n_permutations=permutation_n)
+                    window.make_edge_table()
         return self.window_list
 
     def average_rank(self, rank_by, ascending):

@@ -128,6 +128,10 @@ class tdRoller(Roller):
             else:
                 start_idx = max(window_idx-max_lag,0)
             end_index = max(window_idx-min_lag+1, 0)
+            if (end_index-start_idx)<(max_lag-min_lag+1):
+                window.include_window = False
+                continue
+
             earlier_windows = self.window_list[start_idx:end_index]
             window.earlier_window_idx = [w.nth_window for w in earlier_windows]
             # Add necessary data from earlier windows
@@ -169,27 +173,32 @@ class tdRoller(Roller):
         print "[DONE]"
         return
 
-    def make_static_edge_dict(self, true_edges, self_edges=False, lag_method='max_med'):
+    def make_static_edge_dict(self, true_edges, self_edges=False, lag_method='max_median'):
         """
         Make a dictionary of edges
         :return:
         """
         print "Lumping edges...",
         df = self.full_edge_list.copy()
+
+        #Only keep edges with importance > 0
+        df = df[df['Importance']>0]
+
         if not self_edges:
             df = df[df.Parent != df.Child]
         edge_set = list(set(df.Edge))
         self.edge_dict = {}
         lag_importance_score, lag_lump_method = lag_method.split('_')
-
+        score_method = eval('np.'+lag_importance_score)
+        lump_method = eval('np.'+lag_lump_method)
         for edge in edge_set:
             current_df = df[df.Edge==edge]
             max_idx = current_df['Importance'].idxmax()
-            lag_imp = np.mean([np.mean(current_df.Importance[current_df.Lag==lag]) for lag in self.lag_set])
-            self.edge_dict[edge] = {"dataframe":current_df, "mean_importance":np.median(current_df.Importance),
+            lag_imp = score_method([lump_method(current_df.Importance[current_df.Lag==lag]) for lag in self.lag_set])
+            self.edge_dict[edge] = {"dataframe":current_df, "mean_importance":np.mean(current_df.Importance),
                                     'real_edge':(edge in true_edges), "max_importance":current_df.Importance[max_idx],
                                     'max_edge':(current_df.P_window[max_idx], current_df.C_window[max_idx]),
-                                    'lag_importance': lag_imp}
+                                    'lag_importance': lag_imp, 'lag_method':lag_method}
 
         print "[DONE]"
         return
