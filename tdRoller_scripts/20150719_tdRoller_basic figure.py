@@ -28,19 +28,24 @@ auroc_std.name='std'
 
 idx = ['All_Data', 'Roller', 'tdRFR_optimized']
 
-temp_mean = auroc_mean[idx].values
-temp_std = auroc_std[idx].values
+temp_mean = aupr_mean[idx].values
+temp_std = aupr_std[idx].values
 
 width = 0.9
 
 # Pull the formatting out here
 bar_kwargs = {'width':width,'color':'c','zorder':5, 'align':'center'}
 err_kwargs = {'zorder':0,'fmt':'none','lw':2,'ecolor':'k'}
+labels = (['All Data', 'Roller', 'tdRFR'])
 
+print round(stats.ttest_ind(auroc['All_Data'], auroc['Roller'])[1], 4)
+print round(stats.ttest_ind(auroc['All_Data'], auroc['tdRFR_optimized'])[1], 4)
+sys.exit()
 idx = np.arange(len(temp_mean))
 plt.bar(idx, temp_mean,  **bar_kwargs)
 plt.errs = plt.errorbar(idx, temp_mean, yerr=temp_std, **err_kwargs)
-plt.show()
+plt.xticks(idx, labels, color='k')
+plt.savefig('aupr.pdf', format='pdf')
 
 
 sys.exit()
