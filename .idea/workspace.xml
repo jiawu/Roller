@@ -1,0 +1,1350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tdRoller_scripts/20150719_tdRoller_basic figure.py" afterPath="$PROJECT_DIR$/tdRoller_scripts/20150719_tdRoller_basic figure.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/Roller.iml" afterPath="$PROJECT_DIR$/.idea/Roller.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
+    <ignored path="Roller.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="Roller" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="Roller.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Roller/Roller.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="53" column="84" selection-start-line="53" selection-start-column="84" selection-end-line="53" selection-end-column="84" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tdRoller.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Roller/tdRoller.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="243" column="37" selection-start-line="243" selection-start-column="37" selection-end-line="243" selection-end-column="37" />
+              <folding>
+                <element signature="e#71#96#0" expanded="true" />
+                <element signature="e#938#1481#0" expanded="false" />
+                <element signature="e#1540#2218#0" expanded="false" />
+                <element signature="e#2290#2677#0" expanded="false" />
+                <element signature="e#2749#3826#0" expanded="false" />
+                <element signature="e#3892#5764#0" expanded="false" />
+                <element signature="e#5828#6516#0" expanded="false" />
+                <element signature="e#6618#8639#0" expanded="false" />
+                <element signature="e#8697#9372#0" expanded="false" />
+                <element signature="e#9429#9735#0" expanded="false" />
+                <element signature="e#10881#11722#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="20150719_tdRoller_basic figure.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150719_tdRoller_basic figure.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="41" column="52" selection-start-line="41" selection-start-column="52" selection-end-line="41" selection-end-column="52" />
+              <folding>
+                <element signature="e#147#157#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Evaluator.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Roller/util/Evaluator.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="20150716_basic_tdRoller.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="27" column="29" selection-start-line="27" selection-start-column="29" selection-end-line="27" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Window.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Roller/Window.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="76" column="4" selection-start-line="76" selection-start-column="4" selection-end-line="100" selection-end-column="33" />
+              <folding>
+                <element signature="e#71#89#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RFRWindow.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Roller/RFRWindow.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="272" column="28" selection-start-line="272" selection-start-column="20" selection-end-line="272" selection-end-column="28" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+                <element signature="e#7693#9974#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="true" />
+    </FindUsagesManager>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/run_pipeline_h.py" />
+        <option value="$PROJECT_DIR$/run_pipeline_i.py" />
+        <option value="$PROJECT_DIR$/Roller/util/Grapher.py" />
+        <option value="$PROJECT_DIR$/Roller/unittests/test_dionesus_window.py" />
+        <option value="$PROJECT_DIR$/Roller/DionesusWindow.py" />
+        <option value="$PROJECT_DIR$/Roller/LassoWindow.py" />
+        <option value="$PROJECT_DIR$/Roller/unittests/test_roller.py" />
+        <option value="$PROJECT_DIR$/Roller/util/file_handler.py" />
+        <option value="$PROJECT_DIR$/Roller/util/utility_module.py" />
+        <option value="$PROJECT_DIR$/Roller/util/aupr.py" />
+        <option value="$PROJECT_DIR$/Roller/__init__.py" />
+        <option value="$PROJECT_DIR$/tdRoller_scripts/20150715_lag_testing.py" />
+        <option value="$PROJECT_DIR$/Roller/Window.py" />
+        <option value="$PROJECT_DIR$/Roller/RFRWindow.py" />
+        <option value="$PROJECT_DIR$/Roller/Roller.py" />
+        <option value="$PROJECT_DIR$/Roller/tdRoller.py" />
+        <option value="$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py" />
+        <option value="$PROJECT_DIR$/tdRoller_scripts/20150719_tdRoller_basic figure.py" />
+      </list>
+    </option>
+  </component>
+  <component name="NamedScopeManager">
+    <order />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="597" />
+    <option name="y" value="23" />
+    <option name="width" value="1323" />
+    <option name="height" value="1053" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Roller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Roller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Roller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Roller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Roller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tdRoller_scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="options.lastSelected" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="FullScreen" value="false" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/connectionstyle_demo.py" />
+    <property name="recentsLimit" value="5" />
+    <property name="LayoutCode.rearrangeEntriesPython" value="false" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="180" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="181" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="183" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="693" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder3" value="3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="180" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="181" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="183" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="693" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Roller/unittests" />
+      <recent name="$PROJECT_DIR$/Roller" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.20150719_tdRoller_basic figure">
+    <configuration default="false" name="tdRoller" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Roller" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Roller" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Roller/tdRoller.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="20150715_lag_testing" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tdRoller_scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Roller" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tdRoller_scripts/20150715_lag_testing.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="20150716_basic_tdRoller" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tdRoller_scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Roller" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="20150719_tdRoller_basic figure" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tdRoller_scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Roller" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tdRoller_scripts/20150719_tdRoller_basic figure.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="connectionstyle_demo" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Downloads" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Roller" />
+      <option name="SCRIPT_NAME" value="$USER_HOME$/Downloads/connectionstyle_demo.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Roller" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Attests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Roller" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Roller" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Nosetests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Roller" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Roller" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="py.test">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Roller" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="testToRun" value="" />
+      <option name="keywords" value="" />
+      <option name="params" value="" />
+      <option name="USE_PARAM" value="false" />
+      <option name="USE_KEYWORD" value="false" />
+      <method />
+    </configuration>
+    <list size="5">
+      <item index="0" class="java.lang.String" itemvalue="Python.tdRoller" />
+      <item index="1" class="java.lang.String" itemvalue="Python.20150715_lag_testing" />
+      <item index="2" class="java.lang.String" itemvalue="Python.20150716_basic_tdRoller" />
+      <item index="3" class="java.lang.String" itemvalue="Python.20150719_tdRoller_basic figure" />
+      <item index="4" class="java.lang.String" itemvalue="Python.connectionstyle_demo" />
+    </list>
+    <recent_temporary>
+      <list size="5">
+        <item index="0" class="java.lang.String" itemvalue="Python.20150719_tdRoller_basic figure" />
+        <item index="1" class="java.lang.String" itemvalue="Python.connectionstyle_demo" />
+        <item index="2" class="java.lang.String" itemvalue="Python.20150716_basic_tdRoller" />
+        <item index="3" class="java.lang.String" itemvalue="Python.20150715_lag_testing" />
+        <item index="4" class="java.lang.String" itemvalue="Python.tdRoller" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="" />
+      <created>1413916753036</created>
+      <option name="number" value="Default" />
+      <updated>1413916753036</updated>
+    </task>
+    <task id="LOCAL-00083" summary="Removed create_windows from Roller">
+      <created>1424373774466</created>
+      <option name="number" value="00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1424373774466</updated>
+    </task>
+    <task id="LOCAL-00084" summary="Added docstrings to Roller. Follow this convention in the future.  Docstrings include a &quot;Called by&quot; section that lists functions or scripts that call the function. The lists are not complete; but once they are, unused functions can be removed">
+      <created>1425937333614</created>
+      <option name="number" value="00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1425937333614</updated>
+    </task>
+    <task id="LOCAL-00085" summary="create_windows_no_next refactored to create_windows">
+      <created>1425937486700</created>
+      <option name="number" value="00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1425937486700</updated>
+    </task>
+    <task id="LOCAL-00086" summary="Started window refactoring">
+      <created>1426002684121</created>
+      <option name="number" value="00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1426002684121</updated>
+    </task>
+    <task id="LOCAL-00087" summary="Conflict merge">
+      <created>1428420752019</created>
+      <option name="number" value="00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1428420752019</updated>
+    </task>
+    <task id="LOCAL-00088" summary="Saving best scores and window sizes for google grant application figure">
+      <created>1428422864836</created>
+      <option name="number" value="00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1428422864836</updated>
+    </task>
+    <task id="LOCAL-00089" summary="Dionesus window started">
+      <created>1435257190937</created>
+      <option name="number" value="00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1435257190938</updated>
+    </task>
+    <task id="LOCAL-00090" summary="Old changes from looking at fisher information, can probably be ignored">
+      <created>1435257245408</created>
+      <option name="number" value="00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1435257245409</updated>
+    </task>
+    <task id="LOCAL-00091" summary="Added pls_nipals to Roller.util">
+      <created>1435265136144</created>
+      <option name="number" value="00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1435265136145</updated>
+    </task>
+    <task id="LOCAL-00092" summary="Changed LassoWindow.get_coef so that a new lasso object is made with each iteration">
+      <created>1435265730102</created>
+      <option name="number" value="00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1435265730102</updated>
+    </task>
+    <task id="LOCAL-00093" summary="Added unittest for dionesus window">
+      <created>1435327951579</created>
+      <option name="number" value="00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1435327951579</updated>
+    </task>
+    <task id="LOCAL-00094" summary="Updated Roller init">
+      <created>1435328145444</created>
+      <option name="number" value="00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1435328145444</updated>
+    </task>
+    <task id="LOCAL-00095" summary="Most Dionesus Window methods working">
+      <created>1435331223664</created>
+      <option name="number" value="00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1435331223664</updated>
+    </task>
+    <task id="LOCAL-00096" summary="Minor refactoring changes">
+      <created>1435334539127</created>
+      <option name="number" value="00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1435334539127</updated>
+    </task>
+    <task id="LOCAL-00097" summary="Roller reformatted to adhere to PEP8 standards">
+      <created>1436199907276</created>
+      <option name="number" value="00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1436199907277</updated>
+    </task>
+    <task id="LOCAL-00098" summary="LassoWindow reformatted to adhere to PEP8 standards">
+      <created>1436200000351</created>
+      <option name="number" value="00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1436200000351</updated>
+    </task>
+    <task id="LOCAL-00099" summary="Added comments to LassoWindow. Changed window method rank_edges to sort_edges to prevent overlap with Roller method">
+      <created>1436200768134</created>
+      <option name="number" value="00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1436200768134</updated>
+    </task>
+    <task id="LOCAL-00100" summary="Started tdRoller class for granger causality">
+      <created>1436288347523</created>
+      <option name="number" value="00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1436288347523</updated>
+    </task>
+    <task id="LOCAL-00101" summary="Added todo list to Roller.">
+      <created>1436289000081</created>
+      <option name="number" value="00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1436289000081</updated>
+    </task>
+    <task id="LOCAL-00102" summary="changed tdRoller zscore_all_data() and added bin_data">
+      <created>1436298094888</created>
+      <option name="number" value="00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1436298094888</updated>
+    </task>
+    <task id="LOCAL-00103" summary="Added tdRFRWindow to RFRWindow.py">
+      <created>1436300994169</created>
+      <option name="number" value="00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1436300994169</updated>
+    </task>
+    <task id="LOCAL-00104" summary="Seemingly dead end binning data. Saving work just in case...">
+      <created>1436373823024</created>
+      <option name="number" value="00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1436373823024</updated>
+    </task>
+    <task id="LOCAL-00105" summary="Removed data binning methods">
+      <created>1436374003151</created>
+      <option name="number" value="00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1436374003151</updated>
+    </task>
+    <task id="LOCAL-00106" summary="Beta version of tdRoller running. Need to verify outputs">
+      <created>1436383878323</created>
+      <option name="number" value="00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1436383878323</updated>
+    </task>
+    <task id="LOCAL-00107" summary="Updated roller fit_windows method to include n_jobs parameter">
+      <created>1436383960171</created>
+      <option name="number" value="00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1436383960171</updated>
+    </task>
+    <task id="LOCAL-00108" summary="Exploring output of tdRoller">
+      <created>1436386486692</created>
+      <option name="number" value="00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1436386486692</updated>
+    </task>
+    <task id="LOCAL-00109" summary="tdRoller appears to work. It needs additional functionalization and tweaking">
+      <created>1436394150692</created>
+      <option name="number" value="00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1436394150692</updated>
+    </task>
+    <task id="LOCAL-00110" summary="Testing edge evaluation for tdRoller">
+      <created>1436473127903</created>
+      <option name="number" value="00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1436473127903</updated>
+    </task>
+    <task id="LOCAL-00111" summary="tdRoller appears to score well for in silico networks">
+      <created>1436475413401</created>
+      <option name="number" value="00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1436475413401</updated>
+    </task>
+    <task id="LOCAL-00112" summary="Continuing testing">
+      <created>1436488201919</created>
+      <option name="number" value="00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1436488201919</updated>
+    </task>
+    <task id="LOCAL-00113" summary="Added print statement to Roller.fit_windows()">
+      <created>1436813021954</created>
+      <option name="number" value="00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1436813021954</updated>
+    </task>
+    <task id="LOCAL-00114" summary="Moved elbow_criteria function to util.utility_module">
+      <created>1436813201488</created>
+      <option name="number" value="00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1436813201488</updated>
+    </task>
+    <task id="LOCAL-00115" summary="get_coeffs() in tdRFRWindows now makes a dataframe with the child nodes as rows and parent nodes and columns">
+      <created>1436816015228</created>
+      <option name="number" value="00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1436816015228</updated>
+    </task>
+    <task id="LOCAL-00116" summary="Functionalized some tdRoller code">
+      <created>1436825855445</created>
+      <option name="number" value="00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1436825855445</updated>
+    </task>
+    <task id="LOCAL-00117" summary="added optimized function for compiling tdRoller results">
+      <created>1436891714917</created>
+      <option name="number" value="00117" />
+      <option name="project" value="LOCAL" />
+      <updated>1436891714918</updated>
+    </task>
+    <task id="LOCAL-00118" summary="overwrote score() for tdRoller">
+      <created>1436893648463</created>
+      <option name="number" value="00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1436893648463</updated>
+    </task>
+    <task id="LOCAL-00119" summary="Changed tdRoller so method make_sort_df() can sort based on different ways">
+      <created>1436987586978</created>
+      <option name="number" value="00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1436987586978</updated>
+    </task>
+    <task id="LOCAL-00120" summary="Testing multiple edge lumping strategies with tdRoller">
+      <created>1436992797823</created>
+      <option name="number" value="00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1436992797823</updated>
+    </task>
+    <task id="LOCAL-00121" summary="tdRoller testing moved to script. Roller __init__ updated">
+      <created>1436994457809</created>
+      <option name="number" value="00121" />
+      <option name="project" value="LOCAL" />
+      <updated>1436994457809</updated>
+    </task>
+    <task id="LOCAL-00122" summary="testing code fully removed from tdRoller">
+      <created>1436994485405</created>
+      <option name="number" value="00122" />
+      <option name="project" value="LOCAL" />
+      <updated>1436994485405</updated>
+    </task>
+    <task id="LOCAL-00123" summary="Added basic script for running tdRoller">
+      <created>1437058285966</created>
+      <option name="number" value="00123" />
+      <option name="project" value="LOCAL" />
+      <updated>1437058285966</updated>
+    </task>
+    <task id="LOCAL-00124" summary="Updated tdRFR method run_permutation()">
+      <created>1437060019658</created>
+      <option name="number" value="00124" />
+      <option name="project" value="LOCAL" />
+      <updated>1437060019658</updated>
+    </task>
+    <task id="LOCAL-00125" summary="Updated tdRFR to run permutation test properly">
+      <created>1437061423354</created>
+      <option name="number" value="00125" />
+      <option name="project" value="LOCAL" />
+      <updated>1437061423354</updated>
+    </task>
+    <task id="LOCAL-00126" summary="Minor adjustments to tdRFR window behavior">
+      <created>1437083377673</created>
+      <option name="number" value="00126" />
+      <option name="project" value="LOCAL" />
+      <updated>1437083377673</updated>
+    </task>
+    <task id="LOCAL-00127" summary="Modified tdRoller.augment_windows() so that lag length can be set">
+      <created>1437150027753</created>
+      <option name="number" value="00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1437150027753</updated>
+    </task>
+    <task id="LOCAL-00128" summary="Minor adjustments and testing">
+      <created>1437163109137</created>
+      <option name="number" value="00128" />
+      <option name="project" value="LOCAL" />
+      <updated>1437163109137</updated>
+    </task>
+    <task id="LOCAL-00129" summary="added make_possible_edge_list() to Roller">
+      <created>1437165932226</created>
+      <option name="number" value="00129" />
+      <option name="project" value="LOCAL" />
+      <updated>1437165932226</updated>
+    </task>
+    <task id="LOCAL-00130" summary="tdRoller now accounts for edges that don't have meaningful importance scores">
+      <created>1437169105785</created>
+      <option name="number" value="00130" />
+      <option name="project" value="LOCAL" />
+      <updated>1437169105785</updated>
+    </task>
+    <task id="LOCAL-00131" summary="Basic plotting added to make a figure for Neda">
+      <created>1437363214546</created>
+      <option name="number" value="00131" />
+      <option name="project" value="LOCAL" />
+      <updated>1437363214547</updated>
+    </task>
+    <option name="localTasksCounter" value="132" />
+    <servers />
+  </component>
+  <component name="TodoView" selected-index="0">
+    <todo-panel id="selected-file">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+    <todo-panel id="default-changelist">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="597" y="23" width="1323" height="1053" extended-state="6" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15646258" sideWeight="0.43050846" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19453125" sideWeight="0.5694915" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33015874" sideWeight="0.50080776" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20509978" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32448378" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39675516" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35840708" sideWeight="0.49919224" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32594234" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39800444" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33015874" sideWeight="0.50080776" order="9" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19453125" sideWeight="0.5694915" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20509978" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19453125" sideWeight="0.43050846" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.345898" sideWeight="0.49919224" order="2" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Updated roller fit_windows method to include n_jobs parameter" />
+    <MESSAGE value="Exploring output of tdRoller" />
+    <MESSAGE value="tdRoller appears to work. It needs additional functionalization and tweaking" />
+    <MESSAGE value="Testing edge evaluation for tdRoller" />
+    <MESSAGE value="tdRoller appears to score well for in silico networks" />
+    <MESSAGE value="Continuing testing" />
+    <MESSAGE value="Added print statement to Roller.fit_windows()" />
+    <MESSAGE value="Moved elbow_criteria function to util.utility_module" />
+    <MESSAGE value="get_coeffs() in tdRFRWindows now makes a dataframe with the child nodes as rows and parent nodes and columns" />
+    <MESSAGE value="Functionalized some tdRoller code" />
+    <MESSAGE value="added optimized function for compiling tdRoller results" />
+    <MESSAGE value="overwrote score() for tdRoller" />
+    <MESSAGE value="Changed tdRoller so method make_sort_df() can sort based on different ways" />
+    <MESSAGE value="Testing multiple edge lumping strategies with tdRoller" />
+    <MESSAGE value="tdRoller testing moved to script. Roller __init__ updated" />
+    <MESSAGE value="testing code fully removed from tdRoller" />
+    <MESSAGE value="Added basic script for running tdRoller" />
+    <MESSAGE value="Updated tdRFR method run_permutation()" />
+    <MESSAGE value="Updated tdRFR to run permutation test properly" />
+    <MESSAGE value="Minor adjustments to tdRFR window behavior" />
+    <MESSAGE value="Modified tdRoller.augment_windows() so that lag length can be set" />
+    <MESSAGE value="Minor adjustments and testing" />
+    <MESSAGE value="added make_possible_edge_list() to Roller" />
+    <MESSAGE value="tdRoller now accounts for edges that don't have meaningful importance scores" />
+    <MESSAGE value="Basic plotting added to make a figure for Neda" />
+    <option name="LAST_COMMIT_MESSAGE" value="Basic plotting added to make a figure for Neda" />
+    <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.10526317" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$USER_HOME$/Downloads/connectionstyle_demo.py</url>
+          <line>91</line>
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+      <option name="time" value="36" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Roller/util/Evaluator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="27" column="29" selection-start-line="27" selection-start-column="29" selection-end-line="27" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/Window.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="76" column="4" selection-start-line="76" selection-start-column="4" selection-end-line="100" selection-end-column="33" />
+          <folding>
+            <element signature="e#71#89#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/RFRWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="272" column="28" selection-start-line="272" selection-start-column="20" selection-end-line="272" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#7693#9974#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/Roller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="53" column="84" selection-start-line="53" selection-start-column="84" selection-end-line="53" selection-end-column="84" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/tdRoller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+          <folding>
+            <element signature="e#71#96#0" expanded="true" />
+            <element signature="e#938#1481#0" expanded="false" />
+            <element signature="e#1540#2218#0" expanded="false" />
+            <element signature="e#2290#2677#0" expanded="false" />
+            <element signature="e#2749#3826#0" expanded="false" />
+            <element signature="e#3892#5764#0" expanded="false" />
+            <element signature="e#5828#6516#0" expanded="false" />
+            <element signature="e#6618#8639#0" expanded="false" />
+            <element signature="e#8697#9372#0" expanded="false" />
+            <element signature="e#9429#9735#0" expanded="false" />
+            <element signature="e#10881#11722#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/util/Evaluator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/Window.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="76" column="4" selection-start-line="76" selection-start-column="4" selection-end-line="100" selection-end-column="33" />
+          <folding>
+            <element signature="e#71#89#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/RFRWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="272" column="28" selection-start-line="272" selection-start-column="20" selection-end-line="272" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#7693#9974#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/unittests/test_lassowrapper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6801909">
+          <caret line="37" column="36" selection-start-line="37" selection-start-column="36" selection-end-line="37" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/util/permutation_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.64593303">
+          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/util/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/unittests/test_lasso_window.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.6576087">
+          <caret line="65" column="53" selection-start-line="65" selection-start-column="53" selection-end-line="65" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/goldbetter_model/goldbetter_data.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.02918288">
+          <caret line="1" column="69" selection-start-line="0" selection-start-column="86" selection-end-line="1" selection-end-column="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/goldbetter_model/goldbetter_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.06552094">
+          <caret line="99" column="15" selection-start-line="99" selection-start-column="15" selection-end-line="99" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/unittests/test_pipeline.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.48335123">
+          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run_post_analysis_heatmaps.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/unittests/test_RF_pipeline.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="8" column="10" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/unittests/test_boostrap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.08055854">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="17" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/unittests/test_graphing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/util/linear_wrapper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="121" column="0" selection-start-line="121" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/util/ModelViewer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/unittests/test_permutation_tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="127" column="0" selection-start-line="127" selection-start-column="0" selection-end-line="127" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/None">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/unittests/test_aupr.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="18" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/unittests/test_window.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.30857143">
+          <caret line="24" column="51" selection-start-line="24" selection-start-column="51" selection-end-line="24" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/util/pls_nipals.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="3" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/unittests/test_dionesus_window.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="47" column="35" selection-start-line="47" selection-start-column="35" selection-end-line="47" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/organize_rollers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/archive/run_test_pipeline.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/unittests/test_rfr_window.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.07317073">
+          <caret line="14" column="27" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/unittests/test_roller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.14634146">
+          <caret line="21" column="30" selection-start-line="21" selection-start-column="30" selection-end-line="21" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run_pipeline_RF_window_scan_yeast100.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run_pipeline_RF_window_scan_100.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.29268292">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/util/file_handler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.46088436">
+          <caret line="75" column="27" selection-start-line="75" selection-start-column="27" selection-end-line="75" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/util/Grapher.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.8983958">
+          <caret line="75" column="0" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/util/Ranker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.0160428">
+          <caret line="40" column="26" selection-start-line="40" selection-start-column="26" selection-end-line="40" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/LassoWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.69518715">
+          <caret line="113" column="105" selection-start-line="113" selection-start-column="95" selection-end-line="113" selection-end-column="105" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/DionesusWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="135" column="22" selection-start-line="135" selection-start-column="22" selection-end-line="135" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/util/aupr.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.42028984">
+          <caret line="140" column="45" selection-start-line="140" selection-start-column="45" selection-end-line="140" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.026690392">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150715_lag_testing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.13345195">
+          <caret line="5" column="18" selection-start-line="5" selection-start-column="18" selection-end-line="5" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/util/utility_module.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.83985764">
+          <caret line="101" column="27" selection-start-line="101" selection-start-column="27" selection-end-line="101" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#19#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/RFRWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="272" column="28" selection-start-line="272" selection-start-column="20" selection-end-line="272" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#7693#9974#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/Window.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="76" column="4" selection-start-line="76" selection-start-column="4" selection-end-line="100" selection-end-column="33" />
+          <folding>
+            <element signature="e#71#89#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/Roller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="53" column="84" selection-start-line="53" selection-start-column="84" selection-end-line="53" selection-end-column="84" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/util/Evaluator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Roller/tdRoller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="243" column="37" selection-start-line="243" selection-start-column="37" selection-end-line="243" selection-end-column="37" />
+          <folding>
+            <element signature="e#71#96#0" expanded="true" />
+            <element signature="e#938#1481#0" expanded="false" />
+            <element signature="e#1540#2218#0" expanded="false" />
+            <element signature="e#2290#2677#0" expanded="false" />
+            <element signature="e#2749#3826#0" expanded="false" />
+            <element signature="e#3892#5764#0" expanded="false" />
+            <element signature="e#5828#6516#0" expanded="false" />
+            <element signature="e#6618#8639#0" expanded="false" />
+            <element signature="e#8697#9372#0" expanded="false" />
+            <element signature="e#9429#9735#0" expanded="false" />
+            <element signature="e#10881#11722#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="27" column="29" selection-start-line="27" selection-start-column="29" selection-end-line="27" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150719_tdRoller_basic figure.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="41" column="52" selection-start-line="41" selection-start-column="52" selection-end-line="41" selection-end-column="52" />
+          <folding>
+            <element signature="e#147#157#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

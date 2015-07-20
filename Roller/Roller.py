@@ -52,8 +52,33 @@ class Roller(object):
             self.gene_start = 0
 
         self.gene_list = self.raw_data.columns.values[self.gene_start:self.gene_end]
-
         self.window_list = []
+
+    def make_possible_edge_list(self, parents, children, self_edges=True):
+        """
+        Create a list of all the possible edges between parents and children
+
+        :param parents: array
+            labels for parents
+        :param children: array
+            labels for children
+        :param self_edges:
+        :return: array, length = parents * children
+            array of parent, child combinations for all possible edges
+        """
+        parent_index = range(len(parents))
+        child_index = range(len(children))
+        a, b = np.meshgrid(parent_index, child_index)
+        parent_list = parents[a.flatten()]
+        child_list = children[b.flatten()]
+        possible_edge_list = None
+        if self_edges:
+            possible_edge_list = zip(parent_list, child_list)
+
+        elif not self_edges:
+            possible_edge_list = zip(parent_list[parent_list != child_list], child_list[parent_list != child_list])
+
+        return possible_edge_list
 
     def get_n_windows(self):
         """
@@ -272,7 +297,7 @@ class Roller(object):
             window.initialize_params()
         return self.window_list
 
-    def fit_windows(self, alpha=None, n_trees=None):
+    def fit_windows(self, alpha=None, n_trees=None, show_progress=True):
         #todo: need a better way to pass parameters to fit functions
         """
         Fit each window in the list
@@ -292,7 +317,8 @@ class Roller(object):
             if self.window_type == "RandomForest":
                 if n_trees != None:
                     window.n_trees = n_trees
-            print "Fitting window %i of %i" %((window.nth_window+1), len(self.window_list))
+            if show_progress:
+                print "Fitting window %i of %i" %((window.nth_window+1), len(self.window_list))
             window.fit_window()
 
         return self.window_list
@@ -317,9 +343,10 @@ class Roller(object):
                 window.generate_results_table()
         if self.window_type == "RandomForest":
             for window in self.window_list:
-                print("Running permutation...")
-                window.run_permutation_test(n_permutations=permutation_n)
-                window.make_edge_table()
+                if window.include_window == True:
+                    print("Running permutation on window %i...")%window.nth_window
+                    window.run_permutation_test(n_permutations=permutation_n)
+                    window.make_edge_table()
         return self.window_list
 
     def average_rank(self, rank_by, ascending):
