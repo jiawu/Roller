@@ -123,6 +123,7 @@ class Evaluator:
         return(results)
 
     def calc_roc(self, pred):
+        pdb.set_trace()
         # True Positive Rate (TPR) = TP/(TP+FN)
         # False Positive Rate (FPR) = FP/(FP+TN)
 

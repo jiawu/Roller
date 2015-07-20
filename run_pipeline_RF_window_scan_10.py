@@ -17,8 +17,8 @@ INF_METHOD = "RandomForest"
 OUTPUT_PATH = "/projects/p20519/roller_output/optimizing_window_size/" + INF_METHOD + "/insilico_size10_"
 #OUTPUT_PATH = "Roller/unittests"
 UNIQUE_NAME  = INF_METHOD + "insilico_size10_"
-N_BOOT = 20
-N_PERM = 20
+N_BOOT = 5
+N_PERM = 5
 RANDOM_WINDOWS = False
 
 
