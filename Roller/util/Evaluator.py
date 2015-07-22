@@ -69,7 +69,33 @@ class Evaluator:
         #link_list.sort(columns='Edge_Exists', ascending=False, inplace=True)
         return link_list
 
-    def calc_pr(self, pred, sort_on = 'exists'):
+    def calc_pr(self,pred,sort_on = 'exists'):
+        tpr = []
+        fpr = []
+        pred = pred.drop(pred.index[[i for i,v in enumerate(pred['regulator-target']) if v[0]==v[1]]], axis=0)
+        
+        pred['tp']=pred['regulator-target'].isin(self.gs_flat)
+        pred['fp']=~pred['regulator-target'].isin(self.gs_flat)
+
+        ### find total number of edges
+        negative_edges = self.full_list[~self.full_list.isin(self.gs_flat)]
+        total_negative = len(negative_edges)
+        total_positive = len(self.gs_flat)
+
+        ### generate cumulative sum of tp, fp, tn, fn
+        pred['tp_cs'] = pred['tp'].cumsum()
+        pred['fp_cs'] = pred['fp'].cumsum()
+        pred['fn_cs'] = total_positive - pred['tp_cs']
+        pred['tn_cs'] = total_negative - pred['fp_cs']
+        
+        pred['recall']=pred['tp_cs']/(pred['tp_cs']+pred['fn_cs'])
+        pred['precision']=pred['tp_cs']/(pred['tp_cs']+pred['fp_cs'])
+        aupr = integrate.cumtrapz(x=pred['recall'], y=pred['precision']).tolist()
+        aupr.insert(0,0)
+        pred['aupr'] = aupr
+        return pred['precision'], pred['recall'], pred['aupr']
+      
+    def calc_pr_old(self, pred, sort_on = 'exists'):
         # True Positive Rate (TPR) = TP/(TP+FN)
         # False Positive Rate (FPR) = FP/(FP+TN)
 
