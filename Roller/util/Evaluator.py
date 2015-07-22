@@ -15,17 +15,26 @@ class Evaluator:
         self.gs_data['regulator-target'] = zip(self.gs_data.regulator, self.gs_data.target)
         self.interaction_label = interaction_label
         self.gs_flat = self.gs_data[self.gs_data['exists'] > 0]['regulator-target']
-        #more robust version of defining the full list
-        all_regulators = self.gs_data['regulator'].unique().tolist()
-        all_targets = self.gs_data['target'].unique().tolist()
-        all_regulators.extend(all_targets)
-        all_regulators = np.array(list(set(all_regulators)))
-        
-        self.full_list = tuple(map(tuple,self.possible_edges(all_regulators,
-          all_regulators)))
-        #remove self edges
-        self.full_list = [ x for x in self.full_list if x[0] != x[1] ]
-        self.full_list = pd.Series(self.full_list)
+        self.gs_neg = self.gs_data[self.gs_data['exists'] == 0]['regulator-target']
+        #ecoli has a unique gold standard file
+        if 'ecoli' in self.gs_file:
+            self.regulators = ["G"+str(x) for x in range(1,335)]
+            self.targets = ["G"+str(x) for x in range(1,4512)]
+            self.full_list = tuple(map(tuple,self.possible_edges(np.array(self.regulators),np.array(self.targets))))
+            self.full_list = [ x for x in self.full_list if x[0] != x[1] ]
+            self.full_list = pd.Series(self.full_list)
+        else:
+            #more robust version of defining the full list
+            all_regulators = self.gs_data['regulator'].unique().tolist()
+            all_targets = self.gs_data['target'].unique().tolist()
+            all_regulators.extend(all_targets)
+            all_regulators = np.array(list(set(all_regulators)))
+            
+            self.full_list = tuple(map(tuple,self.possible_edges(all_regulators,
+              all_regulators)))
+            #remove self edges
+            self.full_list = [ x for x in self.full_list if x[0] != x[1] ]
+            self.full_list = pd.Series(self.full_list)
 
     def possible_edges(self,parents, children):
         """
@@ -123,6 +132,35 @@ class Evaluator:
         return(results)
 
     def calc_roc(self, pred):
+        """much faster calculations for AUROC"""
+        tp = 0.0
+        fp = 0.0
+        tpr = []
+        fpr = []
+        pred = pred.drop(pred.index[[i for i,v in enumerate(pred['regulator-target']) if v[0]==v[1]]], axis=0)
+        
+        pred['tp']=pred['regulator-target'].isin(self.gs_flat)
+        pred['fp']=~pred['regulator-target'].isin(self.gs_flat)
+
+        ### find total number of edges
+        negative_edges = self.full_list[~self.full_list.isin(self.gs_flat)]
+        total_negative = len(negative_edges)
+        total_positive = len(self.gs_flat)
+
+        ### generate cumulative sum of tp, fp, tn, fn
+        pred['tp_cs'] = pred['tp'].cumsum()
+        pred['fp_cs'] = pred['fp'].cumsum()
+        pred['fn_cs'] = total_positive - pred['tp_cs']
+        pred['tn_cs'] = total_negative - pred['fp_cs']
+        
+        pred['tpr']=pred['tp_cs']/total_positive
+        pred['fpr']=pred['fp_cs']/total_negative
+        auroc = integrate.cumtrapz(x=pred['fpr'], y=pred['tpr']).tolist()
+        auroc.insert(0,0)
+        pred['auroc'] = auroc
+        return pred['tpr'], pred['fpr'], pred['auroc']
+    
+    def calc_roc_old(self, pred):
         pdb.set_trace()
         # True Positive Rate (TPR) = TP/(TP+FN)
         # False Positive Rate (FPR) = FP/(FP+TN)
