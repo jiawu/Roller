@@ -53,6 +53,7 @@ class Analyzer:
             warnings.warn("Roller with all timepoints is not present. Using Roller with a maximum width of %s as comparison window" % (max_width))
         return(max_row)
 
+
     def get_window_tag(self):
         window_size = self.current_roller.window_width
         tag = self.current_pickle_path + "Width: " + str(window_size)
@@ -85,6 +86,8 @@ class Analyzer:
             network_paths.append(self.current_roller.file_path)
             window_width_list.append(roller_obj.window_width)
 
+    def check_ranked_list(self,roller_obj):
+        for index,window in enumerate(roller_obj.window_list):
             try:
                 sorted_edge_list = window.results_table
                 #check if the sorted edge list actually has importance/ranking values. if it doesn't, raise an error

@@ -7,7 +7,7 @@ from sklearn.cross_validation import KFold
 from scipy import integrate
 from scipy import stats
 import scipy
-
+import time
 
 from Window import Window
 
@@ -167,14 +167,20 @@ class tdRFRWindow(RandomForestRegressionWindow):
         super(tdRFRWindow, self).__init__(dataframe, window_info, roller_data)
         self.x_data = None
         self.x_labels = None
-        self.augmented_edge_list = None
+        self.x_times = None
+        self.edge_table = None
+        self.include_window = True
+        self.earlier_window_idx = None
 
     def fit_window(self, n_jobs=1):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
         """
-        self.edge_importance = self.get_coeffs(self.n_trees, self.x_data, n_jobs=n_jobs)
+        if self.include_window:
+            print "Regressing window index %i against the following window indices: "%self.nth_window,\
+                self.earlier_window_idx
+            self.edge_importance = self.get_coeffs(self.n_trees, self.x_data, n_jobs=n_jobs)
 
     def get_coeffs(self, n_trees, data=None, n_jobs=-1):
         """
@@ -195,7 +201,7 @@ class tdRFRWindow(RandomForestRegressionWindow):
 
         model_list = []
         for col_index, column in enumerate(all_data[:,:max_nodes].T):
-            # Once we get go through all the nodes at this timepoint we can stop
+            # Once we get through all the nodes at this timepoint we can stop
             if col_index == max_nodes:
                 break
             #print "Inferring parents for gene %i of %i" % (col_index, self.n_labels)
@@ -223,4 +229,61 @@ class tdRFRWindow(RandomForestRegressionWindow):
             #training_scores, test_scores = self.crag_window(model_params)
             #self.training_scores.append(training_scores)
             #self.test_scores.append(test_scores)
-        return coeff_matrix
+        importance_dataframe = pd.DataFrame(coeff_matrix, index=self.x_labels[:max_nodes], columns=self.x_labels)
+        importance_dataframe.index.name = 'Child'
+        importance_dataframe.columns.name = 'Parent'
+
+        return importance_dataframe
+
+    def make_edge_table(self):
+        """
+        Make the edge table
+        :return:
+        """
+
+        if not self.include_window:
+            return
+
+        # Build indexing method for all possible edges. Length = number of parents * number of children
+        parent_index = range(self.edge_importance.shape[1])
+        child_index = range(self.edge_importance.shape[0])
+        a, b = np.meshgrid(parent_index, child_index)
+
+        # Flatten arrays to be used in link list creation
+        df = pd.DataFrame()
+        df['Parent'] = self.edge_importance.columns.values[a.flatten()]
+        df['Child'] = self.edge_importance.index.values[b.flatten()]
+        df['Importance'] = self.edge_importance.values.flatten()
+        df['P_window'] = self.x_times[a.flatten()]
+        df['C_window'] = self.x_times[b.flatten()]
+        if self.permutation_p_values is not None:
+            df["p_value"] = self.permutation_p_values.flatten()
+
+        return df
+
+    def run_permutation_test(self, n_permutations=1000, n_jobs=1):
+        if not self.include_window:
+            return
+        #initialize permutation results array
+        self.permutation_means = np.empty(self.edge_importance.shape)
+        self.permutation_sd = np.empty(self.edge_importance.shape)
+
+        zeros = np.zeros(self.edge_importance.shape)
+
+        #initialize running calculation
+        result = {'n':zeros.copy(), 'mean':zeros.copy(), 'ss':zeros.copy()}
+
+        for nth_perm in range(0, n_permutations):
+            #permute data
+            permuted_data = self.permute_data(self.x_data)
+
+            #fit the data and get coefficients
+
+            permuted_coeffs = self.get_coeffs(self.n_trees, permuted_data, n_jobs=n_jobs)
+            dummy_list = []
+            dummy_list.append(permuted_coeffs)
+            result = self.update_variance_2D(result, dummy_list)
+
+        self.permutation_means = result['mean'].copy()
+        self.permutation_sd = np.sqrt(result['variance'].copy())
+        self.permutation_p_values = self.calc_p_value()
