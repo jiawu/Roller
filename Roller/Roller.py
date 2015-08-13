@@ -257,7 +257,7 @@ class Roller(object):
         """
         for window in self.window_list:
             window.initialize_params()
-            window.fit_window()
+            window.fit_window(crag=False)
 
     def rank_windows(self, n_permutes=1000, n_bootstraps=1000, n_alphas=20, noise=0.2):
         """
@@ -297,7 +297,7 @@ class Roller(object):
             window.initialize_params()
         return self.window_list
 
-    def fit_windows(self, alpha=None, n_trees=None, show_progress=True):
+    def fit_windows(self, crag=True, alpha=None, n_trees=None, show_progress=True):
         #todo: need a better way to pass parameters to fit functions
         """
         Fit each window in the list
@@ -319,11 +319,11 @@ class Roller(object):
                     window.n_trees = n_trees
             if show_progress:
                 print "Fitting window %i of %i" %((window.nth_window+1), len(self.window_list))
-            window.fit_window()
+            window.fit_window(crag=crag)
 
         return self.window_list
 
-    def rank_edges(self, n_bootstraps=1000, permutation_n=1000):
+    def rank_edges(self, n_bootstraps=1000, permutation_n=1000,crag=True):
         """
         Run tests to rank edges in windows
 
@@ -343,7 +343,7 @@ class Roller(object):
                 window.generate_results_table()
         if self.window_type == "RandomForest":
             for window in self.window_list:
-                if window.include_window == True:
+                if window.include_window:
                     print("Running permutation on window %i...")%window.nth_window
                     window.run_permutation_test(n_permutations=permutation_n)
                     window.make_edge_table()

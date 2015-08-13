@@ -1,6 +1,6 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
-
+import pdb
 from Roller import Roller
 from RFRWindow import tdRFRWindow
 import numpy as np
@@ -164,7 +164,6 @@ class tdRoller(Roller):
 
         if not self_edges:
             df = df[df.Parent != df.Child]
-
         df['Edge'] = zip(df.Parent, df.Child)
         df['Lag'] = df.C_window - df.P_window
         self.full_edge_list = df.copy()

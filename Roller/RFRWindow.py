@@ -48,7 +48,7 @@ class RandomForestRegressionWindow(Window):
         self.results_table = self.results_table.sort(columns=rank_column_name, axis=0)
         return self.results_table
 
-    def run_permutation_test(self, n_permutations=1000, n_jobs=-1):
+    def run_permutation_test(self, crag=True, n_permutations=1000, n_jobs=-1):
         #initialize permutation results array
         self.permutation_means = np.empty((self.n_genes, self.n_genes))
         self.permutation_sd = np.empty((self.n_genes, self.n_genes))
@@ -66,7 +66,7 @@ class RandomForestRegressionWindow(Window):
 
             #fit the data and get coefficients
 
-            permuted_coeffs = self.get_coeffs(self.n_trees, permuted_data, n_jobs=n_jobs)
+            permuted_coeffs = self.get_coeffs(self.n_trees, crag=crag, data=permuted_data, n_jobs=n_jobs)
             dummy_list = []
             dummy_list.append(permuted_coeffs)
             result = self.update_variance_2D(result, dummy_list)
@@ -108,7 +108,7 @@ class RandomForestRegressionWindow(Window):
             raise ValueError("Number of trees must be int (>=0) or None")
         return
 
-    def fit_window(self, n_jobs=-1):
+    def fit_window(self, crag=True, n_jobs=-1):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
@@ -117,9 +117,9 @@ class RandomForestRegressionWindow(Window):
         if self.n_trees is None:
             raise ValueError("window alpha value must be set before the window can be fit")
 
-        self.edge_importance = self.get_coeffs(self.n_trees, n_jobs=n_jobs)
+        self.edge_importance = self.get_coeffs(self.n_trees, crag=crag, n_jobs=n_jobs)
 
-    def get_coeffs(self, n_trees, data=None, n_jobs=-1):
+    def get_coeffs(self, n_trees, crag=True, data=None, n_jobs=-1):
         """
 
         :param data:
@@ -156,9 +156,10 @@ class RandomForestRegressionWindow(Window):
             coeffs = np.insert(coeffs, col_index, 0)
             coeff_matrix = np.vstack((coeff_matrix, coeffs))
             # there's some scoping issues here. cragging needs the roller's raw data but the window does not know what roller contains (outside scope). have to pass in the roller's raw data and save it somehow :/
-            training_scores, test_scores = self.crag_window(model_params)
-            self.training_scores.append(training_scores)
-            self.test_scores.append(test_scores)
+            if crag == True:
+                training_scores, test_scores = self.crag_window(model_params)
+                self.training_scores.append(training_scores)
+                self.test_scores.append(test_scores)
 
         return coeff_matrix
 
@@ -172,7 +173,7 @@ class tdRFRWindow(RandomForestRegressionWindow):
         self.include_window = True
         self.earlier_window_idx = None
 
-    def fit_window(self, n_jobs=1):
+    def fit_window(self, crag=True ,n_jobs=1):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
@@ -180,9 +181,9 @@ class tdRFRWindow(RandomForestRegressionWindow):
         if self.include_window:
             print "Regressing window index %i against the following window indices: "%self.nth_window,\
                 self.earlier_window_idx
-            self.edge_importance = self.get_coeffs(self.n_trees, self.x_data, n_jobs=n_jobs)
+            self.edge_importance = self.get_coeffs(self.n_trees, crag=crag, data=self.x_data, n_jobs=n_jobs)
 
-    def get_coeffs(self, n_trees, data=None, n_jobs=-1):
+    def get_coeffs(self, n_trees, crag=True, data=None, n_jobs=-1):
         """
 
         :param data:
@@ -261,7 +262,7 @@ class tdRFRWindow(RandomForestRegressionWindow):
 
         return df
 
-    def run_permutation_test(self, n_permutations=1000, n_jobs=1):
+    def run_permutation_test(self, n_permutations=1000, n_jobs=1,crag=True):
         if not self.include_window:
             return
         #initialize permutation results array
@@ -279,7 +280,7 @@ class tdRFRWindow(RandomForestRegressionWindow):
 
             #fit the data and get coefficients
 
-            permuted_coeffs = self.get_coeffs(self.n_trees, permuted_data, n_jobs=n_jobs)
+            permuted_coeffs = self.get_coeffs(self.n_trees, data=permuted_data, n_jobs=n_jobs,)
             dummy_list = []
             dummy_list.append(permuted_coeffs)
             result = self.update_variance_2D(result, dummy_list)
