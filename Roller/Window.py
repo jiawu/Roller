@@ -24,6 +24,7 @@ class Window(object):
             Dictionary that provides data that can be used to uniquely identify a window
         :return:
         """
+        self.include_window=True
         self.model = []
         self.time_label = window_info['time_label']
         self.gene_start = window_info['gene_start']

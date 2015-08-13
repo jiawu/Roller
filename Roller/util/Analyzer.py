@@ -16,29 +16,22 @@ class Analyzer:
         self.total_files_unpickled = []
         self.error_list = []
         self.overall_df = pd.DataFrame()
-        for pickle_path in os.listdir(pickle_path_folder):
+        self.pickle_paths = os.listdir(pickle_path_folder)
+
+        for pickle_path in self.pickle_paths:
             self.current_pickle_path = pickle_path
             try:
-                
                 self.current_roller = pd.read_pickle(pickle_path_folder+"/"+ pickle_path)
                 df = self.aggregate_ranked_list(self.current_roller)
                 self.overall_df = self.overall_df.append(df)
-
             except KeyError:
                 continue
-
             self.total_files_unpickled.append(pickle_path)
-
         
+    def load_list(self,csv_file_path):
+        self.overall_df = pd.read_csv(csv_file_path)
+        return(df)
 
-        
-
-        ### correlation between ###
-
-        ### guess best window ###
-
-        ### check if best window is better than status quo ###
-    
     def get_best_window(self):
         best_row = self.overall_df.loc[self.overall_df['window_width'].idxmax()]
         return(best_row)
@@ -52,7 +45,6 @@ class Analyzer:
             #find max window size
             warnings.warn("Roller with all timepoints is not present. Using Roller with a maximum width of %s as comparison window" % (max_width))
         return(max_row)
-
 
     def get_window_tag(self):
         window_size = self.current_roller.window_width
@@ -130,14 +122,26 @@ class Analyzer:
 
                 window_index_list.append(index+1)
 
-
-
             except (AttributeError,IndexError):
                 window_tag = self.get_window_tag()
                 self.error_list.append(window_tag + "Window Index " + str(index) + " : No results table")
         
         if auroc_list:
-          df = pd.DataFrame( {'pickle_paths':pickle_paths,'network_paths':network_paths,'auroc':auroc_list,'aupr':aupr_list,'window_index':window_index_list,'crag_mse_average':crag_mse_average_list,'crag_ev_average':crag_ev_average_list,'crag_r2_average':crag_r2_average_list,'crag_mse_median':crag_mse_median_list,'crag_ev_median':crag_ev_median_list,'crag_r2_median':crag_r2_median_list,'crag_ev_max':crag_ev_max_list,'crag_mse_max':crag_mse_max_list,'crag_r2_max':crag_r2_max_list,'window_width':window_width_list})
+          df = pd.DataFrame( {'pickle_paths':pickle_paths,
+                              'network_paths':network_paths,
+                              'auroc':auroc_list,
+                              'aupr':aupr_list,
+                              'window_index':window_index_list,
+                              'crag_mse_average':crag_mse_average_list,
+                              'crag_ev_average':crag_ev_average_list,
+                              'crag_r2_average':crag_r2_average_list,
+                              'crag_mse_median':crag_mse_median_list,
+                              'crag_ev_median':crag_ev_median_list,
+                              'crag_r2_median':crag_r2_median_list,
+                              'crag_ev_max':crag_ev_max_list,
+                              'crag_mse_max':crag_mse_max_list,
+                              'crag_r2_max':crag_r2_max_list,
+                              'window_width':window_width_list})
         return(df) 
 
 
