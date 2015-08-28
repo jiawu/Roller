@@ -14,8 +14,13 @@ gene_start_column = 1
 time_label = "Time"
 separator = "\t"
 gene_end = None
+
+df = pd.read_csv(file_path,sep=separator)
 current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
-evaluator = Evaluator(current_gold_standard, '\t')
+node_list = df.columns.tolist()
+node_list.pop(0)
+
+evaluator = Evaluator(current_gold_standard, '\t', node_list=node_list)
 true_edges = evaluator.gs_flat.tolist()
 pd.options.display.float_format = '{:,.5f}'.format
 

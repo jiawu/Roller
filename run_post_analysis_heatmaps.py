@@ -12,18 +12,15 @@ import numpy as np
 import kdpee
 
 #get all pickle files
-path="/projects/p20519/roller_output/optimizing_window_size/RandomForest/insilico_size10_1/"
-#path="/projects/p20519/archived_rollers/Roller_outputs_RF_moretrees/"
-#path="/projects/p20519/archived_rollers/"
-#path="/projects/p20519/Roller_outputs_RF/"
+path="/projects/p20519/roller_output/optimizing_window_size/RandomForest/janes/"
 filenames = next(os.walk(path))[2]
 nfiles = len(filenames)
 #organize pickled objects by dataset analyzed
 obj_list = []
 counter = 0
-image_file_path = "/home/jjw036/Roller/aggregated"
+image_file_path = "/home/jjw036/Roller/janes"
 
-target_dataset =  "data/dream4/insilico_size10_1_timeseries.tsv"
+target_dataset =  '/projects/p20519/Roller/data/invitro/janes_timeseries.tsv'
 img_suffix = "1"
 gp_left = 0.2
 gp_bottom = 0.1
@@ -31,7 +28,7 @@ gp_width = 0.7
 gp_height = 0.2
 
 padding = 0.01
-numTFs = 20
+numTFs = 200
 dm_left = gp_left
 dm_bottom = gp_bottom+gp_height+2*padding
 dm_width = gp_width
@@ -109,10 +106,15 @@ for file in filenames:
           sorted_edge_list.sort(['p_value'], ascending=[True], inplace=True)
           #sorted_edge_list = sorted_edge_list[np.isfinite(sorted_edge_list['p-means'])]
           sorted_edge_list = sorted_edge_list[np.isfinite(sorted_edge_list['p_value'])]
-          #pdb.set_trace()
           precision, recall, aupr = evaluator.calc_pr(sorted_edge_list)
+          precision = precision.tolist()
+          recall = recall.tolist()
+          aupr = aupr.tolist()
           tpr, fpr, auroc = evaluator.calc_roc(sorted_edge_list)
-          
+          auroc = auroc.tolist()
+          tpr = tpr.tolist()
+          fpr = fpr.tolist()
+
           window_auroc.append(auroc[-1])
 
           window_size_list.append(window_size)
@@ -136,7 +138,7 @@ for file in filenames:
 #print(window_size_list)
 size_to_auroc = zip(window_size_list,window_start_list, window_auroc)
 size_to_aupr = zip(window_size_list,window_start_list, aupr_list2)
-
+pdb.set_trace()
 f = plt.figure(figsize=(10,10))
 axarr2 = f.add_axes([gp_left, gp_bottom, gp_width, gp_height])
 axarr1 = f.add_axes([dm_left, dm_bottom, dm_width, dm_height])
@@ -178,7 +180,7 @@ for l in axarr1.get_xticklines() + axarr1.get_yticklines():
     l.set_markersize(0)
 unique_window_sizes = list(set(window_size_list))
 for color_index,window_size in enumerate(unique_window_sizes):
-    if window_size == 15:  
+    if window_size == roller_obj.overall_width:  
       if window_size == max(unique_window_sizes):
           #add horizontal line instead of adding dot plot
           line_start_list = [min(time_vector), max(time_vector)]
@@ -186,13 +188,19 @@ for color_index,window_size in enumerate(unique_window_sizes):
           line_auroc = [line_auroc[0],line_auroc[0]]
           axarr2.plot(map(int,line_start_list), line_auroc, linestyle='--',color =
               tableau20[color_index], label = "WS "+str(window_size))
-      else:
-          line_start_list = [item[1] for item in size_to_auroc if item[0] == window_size]
-          line_auroc = [item[2] for item in size_to_auroc if item[0] == window_size]
-          axarr2.plot(map(int,line_start_list), line_auroc, 'o', linestyle='-',color =
-              tableau20[color_index], label = "WS "+str(window_size))
+    else:
+        line_start_list = [item[1] for item in size_to_auroc if item[0] == window_size]
+        line_auroc = [item[2] for item in size_to_auroc if item[0] == window_size]
+        axarr2.plot(map(int,line_start_list), line_auroc, 'o', linestyle='-',color =
+            tableau20[color_index], label = "WS "+str(window_size))
 axarr2.xaxis.set_ticks_position('bottom')
-axarr2.xaxis.set_ticks(np.arange(0,1050,50))
+
+pdb.set_trace()
+axarr2.get_xaxis().get_major_formatter().labelOnlyBase = False
+line_ticks = np.arange(roller_obj.time_vec[0],roller_obj.time_vec[-1],200)
+axarr2.xaxis.set_ticks(line_ticks)
+
+#axarr2.xaxis.set_ticks(np.arange(0,1050,50))
 xlabels = axarr2.get_xticklabels()
 ylabels = axarr2.get_yticklabels()
 for label in xlabels:
@@ -209,7 +217,7 @@ axarr2.set_position([box.x0, box.y0 + box.height * 0.2,
 axarr2.legend(fontsize=8,bbox_to_anchor=(0.5, -0.2), loc='upper center',ncol=7,fancybox=True, shadow=True)
 axarr1.set_ylabel('Genes (multiple perturbations)')
 axarr2.set_ylabel('AUROC')
-image_save = image_file_path + "_windowsize_lasso_heatmap_" + img_suffix + ".png"
+image_save = image_file_path + "_windowsize_RF_heatmap_" + img_suffix + ".png"
 f.savefig(image_save,format="png")
 print("AUROC:")
 size_to_auroc.sort(key=lambda tup:tup[0],reverse=True)
