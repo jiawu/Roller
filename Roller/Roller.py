@@ -323,7 +323,7 @@ class Roller(object):
 
         return self.window_list
 
-    def rank_edges(self, n_bootstraps=1000, permutation_n=1000):
+    def rank_edges(self, n_bootstraps=1000, permutation_n=1000,crag=True):
         """
         Run tests to rank edges in windows
 
@@ -337,15 +337,15 @@ class Roller(object):
 
         if self.window_type == "Lasso":
             for window in self.window_list:
-                window.run_permutation_test(n_permutations=permutation_n)
+                window.run_permutation_test(n_permutations=permutation_n, crag=crag)
                 print("Running bootstrap...")
                 window.run_bootstrap(n_bootstraps=n_bootstraps)
                 window.generate_results_table()
         if self.window_type == "RandomForest":
             for window in self.window_list:
-                if window.include_window == True:
+                if window.include_window:
                     print("Running permutation on window %i...")%window.nth_window
-                    window.run_permutation_test(n_permutations=permutation_n)
+                    window.run_permutation_test(n_permutations=permutation_n, crag=crag)
                     window.make_edge_table()
         return self.window_list
 

@@ -16,28 +16,17 @@ class Analyzer:
         self.total_files_unpickled = []
         self.error_list = []
         self.overall_df = pd.DataFrame()
-        for pickle_path in os.listdir(pickle_path_folder):
+        self.pickle_paths = os.listdir(pickle_path_folder)
+
+        for pickle_path in self.pickle_paths:
             self.current_pickle_path = pickle_path
             try:
-                
                 self.current_roller = pd.read_pickle(pickle_path_folder+"/"+ pickle_path)
                 df = self.aggregate_ranked_list(self.current_roller)
                 self.overall_df = self.overall_df.append(df)
-
             except KeyError:
                 continue
-
             self.total_files_unpickled.append(pickle_path)
-
-        
-
-        
-
-        ### correlation between ###
-
-        ### guess best window ###
-
-        ### check if best window is better than status quo ###
     
     def predict_best_window(self):
         #max_value = self.overall_df['crag_mse_average'].max()
@@ -52,6 +41,15 @@ class Analyzer:
 
     def get_correlation(self):
         return(self.overall_df.corr())
+
+        
+    def load_list(self,csv_file_path):
+        self.overall_df = pd.read_csv(csv_file_path)
+        return(df)
+
+    def get_best_window(self):
+        best_row = self.overall_df.loc[self.overall_df['window_width'].idxmax()]
+        return(best_row)
 
     def get_max_window(self):
         ### identify status quo ###
@@ -91,6 +89,10 @@ class Analyzer:
         window_width_list = []
 
         for index,window in enumerate(roller_obj.window_list):
+            pickle_paths.append(self.current_pickle_path)
+            network_paths.append(self.current_roller.file_path)
+            window_width_list.append(roller_obj.window_width)
+
             if not self.current_roller.file_path.startswith("/"):
                 self.current_roller.file_path = self.current_roller.file_path.replace("data/","/projects/p20519/Roller/data/")
             pickle_paths.append(self.current_pickle_path)
@@ -142,8 +144,6 @@ class Analyzer:
 
                 window_index_list.append(index)
 
-
-
             except (AttributeError,IndexError):
                 window_tag = self.get_window_tag()
                 self.error_list.append(window_tag + "Window Index " + str(index) + " : No results table")
@@ -162,7 +162,22 @@ class Analyzer:
               crag_mse_max_list = [0]
               crag_r2_max_list = [0]
               crag_ev_max_list = [0]
-          df = pd.DataFrame( {'pickle_paths':pickle_paths,'network_paths':network_paths,'auroc':auroc_list,'aupr':aupr_list,'window_index':window_index_list,'crag_mse_average':crag_mse_average_list,'crag_ev_average':crag_ev_average_list,'crag_r2_average':crag_r2_average_list,'crag_mse_median':crag_mse_median_list,'crag_ev_median':crag_ev_median_list,'crag_r2_median':crag_r2_median_list,'crag_ev_max':crag_ev_max_list,'crag_mse_max':crag_mse_max_list,'crag_r2_max':crag_r2_max_list,'window_width':window_width_list})
+          
+          df = pd.DataFrame( {'pickle_paths':pickle_paths,
+                              'network_paths':network_paths,
+                              'auroc':auroc_list,
+                              'aupr':aupr_list,
+                              'window_index':window_index_list,
+                              'crag_mse_average':crag_mse_average_list,
+                              'crag_ev_average':crag_ev_average_list,
+                              'crag_r2_average':crag_r2_average_list,
+                              'crag_mse_median':crag_mse_median_list,
+                              'crag_ev_median':crag_ev_median_list,
+                              'crag_r2_median':crag_r2_median_list,
+                              'crag_ev_max':crag_ev_max_list,
+                              'crag_mse_max':crag_mse_max_list,
+                              'crag_r2_max':crag_r2_max_list,
+                              'window_width':window_width_list})
         return(df) 
 
 

@@ -9,9 +9,9 @@ import pdb
 """
 This pipeline scans a range of window sizes for a given inference method and generates roller objects for post analysis.
 
-This runs the analysis for Janes et al 2005.
+This is a pipeline scanning the Janes data.
 """
-INPUT_PATH = "data/dream4/janes"
+INPUT_PATH = "/projects/p20519/Roller/data/invitro/janes"
 INF_METHOD = "RandomForest"
 OUTPUT_PATH = "/projects/p20519/roller_output/optimizing_window_size/" + INF_METHOD + "/janes"
 UNIQUE_NAME  = INF_METHOD + "janes"
@@ -40,14 +40,15 @@ if __name__ == "__main__":
     roller.set_window(width=window_size)
     roller.create_windows(random_time = RANDOM_WINDOWS)
     roller.optimize_params()
-    if window_size == 34:
+    if window_size == 13:
         roller.fit_windows(crag=False)
+        roller.rank_edges(permutation_n = N_PERM, crag=False)
     else:
         roller.fit_windows()
-    roller.rank_edges(permutation_n = N_PERM)
+        roller.rank_edges(permutation_n = N_PERM)
 
-    unique_filename = OUTPUT_PATH  + "/" + str(uuid.uuid4())
-    print(unique_filename)
+    unique_filename = OUTPUT_PATH  + "/" + "_window_size_"+ str(window_size) +"_"+ str(uuid.uuid4())
     with open(unique_filename, 'wb') as output:
+    #with gzip.GzipFile(unique_filename,'w') as output:
       pickle.dump(roller,output, pickle.HIGHEST_PROTOCOL)
-
+    #joblib.dump(roller, unique_filename)

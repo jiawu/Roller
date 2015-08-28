@@ -42,12 +42,13 @@ if __name__ == "__main__":
     roller.optimize_params()
     if window_size == 34:
         roller.fit_windows(crag=False)
+        roller.rank_edges(permutation_n = N_PERM, crag=False)
     else:
         roller.fit_windows()
-    roller.rank_edges(permutation_n = N_PERM)
+        roller.rank_edges(permutation_n = N_PERM)
 
     unique_filename = OUTPUT_PATH  + "/" + str(uuid.uuid4())
     print(unique_filename)
     with open(unique_filename, 'wb') as output:
-      pickle.dump(roller,output, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(roller,output, pickle.HIGHEST_PROTOCOL)
 

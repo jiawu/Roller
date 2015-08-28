@@ -12,13 +12,13 @@ import numpy as np
 import kdpee
 #import seaborn
 #get all pickle files
-path="/projects/p20519/Roller_outputs_RF_random/"
+path="/projects/p20519/roller_output/optimizing_window_size/RandomForest/janes/"
 filenames = next(os.walk(path))[2]
 nfiles = len(filenames)
 #organize pickled objects by dataset analyzed
 obj_list = []
 counter = 0
-image_file_path = "/home/jjw036/Roller/aggregated_random_RF"
+image_file_path = "/home/jjw036/Roller/aggregated_janes_RF"
 
 
 #todo: calculate distance between two edge lists
@@ -55,11 +55,11 @@ colors = np.linspace(0,1,22)
 
 overall_df = pd.DataFrame()
 
-target_dataset =  "data/dream4/insilico_size10_1_timeseries.tsv"
+target_dataset =  "data/invitro/janes_timeseries.tsv"
 img_suffix = "1"
 #dataset_list = ["1"]
 
-dataset_list = ["1","2","3","4","5"]
+dataset_list = ["1"]
 for dataset_counter in dataset_list:
   edge_list = []
   dataset_dict = {}
@@ -87,7 +87,7 @@ for dataset_counter in dataset_list:
 
   window_size_list = []
   img_suffix = str(dataset_counter)
-  target_dataset =  "data/dream4/insilico_size10_"+dataset_counter+"_timeseries.tsv"
+  target_dataset =  "data/invitro/janes_timeseries.tsv"
   for file in filenames:
       full_path = path + file
       print(full_path)
@@ -101,7 +101,9 @@ for dataset_counter in dataset_list:
         print(str(counter) + " out of " + str(nfiles))
         key = roller_obj.file_path
         if key == target_dataset:
+          pdb.set_trace()
           target_roller = roller_obj
+
           window_size = roller_obj.window_width
           averaged_edge_list = roller_obj.average_rank(rank_by='importance',
               ascending = False)
@@ -190,6 +192,7 @@ for dataset_counter in dataset_list:
   image_save = image_file_path + "_correlation.png"
   optimal_correlation.savefig(image_save)
   
+  pdb.set_trace()
   optimal_time = target_roller.raw_data['Time'].unique()[11:]
   
   #plot GvsG
