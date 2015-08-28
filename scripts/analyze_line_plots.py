@@ -66,13 +66,13 @@ time_vec = analyzer.current_roller.time_vec.tolist()
 
 lp = LinePlot()
 
+lp.set_x_values(time_vec)
 
 my_df = analyzer.overall_df
 grouped = my_df.groupby(['window_width','window_index'])
 
 ## iterate through window_sizes 
 unique_window_sizes = list(set(analyzer.overall_df['window_width'].tolist()))
-lp.set_x_values(unique_window_sizes)
 best_window_values = []
 for color_index, window_size in enumerate(unique_window_sizes):
     series_y = []
@@ -85,6 +85,8 @@ for color_index, window_size in enumerate(unique_window_sizes):
         value = grouped.get_group((window_size, index)).mean()['auroc']
         series_y.append(value)
         
+        unique_indices = unique_indices.tolist()
+        time_values = [time_vec[x] for x in unique_indices]
     best_window_values.append(max(series_y))
 
 lp.plot_window_series(best_window_values,color_index, window_size,x_values=unique_window_sizes)
