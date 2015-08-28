@@ -17,6 +17,7 @@ gene_end = None
 df = pd.read_csv(file_path,sep=separator)
 current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
 node_list = df.columns.tolist()
+node_list.pop(0)
 pdb.set_trace()
 evaluator = Evaluator(current_gold_standard, '\t', node_list=node_list)
 true_edges = evaluator.gs_flat.tolist()

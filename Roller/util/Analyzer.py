@@ -86,7 +86,7 @@ class Analyzer:
                 if len(sorted_edge_list.columns) < 2:
                     raise AttributeError
                 gold_standard = self.current_roller.file_path.replace("timeseries.tsv","goldstandard.tsv")
-                evaluator = Evaluator("/projects/p20519/Roller/" +gold_standard,sep="\t")
+                evaluator = Evaluator(gold_standard,sep="\t")
                 sorted_edge_list.sort(['importance'], ascending=[False], inplace=True)
                 tpr,fpr,auroc = evaluator.calc_roc(sorted_edge_list)
                 precision,recall,aupr = evaluator.calc_pr(sorted_edge_list)

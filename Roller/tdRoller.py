@@ -238,6 +238,12 @@ class tdRoller(Roller):
 
         return elbow_dict
 
+    def get_samples(self):
+        df=pd.read_csv(self.file_path,sep='\t')
+        node_list = df.columns.tolist()
+        node_list.pop(0)
+        return(node_list)
+
     def score(self, sorted_edge_list, gold_standard_file=None):
         """
         Scores some stuff, I think...
@@ -252,7 +258,8 @@ class tdRoller(Roller):
             current_gold_standard = self.file_path.replace("timeseries.tsv","goldstandard.tsv")
         else:
             current_gold_standard = gold_standard_file
-        evaluator = Evaluator(current_gold_standard, '\t')
+
+        evaluator = Evaluator(current_gold_standard, '\t', node_list=self.get_samples())
         tpr, fpr, auroc = evaluator.calc_roc(sorted_edge_list)
         auroc_dict = {'tpr':np.array(tpr), 'fpr':np.array(fpr), 'auroc': np.array(auroc)}
         precision, recall, aupr = evaluator.calc_pr(sorted_edge_list)

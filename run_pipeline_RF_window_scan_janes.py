@@ -48,4 +48,8 @@ if __name__ == "__main__":
         roller.rank_edges(permutation_n = N_PERM)
 
     unique_filename = OUTPUT_PATH  + "/" + "_window_size_"+ str(window_size) +"_"+ str(uuid.uuid4())
+    with open(unique_filename, 'wb') as output:
+    #with gzip.GzipFile(unique_filename,'w') as output:
+      pickle.dump(roller,output, pickle.HIGHEST_PROTOCOL)
+    #joblib.dump(roller, unique_filename)
 
