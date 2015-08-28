@@ -1,6 +1,6 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
-
+import pdb
 from Roller import Roller
 from RFRWindow import tdRFRWindow
 import numpy as np
@@ -161,7 +161,6 @@ class tdRoller(Roller):
                     df = window.make_edge_table()
                 else:
                     df = df.append(window.make_edge_table(), ignore_index=True)
-
         if not self_edges:
             df = df[df.Parent != df.Child]
 

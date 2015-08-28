@@ -8,7 +8,7 @@ import pdb
 
 class Evaluator:
 
-    def __init__(self, gold_standard_file, sep = '/t',interaction_label = 'regulator-target'):
+    def __init__(self, gold_standard_file, sep = '/t',interaction_label = 'regulator-target',node_list = None):
         self.gs_file = gold_standard_file
         self.gs_data = pd.read_csv(gold_standard_file, sep=sep, header=None)
         self.gs_data.columns = ['regulator','target','exists']
@@ -22,6 +22,11 @@ class Evaluator:
             self.targets = ["G"+str(x) for x in range(1,4512)]
             self.full_list = tuple(map(tuple,self.possible_edges(np.array(self.regulators),np.array(self.targets))))
             self.full_list = [ x for x in self.full_list if x[0] != x[1] ]
+            self.full_list = pd.Series(self.full_list)
+        elif node_list:  
+            all_regulators = np.array(list(set(node_list)))
+            self.full_list = tuple(map(tuple,self.possible_edges(all_regulators,all_regulators)))
+            self.full_list=[ x for x in self.full_list if x[0] != x[1]]
             self.full_list = pd.Series(self.full_list)
         else:
             #more robust version of defining the full list
@@ -187,7 +192,6 @@ class Evaluator:
         return pred['tpr'], pred['fpr'], pred['auroc']
     
     def calc_roc_old(self, pred):
-        pdb.set_trace()
         # True Positive Rate (TPR) = TP/(TP+FN)
         # False Positive Rate (FPR) = FP/(FP+TN)
 

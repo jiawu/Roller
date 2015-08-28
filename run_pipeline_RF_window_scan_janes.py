@@ -9,12 +9,12 @@ import pdb
 """
 This pipeline scans a range of window sizes for a given inference method and generates roller objects for post analysis.
 
-This is the 4500 node variation of it.
+This runs the analysis for Janes et al 2005.
 """
-INPUT_PATH = "data/dream4/ecoli"
+INPUT_PATH = "data/dream4/janes"
 INF_METHOD = "RandomForest"
-OUTPUT_PATH = "/projects/p20519/roller_output/optimizing_window_size/" + INF_METHOD + "/ecoli"
-UNIQUE_NAME  = INF_METHOD + "ecoli"
+OUTPUT_PATH = "/projects/p20519/roller_output/optimizing_window_size/" + INF_METHOD + "/janes"
+UNIQUE_NAME  = INF_METHOD + "janes"
 N_BOOT = 5
 N_PERM = 5
 RANDOM_WINDOWS = False
