@@ -26,7 +26,6 @@ class LinePlot:
         self.x_values = map(int,x_values)
         self.axes.set_xlim(min(self.x_values), self.x_values[-1])
 
-      
     def plot_window_series(self, y_values, color_index, label, x_values = None):
         """
         Plots points that are interpolated with a line.

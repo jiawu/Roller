@@ -1,6 +1,6 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
-
+import pdb
 from Roller.tdRoller import tdRoller
 from Roller.util.Evaluator import Evaluator
 import numpy as np
@@ -25,7 +25,8 @@ tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
 tdr.zscore_all_data()
 tdr.set_window(14)
 tdr.create_windows()
-tdr.augment_windows(min_lag=1, max_lag=None)
+pdb.set_trace()
+tdr.augment_windows(min_lag=1, max_lag=4)
 tdr.fit_windows(n_trees=10, show_progress=False)
 tdr.rank_edges(permutation_n=10)
 tdr.compile_roller_edges(self_edges=True)

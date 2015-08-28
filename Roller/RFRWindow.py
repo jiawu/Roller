@@ -262,7 +262,7 @@ class tdRFRWindow(RandomForestRegressionWindow):
 
         return df
 
-    def run_permutation_test(self, n_permutations=1000, n_jobs=1):
+    def run_permutation_test(self, n_permutations=1000, n_jobs=1,crag=True):
         if not self.include_window:
             return
         #initialize permutation results array
@@ -280,7 +280,7 @@ class tdRFRWindow(RandomForestRegressionWindow):
 
             #fit the data and get coefficients
 
-            permuted_coeffs = self.get_coeffs(self.n_trees, data=permuted_data, n_jobs=n_jobs)
+            permuted_coeffs = self.get_coeffs(self.n_trees, crag=crag, data=permuted_data, n_jobs=n_jobs)
             dummy_list = []
             dummy_list.append(permuted_coeffs)
             result = self.update_variance_2D(result, dummy_list)

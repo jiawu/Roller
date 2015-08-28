@@ -20,7 +20,7 @@ def aggregate_scores(dict_list):
   return(aggr_dict)
 
 #get all pickle files
-path="/projects/p20519/roller_output/optimizing_window_size/RandomForest/insilico_size10_2/"
+path="/projects/p20519/roller_output/optimizing_window_size/RandomForest/ecoli/"
 filenames = next(os.walk(path))[2]
 nfiles = len(filenames)
 #organize pickled objects by dataset analyzed
@@ -44,7 +44,7 @@ dm_bottom = 0.1+0.2+2*0.01
 dm_width = 0.7
 dm_height = 0.03*10
 
-target_dataset =  "data/dream4/insilico_size10_2_timeseries.tsv"
+target_dataset =  "data/dream4/ecoli_timeseries.tsv"
 img_suffix = "2"
 #dataset_list = ["5"]
 dataset_list = ["2"]
@@ -59,7 +59,7 @@ for dataset_counter in dataset_list:
   aggr_test_list = []
   checked_windows = []
   img_suffix = str(dataset_counter)
-  target_dataset =  "data/dream4/insilico_size10_"+dataset_counter+"_timeseries.tsv"
+  target_dataset =  "data/dream4/ecoli_timeseries.tsv"
   for file in filenames:
       full_path = path + file
       print(full_path)
@@ -84,6 +84,7 @@ for dataset_counter in dataset_list:
                 gold_standard = target_roller.file_path.replace("timeseries.tsv","goldstandard.tsv")
                 evaluator = Evaluator(gold_standard,sep="\t")
                 sorted_edge_list = window.results_table
+                pdb.set_trace()
                 sorted_edge_list.sort(['importance'], ascending=[False], inplace=True)
                 sorted_edge_list =sorted_edge_list[np.isfinite(sorted_edge_list['p_value'])]
                 #sorted_edge_list = sorted_edge_list[np.isfinite(sorted_edge_list['p-means'])]
