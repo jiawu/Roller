@@ -1,16 +1,44 @@
-import matplotlib
-matplotlib.use('Agg')
-from Roller.util.LinePlot import LinePlot
-from Roller.util.Analyzer import Analyzer
-from numpy import mean
-import pdb,random
-
+import pandas as pd
 from Roller.tdRoller import tdRoller
 from Roller.util.Evaluator import Evaluator
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-import sys
+
+
+def get_td_stats(file_path, td_window = 6, min_lag=1, max_lag=4, n_trees=10, permutation_n=10, lag_method='median_median'): 
+    gene_start_column = 1
+    time_label = "Time"
+    separator = "\t"
+    gene_end = None
+
+    df = pd.read_csv(file_path,sep=separator)
+    current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
+    node_list = df.columns.tolist()
+    node_list.pop(0)
+
+    evaluator = Evaluator(current_gold_standard, '\t', node_list=node_list)
+    true_edges = evaluator.gs_flat.tolist()
+    pd.options.display.float_format = '{:,.5f}'.format
+
+    #np.random.seed(8)
+
+    tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
+    tdr.zscore_all_data()
+    tdr.set_window(td_window)
+    tdr.create_windows()
+    tdr.augment_windows(min_lag=min_lag, max_lag=max_lag)
+    tdr.fit_windows(n_trees=n_trees, show_progress=False)
+    tdr.rank_edges(permutation_n=permutation_n)
+    tdr.compile_roller_edges(self_edges=True)
+
+    tdr.full_edge_list.loc[tdr.full_edge_list.p_value>=0.05, 'Importance'] = 0
+    tdr.make_static_edge_dict(true_edges, lag_method=lag_method)
+    df2 = tdr.make_sort_df(tdr.edge_dict, 'lag')
+    print len(df2)
+    roc_dict, pr_dict = tdr.score(df2)
+    print roc_dict['auroc'][-1]
+    print pr_dict['aupr'][-1]#+(1-pr_dict['recall'][-1])
+    #tdr.plot_scoring(roc_dict, pr_dict)
+    return((roc_dict['auroc'][-1],pr_dict['aupr'][-1]))
+    #lp.plot_horizontal_line(cragged_window[my_statistic].values, 3, 'best crag')
 
 def main(data_folder, output_path, target_dataset, my_statistic, td_score):
     #Analyzer computes AUROC/AUPR/Cragging Scores and organizes it in a table
@@ -62,6 +90,7 @@ def main(data_folder, output_path, target_dataset, my_statistic, td_score):
 
     ## print best cragging score
     cragged_window = analyzer.predict_best_window()
+    
     lp.plot_horizontal_line(cragged_window[my_statistic].values, 3, 'best crag')
     # plot the tdroller score
     lp.plot_horizontal_line(td_score,17, 'tdRoller')
@@ -70,54 +99,4 @@ def main(data_folder, output_path, target_dataset, my_statistic, td_score):
 
     lp.save_plot(output_path, '_'+my_statistic)
     #grouped.get_group((2,2)).mean()['aupr']
-
-
-
-def get_td_stats(file_path, td_window = 6): 
-    gene_start_column = 1
-    time_label = "Time"
-    separator = "\t"
-    gene_end = None
-
-    df = pd.read_csv(file_path,sep=separator)
-    current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
-    node_list = df.columns.tolist()
-    node_list.pop(0)
-
-    evaluator = Evaluator(current_gold_standard, '\t', node_list=node_list)
-    true_edges = evaluator.gs_flat.tolist()
-    pd.options.display.float_format = '{:,.5f}'.format
-
-    #np.random.seed(8)
-
-    tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
-    tdr.zscore_all_data()
-    tdr.set_window(td_window)
-    tdr.create_windows()
-    tdr.augment_windows(min_lag=1, max_lag=4)
-    tdr.fit_windows(n_trees=10, show_progress=False)
-    tdr.rank_edges(permutation_n=10)
-    tdr.compile_roller_edges(self_edges=True)
-
-    tdr.full_edge_list.loc[tdr.full_edge_list.p_value>=0.05, 'Importance'] = 0
-    tdr.make_static_edge_dict(true_edges, lag_method='median_median')
-    df2 = tdr.make_sort_df(tdr.edge_dict, 'lag')
-    print len(df2)
-    roc_dict, pr_dict = tdr.score(df2)
-    print roc_dict['auroc'][-1]
-    print pr_dict['aupr'][-1]#+(1-pr_dict['recall'][-1])
-    #tdr.plot_scoring(roc_dict, pr_dict)
-    return((roc_dict['auroc'][-1],pr_dict['aupr'][-1]))
-
-data_folder = "/projects/p20519/roller_output/optimizing_window_size/RandomForest/janes"
-output_path = "/home/jjw036/Roller/janes"
-target_dataset = "/projects/p20519/Roller/data/invitro/janes_timeseries.tsv"
-#target_dataset = "/projects/p20519/Roller/data/dream4/ecoli_timeseries.tsv"
-my_statistic = 'aupr'
-roc,pr = get_td_stats(target_dataset, 5)
-pdb.set_trace()
-td_score = pr
-
-main(data_folder, output_path, target_dataset, 'auroc', roc)
-main(data_folder, output_path, target_dataset, 'aupr', pr)
 
