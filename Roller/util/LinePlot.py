@@ -3,8 +3,9 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import os, pdb
+from BasePlot import BasePlot
 
-class LinePlot:
+class LinePlot(BasePlot):
 
     def __init__(self):
         self.f = plt.figure(figsize=(10,10))
@@ -24,8 +25,8 @@ class LinePlot:
         :param x_values: list of str/ints
         """
         self.x_values = map(int,x_values)
-        self.axes.set_xlim(min(self.x_values), self.x_values[-1])
 
+    
     def plot_window_series(self, y_values, color_index, label, x_values = None):
         """
         Plots points that are interpolated with a line.
@@ -37,7 +38,7 @@ class LinePlot:
             x_values = self.x_values
         if color_index > 19:
             color_index = color_index%20
-        self.axes.plot(x_values,y_values, 'o', linestyle='-', color = self.tableau20[color_index], label = str(label), linewidth=1.75)
+        self.axes.plot(x_values,y_values, 'o', linestyle='-', color = self.tableau20[color_index], label = "WS " + str(label), linewidth=1.75)
 
     def plot_vertical_line(self, x_value,color_index, label):
         """
@@ -49,7 +50,7 @@ class LinePlot:
         """
         if color_index > 19:
             color_index = color_index%20
-        self.axes.axvline(x=x_value, linestyle='--',color=self.tableau20[color_index],label=str(label), linewidth=3)
+        self.axes.axvline(x=x_value, linestyle='--',color=self.tableau20[color_index],label="WS "+str(label), linewidth=3)
 
     
     def plot_horizontal_line(self, y_value, color_index, label):
@@ -63,7 +64,7 @@ class LinePlot:
         my_y = [y_value,y_value]
         if color_index > 19:
             color_index = color_index%20
-        self.axes.plot(my_x, my_y, linestyle='--',color=self.tableau20[color_index],label=str(label), linewidth=3)
+        self.axes.plot(my_x, my_y, linestyle='--',color=self.tableau20[color_index],label="WS "+str(label), linewidth=3)
 
     def save_plot(self, folder, tag):
         """
@@ -76,14 +77,14 @@ class LinePlot:
         self.f = self.f.savefig(image_save,format = "png")
         return(self.f)
 
-    def add_formatting(self, min_tick=0,max_tick=20, interval=5, y_label='AUROC'):
+    def add_formatting(self, min_tick=0,max_tick=1200, interval=200):
         #legend
         box = self.axes.get_position()
         self.axes.set_position([box.x0, box.y0 + box.height * 0.2, box.width, box.height * 0.8])
         self.axes.legend(fontsize=8,bbox_to_anchor=(0.5, -0.2), loc='upper center',ncol=7,fancybox=True, shadow=True)
         #labels
-        self.axes.set_ylabel(y_label,fontsize = 16)
-        self.axes.set_xlabel('Window Size',fontsize = 16)
+        self.axes.set_ylabel('AUROC')
+        self.axes.set_xlabel('Time (min)')
         xlabels = self.axes.get_xticklabels()
         ylabels = self.axes.get_yticklabels()
         for label in xlabels:
@@ -95,8 +96,5 @@ class LinePlot:
             l.set_markersize(0)
 
         line_ticks = np.arange(min_tick,max_tick,interval)
-
-        #change y-lim
-        (ymin,ymax) = self.axes.get_ylim()
-        self.axes.set_ylim(ymin,ymax+0.1)
+ 
 
