@@ -18,4 +18,16 @@ class BoxPlot:
             self.tableau20[i] = (r/255., g/255., b/255.)
 
     
+    def save_plot(self, folder, tag):
+        """
+        Saves the plot in designated area.
+        :param folder: string
+        :param tag: string
+        :return self.f: returns the figure
+        """
+        image_save = folder + tag + ".png"
+        self.f = self.f.savefig(image_save,format = "png")
+        return(self.f)
 
+    def add_formatting(self):
+        pass
