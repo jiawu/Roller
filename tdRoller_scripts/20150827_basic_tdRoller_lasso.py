@@ -21,11 +21,11 @@ pd.options.display.float_format = '{:,.5f}'.format
 
 #np.random.seed(8)
 
-tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
+tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator, window_type='Lasso')
 tdr.zscore_all_data()
 tdr.set_window(14)
+tdr.optimize_params()
 tdr.create_windows()
-pdb.set_trace()
 tdr.augment_windows(min_lag=1, max_lag=4)
 tdr.fit_windows(n_trees=10, show_progress=False)
 tdr.rank_edges(permutation_n=10)

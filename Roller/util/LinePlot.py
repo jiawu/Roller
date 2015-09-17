@@ -22,11 +22,11 @@ class LinePlot(BasePlot):
         :param label: int or str
                       example: the window size
         """
-        if not x_values:
-            x_values = self.x_values
+        #if not x_values:
+            #x_values = self.x_values
         if color_index > 19:
             color_index = color_index%20
-        self.axes.plot(x_values,y_values, 'o', linestyle='-', color = self.tableau20[color_index], label = "WS " + str(label), linewidth=1.75)
+        self.axes.plot(x_values,y_values, linestyle='-', color = self.tableau20[color_index], label = str(label), linewidth=5)
 
     def plot_vertical_line(self, x_value,color_index, label):
         """
@@ -74,5 +74,25 @@ class LinePlot(BasePlot):
             l.set_markersize(0)
 
         line_ticks = np.arange(min_tick,max_tick,interval)
+        self.axes.xaxis.set_ticks(line_ticks)
  
+    def add_formatting_auroc(self, min_tick=0,max_tick=1200, interval=200):
+        #legend
+        box = self.axes.get_position()
+        self.axes.set_position([box.x0, box.y0 + box.height * 0.2, box.width, box.height * 0.8])
+        self.axes.legend(fontsize=8,bbox_to_anchor=(0.5, -0.2), loc='upper center',ncol=7,fancybox=True, shadow=True)
+        #labels
+        self.axes.set_ylabel('True Positive Rate', fontsize = 16)
+        self.axes.set_xlabel('False Positive Rate', fontsize = 16)
+        xlabels = self.axes.get_xticklabels()
+        ylabels = self.axes.get_yticklabels()
+        for label in xlabels:
+            label.set_rotation(90)
+            label.set_fontsize(16)
+        for label in (self.axes.get_yticklabels()):
+            label.set_fontsize(16)
+        for l in self.axes.get_xticklines() + self.axes.get_yticklines():
+            l.set_markersize(0)
+
+        line_ticks = np.arange(min_tick,max_tick,interval)
 

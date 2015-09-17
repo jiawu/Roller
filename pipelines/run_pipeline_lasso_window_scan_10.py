@@ -10,7 +10,7 @@ This pipeline scans a range of window sizes for a given inference method and gen
 
 This is the 10 node variation of it.
 """
-INPUT_PATH = "data/dream4/insilico_size10_"
+INPUT_PATH = "/home/jjw036/Roller/data/dream4/insilico_size10_"
 INF_METHOD = "Lasso"
 OUTPUT_PATH = "/projects/p20519/roller_output/optimizing_window_size/" + INF_METHOD + "/insilico_size10_"
 UNIQUE_NAME  = INF_METHOD + "insilico_size10_"
@@ -38,7 +38,7 @@ if __name__ == "__main__":
       roller.set_window(width=window_size)
       roller.create_windows(random_time = RANDOM_WINDOWS)
       roller.optimize_params()
-      roller.fit_windows()
+      roller.fit_windows(crag=False)
       roller.rank_edges(permutation_n = N_PERM)
 
       unique_filename = OUTPUT_PATH + str(network_index) + "/" + str(uuid.uuid4())
