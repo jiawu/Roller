@@ -27,6 +27,21 @@ class Analyzer:
             except KeyError:
                 continue
             self.total_files_unpickled.append(pickle_path)
+    
+    def predict_best_window(self):
+        #max_value = self.overall_df['crag_mse_average'].max()
+        max_value = 0
+        counter = 1
+        while max_value == 0:
+            max_value = self.overall_df['crag_mse_average'].nsmallest(counter).values[-1]
+            counter += 1
+
+        best_row = self.overall_df[self.overall_df['crag_mse_average']== max_value]
+        return(best_row)
+
+    def get_correlation(self):
+        return(self.overall_df.corr())
+
         
     def load_list(self,csv_file_path):
         self.overall_df = pd.read_csv(csv_file_path)
@@ -78,16 +93,23 @@ class Analyzer:
             network_paths.append(self.current_roller.file_path)
             window_width_list.append(roller_obj.window_width)
 
-    def check_ranked_list(self,roller_obj):
-        for index,window in enumerate(roller_obj.window_list):
+            if not self.current_roller.file_path.startswith("/"):
+                self.current_roller.file_path = self.current_roller.file_path.replace("data/","/projects/p20519/Roller/data/")
+            pickle_paths.append(self.current_pickle_path)
+            network_paths.append(self.current_roller.file_path)
+            window_width_list.append(roller_obj.window_width)
+
             try:
                 sorted_edge_list = window.results_table
                 #check if the sorted edge list actually has importance/ranking values. if it doesn't, raise an error
                 if len(sorted_edge_list.columns) < 2:
                     raise AttributeError
+                ## replace relative file paths with absolute file paths
+
                 gold_standard = self.current_roller.file_path.replace("timeseries.tsv","goldstandard.tsv")
-                evaluator = Evaluator("/projects/p20519/Roller/" +gold_standard,sep="\t")
-                sorted_edge_list.sort(['importance'], ascending=[False], inplace=True)
+               
+                evaluator = Evaluator(gold_standard,sep="\t")
+                sorted_edge_list.sort(['p_value'], ascending=[True], inplace=True)
                 tpr,fpr,auroc = evaluator.calc_roc(sorted_edge_list)
                 precision,recall,aupr = evaluator.calc_pr(sorted_edge_list)
                 print(aupr.values[-1])
@@ -120,13 +142,27 @@ class Analyzer:
                 crag_mse_max_list.append(self.max_dict(model_crag,'mse'))
                 crag_r2_max_list.append(self.max_dict(model_crag,'r2'))
 
-                window_index_list.append(index+1)
+                window_index_list.append(index)
 
             except (AttributeError,IndexError):
                 window_tag = self.get_window_tag()
                 self.error_list.append(window_tag + "Window Index " + str(index) + " : No results table")
         
         if auroc_list:
+          if roller_obj.window_width == roller_obj.overall_width:
+              window_index_list = [0]
+              crag_mse_average_list = [0]
+              crag_r2_average_list = [0]
+              crag_ev_average_list =[0]
+              
+              crag_mse_median_list = [0]
+              crag_r2_median_list = [0]
+              crag_ev_median_list =[0]
+              
+              crag_mse_max_list = [0]
+              crag_r2_max_list = [0]
+              crag_ev_max_list = [0]
+          
           df = pd.DataFrame( {'pickle_paths':pickle_paths,
                               'network_paths':network_paths,
                               'auroc':auroc_list,

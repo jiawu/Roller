@@ -11,3 +11,9 @@ methods such as:
 
 
 """
+
+class Reporter:
+    """Generates a pdf report"""
+
+    def __init__(self):
+        self.set_heatmaps(

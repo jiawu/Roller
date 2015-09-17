@@ -17,6 +17,7 @@ gene_end = None
 current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
 df = pd.read_csv(file_path,sep='\t')
 node_list = df.columns.tolist()
+node_list.pop(0)
 evaluator = Evaluator(current_gold_standard, '\t', node_list=node_list)
 true_edges = evaluator.gs_flat.tolist()
 pd.options.display.float_format = '{:,.5f}'.format

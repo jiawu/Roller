@@ -337,7 +337,7 @@ class Roller(object):
 
         if self.window_type == "Lasso":
             for window in self.window_list:
-                window.run_permutation_test(n_permutations=permutation_n)
+                window.run_permutation_test(n_permutations=permutation_n, crag=crag)
                 print("Running bootstrap...")
                 window.run_bootstrap(n_bootstraps=n_bootstraps)
                 window.generate_results_table()
@@ -345,7 +345,7 @@ class Roller(object):
             for window in self.window_list:
                 if window.include_window:
                     print("Running permutation on window %i...")%window.nth_window
-                    window.run_permutation_test(n_permutations=permutation_n)
+                    window.run_permutation_test(n_permutations=permutation_n, crag=crag)
                     window.make_edge_table()
         return self.window_list
 
