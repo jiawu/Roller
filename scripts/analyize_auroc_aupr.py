@@ -4,12 +4,12 @@ from Roller.util.LinePlot import LinePlot
 from Roller.util.Analyzer import Analyzer
 
 import pdb
-import td_wrapper as tdw
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import sys
-
+import td_wrapper as tdw
 
 
 data_folder = "/projects/p20519/roller_output/optimizing_window_size/RandomForest/insilico_size10_1/"

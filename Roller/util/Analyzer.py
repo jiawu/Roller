@@ -5,6 +5,7 @@ import numpy as np
 import pdb
 from Roller.util.Evaluator import Evaluator
 import warnings
+import Roller.util.utility_module as Rutil
 
 
 class Analyzer:
@@ -17,17 +18,89 @@ class Analyzer:
         self.error_list = []
         self.overall_df = pd.DataFrame()
         self.pickle_paths = os.listdir(pickle_path_folder)
+        self.pickle_folder = pickle_path_folder
+        self.max_width_results = None
+        self.min_width_results = None
+        self.all_ranked_lists = []
+        
 
         for pickle_path in self.pickle_paths:
             self.current_pickle_path = pickle_path
             try:
                 self.current_roller = pd.read_pickle(pickle_path_folder+"/"+ pickle_path)
+                # saving rollers
+
                 df = self.aggregate_ranked_list(self.current_roller)
                 self.overall_df = self.overall_df.append(df)
             except KeyError:
                 continue
             self.total_files_unpickled.append(pickle_path)
     
+    def get_ranked_list(self, pickle_path, target_window_index):
+        roller_obj = pd.read_pickle(pickle_path)
+        for index,window in enumerate(roller_obj.window_list):
+            if index == target_window_index:
+                if not roller_obj.file_path.startswith("/"):
+                    roller_obj.file_path = roller_obj.file_path.replace("data/","/projects/p20519/Roller/data/")
+                    sorted_edge_list = window.results_table 
+                    sorted_edge_list.sort(['importance'], ascending=[False], inplace=True)
+        return(sorted_edge_list)
+        
+
+    def aggregate_best_windows(self, top_percentile=10):
+        corr_list = []
+        width_list = []
+        agg_auroc = []
+        agg_auroc_table = []
+        for target_width in range(4,22):
+            width_list.append(target_width)
+            target_df = self.overall_df[self.overall_df['window_width']==target_width]
+            corr_list.append(target_df.corr()['auroc'])
+
+            sorted = self.overall_df.sort('crag_mse_average',ascending=True)
+            
+            target_sorted = sorted[(sorted['window_width']<target_width) &(sorted['window_width']>target_width-3)]
+            n_rows = round(top_percentile*.01*len(target_sorted))
+            print(n_rows," windows incorporated")
+            top_windows = target_sorted.head(n_rows)
+            
+            ## aggregate ranked lists from a list of pickle paths and indices
+            top_ranked_lists = []
+            for index, row in top_windows.iterrows():
+                full_path = self.pickle_folder + row['pickle_paths']
+                window_ranked_list=self.get_ranked_list(full_path, row['window_index'])
+                top_ranked_lists.append(window_ranked_list)
+            agg_auroc_table.append(top_ranked_lists)
+            ## change the value into a rank
+            for ranked_list in top_ranked_lists:
+                ranked_list['importance_rank'] = ranked_list.rank(axis=0, ascending=False)['importance']
+            
+            
+            
+            top_auroc=self.overall_df.sort('auroc', ascending=False).head()
+            top_ranked_lists2 = []
+            for index, row in top_auroc.iterrows():
+                full_path = self.pickle_folder + row['pickle_paths']
+                window_ranked_list=self.get_ranked_list(full_path, row['window_index'])
+                top_ranked_lists2.append(window_ranked_list)
+            
+            ## change the value into a rank
+            for ranked_list in top_ranked_lists2:
+                ranked_list['importance_rank'] = ranked_list.rank(axis=0, ascending=False)['importance']
+            
+            
+            
+            averaged_lists = Rutil.average_rank(top_ranked_lists,col_string='importance_rank')
+            gold_standard = self.current_roller.file_path.replace("timeseries.tsv","goldstandard.tsv")
+            averaged_lists.sort('mean-rank',ascending=True,inplace=True)
+            evaluator = Evaluator(gold_standard,sep="\t")
+            tpr,fpr,auroc=evaluator.calc_roc(averaged_lists)
+            precision, recall, aupr = evaluator.calc_pr(averaged_lists)
+            agg_auroc.append(auroc.tolist()[-1])
+        
+        my_r = zip(width_list, agg_auroc)
+        pdb.set_trace()
+
     def predict_best_window(self):
         #max_value = self.overall_df['crag_mse_average'].max()
         max_value = 0
@@ -55,10 +128,12 @@ class Analyzer:
         ### identify status quo ###
         max_row = self.overall_df.loc[self.overall_df['window_width'].idxmax()]
         max_width = self.current_roller.overall_width
+        """
         if max_row['window_width'] != max_width:
             max_width = max_row['window_width']
             #find max window size
             warnings.warn("Roller with all timepoints is not present. Using Roller with a maximum width of %s as comparison window" % (max_width))
+        """
         return(max_row)
 
     def get_window_tag(self):
@@ -89,10 +164,6 @@ class Analyzer:
         window_width_list = []
 
         for index,window in enumerate(roller_obj.window_list):
-            pickle_paths.append(self.current_pickle_path)
-            network_paths.append(self.current_roller.file_path)
-            window_width_list.append(roller_obj.window_width)
-
             if not self.current_roller.file_path.startswith("/"):
                 self.current_roller.file_path = self.current_roller.file_path.replace("data/","/projects/p20519/Roller/data/")
             pickle_paths.append(self.current_pickle_path)
@@ -109,9 +180,12 @@ class Analyzer:
                 gold_standard = self.current_roller.file_path.replace("timeseries.tsv","goldstandard.tsv")
                
                 evaluator = Evaluator(gold_standard,sep="\t")
-                sorted_edge_list.sort(['p_value'], ascending=[True], inplace=True)
+                #sorted_edge_list.sort(['p_value'], ascending=[True], inplace=True)
+                sorted_edge_list.sort(['importance'], ascending=[False], inplace=True)
+                self.all_ranked_lists.append(sorted_edge_list)
                 tpr,fpr,auroc = evaluator.calc_roc(sorted_edge_list)
                 precision,recall,aupr = evaluator.calc_pr(sorted_edge_list)
+                
                 print(aupr.values[-1])
                 print(auroc.values[-1])
                 
@@ -122,7 +196,11 @@ class Analyzer:
                               'mse':0,
                               'r2':0
                           }]
-                if roller_obj.window_width != 34:
+                if roller_obj.window_width != roller_obj.overall_width:
+                    if self.max_width_results:
+                        if auroc.values[-1] > self.max_width_results['auroc'].values[-1]:
+                            self.min_width_results = {'tpr':tpr, 'fpr':fpr,'auroc':auroc,'precision':precision,'recall':recall,'aupr':aupr}
+
                     crag_iterations = len(window.test_scores)/window.n_genes
                     cragging_scores = []
                     for i in range(0,crag_iterations):
@@ -130,6 +208,9 @@ class Analyzer:
                     # unfortunately, get_coeffs is also called by the null model, so the cragging function also evaluates null models and appends them to window.training_scores. The first indices are the cragging scores for the model.
 
                     model_crag = cragging_scores[0]
+                else:
+                    self.max_width_results = {'tpr':tpr, 'fpr':fpr,'auroc':auroc,'precision':precision,'recall':recall,'aupr':aupr}
+                    
                 crag_ev_average_list.append(self.average_dict(model_crag,'ev'))
                 crag_mse_average_list.append(self.average_dict(model_crag,'mse'))
                 crag_r2_average_list.append(self.average_dict(model_crag,'r2'))
@@ -162,7 +243,6 @@ class Analyzer:
               crag_mse_max_list = [0]
               crag_r2_max_list = [0]
               crag_ev_max_list = [0]
-          
           df = pd.DataFrame( {'pickle_paths':pickle_paths,
                               'network_paths':network_paths,
                               'auroc':auroc_list,
@@ -192,3 +272,4 @@ class Analyzer:
     def max_dict(self,total,key):
         aggr=[x[key] for x in total]
         return(np.max(aggr))
+

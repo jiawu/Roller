@@ -3,6 +3,7 @@ __email__ = 'jfinkle@u.northwestern.edu'
 import pdb
 from Roller import Roller
 from RFRWindow import tdRFRWindow
+from LassoWindow import tdLassoWindow
 import numpy as np
 import pandas as pd
 from scipy import stats
@@ -75,7 +76,11 @@ class tdRoller(Roller):
             Dictionary containing information needed for window initialization
         :return:
         """
-        window_obj = tdRFRWindow(dataframe, window_info_dict, self.raw_data)
+        if self.window_type == "RandomForest":
+            window_obj = tdRFRWindow(dataframe, window_info_dict, self.raw_data)
+        elif self.window_type =="Lasso":
+            window_obj = tdLassoWindow(dataframe, window_info_dict, self.raw_data)
+
 
         return window_obj
 
@@ -138,6 +143,7 @@ class tdRoller(Roller):
                 if ww == 0:
                     #Initialize values
                     window.x_data = win.window_values.copy()
+                    #try not to assign these outside the classfile. I could not figure out where these were assigned (they weren't in the file)
                     window.x_labels = win.raw_data.columns[1:]
                     window.x_times = np.array([win.nth_window]*len(win.genes))
                 else:

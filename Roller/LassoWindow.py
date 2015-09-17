@@ -134,13 +134,7 @@ class LassoWindow(Window):
 
         return self.results_table
 
-    def run_permutation_test(self, n_permutations=1000):
-        # initialize permutation results array
-        self.permutation_means = np.empty((self.n_genes, self.n_genes))
-        self.permutation_sd = np.empty((self.n_genes, self.n_genes))
-        nth_window = self.nth_window
-        zeros = np.zeros((self.n_genes, self.n_genes))
-        # initialize running calculation
+    def _permute_coeffs(self, zeros, crag=False, n_permutations=10):
         result = {'n': zeros.copy(), 'mean': zeros.copy(), 'ss': zeros.copy()}
         # inner loop: permute the window N number of times
         for nth_perm in range(0, n_permutations):
@@ -160,6 +154,15 @@ class LassoWindow(Window):
         self.permutation_means = result['mean'].copy()
         self.permutation_sd = np.sqrt(result['variance'].copy())
         self.permutation_p_values = self.calc_p_value()
+
+    def run_permutation_test(self, n_permutations=10, crag=False):
+        # initialize permutation results array
+        self.permutation_means = np.empty((self.n_genes, self.n_genes))
+        self.permutation_sd = np.empty((self.n_genes, self.n_genes))
+        nth_window = self.nth_window
+        zeros = np.zeros((self.n_genes, self.n_genes))
+        # initialize running calculation
+        self._permute_coeffs(zeros=zeros, n_permutations=n_permutations)
 
     def calc_p_value(self, value=None, mean=None, sd=None):
         if value is None:
@@ -202,7 +205,7 @@ class LassoWindow(Window):
                   "n": n}
         return result
 
-    def run_bootstrap(self, n_bootstraps=1000, n_alphas=20, noise=0.2):
+    def run_bootstrap(self, n_bootstraps=10, n_alphas=20, noise=0.2):
         alpha_range = np.linspace(0, self.null_alpha, n_alphas)
         self.bootstrap_matrix = np.empty((self.n_genes, self.n_genes, n_bootstraps, n_alphas))
         for ii, alpha in enumerate(alpha_range):
@@ -267,7 +270,7 @@ class LassoWindow(Window):
             raise ValueError("alpha must be float (>=0) or None")
         return
 
-    def fit_window(self):
+    def fit_window(self, crag=False):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
@@ -403,7 +406,7 @@ class LassoWindow(Window):
             y_test = x_test.copy()
 
             # Run Lasso
-            current_coef = self.get_coeffs(alpha, x_train)
+            current_coef = self.get_coeffs(alpha, data=x_train)
 
             y_predicted = np.dot(x_test, current_coef)
 
@@ -437,7 +440,58 @@ class LassoWindow(Window):
         ss = np.sum(np.power(X - column_mean, 2), axis=0)
         return ss
 
-    def get_coeffs(self, alpha, data=None):
+    def _initialize_coeffs(self, data):
+        """
+
+        example call:
+
+        all_data, coeff_matrix, model_list, max_nodes = self._initialize_coeffs(data=data)
+        """
+        if data is None:
+            all_data = self.window_values.copy()
+        else:
+            all_data = data.copy()
+        max_nodes = self.window_values.shape[1]
+
+        coeff_matrix = np.array([], dtype=np.float_).reshape(0, all_data.shape[1])
+
+        model_list = []
+        
+        return((all_data, coeff_matrix, model_list, max_nodes))
+
+    def _fitstack_coeffs(self, alpha,coeff_matrix, model_list, all_data, col_index, crag=False):
+        """
+                                      
+        example call:
+        coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, all_data, col_index, n_trees, n_jobs,crag)
+        """
+        clf = linear_model.Lasso(alpha)
+
+        # delete the column that is currently being tested
+        X_matrix = np.delete(all_data, col_index, axis=1)
+        # take out the column so that the gene does not regress on itself
+        target_TF = all_data[:, col_index]
+        clf.fit(X_matrix, target_TF)
+        model_params = {'col_index': col_index,
+                        'response': target_TF,
+                        'predictor': X_matrix,
+                        'model': clf}
+        model_list.append(model_params)
+        coeffs = clf.coef_
+        # artificially add a 0 to where the col_index is
+        # to prevent self-edges
+        coeffs = np.insert(coeffs, col_index, 0)
+        coeff_matrix = np.vstack((coeff_matrix, coeffs))
+        
+        crag=False
+
+        if crag == True:
+            training_scores, test_scores = self.crag_window(model_params)
+            self.training_scores.append(training_scores)
+            self.test_scores.append(test_scores)
+        return((coeff_matrix,model_list))
+
+    def get_coeffs(self, alpha, data=None, crag=False):
         """
         returns a 2D array with target as rows and regulators as columns
         :param alpha: float
@@ -447,38 +501,134 @@ class LassoWindow(Window):
         :return:
         """
         # loop that iterates through the target genes
-        if data is None:
-            all_data = self.window_values.copy()
-        else:
-            all_data = data.copy()
-
-        coeff_matrix = np.array([], dtype=np.float_).reshape(0, all_data.shape[1])
-
-        model_list = []
-
+        all_data, coeff_matrix, model_list, max_nodes = self._initialize_coeffs(data=data)
         for col_index, column in enumerate(all_data.T):
             # Instantiate a new Lasso object
-            clf = linear_model.Lasso(alpha)
+            coeff_matrix, model_list = self._fitstack_coeffs(alpha=alpha,coeff_matrix=coeff_matrix, model_list=model_list, all_data=all_data, col_index=col_index,crag=crag)
 
-            # delete the column that is currently being tested
-            X_matrix = np.delete(all_data, col_index, axis=1)
-            # take out the column so that the gene does not regress on itself
-            target_TF = all_data[:, col_index]
-            clf.fit(X_matrix, target_TF)
-            model_params = {'col_index': col_index,
-                            'response': target_TF,
-                            'predictor': X_matrix,
-                            'model': clf}
-            model_list.append(model_params)
-            coeffs = clf.coef_
-            # artificially add a 0 to where the col_index is
-            # to prevent self-edges
-            coeffs = np.insert(coeffs, col_index, 0)
-            coeff_matrix = np.vstack((coeff_matrix, coeffs))
-
-            # scoping issues
-            training_scores, test_scores = self.crag_window(model_params)
-            self.training_scores.append(training_scores)
-            self.test_scores.append(test_scores)
 
         return coeff_matrix
+
+class tdLassoWindow(LassoWindow):
+    def __init__(self, dataframe, window_info, roller_data):
+        self.x_data = None
+        self.x_labels = None 
+        self.x_times = None
+        self.edge_table = None
+        self.include_window = True
+        self.earlier_window_idx = None
+        
+        super(tdLassoWindow, self).__init__(dataframe, window_info, roller_data)
+
+    def fit_window(self, alpha=None, crag=False,n_trees=10, show_progress=False):
+        """
+        Set the attributes of the window using expected pipeline procedure and calculate beta values
+        :return:
+        """
+        if self.alpha==None:
+            self.initialize_params()
+            alpha = self.alpha
+        
+        self.beta_coefficients = self.get_coeffs(self.alpha).values
+        #if self.include_window:
+            #print "Regressing window index %i against the following window indices: "%self.nth_window,\
+                #self.earlier_window_idx
+        self.edge_importance = self.get_coeffs(alpha,crag=crag, data=self.x_data)
+
+    def get_coeffs(self, alpha,crag=False, data=None):
+        """
+
+        :param data:
+        :param n_trees:
+        :return: array-like
+            An array in which the rows are children and the columns are the parents
+        """
+        
+        ## initialize items
+        all_data, coeff_matrix, model_list, max_nodes = self._initialize_coeffs(data=data)
+
+        for col_index, column in enumerate(all_data[:,:max_nodes].T):
+            # Once we get through all the nodes at this timepoint we can stop
+            if col_index == max_nodes:
+                break
+            coeff_matrix, model_list = self._fitstack_coeffs(alpha=alpha,coeff_matrix=coeff_matrix, model_list=model_list, all_data=all_data, col_index=col_index,crag=crag) 
+            
+        
+        if self.x_labels == None:
+            label = self.raw_data.columns[1:]
+            importance_dataframe = pd.DataFrame(coeff_matrix, index=label[:max_nodes], columns=label)
+        else:
+            importance_dataframe = pd.DataFrame(coeff_matrix, index=self.x_labels[:max_nodes], columns=self.x_labels[:coeff_matrix.shape[1]])
+        importance_dataframe.index.name = 'Child'
+        importance_dataframe.columns.name = 'Parent'
+        return importance_dataframe
+
+    def make_edge_table(self):
+        """
+        Make the edge table
+        :return:
+        """
+
+        if not self.include_window:
+            return
+
+        # Build indexing method for all possible edges. Length = number of parents * number of children
+        parent_index = range(self.edge_importance.shape[1])
+        child_index = range(self.edge_importance.shape[0])
+        a, b = np.meshgrid(parent_index, child_index)
+
+        # Flatten arrays to be used in link list creation
+        df = pd.DataFrame()
+        df['Parent'] = self.edge_importance.columns.values[a.flatten()]
+        df['Child'] = self.edge_importance.index.values[b.flatten()]
+        df['Importance'] = self.edge_importance.values.flatten()
+        df['P_window'] = self.x_times[a.flatten()]
+        df['C_window'] = self.x_times[b.flatten()]
+        if self.permutation_p_values is not None:
+            df["p_value"] = self.permutation_p_values.flatten()
+
+        return df
+
+    def run_permutation_test(self, n_permutations=10, crag=False):
+        #if not self.include_window:
+        #    return
+        #initialize permutation results array
+        self.permutation_means = np.empty(self.edge_importance.shape)
+        self.permutation_sd = np.empty(self.edge_importance.shape)
+
+        zeros = np.zeros(self.edge_importance.shape)
+        self._permute_coeffs(zeros, crag=False, n_permutations=n_permutations)
+
+
+    def generate_results_table(self):
+        """
+
+        :return:
+
+        Called by:
+            Roller.rank_edges()
+        """
+        # generate edges for initial model
+        initial_edges = self.create_linked_list(self.beta_coefficients, 'B')
+        # permutation edges
+        permutation_mean_edges = self.create_linked_list(self.permutation_means.values, 'p-means')
+        permutation_sd_edges = self.create_linked_list(self.permutation_sd.values, 'p-sd')
+        stability_edges = self.create_linked_list(self.edge_stability_auc, 'stability')
+
+        aggregated_edges = initial_edges.merge(permutation_mean_edges, on='regulator-target').merge(
+            permutation_sd_edges, on='regulator-target').merge(stability_edges, on='regulator-target')
+
+        # sorry, it is a little messy to do the p-value calculations for permutation tests here...
+        # valid_indices = aggregated_edges['p-sd'] != 0
+        # valid_indices = aggregated_edges['B'] != 0
+        valid_window = aggregated_edges
+        initial_B = valid_window['B']
+        sd = valid_window['p-sd']
+        mean = valid_window['p-means']
+        valid_window['final-z-scores-perm'] = (initial_B - mean) / sd
+        valid_window['cdf-perm'] = (-1 * abs(valid_window['final-z-scores-perm'])).apply(scipy.stats.norm.cdf)
+        # calculate t-tailed pvalue
+        valid_window['p-value-perm'] = (2 * valid_window['cdf-perm'])
+        self.results_table = valid_window
+        return self.results_table
+
