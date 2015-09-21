@@ -157,10 +157,14 @@ class tdRoller(Roller):
         df = None
         for ww, window in enumerate(self.window_list):
             if window.include_window:
+                current_df = window.make_edge_table()
+                current_df.sort(['Importance'], ascending=False, inplace=True)
+                current_df['Rank'] = np.arange(len(current_df))
+
                 if df is None:
-                    df = window.make_edge_table()
+                    df = current_df.copy()
                 else:
-                    df = df.append(window.make_edge_table(), ignore_index=True)
+                    df = df.append(current_df.copy(), ignore_index=True)
         if not self_edges:
             df = df[df.Parent != df.Child]
         df['Edge'] = zip(df.Parent, df.Child)
@@ -191,16 +195,18 @@ class tdRoller(Roller):
             if edge in edge_diff:
                 self.edge_dict[edge] = {"dataframe": None, "mean_importance": 0, 'real_edge': (edge in true_edges),
                                         "max_importance": 0, 'max_edge': None, 'lag_importance': 0,
-                                        'lag_method': lag_method}
+                                        'lag_method': lag_method, 'rank_importance':0}
                 continue
             current_df = df[df.Edge==edge]
             max_idx = current_df['Importance'].idxmax()
             lag_set = list(set(current_df.Lag))
             lag_imp = score_method([lump_method(current_df.Importance[current_df.Lag==lag]) for lag in lag_set])
+            lag_rank = score_method([lump_method(current_df.Rank[current_df.Lag==lag]) for lag in lag_set])
             self.edge_dict[edge] = {"dataframe":current_df, "mean_importance":np.mean(current_df.Importance),
                                     'real_edge':(edge in true_edges), "max_importance":current_df.Importance[max_idx],
                                     'max_edge':(current_df.P_window[max_idx], current_df.C_window[max_idx]),
-                                    'lag_importance': lag_imp, 'lag_method':lag_method}
+                                    'lag_importance': lag_imp, 'lag_method':lag_method,
+                                    'rank_importance': lag_rank}
         print "[DONE]"
         if edge_diff:
             message = 'The last %i edges had no meaningful importance score' \
@@ -214,7 +220,9 @@ class tdRoller(Roller):
         :param df: dataframe
         :return: dataframe
         """
+
         sort_field = sort_by+"_importance"
+
         print "Calculating %s edge importance..." %sort_by,
         temp_dict = {edge:df[edge][sort_field] for edge in df.keys()}
         sort_df = pd.DataFrame.from_dict(temp_dict, orient='index')
