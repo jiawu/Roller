@@ -157,8 +157,15 @@ class tdRoller(Roller):
         df = None
         for ww, window in enumerate(self.window_list):
             if window.include_window:
+                # Get the edges and associated values in table form
                 current_df = window.make_edge_table()
-                current_df.sort(['Importance'], ascending=False, inplace=True)
+
+                # Only retain edges if the p_value is below the threshold
+                #current_df = current_df[current_df['p_value'] <= 0.05]
+                current_df['adj_imp'] = current_df['Importance']*(1-current_df['p_value'])
+                #current_df.loc[current_df['p_value']>0.05, 'Importance'] = 0
+                #current_df.sort(['Importance'], ascending=False, inplace=True)
+                current_df.sort(['adj_imp'], ascending=False, inplace=True)
                 current_df['Rank'] = np.arange(len(current_df))
 
                 if df is None:
@@ -179,14 +186,23 @@ class tdRoller(Roller):
         :return:
         """
         print "Lumping edges...",
+        print
         df = self.full_edge_list.copy()
-        #Only keep edges with importance > 0
-        df = df[df['Importance']>0]
+
+        # Only keep edges with importance > 0. Values below 0 are not helpful for model building
+        df = df[df['Importance'] > 0]
+
+        # Ignore self edges if desired
         if not self_edges:
             df = df[df.Parent != df.Child]
         edge_set = list(set(df.Edge))
+
+        # Calculate the full set of potential edges
         full_edge_set = set(self.make_possible_edge_list(self.gene_list, self.gene_list, self_edges=self_edges))
+
+        # Identify edges that could exist, but do not appear in the inferred list
         edge_diff = full_edge_set.difference(edge_set)
+
         self.edge_dict = {}
         lag_importance_score, lag_lump_method = lag_method.split('_')
         score_method = eval('np.'+lag_importance_score)
@@ -195,7 +211,7 @@ class tdRoller(Roller):
             if edge in edge_diff:
                 self.edge_dict[edge] = {"dataframe": None, "mean_importance": 0, 'real_edge': (edge in true_edges),
                                         "max_importance": 0, 'max_edge': None, 'lag_importance': 0,
-                                        'lag_method': lag_method, 'rank_importance':0}
+                                        'lag_method': lag_method, 'rank_importance':np.nan}
                 continue
             current_df = df[df.Edge==edge]
             max_idx = current_df['Importance'].idxmax()
@@ -227,7 +243,10 @@ class tdRoller(Roller):
         temp_dict = {edge:df[edge][sort_field] for edge in df.keys()}
         sort_df = pd.DataFrame.from_dict(temp_dict, orient='index')
         sort_df.columns = [sort_field]
-        sort_df.sort(sort_field, ascending=False, inplace=True)
+        if sort_by.lower() == 'rank':
+            sort_df.sort(sort_field, ascending=True, inplace=True)
+        else:
+            sort_df.sort(sort_field, ascending=False, inplace=True)
         #sort_df['mean_importance'] = stats.zscore(sort_df['mean_importance'], ddof=1)
         sort_df.index.name = 'regulator-target'
         sort_df=sort_df.reset_index()
