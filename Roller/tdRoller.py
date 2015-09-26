@@ -28,41 +28,6 @@ class tdRoller(Roller):
         self.edge_dict = None
         self.lag_set = None
 
-        # Zscore the data
-        self.norm_data = self.zscore_all_data()
-
-    def zscore_all_data(self):
-        """
-        Z-score the data by column
-        :return:
-        """
-        # Get the raw data values
-        raw_dataset = self.raw_data.values.copy()
-
-        # z-score the values with 1 degree of freedom
-        zscored_datset = pd.DataFrame(stats.zscore(raw_dataset, axis=0, ddof=1), index=self.raw_data.index,
-                                      columns=self.raw_data.columns)
-
-        # replace time values with original time values
-        zscored_datset[self.time_label] = self.raw_data[self.time_label]
-        return zscored_datset
-
-    def create_windows(self, random_time=False):
-        """
-        Create window objects for the roller to use
-
-        Called by:
-            pipeline
-
-        :return:
-        """
-        window_list = [self.get_window_object(self.get_window_raw(index, random_time),
-                                              {"time_label": self.time_label+'_'+str(index),
-                                               "gene_start": self.gene_start,
-                                               "gene_end": self.gene_end,
-                                               "nth_window": index}) if (
-        index + self.window_width <= self.overall_width) else '' for index in range(self.get_n_windows())]
-        self.window_list = window_list
 
     def get_window_object(self, dataframe, window_info_dict):
         """
@@ -77,42 +42,12 @@ class tdRoller(Roller):
         :return:
         """
         if self.window_type == "RandomForest":
-            window_obj = tdRFRWindow(dataframe, window_info_dict, self.raw_data)
+            window_obj = tdRFRWindow(dataframe, window_info_dict, self.norm_data)
         elif self.window_type =="Lasso":
-            window_obj = tdLassoWindow(dataframe, window_info_dict, self.raw_data)
+            window_obj = tdLassoWindow(dataframe, window_info_dict, self.norm_data)
 
 
         return window_obj
-
-    def get_window_raw(self, start_index, random_time=False):
-        """
-        Select a window from the full data set. This is fancy data-frame slicing
-
-        Called by:
-            create_windows
-            get_window_stats
-            get_window
-
-        :param start_index: int
-            The start of the window
-        :param random_time: bool, optional
-        :return: data-frame
-        """
-        if random_time:
-            # select three random timepoints
-            time_window = self.time_vec[start_index]
-            choices = self.time_vec
-            choices = np.delete(choices, start_index)
-            for x in range(0, self.window_width - 1):
-                chosen_time = random.choice(choices)
-                time_window = np.append(time_window, chosen_time)
-                chosen_index = np.where(choices == chosen_time)
-                choices = np.delete(choices, chosen_index)
-        else:
-            end_index = start_index + self.window_width
-            time_window = self.time_vec[start_index:end_index]
-        data = self.norm_data[self.norm_data[self.time_label].isin(time_window)]
-        return data
 
     def augment_windows(self, min_lag=0, max_lag=None):
         """
@@ -122,6 +57,8 @@ class tdRoller(Roller):
             if None, all earlier windows will included
         :return:
         """
+        new_window_list = []
+
         if min_lag>max_lag and max_lag is not None:
             raise Exception('The minimum lag cannot be greater than the maximum lag')
         # Enumerate all of the windows except the first
@@ -144,14 +81,18 @@ class tdRoller(Roller):
                     #Initialize values
                     window.x_data = win.window_values.copy()
                     #try not to assign these outside the classfile. I could not figure out where these were assigned (they weren't in the file)
-                    window.x_labels = win.raw_data.columns[1:]
+                    window.x_labels = win.data.columns[1:]
                     window.x_times = np.array([win.nth_window]*len(win.genes))
+
                 else:
                     window.x_data = np.hstack((window.x_data, win.window_values))
-                    window.x_labels = np.append(window.x_labels, win.raw_data.columns[1:])
+                    window.x_labels = np.append(window.x_labels, win.data.columns[1:])
                     window.x_times = np.append(window.x_times, np.array([win.nth_window]*len(win.genes)))
-            if window.x_data is None:
+            if window.x_data is not None:
+                new_window_list.append(window)
+            else:
                 window.include_window = False
+        self.window_list = new_window_list
         return
 
     def compile_roller_edges(self, self_edges=False):
