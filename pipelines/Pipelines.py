@@ -1,7 +1,7 @@
 import pandas as pd
 from Roller.tdRoller import tdRoller
 from Roller.util.Evaluator import Evaluator
-
+import pdb
 
 def get_td_stats(**kwargs): 
     kwargs.setdefault('td_window',6)
@@ -27,8 +27,13 @@ def get_td_stats(**kwargs):
     pd.options.display.float_format = '{:,.5f}'.format
 
     #np.random.seed(8)
+    if "Lasso" in kwargs['data_folder']:
+        tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator, window_type="Lasso")
+    else:
+        tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
 
-    tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
+
+
     tdr.zscore_all_data()
     tdr.set_window(kwargs['td_window'])
     tdr.create_windows()
