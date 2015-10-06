@@ -1,8 +1,8 @@
 from Roller.util.Evaluator import Evaluator
 from Roller.tdRoller import tdRoller
 import pandas as pd
-
-def get_td_stats(file_path): 
+import pdb
+def get_td_stats(file_path, min_lag = 0): 
     gene_start_column = 1
     time_label = "Time"
     separator = "\t"
@@ -19,9 +19,9 @@ def get_td_stats(file_path):
 
     tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
     tdr.zscore_all_data()
-    tdr.set_window(8)
+    tdr.set_window(4)
     tdr.create_windows()
-    tdr.augment_windows(min_lag=1, max_lag=4)
+    tdr.augment_windows(min_lag=min_lag, max_lag=4)
     tdr.fit_windows(n_trees=500, show_progress=False)
     tdr.rank_edges(permutation_n=5)
     tdr.compile_roller_edges(self_edges=True)
@@ -34,6 +34,6 @@ def get_td_stats(file_path):
     print roc_dict['auroc'][-1]
     print pr_dict['aupr'][-1]#+(1-pr_dict['recall'][-1])
     #return((roc_dict['auroc'][-1],pr_dict['aupr'][-1]))
-    return((roc_dict, pr_dict))
+    return((roc_dict, pr_dict, df2))
 
 
