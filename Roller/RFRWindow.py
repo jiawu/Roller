@@ -42,7 +42,7 @@ class RandomForestRegressionWindow(Window):
         if rank_by == "p_value":
             self.results_table.sort(columns=['p_value', 'importance'], ascending=[True, False], inplace=True)
         elif rank_by == "importance":
-            self.results_table.sort(columns=['p_value', 'importance'], ascending=[False, True], inplace=True)
+            self.results_table.sort(columns=['importance','p_value'], ascending=[False, True], inplace=True)
         valid_window = self.results_table
         valid_window[rank_column_name] = valid_window[rank_by].rank(method="dense",ascending=False)
         self.results_table = self.results_table.sort(columns=rank_column_name, axis=0)
@@ -77,7 +77,7 @@ class RandomForestRegressionWindow(Window):
         self.permutation_sd = np.sqrt(result['variance'].copy())
         self.permutation_p_values = self.calc_p_value()
     
-    def run_permutation_test(self, crag=True, n_permutations=1000, n_jobs=-1):
+    def run_permutation_test(self, crag=False, n_permutations=1000, n_jobs=-1):
         #initialize permutation results array
         self.permutation_means = np.empty((self.n_genes, self.n_genes))
         self.permutation_sd = np.empty((self.n_genes, self.n_genes))
@@ -110,7 +110,7 @@ class RandomForestRegressionWindow(Window):
         """
         if n_trees is None:
             # Select number of trees with default parameters
-            self.n_trees = 300
+            self.n_trees = 500
         elif n_trees >= 0 and type(n_trees) == int:
             self.n_trees = n_trees
         else:
@@ -129,6 +129,8 @@ class RandomForestRegressionWindow(Window):
         self.edge_importance = self.get_coeffs(self.n_trees, crag=crag, n_jobs=n_jobs)
 
     def _initialize_coeffs(self, data):
+        """ Returns a copy of the vector, an empty array with a defined shape, an empty list, and the maximum number of nodes
+        """
         if data is None:
             all_data = self.window_values.copy()
         else:
@@ -177,7 +179,7 @@ class RandomForestRegressionWindow(Window):
             An array in which the rows are childred and the columns are the parents
         """
         ## initialize items
-        all_data, coeff_matrix, model_list =self._initialize_coeffs(data=data)
+        all_data, coeff_matrix, model_list, max_nodes =self._initialize_coeffs(data=data)
 
         for col_index, column in enumerate(all_data.T):
             coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, all_data, col_index, n_trees, n_jobs,crag) 
