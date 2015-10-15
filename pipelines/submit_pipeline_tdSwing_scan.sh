@@ -17,8 +17,8 @@ module load python/anaconda
 cd /home/jjw036/Roller/pipelines
 
 
-iterating_param="permutation_n"
-iterating_style="log"
+iterating_param="td_window"
+iterating_style="minmax 1 6"
 if [ $param_set -eq 1 ] 
 then
     #echo "param_set is ${param_set}"
