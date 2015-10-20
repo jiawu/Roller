@@ -59,13 +59,13 @@ if __name__ == "__main__":
     elif param_test_style == "string":
         param_tests = [str(x) for x in sys.argv[6:]]
         
-    n_trials = 5
+    n_trials = 2
 
     #always save the full parameter list and date in the dataframe for each test. for posterity!
 
     current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
 
-    default_params = {'data_folder':data_folder, 'file_path':target_dataset, 'td_window':6,'min_lag':1,'max_lag':4,'n_trees':500,'permutation_n':10, 'lag_method':'median_median','n_trials':n_trials, 'run_time':current_time, 'iterating_param':my_iterating_param}
+    default_params = {'data_folder':data_folder, 'file_path':target_dataset, 'td_window':6,'min_lag':1,'max_lag':4,'n_trees':500,'permutation_n':5, 'lag_method':'median_median','n_trials':n_trials, 'run_time':current_time, 'iterating_param':my_iterating_param}
 
     overall_df = pd.DataFrame()
 
