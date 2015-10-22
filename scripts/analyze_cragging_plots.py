@@ -17,7 +17,7 @@ data_folder = "/projects/p20519/roller_output/optimizing_window_size/RandomFores
 output_path = "/home/jjw036/Roller/insilico_size10_1"
 
 target_dataset = "/projects/p20519/Roller/data/dream4/insilico_size10_1_timeseries.tsv"
-roc,pr = tdw.get_td_stats(target_dataset)
+#roc,pr = tdw.get_td_stats(target_dataset)
 #target_dataset = "/projects/p20519/Roller/data/invitro/whitfield_shojaie_timeseries.tsv"
 
 #Analyzer computes AUROC/AUPR/Cragging Scores and organizes it in a table
@@ -59,6 +59,7 @@ lp.plot_vertical_line(analyzer.current_roller.overall_width, color_index, window
 
 ## print best cragging score
 cragged_window = analyzer.predict_best_window()
+analyzer.aggregate_best_windows()
 lp.plot_horizontal_line(cragged_window['auroc'].values, 1, 'best crag')
 lp.add_formatting()        
 

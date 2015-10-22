@@ -3,31 +3,43 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import os, pdb
+from BasePlot import BasePlot
 
-class BoxPlot:
-
-    def __init__(self):
-        self.f = plt.figure(figsize=(10,10))
-        self.axes = self.f.gca()
-
-        #initialize colormap
-        self.tableau20 = [(152,223,138),(31, 119, 180), (174, 199, 232), (255, 127, 14),(255, 187, 120),  (44, 160, 44), (255, 152, 150),(148, 103, 189), (197, 176, 213), (140, 86, 75), (196, 156, 148),(227, 119, 194), (247, 182, 210), (127, 127, 127), (199, 199, 199),(188, 189, 34), (219, 219, 141), (23, 190, 207), (158, 218, 229),(214,39,40)]
-        
-        for i in range(len(self.tableau20)):
-            r,g,b = self.tableau20[i]
-            self.tableau20[i] = (r/255., g/255., b/255.)
-
+class BoxPlot(BasePlot):
     
-    def save_plot(self, folder, tag):
+    def __init__(self):
+        BasePlot.__init__(self)
+        self.meanpointprops = dict(marker='D', markersize=6)
+        self.flierprops = dict(marker='o', markersize=6, markerfacecolor='black', markeredgecolor='black', linewidth=8.0)
+        self.boxprops = dict(color='black', linewidth=3.0)
+        self.whiskerprops = dict(color='black', linewidth=2.0)
+        self.capprops = self.whiskerprops
+        self.medianprops = dict(color='blue', linewidth=2.5)
+    
+    def plot_box(self, y_values, labels = None):
         """
-        Saves the plot in designated area.
-        :param folder: string
-        :param tag: string
-        :return self.f: returns the figure
+        Plots the summary data
+        :param y_values: list of np vectors
+        :param label: int or str
+                      example: the window size
+        :return fig obj:
         """
-        image_save = folder + tag + ".png"
-        self.f = self.f.savefig(image_save,format = "png")
-        return(self.f)
+        bp=self.axes.boxplot(y_values, labels=labels, widths = 0.3,medianprops = self.medianprops, whiskerprops=self.whiskerprops,flierprops=self.flierprops, meanprops=self.meanpointprops,showmeans=True, boxprops=self.boxprops, capprops=self.capprops)
+        return(bp)
 
     def add_formatting(self):
-        pass
+        self.axes.set_title('tdRoller Parameter Sensitivity', fontsize=25)
+        self.axes.set_aspect(25)
+
+        self.axes.set_ylabel('AUPR', fontsize=30)
+
+        ylabels = self.axes.get_yticklabels()
+        xlabels = self.axes.get_xticklabels()
+        for label in (self.axes.get_xticklabels()):
+            label.set_fontsize(18)
+            label.set_rotation('vertical')
+        for label in (self.axes.get_yticklabels()):
+            label.set_fontsize(20)
+        for l in self.axes.get_xticklines() + self.axes.get_yticklines():
+            l.set_markersize(0)
+

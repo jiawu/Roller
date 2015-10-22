@@ -34,6 +34,7 @@ class DionesusWindow(Window):
         self.permutation_pvalues = None
 
     def make_edge_table(self):
+        """
         if self.permutation_p_values is None:
             raise ValueError("p values must be set before making the edge table. Use method run_permutation test")
 
@@ -42,17 +43,20 @@ class DionesusWindow(Window):
                              "Use method run_permutation test")
         self.edge_table["p_value"] = self.permutation_p_values.flatten()
         self.edge_table["stability"] = self.edge_stability_auc.flatten()
-
-    def sort_edges(self, method="p_value"):
-        if self.edge_table is None:
+        """
+        # For now, the edge table will only consist of VIP scores
+        self.results_table['p_value'] = self.permutation_p_values.flatten()
+        self.results_table['importance'] = np.asarray(self.vip).flatten()
+        
+    def sort_edges(self, method="importance"):
+        if self.results_table is None:
             raise ValueError("The edge table must be created before getting edges")
-        temp_edge_table = self.edge_table.copy()
         if method == "p_value":
-            temp_edge_table.sort(columns=['p_value', 'stability'], ascending=[True, False], inplace=True)
-        elif method == "stability":
-            temp_edge_table.sort(columns=['stability', 'p_value'], ascending=[False, True], inplace=True)
+            self.results_table.sort(columns=['p_value', 'importance'], ascending=[True, False], inplace=True)
+        elif method == "importance":
+            self.results_table.sort(columns=['importance', 'p_value'], ascending=[False, True], inplace=True)
 
-        return temp_edge_table['regulator-target'].values
+        return self.results_table['regulator-target'].values
 
     def generate_results_table(self):
 
@@ -98,7 +102,7 @@ class DionesusWindow(Window):
 
         return (self.results_table)
 
-    def run_permutation_test(self, n_permutations=1000):
+    def run_permutation_test(self, n_permutations=1000, crag = False):
 
         # initialize permutation results array
         self.permutation_means = np.empty((self.n_genes, self.n_genes))
@@ -176,14 +180,14 @@ class DionesusWindow(Window):
         """
         pass
 
-    def fit_window(self, pcs=3):
+    def fit_window(self, pcs=3, crag=False):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
 
         :return:
         """
 
-        self.beta_coefficients, self.vip = self.get_coeffs(pcs)
+        self.beta_coefficients, self.vip = self.get_coeffs(pcs, crag=crag)
 
     def sum_of_squares(self, X):
         """
@@ -197,7 +201,7 @@ class DionesusWindow(Window):
         ss = np.sum(np.power(X - column_mean, 2), axis=0)
         return ss
 
-    def get_coeffs(self, num_pcs=3, data=None):
+    def get_coeffs(self, num_pcs=3, data=None, crag=False):
         """
         returns a 2D array with target as rows and regulators as columns
         :param alpha: float
@@ -246,8 +250,9 @@ class DionesusWindow(Window):
             vip_matrix = np.vstack((vip_matrix, vips))
 
             # scoping issues
-            training_scores, test_scores = self.crag_window(model_params)
-            self.training_scores.append(training_scores)
-            self.test_scores.append(test_scores)
+            if crag:
+                training_scores, test_scores = self.crag_window(model_params)
+                self.training_scores.append(training_scores)
+                self.test_scores.append(test_scores)
 
         return coeff_matrix, vip_matrix

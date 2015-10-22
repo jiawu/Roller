@@ -100,3 +100,5 @@ def elbow_criteria(x,y):
     elbow_x = x[index_max]
     elbow_y = y[index_max]
     return elbow_x, elbow_y
+
+

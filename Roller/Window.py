@@ -14,8 +14,8 @@ class Window(object):
     should be sub-classed to have network inference specific features and methods.
     """
 
-    def __init__(self, raw_dataframe, window_info, roller_raw_data):
-        #todo: unclear if roller_raw_data is necessary
+    def __init__(self, raw_dataframe, window_info, roller_data):
+        #todo: unclear if roller_data is necessary
         """
         Initialize a window object. Extract information from the passed data-frame. Generate edge list.
 
@@ -30,7 +30,7 @@ class Window(object):
         self.gene_start = window_info['gene_start']
         self.gene_end = window_info['gene_end']
         self.nth_window = window_info['nth_window']
-        self.raw_data = raw_dataframe
+        self.data = raw_dataframe
         dataframe = raw_dataframe.iloc[:, self.gene_start:self.gene_end]
         self.df = dataframe
         self.window_values = dataframe.values
@@ -44,7 +44,7 @@ class Window(object):
         self.edge_list = self.possible_edge_list(self.genes, self.genes)
         # Add edge list to edge table
         self.results_table['regulator-target'] = self.edge_list
-        self.roller_raw = roller_raw_data
+        self.roller_data = roller_data
 
         # The training score is a list of descriptors for how well the model fit the training data for each response variable for the current window
         # the test score is a list of descriptors for how well the model fit the test data for each response variable for the current window.
@@ -245,9 +245,9 @@ class Window(object):
     def pack_values(self, df):
         #pack the values into separate time series. It outputs a list of pandasdataframes such that each series can be analyzed separately.
         #this is important because otherwise the algorithm will combine calculations from separate time series
-        time = self.raw_data[self.time_label].unique()
+        time = self.data[self.time_label].unique()
         time_n = len(time)
-        series_n = len(self.raw_data[self.time_label])/len(time)
+        series_n = len(self.data[self.time_label])/len(time)
         time_series_list = []
         for i in range(0, series_n):
             #get data[first time point : last timepoint]
@@ -260,7 +260,7 @@ class Window(object):
         rates_list = []
         for series in series_list:
             rise = np.diff(series, n, axis = 0)
-            time = self.raw_data[self.time_label].unique()
+            time = self.data[self.time_label].unique()
             rrun = np.array([j-i for i,j in zip(time[:-1], time[1:])])
             #the vector represents the scalars used to divide each row
             rates = rise/rrun[:,None]
@@ -287,7 +287,7 @@ class Window(object):
         n_genes = self.window_values.shape[1]
         linearity = []
         for gene_index in range(0,n_genes):
-            xi = self.raw_data[self.time_label].unique()
+            xi = self.data[self.time_label].unique()
             y = self.window_values[gene_index,:]
             slope, intercept, r_value, p_value, std_er = stats.linregress(xi, y)
         linearity.append(r_value)
@@ -303,7 +303,7 @@ class Window(object):
         predictor_train = model_params['predictor']
         response_col = model_params['col_index']
         training_scores = Rutil.get_cragging_scores(model, predictor_train, response_train)
-        test_data = Rutil.get_test_set(self.raw_data, self.roller_raw)
+        test_data = Rutil.get_test_set(self.data, self.roller_data)
 
         response_test = test_data.ix[:,response_col].values
         predictor_test = test_data.drop(test_data.columns[response_col],1).values
