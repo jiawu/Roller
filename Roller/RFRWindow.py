@@ -42,18 +42,17 @@ class RandomForestRegressionWindow(Window):
         if rank_by == "p_value":
             self.results_table.sort(columns=['p_value', 'importance'], ascending=[True, False], inplace=True)
         elif rank_by == "importance":
-            self.results_table.sort(columns=['p_value', 'importance'], ascending=[False, True], inplace=True)
+            self.results_table.sort(columns=['importance','p_value'], ascending=[False, True], inplace=True)
         valid_window = self.results_table
         valid_window[rank_column_name] = valid_window[rank_by].rank(method="dense",ascending=False)
         self.results_table = self.results_table.sort(columns=rank_column_name, axis=0)
         return self.results_table
 
-    def run_permutation_test(self, crag=True, n_permutations=1000, n_jobs=-1):
-        #initialize permutation results array
-        self.permutation_means = np.empty((self.n_genes, self.n_genes))
-        self.permutation_sd = np.empty((self.n_genes, self.n_genes))
-        nth_window = self.nth_window
-        zeros = np.zeros((self.n_genes, self.n_genes))
+    def _permute_coeffs(self, zeros, crag,n_permutations, n_jobs, td=False):
+        """
+        Internal method that is shared between window and tdWindow
+
+        """
         #initialize running calculation
         result = {'n':zeros.copy(), 'mean':zeros.copy(), 'ss':zeros.copy()}
         #inner loop: permute the window N number of times
@@ -62,7 +61,10 @@ class RandomForestRegressionWindow(Window):
                 #print 'Perm Run: ' +str(nth_perm)
 
             #permute data
-            permuted_data = self.permute_data(self.window_values)
+            if td == True:
+                permuted_data = self.permute_data(self.x_data)
+            else:
+                permuted_data = self.permute_data(self.window_values)
 
             #fit the data and get coefficients
 
@@ -74,6 +76,13 @@ class RandomForestRegressionWindow(Window):
         self.permutation_means = result['mean'].copy()
         self.permutation_sd = np.sqrt(result['variance'].copy())
         self.permutation_p_values = self.calc_p_value()
+    
+    def run_permutation_test(self, crag=False, n_permutations=1000, n_jobs=-1):
+        #initialize permutation results array
+        self.permutation_means = np.empty((self.n_genes, self.n_genes))
+        self.permutation_sd = np.empty((self.n_genes, self.n_genes))
+        zeros = np.zeros((self.n_genes, self.n_genes))
+        self._permute_coeffs(zeros, crag=crag, n_permutations=n_permutations, n_jobs=n_jobs)
 
     def calc_p_value(self, value=None, mean=None, sd=None):
         if value is None:
@@ -101,7 +110,7 @@ class RandomForestRegressionWindow(Window):
         """
         if n_trees is None:
             # Select number of trees with default parameters
-            self.n_trees = 300
+            self.n_trees = 500
         elif n_trees >= 0 and type(n_trees) == int:
             self.n_trees = n_trees
         else:
@@ -119,6 +128,48 @@ class RandomForestRegressionWindow(Window):
 
         self.edge_importance = self.get_coeffs(self.n_trees, crag=crag, n_jobs=n_jobs)
 
+    def _initialize_coeffs(self, data):
+        """ Returns a copy of the vector, an empty array with a defined shape, an empty list, and the maximum number of nodes
+        """
+        if data is None:
+            all_data = self.window_values.copy()
+        else:
+            all_data = data.copy()
+
+        max_nodes = self.window_values.shape[1]
+
+        coeff_matrix = np.array([], dtype=np.float_).reshape(0, all_data.shape[1])
+
+        model_list = []
+        return((all_data,coeff_matrix,model_list,max_nodes))
+  
+    def _fitstack_coeffs(self, coeff_matrix, model_list, all_data, col_index, n_trees, n_jobs, crag):
+        #print "Inferring parents for gene %i of %i" % (col_index, self.n_labels)
+        X_matrix = np.delete(all_data, col_index, axis=1)
+
+        #take out the column so that the gene does not regress on itself
+        target_TF = all_data[:, col_index]
+
+        rfr = RandomForestRegressor(n_estimators=n_trees, n_jobs=n_jobs, max_features="sqrt")
+        rfr.fit(X_matrix, target_TF)
+        model_params = {'col_index':col_index,
+                        'response':target_TF,
+                        'predictor':X_matrix,
+                        'model':rfr}
+        model_list.append(model_params)
+        coeffs = rfr.feature_importances_
+        #artificially add a 0 to where the col_index is
+        #to prevent self-edges
+        coeffs = np.insert(coeffs, col_index, 0)
+        coeff_matrix = np.vstack((coeff_matrix, coeffs))
+        # there's some scoping issues here. cragging needs the roller's raw data but the window does not know what roller contains (outside scope). have to pass in the roller's raw data and save it somehow :/
+        if crag == True:
+            training_scores, test_scores = self.crag_window(model_params)
+            self.training_scores.append(training_scores)
+            self.test_scores.append(test_scores)
+        
+        return((coeff_matrix,model_list))
+        
     def get_coeffs(self, n_trees, crag=True, data=None, n_jobs=-1):
         """
 
@@ -127,40 +178,11 @@ class RandomForestRegressionWindow(Window):
         :return: array-like
             An array in which the rows are childred and the columns are the parents
         """
-        if data is None:
-            all_data = self.window_values.copy()
-        else:
-            all_data = data.copy()
+        ## initialize items
+        all_data, coeff_matrix, model_list, max_nodes =self._initialize_coeffs(data=data)
 
-        coeff_matrix = np.array([], dtype=np.float_).reshape(0, all_data.shape[1])
-
-        model_list = []
         for col_index, column in enumerate(all_data.T):
-            #print "Inferring parents for gene %i of %i" % (col_index, self.n_labels)
-            #delete the column that is currently being tested
-            X_matrix = np.delete(all_data, col_index, axis=1)
-
-            #take out the column so that the gene does not regress on itself
-            target_TF = all_data[:, col_index]
-
-            rfr = RandomForestRegressor(n_estimators=n_trees, n_jobs=n_jobs, max_features="sqrt")
-            rfr.fit(X_matrix, target_TF)
-            model_params = {'col_index':col_index,
-                            'response':target_TF,
-                            'predictor':X_matrix,
-                            'model':rfr}
-            model_list.append(model_params)
-            coeffs = rfr.feature_importances_
-            #artificially add a 0 to where the col_index is
-            #to prevent self-edges
-            coeffs = np.insert(coeffs, col_index, 0)
-            coeff_matrix = np.vstack((coeff_matrix, coeffs))
-            # there's some scoping issues here. cragging needs the roller's raw data but the window does not know what roller contains (outside scope). have to pass in the roller's raw data and save it somehow :/
-            if crag == True:
-                training_scores, test_scores = self.crag_window(model_params)
-                self.training_scores.append(training_scores)
-                self.test_scores.append(test_scores)
-
+            coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, all_data, col_index, n_trees, n_jobs,crag) 
         return coeff_matrix
 
 class tdRFRWindow(RandomForestRegressionWindow):
@@ -173,7 +195,7 @@ class tdRFRWindow(RandomForestRegressionWindow):
         self.include_window = True
         self.earlier_window_idx = None
 
-    def fit_window(self, crag=True ,n_jobs=1):
+    def fit_window(self, crag=False ,n_jobs=1):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
@@ -181,9 +203,9 @@ class tdRFRWindow(RandomForestRegressionWindow):
         if self.include_window:
             print "Regressing window index %i against the following window indices: "%self.nth_window,\
                 self.earlier_window_idx
-            self.edge_importance = self.get_coeffs(self.n_trees, crag=crag, data=self.x_data, n_jobs=n_jobs)
+            self.edge_importance = self.get_coeffs(self.n_trees, crag=False, data=self.x_data, n_jobs=n_jobs)
 
-    def get_coeffs(self, n_trees, crag=True, data=None, n_jobs=-1):
+    def get_coeffs(self, n_trees, crag=False, data=None, n_jobs=-1):
         """
 
         :param data:
@@ -191,49 +213,19 @@ class tdRFRWindow(RandomForestRegressionWindow):
         :return: array-like
             An array in which the rows are children and the columns are the parents
         """
-        if data is None:
-            all_data = self.window_values.copy()
-        else:
-            all_data = data.copy()
+        
+        ## initialize items
+        all_data, coeff_matrix, model_list, max_nodes = self._initialize_coeffs(data=data)
 
-        max_nodes = self.window_values.shape[1]
-
-        coeff_matrix = np.array([], dtype=np.float_).reshape(0, all_data.shape[1])
-
-        model_list = []
         for col_index, column in enumerate(all_data[:,:max_nodes].T):
             # Once we get through all the nodes at this timepoint we can stop
             if col_index == max_nodes:
                 break
-            #print "Inferring parents for gene %i of %i" % (col_index, self.n_labels)
-
-
-            #delete the column that is currently being tested
-            X_matrix = np.delete(all_data, col_index, axis=1)
-
-            #take out the column so that the gene does not regress on itself
-            target_TF = all_data[:, col_index]
-
-            rfr = RandomForestRegressor(n_estimators=n_trees, n_jobs=n_jobs, max_features="sqrt")
-            rfr.fit(X_matrix, target_TF)
-            model_params = {'col_index':col_index,
-                            'response':target_TF,
-                            'predictor':X_matrix,
-                            'model':rfr}
-            model_list.append(model_params)
-            coeffs = rfr.feature_importances_
-            #artificially add a 0 to where the col_index is
-            #to prevent self-edges
-            coeffs = np.insert(coeffs, col_index, 0)
-            coeff_matrix = np.vstack((coeff_matrix, coeffs))
-            # there's some scoping issues here. cragging needs the roller's raw data but the window does not know what roller contains (outside scope). have to pass in the roller's raw data and save it somehow :/
-            #training_scores, test_scores = self.crag_window(model_params)
-            #self.training_scores.append(training_scores)
-            #self.test_scores.append(test_scores)
+            coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, all_data, col_index, n_trees, n_jobs,crag) 
+        
         importance_dataframe = pd.DataFrame(coeff_matrix, index=self.x_labels[:max_nodes], columns=self.x_labels)
         importance_dataframe.index.name = 'Child'
         importance_dataframe.columns.name = 'Parent'
-
         return importance_dataframe
 
     def make_edge_table(self):
@@ -262,7 +254,7 @@ class tdRFRWindow(RandomForestRegressionWindow):
 
         return df
 
-    def run_permutation_test(self, n_permutations=1000, n_jobs=1,crag=True):
+    def run_permutation_test(self, n_permutations=1000, n_jobs=1,crag=False):
         if not self.include_window:
             return
         #initialize permutation results array
@@ -270,21 +262,6 @@ class tdRFRWindow(RandomForestRegressionWindow):
         self.permutation_sd = np.empty(self.edge_importance.shape)
 
         zeros = np.zeros(self.edge_importance.shape)
+        self._permute_coeffs(zeros, crag=False, n_permutations=n_permutations, n_jobs=n_jobs, td=True)
 
-        #initialize running calculation
-        result = {'n':zeros.copy(), 'mean':zeros.copy(), 'ss':zeros.copy()}
-
-        for nth_perm in range(0, n_permutations):
-            #permute data
-            permuted_data = self.permute_data(self.x_data)
-
-            #fit the data and get coefficients
-
-            permuted_coeffs = self.get_coeffs(self.n_trees, crag=crag, data=permuted_data, n_jobs=n_jobs)
-            dummy_list = []
-            dummy_list.append(permuted_coeffs)
-            result = self.update_variance_2D(result, dummy_list)
-
-        self.permutation_means = result['mean'].copy()
-        self.permutation_sd = np.sqrt(result['variance'].copy())
-        self.permutation_p_values = self.calc_p_value()
+        

@@ -1,12 +1,13 @@
 import pandas as pd
 import numpy as np
+from scipy import stats
 from Window import Window
 from LassoWindow import LassoWindow
 from RFRWindow import RandomForestRegressionWindow, tdRFRWindow
 from DionesusWindow import DionesusWindow
 from util import utility_module as utility
 from util.Evaluator import Evaluator
-import pdb
+
 import random
 
 
@@ -53,6 +54,10 @@ class Roller(object):
 
         self.gene_list = self.raw_data.columns.values[self.gene_start:self.gene_end]
         self.window_list = []
+
+        #assign norm data for window creation. by default, norm_data is raw_data and is later modified by other functions.
+
+        self.norm_data = self.raw_data
 
     def make_possible_edge_list(self, parents, children, self_edges=True):
         """
@@ -140,7 +145,7 @@ class Roller(object):
         else:
             end_index = start_index + self.window_width
             time_window = self.time_vec[start_index:end_index]
-        data = self.raw_data[self.raw_data[self.time_label].isin(time_window)]
+        data = self.norm_data[self.norm_data[self.time_label].isin(time_window)]
         return data
 
     def set_window(self, width):
@@ -237,11 +242,11 @@ class Roller(object):
         :return:
         """
         if self.window_type == "Lasso":
-            window_obj = LassoWindow(dataframe, window_info_dict, self.raw_data)
+            window_obj = LassoWindow(dataframe, window_info_dict, self.norm_data)
         elif self.window_type == "RandomForest":
-            window_obj = RandomForestRegressionWindow(dataframe, window_info_dict, self.raw_data)
+            window_obj = RandomForestRegressionWindow(dataframe, window_info_dict, self.norm_data)
         elif self.window_type == "Dionesus":
-            window_obj = DionesusWindow(dataframe, window_info_dict, self.raw_data)
+            window_obj = DionesusWindow(dataframe, window_info_dict, self.norm_data)
 
         return window_obj
 
@@ -259,7 +264,7 @@ class Roller(object):
             window.initialize_params()
             window.fit_window(crag=False)
 
-    def rank_windows(self, n_permutes=1000, n_bootstraps=1000, n_alphas=20, noise=0.2):
+    def rank_windows(self, n_permutes=10, n_bootstraps=10, n_alphas=20, noise=0.2):
         """
         Run tests to score and rank windows
 
@@ -278,7 +283,7 @@ class Roller(object):
         :return:
         """
         for window in self.window_list:
-            window.run_permutation_test(n_permutes)
+            window.run_permutation_test(n_permutes, crag=False)
             window.run_bootstrap(n_bootstraps, n_alphas, noise)
             window.make_edge_table()
 
@@ -334,19 +339,22 @@ class Roller(object):
         :param permutation_n:
         :return:
         """
-
+        if self.window_type == "Dionesus":
+            for window in self.window_list:
+                window.run_permutation_test(n_permutations=permutation_n, crag=False)
+                window.make_edge_table()                
+        
         if self.window_type == "Lasso":
             for window in self.window_list:
-                window.run_permutation_test(n_permutations=permutation_n, crag=crag)
+                window.run_permutation_test(n_permutations=permutation_n, crag=False)
                 print("Running bootstrap...")
                 window.run_bootstrap(n_bootstraps=n_bootstraps)
-                window.generate_results_table()
+                window.make_edge_table()
         if self.window_type == "RandomForest":
             for window in self.window_list:
-                if window.include_window:
-                    print("Running permutation on window %i...")%window.nth_window
-                    window.run_permutation_test(n_permutations=permutation_n, crag=crag)
-                    window.make_edge_table()
+                print("Running permutation on window %i...")%window.nth_window
+                window.run_permutation_test(n_permutations=permutation_n, crag=False)
+                window.make_edge_table()
         return self.window_list
 
     def average_rank(self, rank_by, ascending):
@@ -389,8 +397,6 @@ class Roller(object):
         :param gold_standard_file:
         :return:
         """
-        if len(sorted_edge_list) < 15:
-            pdb.set_trace()
         evaluator = Evaluator(gold_standard_file, sep='\t')
         edge_cutoff = len(evaluator.gs_flat)
         precision, recall, aupr = evaluator.calc_pr(sorted_edge_list[0:edge_cutoff + 1])
@@ -406,17 +412,17 @@ class Roller(object):
         Called by:
             pipeline
 
-        :return:
+        :return: z-scored dataframe
         """
         # zscores all the data
-        dataframe = self.raw_data
+        raw_dataset = self.raw_data.values.copy()
 
-        # for each column, calculate the zscore
-        # zscore is calculated as X - meanX / std(ddof = 1)
-        for item in dataframe.columns:
-            if item != self.time_label:
-                dataframe[item] = (dataframe[item] - dataframe[item].mean()) / dataframe[item].std(ddof=1)
-        self.raw_data = dataframe
+        zscored_dataset = pd.DataFrame(stats.zscore(raw_dataset, axis=0, ddof=1), index=self.raw_data.index, columns=self.raw_data.columns)
+
+        zscored_dataset[self.time_label] = self.raw_data[self.time_label]
+        self.norm_data = zscored_dataset
+
+        return(zscored_dataset)
 
     def get_window_stats(self):
         """

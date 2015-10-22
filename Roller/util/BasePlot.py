@@ -22,8 +22,8 @@ class BasePlot:
         :param tag: string
         :return self.f: returns the figure
         """
-        image_save = folder + tag + ".png"
-        self.f = self.f.savefig(image_save,format = "png")
+        image_save = folder + tag + ".ps"
+        self.f = self.f.savefig(image_save,format = "ps", bbox_inches='tight')
         return(self.f)
 
     def add_formatting(self):
