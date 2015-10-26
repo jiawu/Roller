@@ -9,7 +9,6 @@ import gzip
 from Roller.util.Analyzer import Analyzer
 from datetime import datetime
 import pandas as pd
-import pdb
 #from sklearn.externals import joblib
 """
 This pipeline scans a range of window sizes for a given inference method and generates roller objects for post analysis.

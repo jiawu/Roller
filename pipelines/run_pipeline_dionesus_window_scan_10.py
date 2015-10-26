@@ -51,7 +51,6 @@ def main(window_size, n_trials, my_iterating_param):
 
             analyzer = Analyzer(roller)
             result_df = analyzer.get_result_df()
-            pdb.set_trace()
             aggregated_best_windows = analyzer.aggregate_best_windows(result_df)
             
             print(aggregated_best_windows)
