@@ -5,7 +5,6 @@ import sys
 import Roller
 import uuid
 import pickle
-import pdb
 import pandas as pd
 from Roller.util.Analyzer import Analyzer
 from datetime import datetime

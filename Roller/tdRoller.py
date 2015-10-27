@@ -4,6 +4,7 @@ import pdb
 from Roller import Roller
 from RFRWindow import tdRFRWindow
 from LassoWindow import tdLassoWindow
+from DionesusWindow import tdDionesusWindow
 import numpy as np
 import pandas as pd
 from scipy import stats
@@ -46,6 +47,8 @@ class tdRoller(Roller):
         elif self.window_type =="Lasso":
             window_obj = tdLassoWindow(dataframe, window_info_dict, self.norm_data)
 
+        elif self.window_type =="Dionesus":
+            window_obj = tdDionesusWindow(dataframe, window_info_dict, self.norm_data)
 
         return window_obj
 
