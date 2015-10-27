@@ -6,6 +6,7 @@ from scipy import stats
 from sklearn.cross_decomposition import PLSRegression
 import numpy as np
 from Window import Window
+import pandas as pd
 
 
 class DionesusWindow(Window):
@@ -327,7 +328,7 @@ class tdDionesusWindow(DionesusWindow):
             # Once we get through all the nodes at this timepoint we can stop
             if col_index == max_nodes:
                 break
-            coeff_matrix, model_list = self._fitstack_coeffs(num_pcs=num_pcs,coeff_matrix=coeff_matrix, vip_matrix=vip_matrix, model_list=model_list, all_data=all_data, col_index=col_index,crag=crag) 
+            coeff_matrix, model_list = self._fitstack_coeffs(num_pcs=num_pcs,coeff_matrix=coeff_matrix, vip_matrix=vip_matrix, model_list=model_list, all_data=all_data, col_index=col_index,crag=crag)
             
         """
         if self.x_labels == None:

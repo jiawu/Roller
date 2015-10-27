@@ -143,24 +143,26 @@ class RandomForestRegressionWindow(Window):
         model_list = []
         return((all_data,coeff_matrix,model_list,max_nodes))
   
-    def _fitstack_coeffs(self, coeff_matrix, model_list, all_data, col_index, n_trees, n_jobs, crag):
+    def _fitstack_coeffs(self, coeff_matrix, model_list, x_matrix, target_y, col_index, n_trees, n_jobs, crag):
         #print "Inferring parents for gene %i of %i" % (col_index, self.n_labels)
-        X_matrix = np.delete(all_data, col_index, axis=1)
+        #X_matrix = np.delete(all_data, col_index, axis=1)
 
         #take out the column so that the gene does not regress on itself
-        target_TF = all_data[:, col_index]
+        #target_TF = all_data[:, col_index]
 
         rfr = RandomForestRegressor(n_estimators=n_trees, n_jobs=n_jobs, max_features="sqrt")
-        rfr.fit(X_matrix, target_TF)
+        rfr.fit(x_matrix, target_y)
         model_params = {'col_index':col_index,
-                        'response':target_TF,
-                        'predictor':X_matrix,
+                        'response':target_y,
+                        'predictor':x_matrix,
                         'model':rfr}
         model_list.append(model_params)
         coeffs = rfr.feature_importances_
+
         #artificially add a 0 to where the col_index is
         #to prevent self-edges
-        coeffs = np.insert(coeffs, col_index, 0)
+        if coeff_matrix.shape[1]-len(coeffs) == 1:
+            coeffs = np.insert(coeffs, col_index, 0)
         coeff_matrix = np.vstack((coeff_matrix, coeffs))
         # there's some scoping issues here. cragging needs the roller's raw data but the window does not know what roller contains (outside scope). have to pass in the roller's raw data and save it somehow :/
         if crag == True:
@@ -168,7 +170,7 @@ class RandomForestRegressionWindow(Window):
             self.training_scores.append(training_scores)
             self.test_scores.append(test_scores)
         
-        return((coeff_matrix,model_list))
+        return (coeff_matrix, model_list)
         
     def get_coeffs(self, n_trees, crag=True, data=None, n_jobs=-1):
         """
@@ -213,16 +215,16 @@ class tdRFRWindow(RandomForestRegressionWindow):
         :return: array-like
             An array in which the rows are children and the columns are the parents
         """
-        
+
         ## initialize items
         all_data, coeff_matrix, model_list, max_nodes = self._initialize_coeffs(data=data)
 
-        for col_index, column in enumerate(all_data[:,:max_nodes].T):
-            # Once we get through all the nodes at this timepoint we can stop
-            if col_index == max_nodes:
-                break
-            coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, all_data, col_index, n_trees, n_jobs,crag) 
-        
+        for col_index, column in enumerate(self.window_values.T):
+            target_y = column.copy()
+            x_matrix = all_data.copy()
+            if self.nth_window in self.x_times:
+                x_matrix = np.delete(x_matrix, col_index, axis=1)
+            coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, x_matrix, target_y, col_index, n_trees, n_jobs,crag)
         importance_dataframe = pd.DataFrame(coeff_matrix, index=self.x_labels[:max_nodes], columns=self.x_labels)
         importance_dataframe.index.name = 'Child'
         importance_dataframe.columns.name = 'Parent'
