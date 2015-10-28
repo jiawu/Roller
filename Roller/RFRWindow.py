@@ -162,8 +162,10 @@ class RandomForestRegressionWindow(Window):
 
         #artificially add a 0 to where the col_index is
         #to prevent self-edges
+
         if coeff_matrix.shape[1]-len(coeffs) == 1:
             coeffs = np.insert(coeffs, col_index, 0)
+
         coeff_matrix = np.vstack((coeff_matrix, coeffs))
         # there's some scoping issues here. cragging needs the roller's raw data but the window does not know what roller contains (outside scope). have to pass in the roller's raw data and save it somehow :/
         if crag == True:
@@ -222,6 +224,8 @@ class tdRFRWindow(RandomForestRegressionWindow):
         all_data, coeff_matrix, model_list, max_nodes = self._initialize_coeffs(data=data)
         mse_matrix = None
         # Calculate a model for each target column
+
+
         for col_index, column in enumerate(self.window_values.T):
             target_y = column.copy()
             x_matrix = all_data.copy()
@@ -233,7 +237,7 @@ class tdRFRWindow(RandomForestRegressionWindow):
             base_mse = mean_squared_error(model_list[col_index]['model'].predict(x_matrix), target_y)
 
             if calc_mse:
-                _, f_coeff_matrix, f_model_list, _ = self._initialize_coeffs(data=data)
+                _, f_coeff_matrix, f_model_list, _ = self._initialize_coeffs(data=x_matrix)
                 mse_list = []
                 for idx in range(x_matrix.shape[1]):
                     adj_x_matrix = np.delete(x_matrix, idx, axis=1)
@@ -276,6 +280,10 @@ class tdRFRWindow(RandomForestRegressionWindow):
         df['C_window'] = child_values[b.flatten()]
         if self.permutation_p_values is not None:
             df["p_value"] = self.permutation_p_values.flatten()
+
+        # Remove any self edges
+        df = df[~((df['Parent'] == df['Child'])&(df['P_window'] == df['C_window']))]
+
         df['MSE_diff'] = self.edge_mse_diff.flatten()
 
         return df

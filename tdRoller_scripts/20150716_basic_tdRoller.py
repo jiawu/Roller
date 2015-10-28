@@ -8,7 +8,15 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import sys
 
-insilico_n = 3
+insilico_n = 4
+window_width = 15
+min_lag = 1
+max_lag = 3
+n_trees = 10
+n_permutes = 100
+mse_adjust = True
+combine_method = 'mean_mean'
+sort_by = 'adj'
 file_path = "../data/dream4/insilico_size10_%i_timeseries.tsv"%insilico_n
 gene_start_column = 1
 time_label = "Time"
@@ -23,29 +31,41 @@ np.random.seed(8)
 
 tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
 tdr.zscore_all_data()
-tdr.set_window(15)
+tdr.set_window(window_width)
 tdr.create_windows()
-tdr.augment_windows(min_lag=1, max_lag=3)
-tdr.fit_windows(n_trees=10, show_progress=False)
-tdr.rank_edges(permutation_n=10)
-tdr.compile_roller_edges(self_edges=True, mse_adjust=False)
-tdr.make_static_edge_dict(true_edges, lag_method='mean_mean')
-df2 = tdr.make_sort_df(tdr.edge_dict, 'lag')
+tdr.augment_windows(min_lag=min_lag, max_lag=max_lag)
+tdr.fit_windows(n_trees=n_trees, show_progress=False)
+tdr.rank_edges(permutation_n=n_permutes)
+tdr.compile_roller_edges(self_edges=True, mse_adjust=mse_adjust)
+tdr.make_static_edge_dict(true_edges, lag_method=combine_method)
+df2 = tdr.make_sort_df(tdr.edge_dict, sort_by)
 df2['Rank'] = np.arange(len(df2))
+
+#print(df2)
+roc_dict, pr_dict = tdr.score(df2)
+#tdr.plot_scoring(roc_dict, pr_dict)
+
 print df2
 
 gs_ranks = [df2['Rank'][df2['regulator-target'] == edge].values[0] for edge in true_edges]
 print zip(true_edges, gs_ranks)
-box_data = [tdr.edge_dict[(edge)]['dataframe']['Importance'].values for edge in df2['regulator-target'].values]
-print tdr.edge_dict[('G1', 'G8')]['dataframe']
-plt.boxplot(box_data)
+box_data = [tdr.edge_dict[(edge)]['dataframe']['adj_imp'].values for edge in df2['regulator-target'].values]
+print tdr.edge_dict[('G10', 'G7')]['dataframe']
+
+print 'AUROC: ', roc_dict['auroc'][-1]
+print 'AUPR: ', pr_dict['aupr'][-1]#+(1-pr_dict['recall'][-1])
+print 'F1: ', (2*roc_dict['auroc'][-1]*pr_dict['aupr'][-1]/(roc_dict['auroc'][-1]+pr_dict['aupr'][-1]))
+
+print "Network: ", insilico_n
+print 'Window width: ', window_width
+print 'Min lag: ', min_lag
+print 'Max lag: ', max_lag
+print 'trees: ', n_trees
+print 'perms: ', n_permutes
+print 'mse adjusted: ', mse_adjust
+print 'lumping: ', combine_method
+print 'sorting by: ', sort_by
+
+#plt.boxplot(box_data)
 #plt.xticks(df2['regulator-target'].values)
-plt.show()
-
-#print(df2)
-roc_dict, pr_dict = tdr.score(df2)
-
-print roc_dict['auroc'][-1]
-print pr_dict['aupr'][-1]#+(1-pr_dict['recall'][-1])
-print (2*roc_dict['auroc'][-1]*pr_dict['aupr'][-1]/(roc_dict['auroc'][-1]+pr_dict['aupr'][-1]))
-#tdr.plot_scoring(roc_dict, pr_dict)
+#plt.show()
