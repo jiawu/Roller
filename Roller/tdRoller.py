@@ -166,18 +166,19 @@ class tdRoller(Roller):
             if edge in edge_diff:
                 self.edge_dict[edge] = {"dataframe": None, "mean_importance": 0, 'real_edge': (edge in true_edges),
                                         "max_importance": 0, 'max_edge': None, 'lag_importance': 0,
-                                        'lag_method': lag_method, 'rank_importance':np.nan}
+                                        'lag_method': lag_method, 'rank_importance':np.nan, 'adj_importance':0}
                 continue
             current_df = df[df.Edge == edge]
             max_idx = current_df['Importance'].idxmax()
             lag_set = list(set(current_df.Lag))
             lag_imp = score_method([lump_method(current_df.Importance[current_df.Lag == lag]) for lag in lag_set])
+            lag_adj_imp = score_method([lump_method(current_df.adj_imp[current_df.Lag == lag]) for lag in lag_set])
             lag_rank = score_method([lump_method(current_df.Rank[current_df.Lag == lag]) for lag in lag_set])
             self.edge_dict[edge] = {"dataframe":current_df, "mean_importance":np.mean(current_df.Importance),
                                     'real_edge':(edge in true_edges), "max_importance":current_df.Importance[max_idx],
                                     'max_edge':(current_df.P_window[max_idx], current_df.C_window[max_idx]),
                                     'lag_importance': lag_imp, 'lag_method':lag_method,
-                                    'rank_importance': lag_rank}
+                                    'rank_importance': lag_rank, 'adj_importance':lag_adj_imp}
         print "[DONE]"
         if edge_diff:
             message = 'The last %i edges had no meaningful importance score' \
