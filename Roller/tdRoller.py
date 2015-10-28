@@ -108,7 +108,7 @@ class tdRoller(Roller):
         for ww, window in enumerate(self.window_list):
             if window.include_window:
                 # Get the edges and associated values in table form
-                current_df = window.make_edge_table()
+                current_df = window.make_edge_table(calc_mse=mse_adjust)
 
                 # Only retain edges if the p_value is below the threshold
                 #current_df = current_df[current_df['p_value'] <= 0.05]
@@ -116,7 +116,6 @@ class tdRoller(Roller):
                 # Only retain edges if the MSE_diff is negative
                 if mse_adjust:
                     current_df = current_df[current_df['MSE_diff'] < 0]
-
 
                 current_df['adj_imp'] = current_df['Importance']*(1-current_df['p_value'])#*current_df['MSE_diff']
 
