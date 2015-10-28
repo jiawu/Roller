@@ -118,7 +118,7 @@ class RandomForestRegressionWindow(Window):
             raise ValueError("Number of trees must be int (>=0) or None")
         return
 
-    def fit_window(self, crag=True, n_jobs=-1):
+    def fit_window(self, crag=True, n_jobs=-1, calc_mse=False):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
@@ -127,7 +127,7 @@ class RandomForestRegressionWindow(Window):
         if self.n_trees is None:
             raise ValueError("window alpha value must be set before the window can be fit")
 
-        self.edge_importance = self.get_coeffs(self.n_trees, crag=crag, n_jobs=n_jobs)
+        self.edge_importance = self.get_coeffs(self.n_trees, crag=crag, n_jobs=n_jobs, calc_mse=calc_mse)
 
     def _initialize_coeffs(self, data):
         """ Returns a copy of the vector, an empty array with a defined shape, an empty list, and the maximum number of nodes
@@ -175,7 +175,7 @@ class RandomForestRegressionWindow(Window):
         
         return (coeff_matrix, model_list)
         
-    def get_coeffs(self, n_trees, crag=True, data=None, n_jobs=-1):
+    def get_coeffs(self, n_trees, crag=True, data=None, n_jobs=-1, calc_mse=False):
         """
 
         :param data:
@@ -187,7 +187,7 @@ class RandomForestRegressionWindow(Window):
         all_data, coeff_matrix, model_list, max_nodes =self._initialize_coeffs(data=data)
 
         for col_index, column in enumerate(all_data.T):
-            coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, all_data, col_index, n_trees, n_jobs,crag) 
+            coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, all_data, col_index, n_trees, n_jobs,crag)
         return coeff_matrix
 
 class tdRFRWindow(RandomForestRegressionWindow):
@@ -201,7 +201,7 @@ class tdRFRWindow(RandomForestRegressionWindow):
         self.earlier_window_idx = None
         self.edge_mse_diff = None
 
-    def fit_window(self, crag=False ,n_jobs=1):
+    def fit_window(self, crag=False ,n_jobs=1, calc_mse=False):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
@@ -209,7 +209,7 @@ class tdRFRWindow(RandomForestRegressionWindow):
         if self.include_window:
             print "Regressing window index %i against the following window indices: "%self.nth_window,\
                 self.earlier_window_idx
-            self.edge_importance, self.edge_mse_diff = self.get_coeffs(self.n_trees, crag=False, data=self.x_data, n_jobs=n_jobs, calc_mse=True)
+            self.edge_importance, self.edge_mse_diff = self.get_coeffs(self.n_trees, crag=False, data=self.x_data, n_jobs=n_jobs, calc_mse=calc_mse)
 
     def get_coeffs(self, n_trees, crag=False, data=None, n_jobs=-1, calc_mse=False):
         """
@@ -254,7 +254,7 @@ class tdRFRWindow(RandomForestRegressionWindow):
         importance_dataframe.columns.name = 'Parent'
         return importance_dataframe, mse_matrix
 
-    def make_edge_table(self):
+    def make_edge_table(self, calc_mse=False):
         """
         Make the edge table
         :return:
@@ -284,7 +284,8 @@ class tdRFRWindow(RandomForestRegressionWindow):
         # Remove any self edges
         df = df[~((df['Parent'] == df['Child'])&(df['P_window'] == df['C_window']))]
 
-        df['MSE_diff'] = self.edge_mse_diff.flatten()
+        if calc_mse:
+            df['MSE_diff'] = self.edge_mse_diff.flatten()
 
         return df
 
