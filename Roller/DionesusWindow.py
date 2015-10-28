@@ -6,6 +6,7 @@ from scipy import stats
 from sklearn.cross_decomposition import PLSRegression
 import numpy as np
 from Window import Window
+import pandas as pd
 
 
 class DionesusWindow(Window):
@@ -270,6 +271,21 @@ class DionesusWindow(Window):
             coeff_matrix, vip_matrix, model_list = self._fitstack_coeffs(num_pcs = num_pcs, coeff_matrix=coeff_matrix, vip_matrix=vip_matrix, model_list=model_list, all_data=all_data, col_index=col_index, crag=crag)
 
         return coeff_matrix, vip_matrix
+    
+    def _permute_coeffs(self, zeros, crag=False, n_permutations=10):
+        result={'n': zeros.copy(), 'mean': zeros.copy(), 'ss': zeros.copy()}
+        for nth_perm in range(0, n_permutations):
+            if self.x_data is not None:
+                permuted_data = self.permute_data(self.x_data)
+            else:
+                permuted_data = self.permute_data(self.window_values)
+            importance_df, permuted_coeffs = self.get_coeffs(data=permuted_data)
+            dummy_list = []
+            dummy_list.append(permuted_coeffs)
+            result = self.update_variance_2D(result, dummy_list)
+        self.permutation_means = result['mean'].copy()
+        self.permutation_sd = np.sqrt(result['variance'].copy())
+        self.permutation_p_values = self.calc_p_value()
 
 class tdDionesusWindow(DionesusWindow):
     def __init__(self, dataframe, window_info, roller_data):
@@ -307,7 +323,7 @@ class tdDionesusWindow(DionesusWindow):
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
         """
-        self.beta_coefficients, self.vip = self.get_coeffs(pcs, crag=crag, data=self.x_data)
+        self.vip, self.beta_coefficients = self.get_coeffs(pcs, crag=crag, data=self.x_data)
         self.edge_importance = self.vip.copy()
         
     def get_coeffs(self, num_pcs=3,crag=False, data=None):
@@ -322,12 +338,13 @@ class tdDionesusWindow(DionesusWindow):
         ## initialize items
         all_data, coeff_matrix, model_list, max_nodes = self._initialize_coeffs(data=data)
         vip_matrix = coeff_matrix.copy()
+      
 
         for col_index, column in enumerate(all_data[:,:max_nodes].T):
             # Once we get through all the nodes at this timepoint we can stop
             if col_index == max_nodes:
                 break
-            coeff_matrix, model_list = self._fitstack_coeffs(num_pcs=num_pcs,coeff_matrix=coeff_matrix, vip_matrix=vip_matrix, model_list=model_list, all_data=all_data, col_index=col_index,crag=crag) 
+            coeff_matrix, vip_matrix, model_list = self._fitstack_coeffs(num_pcs=num_pcs,coeff_matrix=coeff_matrix, vip_matrix=vip_matrix, model_list=model_list, all_data=all_data, col_index=col_index,crag=False) 
             
         """
         if self.x_labels == None:
@@ -338,7 +355,7 @@ class tdDionesusWindow(DionesusWindow):
         importance_dataframe = pd.DataFrame(vip_matrix, index=self.x_labels[:max_nodes], columns=self.x_labels)
         importance_dataframe.index.name = 'Child'
         importance_dataframe.columns.name = 'Parent'
-        return importance_dataframe
+        return(importance_dataframe,coeff_matrix)
 
     def make_edge_table(self):
         """
