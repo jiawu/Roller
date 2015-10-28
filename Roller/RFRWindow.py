@@ -270,7 +270,10 @@ class tdRFRWindow(RandomForestRegressionWindow):
         df['Child'] = self.edge_importance.index.values[b.flatten()]
         df['Importance'] = self.edge_importance.values.flatten()
         df['P_window'] = self.x_times[a.flatten()]
-        df['C_window'] = self.x_times[b.flatten()]
+
+        # Calculate the window of the child node, which is equivalent to the current window index
+        child_values = np.array([self.nth_window]*self.edge_importance.shape[0])
+        df['C_window'] = child_values[b.flatten()]
         if self.permutation_p_values is not None:
             df["p_value"] = self.permutation_p_values.flatten()
         df['MSE_diff'] = self.edge_mse_diff.flatten()
