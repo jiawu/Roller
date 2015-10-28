@@ -98,7 +98,7 @@ class tdRoller(Roller):
         self.window_list = new_window_list
         return
 
-    def compile_roller_edges(self, self_edges=False):
+    def compile_roller_edges(self, self_edges=False, mse_adjust=True):
         """
         Edges across all windows will be compiled into a single edge list
         :return:
@@ -107,10 +107,26 @@ class tdRoller(Roller):
         df = None
         for ww, window in enumerate(self.window_list):
             if window.include_window:
+                # Get the edges and associated values in table form
+                current_df = window.make_edge_table()
+
+                # Only retain edges if the p_value is below the threshold
+                #current_df = current_df[current_df['p_value'] <= 0.05]
+
+                # Only retain edges if the MSE_diff is negative
+                if mse_adjust:
+                    current_df = current_df[current_df['MSE_diff'] < 0]
+
+
+                current_df['adj_imp'] = current_df['Importance']*(1-current_df['p_value'])#*current_df['MSE_diff']
+
+                current_df.sort(['adj_imp'], ascending=False, inplace=True)
+                current_df['Rank'] = np.arange(len(current_df))
+
                 if df is None:
-                    df = window.make_edge_table()
+                    df = current_df.copy()
                 else:
-                    df = df.append(window.make_edge_table(), ignore_index=True)
+                    df = df.append(current_df.copy(), ignore_index=True)
         if not self_edges:
             df = df[df.Parent != df.Child]
         df['Edge'] = zip(df.Parent, df.Child)
@@ -125,14 +141,23 @@ class tdRoller(Roller):
         :return:
         """
         print "Lumping edges...",
+        print
         df = self.full_edge_list.copy()
-        #Only keep edges with importance > 0
-        df = df[df['Importance']>0]
+
+        # Only keep edges with importance > 0. Values below 0 are not helpful for model building
+        df = df[df['Importance'] > 0]
+
+        # Ignore self edges if desired
         if not self_edges:
             df = df[df.Parent != df.Child]
         edge_set = list(set(df.Edge))
+
+        # Calculate the full set of potential edges
         full_edge_set = set(self.make_possible_edge_list(self.gene_list, self.gene_list, self_edges=self_edges))
+
+        # Identify edges that could exist, but do not appear in the inferred list
         edge_diff = full_edge_set.difference(edge_set)
+
         self.edge_dict = {}
         lag_importance_score, lag_lump_method = lag_method.split('_')
         score_method = eval('np.'+lag_importance_score)
@@ -141,16 +166,19 @@ class tdRoller(Roller):
             if edge in edge_diff:
                 self.edge_dict[edge] = {"dataframe": None, "mean_importance": 0, 'real_edge': (edge in true_edges),
                                         "max_importance": 0, 'max_edge': None, 'lag_importance': 0,
-                                        'lag_method': lag_method}
+                                        'lag_method': lag_method, 'rank_importance':np.nan, 'adj_importance':0}
                 continue
-            current_df = df[df.Edge==edge]
+            current_df = df[df.Edge == edge]
             max_idx = current_df['Importance'].idxmax()
             lag_set = list(set(current_df.Lag))
-            lag_imp = score_method([lump_method(current_df.Importance[current_df.Lag==lag]) for lag in lag_set])
+            lag_imp = score_method([lump_method(current_df.Importance[current_df.Lag == lag]) for lag in lag_set])
+            lag_adj_imp = score_method([lump_method(current_df.adj_imp[current_df.Lag == lag]) for lag in lag_set])
+            lag_rank = score_method([lump_method(current_df.Rank[current_df.Lag == lag]) for lag in lag_set])
             self.edge_dict[edge] = {"dataframe":current_df, "mean_importance":np.mean(current_df.Importance),
                                     'real_edge':(edge in true_edges), "max_importance":current_df.Importance[max_idx],
                                     'max_edge':(current_df.P_window[max_idx], current_df.C_window[max_idx]),
-                                    'lag_importance': lag_imp, 'lag_method':lag_method}
+                                    'lag_importance': lag_imp, 'lag_method':lag_method,
+                                    'rank_importance': lag_rank, 'adj_importance':lag_adj_imp}
         print "[DONE]"
         if edge_diff:
             message = 'The last %i edges had no meaningful importance score' \
@@ -164,15 +192,20 @@ class tdRoller(Roller):
         :param df: dataframe
         :return: dataframe
         """
+
         sort_field = sort_by+"_importance"
+
         print "Calculating %s edge importance..." %sort_by,
         temp_dict = {edge:df[edge][sort_field] for edge in df.keys()}
         sort_df = pd.DataFrame.from_dict(temp_dict, orient='index')
         sort_df.columns = [sort_field]
-        sort_df.sort(sort_field, ascending=False, inplace=True)
+        if sort_by.lower() == 'rank':
+            sort_df.sort(sort_field, ascending=True, inplace=True)
+        else:
+            sort_df.sort(sort_field, ascending=False, inplace=True)
         #sort_df['mean_importance'] = stats.zscore(sort_df['mean_importance'], ddof=1)
         sort_df.index.name = 'regulator-target'
-        sort_df=sort_df.reset_index()
+        sort_df = sort_df.reset_index()
         print "[DONE]"
         return sort_df
 
