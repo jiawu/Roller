@@ -594,8 +594,8 @@ class tdLassoWindow(LassoWindow):
             # Once we get through all the nodes at this timepoint we can stop
             if col_index == max_nodes:
                 break
-            coeff_matrix, model_list = self._fitstack_coeffs(alpha=alpha,coeff_matrix=coeff_matrix, model_list=model_list, all_data=all_data, col_index=col_index,crag=crag) 
-            
+            coeff_matrix, model_list = self._fitstack_coeffs(alpha=alpha,coeff_matrix=coeff_matrix, model_list=model_list, all_data=all_data, col_index=col_index,crag=crag)
+
         """
         if self.x_labels == None:
             label = self.raw_data.columns[1:]
