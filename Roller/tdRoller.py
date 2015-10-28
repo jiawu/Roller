@@ -98,7 +98,7 @@ class tdRoller(Roller):
         self.window_list = new_window_list
         return
 
-    def compile_roller_edges(self, self_edges=False):
+    def compile_roller_edges(self, self_edges=False, mse_adjust=True):
         """
         Edges across all windows will be compiled into a single edge list
         :return:
@@ -112,9 +112,14 @@ class tdRoller(Roller):
 
                 # Only retain edges if the p_value is below the threshold
                 #current_df = current_df[current_df['p_value'] <= 0.05]
-                current_df['adj_imp'] = current_df['Importance']*(1-current_df['p_value'])
-                #current_df.loc[current_df['p_value']>0.05, 'Importance'] = 0
-                #current_df.sort(['Importance'], ascending=False, inplace=True)
+
+                # Only retain edges if the MSE_diff is negative
+                if mse_adjust:
+                    current_df = current_df[current_df['MSE_diff'] < 0]
+
+
+                current_df['adj_imp'] = current_df['Importance']*(1-current_df['p_value'])#*current_df['MSE_diff']
+
                 current_df.sort(['adj_imp'], ascending=False, inplace=True)
                 current_df['Rank'] = np.arange(len(current_df))
 
@@ -163,11 +168,11 @@ class tdRoller(Roller):
                                         "max_importance": 0, 'max_edge': None, 'lag_importance': 0,
                                         'lag_method': lag_method, 'rank_importance':np.nan}
                 continue
-            current_df = df[df.Edge==edge]
+            current_df = df[df.Edge == edge]
             max_idx = current_df['Importance'].idxmax()
             lag_set = list(set(current_df.Lag))
-            lag_imp = score_method([lump_method(current_df.Importance[current_df.Lag==lag]) for lag in lag_set])
-            lag_rank = score_method([lump_method(current_df.Rank[current_df.Lag==lag]) for lag in lag_set])
+            lag_imp = score_method([lump_method(current_df.Importance[current_df.Lag == lag]) for lag in lag_set])
+            lag_rank = score_method([lump_method(current_df.Rank[current_df.Lag == lag]) for lag in lag_set])
             self.edge_dict[edge] = {"dataframe":current_df, "mean_importance":np.mean(current_df.Importance),
                                     'real_edge':(edge in true_edges), "max_importance":current_df.Importance[max_idx],
                                     'max_edge':(current_df.P_window[max_idx], current_df.C_window[max_idx]),
@@ -199,7 +204,7 @@ class tdRoller(Roller):
             sort_df.sort(sort_field, ascending=False, inplace=True)
         #sort_df['mean_importance'] = stats.zscore(sort_df['mean_importance'], ddof=1)
         sort_df.index.name = 'regulator-target'
-        sort_df=sort_df.reset_index()
+        sort_df = sort_df.reset_index()
         print "[DONE]"
         return sort_df
 
