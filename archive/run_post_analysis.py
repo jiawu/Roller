@@ -6,7 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 import os
 import pandas as pd
-from Swing.util.Evaluator import Evaluator
+from Swing_old.util.Evaluator import Evaluator
 import pdb
 import numpy as np
 import kdpee

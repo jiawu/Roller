@@ -1,7 +1,7 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
-import Swing
+import Swing_old
 from sklearn.preprocessing import Imputer
 import matplotlib as mpl
 import numpy as np
@@ -15,7 +15,7 @@ if __name__ == '__main__':
     separator = "\t"
     gene_end = None
 
-    roll_me = Swing.Swing(file_path, gene_start_column, gene_end, time_label, separator)
+    roll_me = Swing_old.Swing(file_path, gene_start_column, gene_end, time_label, separator)
     window_size = roll_me.overall_width
     roll_me.remove_blank_rows()
     alpha=0.003

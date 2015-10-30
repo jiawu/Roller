@@ -1,7 +1,7 @@
 __author__ = 'jfinkle'
 
 
-from Swing import Swing
+from Swing_old import Swing
 from sklearn.preprocessing import Imputer
 from linear_wrapper import LassoWrapper
 import numpy as np

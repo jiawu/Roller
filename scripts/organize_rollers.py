@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 import os
 import pandas as pd
-from Swing.util.Evaluator import Evaluator
+from Swing_old.util.Evaluator import Evaluator
 import shutil
 import sys
 

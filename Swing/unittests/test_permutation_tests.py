@@ -1,5 +1,5 @@
 import unittest
-from Swing.util.permutation_test import Permuter
+from Swing_old.util.permutation_test import Permuter
 import numpy as np
 from random import randint
 import numpy.testing as npt

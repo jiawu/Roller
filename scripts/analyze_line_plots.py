@@ -1,7 +1,7 @@
 import matplotlib
 matplotlib.use('Agg')
-from Swing.util.LinePlot import LinePlot
-from Swing.util.Analyzer import Analyzer
+from Swing_old.util.LinePlot import LinePlot
+from Swing_old.util.Analyzer import Analyzer
 
 import pdb
 import td_wrapper as tdw

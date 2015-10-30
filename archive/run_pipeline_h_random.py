@@ -2,7 +2,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import sys
-import Swing
+import Swing_old
 import uuid
 import pickle
 if __name__ == "__main__":
@@ -20,7 +20,7 @@ if __name__ == "__main__":
       #gold_standard = "data/dream4/insilico_size10_1_goldstandard.tsv"
       image_file_path = "insilico_size10_" + str(file_path_index) + "_alphas"
       #image_file_path = saaaas"insilico_size10_1_alphas"
-      roller = Swing.Swing(file_path, gene_start_column, gene_end, time_label,separator,window_type="RandomForest")
+      roller = Swing_old.Swing(file_path, gene_start_column, gene_end, time_label,separator,window_type="RandomForest")
       print("Overall Width: " + str(roller.overall_width))
       roller.zscore_all_data()
 

@@ -1,10 +1,10 @@
 import sys, os
-import Swing
+import Swing_old
 import pandas as pd
 import numpy as np
-from Swing.util.Evaluator import Evaluator
+from Swing_old.util.Evaluator import Evaluator
 import warnings
-import Swing.util.utility_module as Rutil
+import Swing_old.util.utility_module as Rutil
 import pdb
 
 class Analyzer:

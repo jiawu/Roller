@@ -1,7 +1,7 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 import pdb
-from Swing.tdSwing import tdSwing
+from Swing import Swing
 from Swing.util.Evaluator import Evaluator
 import numpy as np
 import matplotlib.pyplot as plt
@@ -29,7 +29,7 @@ pd.options.display.float_format = '{:,.5f}'.format
 
 np.random.seed(8)
 
-tdr = tdSwing(file_path, gene_start_column, gene_end, time_label, separator)
+tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator)
 tdr.zscore_all_data()
 tdr.set_window(window_width)
 tdr.create_windows()
@@ -49,7 +49,7 @@ print df2
 
 gs_ranks = [df2['Rank'][df2['regulator-target'] == edge].values[0] for edge in true_edges]
 print zip(true_edges, gs_ranks)
-#box_data = [tdr.edge_dict[(edge)]['dataframe']['adj_imp'].values for edge in df2['regulator-target'].values]
+# box_data = [tdr.edge_dict[(edge)]['dataframe']['adj_imp'].values for edge in df2['regulator-target'].values]
 print tdr.edge_dict[('G10', 'G7')]['dataframe']
 
 print 'AUROC: ', roc_dict['auroc'][-1]
@@ -66,6 +66,5 @@ print 'mse adjusted: ', mse_adjust
 print 'lumping: ', combine_method
 print 'sorting by: ', sort_by
 
-#plt.boxplot(box_data)
-#plt.xticks(df2['regulator-target'].values)
-#plt.show()
+# plt.boxplot(box_data)
+# plt.show()

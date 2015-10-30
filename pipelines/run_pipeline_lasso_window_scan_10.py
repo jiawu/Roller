@@ -2,11 +2,11 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import sys
-import Swing
+import Swing_old
 import uuid
 import pickle
 import pandas as pd
-from Swing.util.Analyzer import Analyzer
+from Swing_old.util.Analyzer import Analyzer
 from datetime import datetime
 
 """
@@ -34,7 +34,7 @@ def main(window_size, n_trials, my_iterating_param):
             gene_end = None
             gold_standard = INPUT_PATH + str(network_index) + "_goldstandard.tsv"
 
-            roller = Swing.Swing(file_path, gene_start_column, gene_end, time_label,separator,window_type=INF_METHOD)
+            roller = Swing_old.Swing(file_path, gene_start_column, gene_end, time_label,separator,window_type=INF_METHOD)
             print("Overall Width: " + str(roller.overall_width))
             roller.zscore_all_data()
 

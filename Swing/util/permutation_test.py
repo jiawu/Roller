@@ -28,7 +28,7 @@ import sys
 from sklearn.utils import shuffle
 import time
 import dionesus as dio
-from Swing.util.linear_wrapper import LassoWrapper
+from Swing_old.util.linear_wrapper import LassoWrapper
 import pdb
 
 

@@ -3,11 +3,11 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import unittest
 import numpy as np
-import Swing
+import Swing_old
 import pdb
-import Swing.util.Grapher as Grapher
+import Swing_old.util.Grapher as Grapher
 import pandas as pd
-from Swing.util.Evaluator import Evaluator
+from Swing_old.util.Evaluator import Evaluator
 from scipy.stats.stats import pearsonr
 class TestRFGrapher(unittest.TestCase):
     def setUp(self):
@@ -17,7 +17,7 @@ class TestRFGrapher(unittest.TestCase):
         separator = "\t"
         gene_end = None
 
-        self.roller = Swing.Swing(file_path, gene_start_column, gene_end, time_label, separator,window_type = "RandomForest")
+        self.roller = Swing_old.Swing(file_path, gene_start_column, gene_end, time_label, separator,window_type = "RandomForest")
         roller_result_path = "sample_RF_roller_results2.pickle"
         self.roller_results = pd.read_pickle(roller_result_path)
     

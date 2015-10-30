@@ -1,12 +1,12 @@
 import matplotlib
 matplotlib.use('Agg')
-from Swing.util.LinePlot import LinePlot
-from Swing.util.Analyzer import Analyzer
+from Swing_old.util.LinePlot import LinePlot
+from Swing_old.util.Analyzer import Analyzer
 
 import pdb
 
-from Swing.tdSwing import tdSwing
-from Swing.util.Evaluator import Evaluator
+from Swing_old.tdSwing import tdSwing
+from Swing_old.util.Evaluator import Evaluator
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
