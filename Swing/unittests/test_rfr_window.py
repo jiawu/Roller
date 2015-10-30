@@ -2,7 +2,7 @@ __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
 import unittest
-import Swing_old
+import Swing
 import pandas as pd
 import numpy as np
 import numpy.testing as npt
@@ -16,11 +16,11 @@ class TestRFRWindow(unittest.TestCase):
         separator = "\t"
         gene_end = None
 
-        self.roller = Swing_old.Swing(file_path, gene_start_column, gene_end, time_label, separator, window_type = "RandomForest")
+        self.roller = Swing.Swing(file_path, gene_start_column, gene_end, time_label, separator, window_type = "RandomForest")
         index = 0
         window_info = {"time_label": self.roller.time_label, "gene_start": self.roller.gene_start,
                        "gene_end": self.roller.gene_end, 'nth_window': index}
-        self.test_rfr = Swing_old.RandomForestRegressionWindow(self.roller.get_window_raw(index),window_info)
+        self.test_rfr = Swing.RandomForestRegressionWindow(self.roller.get_window_raw(index),window_info)
         self.jobs = 1
         self.trees = 10
         self.permutes = 10

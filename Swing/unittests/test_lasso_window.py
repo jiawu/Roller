@@ -2,7 +2,7 @@ __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
 import unittest
-import Swing_old
+import Swing
 import pandas as pd
 import numpy as np
 import numpy.testing as npt
@@ -16,8 +16,8 @@ class TestLassoWindow(unittest.TestCase):
         separator = "\t"
         gene_end = None
 
-        self.roller = Swing_old.Swing(file_path, gene_start_column, gene_end, time_label, separator, window_type = "Lasso")
-        self.test_lassoWindow = Swing_old.LassoWindow(self.roller.current_window)
+        self.roller = Swing.Swing(file_path, gene_start_column, gene_end, time_label, separator, window_type = "Lasso")
+        self.test_lassoWindow = Swing.LassoWindow(self.roller.current_window)
 
     def test_initialize_params_default(self):
         """ Test parameter initialization with default arguments """

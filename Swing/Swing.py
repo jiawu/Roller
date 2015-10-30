@@ -240,6 +240,7 @@ class Swing(object):
         index + self.window_width <= self.overall_width) else '' for index in range(self.get_n_windows())]
         self.window_list = window_list
 
+    #todo: merge these two items
     def get_window_object(self, dataframe, window_info_dict):
         """
         Return a window object from a data-frame
@@ -260,6 +261,29 @@ class Swing(object):
             window_obj = DionesusWindow(dataframe, window_info_dict, self.norm_data)
 
         return window_obj
+
+    def get_window_object(self, dataframe, window_info_dict):
+        """
+        Return a window object from a data-frame
+
+        Called by:
+            create_windows
+
+        :param dataframe: data-frame
+        :param window_info_dict: dict
+            Dictionary containing information needed for window initialization
+        :return:
+        """
+        if self.window_type == "RandomForest":
+            window_obj = tdRFRWindow(dataframe, window_info_dict, self.norm_data)
+        elif self.window_type =="Lasso":
+            window_obj = tdLassoWindow(dataframe, window_info_dict, self.norm_data)
+
+        elif self.window_type =="Dionesus":
+            window_obj = tdDionesusWindow(dataframe, window_info_dict, self.norm_data)
+
+        return window_obj
+
 
     def initialize_windows(self):
         """
@@ -481,29 +505,6 @@ class Swing(object):
                         'total_windows': self.get_n_windows(),
                         'window_index': window_index}
         return window_stats
-
-
-    def get_window_object(self, dataframe, window_info_dict):
-        """
-        Return a window object from a data-frame
-
-        Called by:
-            create_windows
-
-        :param dataframe: data-frame
-        :param window_info_dict: dict
-            Dictionary containing information needed for window initialization
-        :return:
-        """
-        if self.window_type == "RandomForest":
-            window_obj = tdRFRWindow(dataframe, window_info_dict, self.norm_data)
-        elif self.window_type =="Lasso":
-            window_obj = tdLassoWindow(dataframe, window_info_dict, self.norm_data)
-
-        elif self.window_type =="Dionesus":
-            window_obj = tdDionesusWindow(dataframe, window_info_dict, self.norm_data)
-
-        return window_obj
 
     def augment_windows(self, min_lag=0, max_lag=None):
         """
