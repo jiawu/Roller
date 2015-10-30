@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 import os
 import pandas as pd
-from Roller.util.Evaluator import Evaluator
+from Swing.util.Evaluator import Evaluator
 import pdb
 import numpy as np
 import kdpee
@@ -18,9 +18,9 @@ nfiles = len(filenames)
 #organize pickled objects by dataset analyzed
 obj_list = []
 counter = 0
-image_file_path = "/home/jjw036/Roller/janes"
+image_file_path = "/home/jjw036/Swing/janes"
 
-target_dataset =  '/projects/p20519/Roller/data/invitro/janes_timeseries.tsv'
+target_dataset =  '/projects/p20519/Swing/data/invitro/janes_timeseries.tsv'
 img_suffix = "1"
 gp_left = 0.2
 gp_bottom = 0.1
@@ -88,7 +88,7 @@ for file in filenames:
       #roller_obj.average_rank(rank_by='stability', ascending = False)
 #      roller_obj.average_rank(rank_by='importance', ascending = True)
       
-      # create barplots for each Roller of a certain window size
+      # create barplots for each Swing of a certain window size
       # window size = bar plot
       # then group all barplots into a 3D bar plot
       if window_size not in window_size_list:

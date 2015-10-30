@@ -1,12 +1,12 @@
 import matplotlib
 matplotlib.use('Agg')
-from Roller.util.LinePlot import LinePlot
-from Roller.util.Analyzer import Analyzer
+from Swing.util.LinePlot import LinePlot
+from Swing.util.Analyzer import Analyzer
 
 import pdb
 
-from Roller.tdRoller import tdRoller
-from Roller.util.Evaluator import Evaluator
+from Swing.tdSwing import tdSwing
+from Swing.util.Evaluator import Evaluator
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -28,7 +28,7 @@ def get_td_stats(file_path):
     true_edges = evaluator.gs_flat.tolist()
     pd.options.display.float_format = '{:,.5f}'.format
 
-    tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
+    tdr = tdSwing(file_path, gene_start_column, gene_end, time_label, separator)
     tdr.zscore_all_data()
     tdr.set_window(8)
     tdr.create_windows()
@@ -54,9 +54,9 @@ for data_index in dataset_list:
 
     output_path = "/home/jjw036/insilico_"+data_index+"_"
 
-    target_dataset = "/projects/p20519/Roller/data/dream4/insilico_size10_"+data_index+"_timeseries.tsv"
+    target_dataset = "/projects/p20519/Swing/data/dream4/insilico_size10_"+data_index+"_timeseries.tsv"
     roc,pr = get_td_stats(target_dataset)
-    #target_dataset = "/projects/p20519/Roller/data/invitro/whitfield_shojaie_timeseries.tsv"
+    #target_dataset = "/projects/p20519/Swing/data/invitro/whitfield_shojaie_timeseries.tsv"
 
     #Analyzer computes AUROC/AUPR/Cragging Scores and organizes it in a table
 

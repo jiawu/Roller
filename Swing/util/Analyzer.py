@@ -1,10 +1,10 @@
 import sys, os
-import Roller
+import Swing
 import pandas as pd
 import numpy as np
-from Roller.util.Evaluator import Evaluator
+from Swing.util.Evaluator import Evaluator
 import warnings
-import Roller.util.utility_module as Rutil
+import Swing.util.utility_module as Rutil
 import pdb
 
 class Analyzer:
@@ -55,7 +55,7 @@ class Analyzer:
         for index,window in enumerate(roller_obj.window_list):
             if index == target_window_index:
                 if not roller_obj.file_path.startswith("/"):
-                    roller_obj.file_path = roller_obj.file_path.replace("data/","/projects/p20519/Roller/data/")
+                    roller_obj.file_path = roller_obj.file_path.replace("data/","/projects/p20519/Swing/data/")
                 sorted_edge_list = window.results_table 
                 if 'stability' in sorted_edge_list:
                     sorted_edge_list.rename(columns={'stability':'importance'},inplace=True)
@@ -236,7 +236,7 @@ class Analyzer:
         if max_row['window_width'] != max_width:
             max_width = max_row['window_width']
             #find max window size
-            warnings.warn("Roller with all timepoints is not present. Using Roller with a maximum width of %s as comparison window" % (max_width))
+            warnings.warn("Swing with all timepoints is not present. Using Swing with a maximum width of %s as comparison window" % (max_width))
         """
         return(max_row)
 
@@ -270,7 +270,7 @@ class Analyzer:
         for index,window in enumerate(roller_obj.window_list):
             
             if not self.current_roller.file_path.startswith("/"):
-                self.current_roller.file_path = self.current_roller.file_path.replace("data/","/projects/p20519/Roller/data/")
+                self.current_roller.file_path = self.current_roller.file_path.replace("data/","/projects/p20519/Swing/data/")
             pickle_paths.append(self.current_pickle_path)
             network_paths.append(self.current_roller.file_path)
             window_width_list.append(roller_obj.window_width)

@@ -2,12 +2,12 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import sys
-import Roller
+import Swing
 import uuid
 import pickle
 import pdb
 import pandas as pd
-from Roller.util.Analyzer import Analyzer
+from Swing.util.Analyzer import Analyzer
 from datetime import datetime
 
 """
@@ -15,7 +15,7 @@ This pipeline scans a range of window sizes for a given inference method and gen
 
 This is the 10 node variation of it.
 """
-INPUT_PATH = "/home/jjw036/Roller/data/dream4/insilico_size10_"
+INPUT_PATH = "/home/jjw036/Swing/data/dream4/insilico_size10_"
 INF_METHOD = "Dionesus"
 OUTPUT_PATH = "/projects/p20519/roller_output/optimizing_window_size/" + INF_METHOD + "/insilico_size10_"
 UNIQUE_NAME  = INF_METHOD + "insilico_size10_"
@@ -35,7 +35,7 @@ def main(window_size, n_trials, my_iterating_param):
             gene_end = None
             gold_standard = INPUT_PATH + str(network_index) + "_goldstandard.tsv"
 
-            roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label,separator,window_type=INF_METHOD)
+            roller = Swing.Swing(file_path, gene_start_column, gene_end, time_label,separator,window_type=INF_METHOD)
             print("Overall Width: " + str(roller.overall_width))
             roller.zscore_all_data()
 

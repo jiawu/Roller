@@ -1,12 +1,12 @@
 import matplotlib
 matplotlib.use('Agg')
-from Roller.util.LinePlot import LinePlot
-from Roller.util.Analyzer import Analyzer
+from Swing.util.LinePlot import LinePlot
+from Swing.util.Analyzer import Analyzer
 
 import pdb
 
-from Roller.tdRoller import tdRoller
-from Roller.util.Evaluator import Evaluator
+from Swing.tdSwing import tdSwing
+from Swing.util.Evaluator import Evaluator
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -30,7 +30,7 @@ def get_td_stats(file_path):
 
     #np.random.seed(8)
 
-    tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
+    tdr = tdSwing(file_path, gene_start_column, gene_end, time_label, separator)
     tdr.zscore_all_data()
     tdr.set_window(8)
     tdr.create_windows()
@@ -51,10 +51,10 @@ def get_td_stats(file_path):
 
 data_folder = "/projects/p20519/roller_output/optimizing_window_size/RandomForest/janes/"
 
-output_path = "/home/jjw036/Roller/janes"
+output_path = "/home/jjw036/Swing/janes"
 
-#target_dataset = "/projects/p20519/Roller/data/dream4/i_timeseries.tsv"
-target_dataset = "/projects/p20519/Roller/data/invitro/janes_timeseries.tsv"
+#target_dataset = "/projects/p20519/Swing/data/dream4/i_timeseries.tsv"
+target_dataset = "/projects/p20519/Swing/data/invitro/janes_timeseries.tsv"
 roc,pr = get_td_stats(target_dataset)
 
 #Analyzer computes AUROC/AUPR/Cragging Scores and organizes it in a table

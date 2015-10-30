@@ -34,7 +34,7 @@ if __name__ == "__main__":
     :param data_folder: /projects/p20519/roller_output/optimizing_window_size/RandomForest/janes
     :param output_path: /projects/p20519/roller_output/stability_analysis/RandomForest/janes_ntrees_
         the output will be a tsv named janes_ntrees_<currenttime>.tsv
-    :param target_dataset: /projects/p20519/Roller/data/invitro/janes_timeseries.tsv or/projects/p20519/Roller/data/dream4/ecoli_timeseries.tsv
+    :param target_dataset: /projects/p20519/Swing/data/invitro/janes_timeseries.tsv or/projects/p20519/Swing/data/dream4/ecoli_timeseries.tsv
     :param my_iterating_param: = n_trees
 
     :param param_test_style: str that defines either logarithmic 10,100,1000 or specify a min/max or string

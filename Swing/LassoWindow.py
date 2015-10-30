@@ -49,7 +49,7 @@ class LassoWindow(Window):
         :return: pandas data-frame
 
         Called by:
-            Roller.rank_windows()
+            Swing.rank_windows()
 
         """
         if self.permutation_p_values is None:
@@ -69,7 +69,7 @@ class LassoWindow(Window):
         :return:
 
         Called by:
-            Roller.average_rank()
+            Swing.average_rank()
         """
         if self.edge_table is None:
             raise ValueError("The edge table must be created before getting edges")
@@ -498,7 +498,7 @@ class LassoWindow(Window):
         :return:
 
         Called by:
-            Roller.rank_edges()
+            Swing.rank_edges()
         """
         # generate edges for initial model
         initial_edges = self.create_linked_list(self.beta_coefficients, 'B')

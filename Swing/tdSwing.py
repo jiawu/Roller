@@ -1,7 +1,7 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 import pdb
-from Roller import Roller
+from Swing import Swing
 from RFRWindow import tdRFRWindow
 from LassoWindow import tdLassoWindow
 from DionesusWindow import tdDionesusWindow
@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from util.Evaluator import Evaluator
 from util.utility_module import elbow_criteria
 
-class tdRoller(Roller):
+class tdSwing(Swing):
     """
     A roller that incorporates time delays
     """
@@ -23,7 +23,7 @@ class tdRoller(Roller):
     def __init__(self, file_path, gene_start=None, gene_end=None, time_label="Time", separator="\t",
                  window_type="RandomForest", threshold=1, q=None):
 
-        super(tdRoller, self).__init__(file_path, gene_start, gene_end, time_label, separator,
+        super(tdSwing, self).__init__(file_path, gene_start, gene_end, time_label, separator,
                  window_type)
         self.full_edge_list = None
         self.edge_dict = None

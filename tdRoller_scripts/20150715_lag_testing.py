@@ -1,8 +1,8 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
-from Roller.tdRoller import tdRoller
-from Roller.util.Evaluator import Evaluator
+from Swing.tdSwing import tdSwing
+from Swing.util.Evaluator import Evaluator
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -22,7 +22,7 @@ for ii in range(1,6):
 
         np.random.seed(8)
 
-        tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
+        tdr = tdSwing(file_path, gene_start_column, gene_end, time_label, separator)
         tdr.zscore_all_data()
         w_widths = range(2,21)
         auroc_list = []

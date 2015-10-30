@@ -1,7 +1,7 @@
 import matplotlib
 matplotlib.use('Agg')
-from Roller.util.LinePlot import LinePlot
-from Roller.util.Analyzer import Analyzer
+from Swing.util.LinePlot import LinePlot
+from Swing.util.Analyzer import Analyzer
 
 import pdb
 
@@ -14,11 +14,11 @@ import td_wrapper as tdw
 
 data_folder = "/projects/p20519/roller_output/optimizing_window_size/RandomForest/insilico_size10_1/"
 
-output_path = "/home/jjw036/Roller/insilico_size10_1"
+output_path = "/home/jjw036/Swing/insilico_size10_1"
 
-target_dataset = "/projects/p20519/Roller/data/dream4/insilico_size10_1_timeseries.tsv"
+target_dataset = "/projects/p20519/Swing/data/dream4/insilico_size10_1_timeseries.tsv"
 roc,pr = tdw.get_td_stats(target_dataset)
-#target_dataset = "/projects/p20519/Roller/data/invitro/whitfield_shojaie_timeseries.tsv"
+#target_dataset = "/projects/p20519/Swing/data/invitro/whitfield_shojaie_timeseries.tsv"
 
 #Analyzer computes AUROC/AUPR/Cragging Scores and organizes it in a table
 

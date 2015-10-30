@@ -10,7 +10,7 @@ Therefore, not all of the functions are immediately usable. Still, you should ge
 
 
 Brainstorming:
-    1. get a Roller
+    1. get a Swing
     2. For each window
     3. Permute the data
     4. calculate coefficients for the permuted data
@@ -28,7 +28,7 @@ import sys
 from sklearn.utils import shuffle
 import time
 import dionesus as dio
-from Roller.util.linear_wrapper import LassoWrapper
+from Swing.util.linear_wrapper import LassoWrapper
 import pdb
 
 

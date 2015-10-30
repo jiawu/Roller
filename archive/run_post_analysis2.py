@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 import os
 import pandas as pd
-from Roller.util.Evaluator import Evaluator
+from Swing.util.Evaluator import Evaluator
 #get all pickle files
 path="/projects/p20519/Roller_outputs/"
 filenames = next(os.walk(path))[2]
@@ -12,7 +12,7 @@ nfiles = len(filenames)
 #organize pickled objects by dataset analyzed
 obj_list = []
 counter = 0
-image_file_path = "/home/jjw036/Roller/aggregated"
+image_file_path = "/home/jjw036/Swing/aggregated"
 
 dataset_dict = {}
 
