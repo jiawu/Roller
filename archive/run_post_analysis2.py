@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 import os
 import pandas as pd
-from Swing.util.Evaluator import Evaluator
+from Swing_old.util.Evaluator import Evaluator
 #get all pickle files
 path="/projects/p20519/Roller_outputs/"
 filenames = next(os.walk(path))[2]

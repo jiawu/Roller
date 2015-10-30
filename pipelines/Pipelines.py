@@ -1,5 +1,5 @@
 import pandas as pd
-from Swing.tdSwing import tdSwing
+from Swing import Swing
 from Swing.util.Evaluator import Evaluator
 import pdb
 
@@ -28,9 +28,9 @@ def get_td_stats(**kwargs):
 
     #np.random.seed(8)
     if "Lasso" in kwargs['data_folder']:
-        tdr = tdSwing(file_path, gene_start_column, gene_end, time_label, separator, window_type="Lasso")
+        tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, window_type="Lasso")
     else:
-        tdr = tdSwing(file_path, gene_start_column, gene_end, time_label, separator)
+        tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator)
 
 
 

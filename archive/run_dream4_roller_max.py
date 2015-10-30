@@ -1,14 +1,14 @@
 from __future__ import absolute_import
-import Swing
+import Swing_old
 from sklearn.preprocessing import Imputer
-from Swing.util.linear_wrapper import LassoWrapper
+from Swing_old.util.linear_wrapper import LassoWrapper
 import numpy as np
 import matplotlib as mpl
-from Swing.util.permutation_test import Permuter
+from Swing_old.util.permutation_test import Permuter
 import itertools
-from Swing.util import utility_module as utility
-from Swing.util.Ranker import LassoBootstrapper
-from Swing.util.Evaluator import Evaluator
+from Swing_old.util import utility_module as utility
+from Swing_old.util.Ranker import LassoBootstrapper
+from Swing_old.util.Evaluator import Evaluator
 import pdb
 import pandas as pd
 import pickle
@@ -22,7 +22,7 @@ time_label = "Time"
 separator = "\t"
 gene_end = None
 
-roll_me = Swing.Swing(file_path, gene_start_column, gene_end, time_label, separator)
+roll_me = Swing_old.Swing(file_path, gene_start_column, gene_end, time_label, separator)
 window_size = roll_me.overall_width
 #get only TFs data, window size of 4
 roll_me.set_window(window_size)

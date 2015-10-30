@@ -2,8 +2,8 @@ __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
 import unittest
-from Swing.util.linear_wrapper import LassoWrapper
-from Swing.util import linear_wrapper
+from Swing_old.util.linear_wrapper import LassoWrapper
+from Swing_old.util import linear_wrapper
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd

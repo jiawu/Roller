@@ -1,5 +1,5 @@
-from Swing.util.Evaluator import Evaluator
-from Swing.tdSwing import tdSwing
+from Swing_old.util.Evaluator import Evaluator
+from Swing_old.tdSwing import tdSwing
 import pandas as pd
 import pdb
 def get_td_stats(file_path, min_lag = 0): 

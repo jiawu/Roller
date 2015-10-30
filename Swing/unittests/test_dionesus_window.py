@@ -2,7 +2,7 @@ __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
 import unittest
-import Swing
+import Swing_old
 import pandas as pd
 import numpy as np
 import numpy.testing as npt
@@ -16,7 +16,7 @@ class TestDionesusWindow(unittest.TestCase):
         separator = "\t"
         gene_end = None
 
-        self.roller = Swing.Swing(file_path, gene_start_column, gene_end, time_label, separator,
+        self.roller = Swing_old.Swing(file_path, gene_start_column, gene_end, time_label, separator,
                                     window_type="Dionesus")
 
         self.roller.create_windows()
