@@ -1,5 +1,5 @@
 import unittest
-import Swing_old
+import Swing
 import numpy as np
 import pandas as pd
 import numpy.testing as npt
@@ -14,7 +14,7 @@ class TestRoller(unittest.TestCase):
         separator = "\t"
         gene_end = None
 
-        self.dream_roller = Swing_old.Swing(file_path, gene_start_column, gene_end, time_label, separator, window_type = "Lasso")
+        self.dream_roller = Swing.Swing(file_path, gene_start_column, gene_end, time_label, separator, window_type = "Lasso")
 
         # Only make 2 windows, so that that testing doesn't take forever
         self.dream_roller.set_window(self.dream_roller.overall_width-1)
