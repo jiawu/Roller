@@ -1,6 +1,6 @@
 import matplotlib
 matplotlib.use('Agg')
-from Roller.util.BoxPlot import BoxPlot
+from Swing.util.BoxPlot import BoxPlot
 import pdb
 
 import numpy as np

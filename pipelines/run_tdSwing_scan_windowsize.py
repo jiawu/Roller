@@ -23,9 +23,9 @@ import Pipelines as pl
 # to save the models for the iteration tests, we will save a dataframe (in the form of the final dataframe from Analyzer...) instead of a full model, because it is too computationally expensive, and as of this day, we are running out of room on QUEST.
 
 data_folder = "/projects/p20519/roller_output/optimizing_window_size/RandomForest/ecoli"
-output_path = "/home/jjw036/Roller/ecoli"
-#target_dataset = "/projects/p20519/Roller/data/invitro/janes_timeseries.tsv"
-target_dataset = "/projects/p20519/Roller/data/dream4/ecoli_timeseries.tsv"
+output_path = "/home/jjw036/Swing/ecoli"
+#target_dataset = "/projects/p20519/Swing/data/invitro/janes_timeseries.tsv"
+target_dataset = "/projects/p20519/Swing/data/dream4/ecoli_timeseries.tsv"
 my_statistic = 'aupr'
 roc,pr = get_td_stats(target_dataset, 5)
 pdb.set_trace()

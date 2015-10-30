@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-import Roller
+import Swing
 import pdb
 
 class TestRFPipeline(unittest.TestCase):
@@ -11,7 +11,7 @@ class TestRFPipeline(unittest.TestCase):
         separator = "\t"
         gene_end = None
 
-        self.roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator,window_type = "RandomForest")
+        self.roller = Swing.Swing(file_path, gene_start_column, gene_end, time_label, separator,window_type = "RandomForest")
 
     def test_crap(self):
         self.roller.set_window(20)

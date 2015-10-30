@@ -1,12 +1,12 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
-import Roller
+import Swing
 import numpy as np
 import sys
-from Roller.util.linear_wrapper import LassoWrapper
-from Roller.util import Ranker
-from Roller.util import Grapher
+from Swing.util.linear_wrapper import LassoWrapper
+from Swing.util import Ranker
+from Swing.util import Grapher
 from scipy import stats
 import matplotlib.pyplot as plt
 import time

@@ -3,11 +3,11 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import unittest
 import numpy as np
-import Roller
+import Swing
 import pdb
-import Roller.util.Grapher as Grapher
+import Swing.util.Grapher as Grapher
 import pandas as pd
-from Roller.util.Evaluator import Evaluator
+from Swing.util.Evaluator import Evaluator
 from scipy.stats.stats import pearsonr
 class TestRFGrapher(unittest.TestCase):
     def setUp(self):
@@ -17,7 +17,7 @@ class TestRFGrapher(unittest.TestCase):
         separator = "\t"
         gene_end = None
 
-        self.roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator,window_type = "RandomForest")
+        self.roller = Swing.Swing(file_path, gene_start_column, gene_end, time_label, separator,window_type = "RandomForest")
         roller_result_path = "sample_RF_roller_results2.pickle"
         self.roller_results = pd.read_pickle(roller_result_path)
     
@@ -210,6 +210,6 @@ class TestRFGrapher(unittest.TestCase):
         for l in axarr2.get_xticklines() + axarr2.get_yticklines():
             l.set_markersize(0)
         #f.subplots_adjust(wspace=0.001,hspace=0.001,top=None,bottom=None)
-        f.savefig("/home/jjw036/Roller/yeast_heatmap2.png")
+        f.savefig("/home/jjw036/Swing/yeast_heatmap2.png")
 if __name__ == '__main__':
     unittest.main()

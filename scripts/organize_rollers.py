@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 import os
 import pandas as pd
-from Roller.util.Evaluator import Evaluator
+from Swing.util.Evaluator import Evaluator
 import shutil
 import sys
 
@@ -17,7 +17,7 @@ if __name__ == "__main__":
   #organize pickled objects by dataset analyzed
   obj_list = []
   counter = 0
-  image_file_path = "/home/jjw036/Roller/aggregated"
+  image_file_path = "/home/jjw036/Swing/aggregated"
 
   target_dataset =  "data/dream4/insilico_size10_1_timeseries.tsv"
 

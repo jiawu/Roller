@@ -11,7 +11,7 @@ from util.Evaluator import Evaluator
 import random
 
 
-class Roller(object):
+class Swing(object):
     """
     A thing that grabs different timepoints of data, can set window and step size.
 
@@ -255,7 +255,7 @@ class Roller(object):
         deprecated - Initialize window parameters and do a preliminary fit
 
         Called by:
-        Currently only called by unittest Roller/unittests/test_roller.py
+        Currently only called by unittest Swing/unittests/test_roller.py
 
         todo: delete
         :return:

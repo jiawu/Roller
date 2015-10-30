@@ -6,7 +6,7 @@ import codecs
 import os
 import sys
 
-import Roller
+import Swing
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -33,8 +33,8 @@ class PyTest(TestCommand):
         sys.exit(errcode)
 
 setup(
-    name='Roller',
-    url='http://github.com/jiawu/Roller/',
+    name='Swing',
+    url='http://github.com/jiawu/Swing/',
     license='Apache Software License',
     author='Justin Finkle & Jia Wu',
     tests_require=['pytest'],
@@ -43,10 +43,10 @@ setup(
     author_email='jfinkle@u.northwestern.edu.com',
     description='Sliding window inference methods',
     long_description=long_description,
-    packages=['Roller'],
+    packages=['Swing'],
     include_package_data=True,
     platforms='any',
-    test_suite='Roller.unittests.test_Roller',
+    test_suite='Swing.unittests.test_Roller',
     classifiers = [],
     extras_require={
         'testing': ['pytest'],

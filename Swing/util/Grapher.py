@@ -70,7 +70,7 @@ def generate_heatmap_from_df(raw_data):
     
     
     title.set_x(1.2)
-    figure1.savefig("/home/jjw036/Roller/yeast_heatmap.png")
+    figure1.savefig("/home/jjw036/Swing/yeast_heatmap.png")
     return(figure1, heatmap)
 
 

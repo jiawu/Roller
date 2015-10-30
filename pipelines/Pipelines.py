@@ -1,6 +1,6 @@
 import pandas as pd
-from Roller.tdRoller import tdRoller
-from Roller.util.Evaluator import Evaluator
+from Swing.tdSwing import tdSwing
+from Swing.util.Evaluator import Evaluator
 import pdb
 
 def get_td_stats(**kwargs): 
@@ -28,9 +28,9 @@ def get_td_stats(**kwargs):
 
     #np.random.seed(8)
     if "Lasso" in kwargs['data_folder']:
-        tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator, window_type="Lasso")
+        tdr = tdSwing(file_path, gene_start_column, gene_end, time_label, separator, window_type="Lasso")
     else:
-        tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
+        tdr = tdSwing(file_path, gene_start_column, gene_end, time_label, separator)
 
 
 

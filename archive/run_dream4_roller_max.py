@@ -1,14 +1,14 @@
 from __future__ import absolute_import
-import Roller
+import Swing
 from sklearn.preprocessing import Imputer
-from Roller.util.linear_wrapper import LassoWrapper
+from Swing.util.linear_wrapper import LassoWrapper
 import numpy as np
 import matplotlib as mpl
-from Roller.util.permutation_test import Permuter
+from Swing.util.permutation_test import Permuter
 import itertools
-from Roller.util import utility_module as utility
-from Roller.util.Ranker import LassoBootstrapper
-from Roller.util.Evaluator import Evaluator
+from Swing.util import utility_module as utility
+from Swing.util.Ranker import LassoBootstrapper
+from Swing.util.Evaluator import Evaluator
 import pdb
 import pandas as pd
 import pickle
@@ -16,13 +16,13 @@ import scipy
 
 
 file_path = "data/dream4/insilico_size10_1_timeseries.tsv"
-#file_path = "/Users/jjw036/Roller/goldbetter_model/goldbetter_data.txt"
+#file_path = "/Users/jjw036/Swing/goldbetter_model/goldbetter_data.txt"
 gene_start_column = 1
 time_label = "Time"
 separator = "\t"
 gene_end = None
 
-roll_me = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
+roll_me = Swing.Swing(file_path, gene_start_column, gene_end, time_label, separator)
 window_size = roll_me.overall_width
 #get only TFs data, window size of 4
 roll_me.set_window(window_size)

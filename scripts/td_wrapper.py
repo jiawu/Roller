@@ -1,5 +1,5 @@
-from Roller.util.Evaluator import Evaluator
-from Roller.tdRoller import tdRoller
+from Swing.util.Evaluator import Evaluator
+from Swing.tdSwing import tdSwing
 import pandas as pd
 import pdb
 def get_td_stats(file_path, min_lag = 0): 
@@ -17,7 +17,7 @@ def get_td_stats(file_path, min_lag = 0):
     true_edges = evaluator.gs_flat.tolist()
     pd.options.display.float_format = '{:,.5f}'.format
 
-    tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
+    tdr = tdSwing(file_path, gene_start_column, gene_end, time_label, separator)
     tdr.zscore_all_data()
     tdr.set_window(4)
     tdr.create_windows()

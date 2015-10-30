@@ -26,7 +26,7 @@ for lag in range(0, 4):
 
     for network_index in range(1,6):
         td_edge_lists_lag.append([])
-        target_dataset = "/projects/p20519/Roller/data/dream4/insilico_size10_" + str(network_index) + "_timeseries.tsv"
+        target_dataset = "/projects/p20519/Swing/data/dream4/insilico_size10_" + str(network_index) + "_timeseries.tsv"
         roc, pr, RF_td_edge_list = tdw.get_td_stats(target_dataset, min_lag = lag)
         td_edge_list.append(RF_td_edge_list)
 

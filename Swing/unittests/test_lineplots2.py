@@ -1,12 +1,12 @@
 import matplotlib
 matplotlib.use('Agg')
-from Roller.util.LinePlot import LinePlot
-from Roller.util.Analyzer import Analyzer
+from Swing.util.LinePlot import LinePlot
+from Swing.util.Analyzer import Analyzer
 from numpy import mean
 import pdb,random
 
-from Roller.tdRoller import tdRoller
-from Roller.util.Evaluator import Evaluator
+from Swing.tdSwing import tdSwing
+from Swing.util.Evaluator import Evaluator
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -90,7 +90,7 @@ def get_td_stats(file_path, td_window = 6):
 
     #np.random.seed(8)
 
-    tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
+    tdr = tdSwing(file_path, gene_start_column, gene_end, time_label, separator)
     tdr.zscore_all_data()
     tdr.set_window(td_window)
     tdr.create_windows()
@@ -110,9 +110,9 @@ def get_td_stats(file_path, td_window = 6):
     return((roc_dict['auroc'][-1],pr_dict['aupr'][-1]))
 
 data_folder = "/projects/p20519/roller_output/optimizing_window_size/RandomForest/janes"
-output_path = "/home/jjw036/Roller/janes"
-target_dataset = "/projects/p20519/Roller/data/invitro/janes_timeseries.tsv"
-#target_dataset = "/projects/p20519/Roller/data/dream4/ecoli_timeseries.tsv"
+output_path = "/home/jjw036/Swing/janes"
+target_dataset = "/projects/p20519/Swing/data/invitro/janes_timeseries.tsv"
+#target_dataset = "/projects/p20519/Swing/data/dream4/ecoli_timeseries.tsv"
 my_statistic = 'aupr'
 roc,pr = get_td_stats(target_dataset, 5)
 pdb.set_trace()

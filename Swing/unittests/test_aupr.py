@@ -1,5 +1,5 @@
 import unittest
-from Roller.util.Evaluator import Evaluator
+from Swing.util.Evaluator import Evaluator
 import numpy as np
 from random import randint
 import numpy.testing as npt

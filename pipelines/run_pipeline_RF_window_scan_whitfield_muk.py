@@ -2,7 +2,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import sys
-import Roller
+import Swing
 import uuid
 import pickle
 import pdb
@@ -11,7 +11,7 @@ This pipeline scans a range of window sizes for a given inference method and gen
 
 This is a pipeline scanning the Janes data.
 """
-INPUT_PATH = "/projects/p20519/Roller/data/invitro/whitfield_muk"
+INPUT_PATH = "/projects/p20519/Swing/data/invitro/whitfield_muk"
 INF_METHOD = "RandomForest"
 OUTPUT_PATH = "/projects/p20519/roller_output/optimizing_window_size/" + INF_METHOD + "/whitfield_muk"
 UNIQUE_NAME  = INF_METHOD + "whitfield_muk"
@@ -33,7 +33,7 @@ if __name__ == "__main__":
     gene_end = None
     gold_standard = INPUT_PATH + "_goldstandard.tsv"
 
-    roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label,separator,window_type=INF_METHOD)
+    roller = Swing.Swing(file_path, gene_start_column, gene_end, time_label,separator,window_type=INF_METHOD)
     print("Overall Width: " + str(roller.overall_width))
     roller.zscore_all_data()
 

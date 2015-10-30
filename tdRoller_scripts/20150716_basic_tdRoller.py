@@ -1,8 +1,8 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 import pdb
-from Roller.tdRoller import tdRoller
-from Roller.util.Evaluator import Evaluator
+from Swing.tdSwing import tdSwing
+from Swing.util.Evaluator import Evaluator
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -29,14 +29,14 @@ pd.options.display.float_format = '{:,.5f}'.format
 
 np.random.seed(8)
 
-tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
+tdr = tdSwing(file_path, gene_start_column, gene_end, time_label, separator)
 tdr.zscore_all_data()
 tdr.set_window(window_width)
 tdr.create_windows()
 tdr.augment_windows(min_lag=min_lag, max_lag=max_lag)
 tdr.fit_windows(n_trees=n_trees, show_progress=False, calc_mse=mse_adjust)
 tdr.rank_edges(permutation_n=n_permutes, calc_mse=mse_adjust)
-tdr.compile_roller_edges(self_edges=True, mse_adjust=mse_adjust)
+tdr.compile_roller_edges(self_edges=True, calc_mse=mse_adjust)
 tdr.make_static_edge_dict(true_edges, lag_method=combine_method)
 df2 = tdr.make_sort_df(tdr.edge_dict, sort_by)
 df2['Rank'] = np.arange(len(df2))
