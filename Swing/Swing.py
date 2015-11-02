@@ -24,14 +24,23 @@ class Swing(object):
     """
 
     def __init__(self, file_path, gene_start=None, gene_end=None, time_label="Time", separator="\t",
-                 window_type="RandomForest", threshold=1, q=None):
+                 window_type="RandomForest", step_size=1, min_lag=0, max_lag=0, window_width=3):
         """
         Initialize the roller object. Read the file and put it into a pandas dataframe
-        :param file_path: file-like object or string
-                        The file to read
+        :param file_path: string
+            File to read
         :param gene_start: int
         :param gene_end: int
+        :param time_label:
+        :param separator:
+        :param window_type:
+        :param step_size:
+        :param min_lag:
+        :param max_lag:
+        :param window_width:
+        :return:
         """
+
         # Read the raw data into a pandas dataframe object
         self.raw_data = pd.read_csv(file_path, sep=separator)
         self.raw_data = self.raw_data.dropna(axis=0, how='all')
@@ -39,11 +48,15 @@ class Swing(object):
         self.file_path = file_path
         self.window_type = window_type
 
-        # Set roller defaults
+        # Set SWING defaults
         self.current_step = 0
-        self.window_width = 3
-        self.step_size = 1
+        self.window_width = window_width
+        self.step_size = step_size
         self.time_label = time_label
+
+        # Set lag defaults
+        self.min_lag = min_lag
+        self.max_lag = max_lag
 
         # Get overall width of the time-course
         self.time_vec = self.raw_data[self.time_label].unique()
@@ -61,14 +74,13 @@ class Swing(object):
         self.gene_list = self.raw_data.columns.values[self.gene_start:self.gene_end]
         self.window_list = []
 
-        #assign norm data for window creation. by default, norm_data is raw_data and is later modified by other functions.
-
+        # assign norm data for window creation.
+        # by default, norm_data is raw_data and is later modified by other functions.
         self.norm_data = self.raw_data
 
         self.full_edge_list = None
         self.edge_dict = None
         self.lag_set = None
-
 
     def make_possible_edge_list(self, parents, children, self_edges=True):
         """
@@ -506,6 +518,42 @@ class Swing(object):
                         'window_index': window_index}
         return window_stats
 
+    def compile_roller_edges(self, self_edges=False, calc_mse=True):
+        """
+        Edges across all windows will be compiled into a single edge list
+        :return:
+        """
+        print "Compiling all model edges...",
+        df = None
+        for ww, window in enumerate(self.window_list):
+            if window.include_window:
+                # Get the edges and associated values in table form
+                current_df = window.make_edge_table(calc_mse=calc_mse)
+
+                # Only retain edges if the p_value is below the threshold
+                #current_df = current_df[current_df['p_value'] <= 0.05]
+
+                # Only retain edges if the MSE_diff is negative
+                if calc_mse:
+                    current_df = current_df[current_df['MSE_diff'] < 0]
+
+                current_df['adj_imp'] = current_df['Importance']*(1-current_df['p_value'])#*current_df['MSE_diff']
+
+                current_df.sort(['adj_imp'], ascending=False, inplace=True)
+                current_df['Rank'] = np.arange(len(current_df))
+
+                if df is None:
+                    df = current_df.copy()
+                else:
+                    df = df.append(current_df.copy(), ignore_index=True)
+        if not self_edges:
+            df = df[df.Parent != df.Child]
+        df['Edge'] = zip(df.Parent, df.Child)
+        df['Lag'] = df.C_window - df.P_window
+        self.full_edge_list = df.copy()
+        print "[DONE]"
+        return
+
     def augment_windows(self, min_lag=0, max_lag=None):
         """
         Window data is augmented to include data from previous time points and labeled accordingly
@@ -550,42 +598,6 @@ class Swing(object):
             else:
                 window.include_window = False
         self.window_list = new_window_list
-        return
-
-    def compile_roller_edges(self, self_edges=False, calc_mse=True):
-        """
-        Edges across all windows will be compiled into a single edge list
-        :return:
-        """
-        print "Compiling all model edges...",
-        df = None
-        for ww, window in enumerate(self.window_list):
-            if window.include_window:
-                # Get the edges and associated values in table form
-                current_df = window.make_edge_table(calc_mse=calc_mse)
-
-                # Only retain edges if the p_value is below the threshold
-                #current_df = current_df[current_df['p_value'] <= 0.05]
-
-                # Only retain edges if the MSE_diff is negative
-                if calc_mse:
-                    current_df = current_df[current_df['MSE_diff'] < 0]
-
-                current_df['adj_imp'] = current_df['Importance']*(1-current_df['p_value'])#*current_df['MSE_diff']
-
-                current_df.sort(['adj_imp'], ascending=False, inplace=True)
-                current_df['Rank'] = np.arange(len(current_df))
-
-                if df is None:
-                    df = current_df.copy()
-                else:
-                    df = df.append(current_df.copy(), ignore_index=True)
-        if not self_edges:
-            df = df[df.Parent != df.Child]
-        df['Edge'] = zip(df.Parent, df.Child)
-        df['Lag'] = df.C_window - df.P_window
-        self.full_edge_list = df.copy()
-        print "[DONE]"
         return
 
     def make_static_edge_dict(self, true_edges, self_edges=False, lag_method='max_median'):
