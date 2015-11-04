@@ -246,7 +246,6 @@ class Swing(object):
             warnings.warn('a')
         self.window_list = window_list
 
-    #todo: merge these two items
     def get_window_object(self, dataframe, window_info_dict):
         """
         Return a window object from a data-frame
@@ -259,34 +258,25 @@ class Swing(object):
             Dictionary containing information needed for window initialization
         :return:
         """
-        if self.window_type == "Lasso":
-            window_obj = LassoWindow(dataframe, window_info_dict, self.norm_data)
-        elif self.window_type == "RandomForest":
-            window_obj = RandomForestRegressionWindow(dataframe, window_info_dict, self.norm_data)
-        elif self.window_type == "Dionesus":
-            window_obj = DionesusWindow(dataframe, window_info_dict, self.norm_data)
+        window_obj = None
+        #todo: this is a stop gap measure for refactoring. ideally there will not be separate tdWindows
+        # If min_lag is 0 and max_lag is 0 then you don't need a tdWindow
+        if self.min_lag == 0 and self.max_lag == 0:
+            if self.window_type == "Lasso":
+                window_obj = LassoWindow(dataframe, window_info_dict, self.norm_data)
+            elif self.window_type == "RandomForest":
+                window_obj = RandomForestRegressionWindow(dataframe, window_info_dict, self.norm_data)
+            elif self.window_type == "Dionesus":
+                window_obj = DionesusWindow(dataframe, window_info_dict, self.norm_data)
 
-        return window_obj
+        else:
+            if self.window_type == "RandomForest":
+                window_obj = tdRFRWindow(dataframe, window_info_dict, self.norm_data)
+            elif self.window_type =="Lasso":
+                window_obj = tdLassoWindow(dataframe, window_info_dict, self.norm_data)
 
-    def get_window_object(self, dataframe, window_info_dict):
-        """
-        Return a window object from a data-frame
-
-        Called by:
-            create_windows
-
-        :param dataframe: data-frame
-        :param window_info_dict: dict
-            Dictionary containing information needed for window initialization
-        :return:
-        """
-        if self.window_type == "RandomForest":
-            window_obj = tdRFRWindow(dataframe, window_info_dict, self.norm_data)
-        elif self.window_type =="Lasso":
-            window_obj = tdLassoWindow(dataframe, window_info_dict, self.norm_data)
-
-        elif self.window_type =="Dionesus":
-            window_obj = tdDionesusWindow(dataframe, window_info_dict, self.norm_data)
+            elif self.window_type =="Dionesus":
+                window_obj = tdDionesusWindow(dataframe, window_info_dict, self.norm_data)
 
         return window_obj
 
