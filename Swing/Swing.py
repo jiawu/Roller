@@ -58,13 +58,13 @@ class Swing(object):
             File to read
         :param gene_start: int
         :param gene_end: int
-        :param time_label:
-        :param separator:
-        :param window_type:
-        :param step_size:
-        :param min_lag:
-        :param max_lag:
-        :param window_width:
+        :param time_label: str
+        :param separator: str
+        :param window_type: str
+        :param step_size: int
+        :param min_lag: int
+        :param max_lag: int or None
+        :param window_width: int
         :return:
         """
 
@@ -119,28 +119,8 @@ class Swing(object):
 
         :return: int
         """
-        total_windows = (self.overall_width - self.window_width + 1) / (self.step_size)
+        total_windows = (self.overall_width - self.window_width + 1) / self.step_size
         return total_windows
-
-    def get_window(self, start_index):
-        # todo: start_index should be used
-        """
-        Select a window from the full data set, only keeping the data corresponding to genes
-
-        Called by:
-            __init__
-            set_max_alpha in Ranker.py (necessary)
-            permutation_test.py (deprecated)
-
-
-        :param start_index: int
-            The start of the window
-
-        :return: data-frame
-        """
-        raw_window = self.get_window_raw(0)
-        only_genes = raw_window.iloc[:, self.gene_start:self.gene_end]
-        return only_genes
 
     def get_window_raw(self, start_index, random_time=False):
         """
@@ -245,12 +225,25 @@ class Swing(object):
 
         :return:
         """
-        window_list = [self.get_window_object(self.get_window_raw(index, random_time),
-                                              {"time_label": self.time_label,
-                                               "gene_start": self.gene_start,
-                                               "gene_end": self.gene_end,
-                                               "nth_window": index}) if (
-        index + self.window_width <= self.overall_width) else '' for index in range(self.get_n_windows())]
+        # Initialize empty lists
+        window_list = []
+        windows_out_bounds = []
+
+        # Generate possible windows using specified SWING parameters
+        for index in range(self.get_n_windows()):
+            # Confirm that the window will not be out of bounds
+            if (index + self.window_width) > self.overall_width:
+                windows_out_bounds.append(index)
+                continue
+
+            raw_window = self.get_window_raw(index, random_time)
+            window_info = {"time_label": self.time_label, "gene_start": self.gene_start, "gene_end": self.gene_end,
+                           "nth_window": index}
+            window_object = self.get_window_object(raw_window, window_info)
+            window_list.append(window_object)
+
+        if windows_out_bounds:
+            warnings.warn('a')
         self.window_list = window_list
 
     #todo: merge these two items
