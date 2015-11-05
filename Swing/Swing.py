@@ -233,6 +233,22 @@ class Swing(object):
         """
         self.max_lag = max_lag
 
+    def get_explanatory_indices(self, index, min_lag, max_lag):
+        # In append mode, the start index can always be 0
+        if max_lag is None:
+            start_idx = 0
+        else:
+            start_idx = max(index-max_lag, 0)
+        end_index = max(index-min_lag+1, 0)
+
+        explanatory_indices = range(start_idx, end_index)
+
+        # If the maximum lag required is greater than the index, this window must be left censored
+        if len(explanatory_indices) == 0 or max_lag > index:
+            explanatory_indices = None
+
+        return explanatory_indices
+
     def create_windows(self, random_time=False):
         """
         Create window objects for the roller to use
@@ -244,7 +260,6 @@ class Swing(object):
         """
         # Initialize empty lists
         window_list = []
-        windows_out_bounds = []
 
         # Check to make sure lags are valid if parameters have been changed
         self.check_lags()
@@ -260,19 +275,11 @@ class Swing(object):
 
             # Confirm that the window will not be out of bounds
             if (index + self.window_width) > self.overall_width:
-                windows_out_bounds.append(index)
-                continue
+                raise Exception('Window created that is out of bounds based on parameters')
 
-            # In append mode, the start index can always be 0
-            if self.max_lag is None:
-                start_idx = 0
-            else:
-                start_idx = max(index-self.max_lag, 0)
-            end_index = max(index-self.min_lag+1, 0)
+            explanatory_windows = self.get_explanatory_indices(index, min_lag=self.min_lag, max_lag=self.max_lag)
+            print explanatory_windows
 
-            if self.max_lag is not None and (end_index-start_idx) < (self.max_lag-self.min_lag+1):
-                windows_out_bounds.append(index)
-                continue
             continue
             raw_window = self.get_window_raw(index, random_time)
             x_data, y_data = self.get_window_data(index, self.min_lag, self.max_lag)
@@ -280,13 +287,7 @@ class Swing(object):
                            "nth_window": index}
             window_object = self.get_window_object(raw_window, window_info)
             window_list.append(window_object)
-        print self.get_n_windows()
-        print len(windows_out_bounds)
-        if len(windows_out_bounds) == self.get_n_windows():
-            warnings.warn('There were no valid windows with the specified parameters')
-        elif windows_out_bounds:
-            warning_string = 'The following windows are out of bounds %s' % windows_out_bounds
-            warnings.warn(warning_string)
+
         sys.exit()
         self.window_list = window_list
 
