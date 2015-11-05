@@ -81,14 +81,14 @@ class Swing(object):
         self.step_size = step_size
         self.time_label = time_label
 
+        # Get overall width of the time-course
+        self.time_vec = self.raw_data[self.time_label].unique()
+        self.overall_width = len(self.time_vec)
+
         # Set lag defaults
         self.min_lag = min_lag
         self.max_lag = max_lag
         self.check_lags()
-
-        # Get overall width of the time-course
-        self.time_vec = self.raw_data[self.time_label].unique()
-        self.overall_width = len(self.time_vec)
 
         if gene_end is not None:
             self.gene_end = gene_end
@@ -217,6 +217,22 @@ class Swing(object):
 
         return len(self.raw_data.columns) - 1
 
+    def set_min_lag(self, min_lag):
+        """
+        Set the minimum lag for the roller
+        :param min_lag:
+        :return:
+        """
+        self.min_lag = min_lag
+
+    def set_max_lag(self, max_lag):
+        """
+        Set the minimum lag for the roller
+        :param min_lag:
+        :return:
+        """
+        self.max_lag = max_lag
+
     def create_windows(self, random_time=False):
         """
         Create window objects for the roller to use
@@ -230,21 +246,48 @@ class Swing(object):
         window_list = []
         windows_out_bounds = []
 
+        # Check to make sure lags are valid if parameters have been changed
+        self.check_lags()
+
+        # If min_lag is 0 and max_lag is 0 then you don't need a tdWindow
+        if self.min_lag == 0 and self.max_lag == 0:
+            td_window = False
+        else:
+            td_window = True
+
         # Generate possible windows using specified SWING parameters
         for index in range(self.get_n_windows()):
+
             # Confirm that the window will not be out of bounds
             if (index + self.window_width) > self.overall_width:
                 windows_out_bounds.append(index)
                 continue
 
+            # In append mode, the start index can always be 0
+            if self.max_lag is None:
+                start_idx = 0
+            else:
+                start_idx = max(index-self.max_lag, 0)
+            end_index = max(index-self.min_lag+1, 0)
+
+            if self.max_lag is not None and (end_index-start_idx) < (self.max_lag-self.min_lag+1):
+                windows_out_bounds.append(index)
+                continue
+            continue
             raw_window = self.get_window_raw(index, random_time)
+            x_data, y_data = self.get_window_data(index, self.min_lag, self.max_lag)
             window_info = {"time_label": self.time_label, "gene_start": self.gene_start, "gene_end": self.gene_end,
                            "nth_window": index}
             window_object = self.get_window_object(raw_window, window_info)
             window_list.append(window_object)
-
-        if windows_out_bounds:
-            warnings.warn('a')
+        print self.get_n_windows()
+        print len(windows_out_bounds)
+        if len(windows_out_bounds) == self.get_n_windows():
+            warnings.warn('There were no valid windows with the specified parameters')
+        elif windows_out_bounds:
+            warning_string = 'The following windows are out of bounds %s' % windows_out_bounds
+            warnings.warn(warning_string)
+        sys.exit()
         self.window_list = window_list
 
     def check_lags(self):
@@ -258,26 +301,13 @@ class Swing(object):
         if self.min_lag < 0:
             raise Exception('The minimum lag cannot be negative')
 
-    def get_window_object(self, dataframe, window_info_dict):
-        """
-        Return a window object from a data-frame
+        if self.min_lag > self.get_n_windows():
+            raise Exception('The minimum lag cannot be greater than the number of windows')
 
-        Called by:
-            create_windows
+        if self.max_lag >= self.get_n_windows():
+            raise Exception('The maximum lag cannot be greater than or equal to the number of windows')
 
-        :param dataframe: data-frame
-        :param window_info_dict: dict
-            Dictionary containing information needed for window initialization
-        :return:
-        """
-        window_obj = None
-        # todo: this is a stop gap measure for refactoring. ideally there will not be separate tdWindows
-        # If min_lag is 0 and max_lag is 0 then you don't need a tdWindow
-        if self.min_lag == 0 and self.max_lag == 0:
-            td_window = False
-        else:
-            td_window = True
-
+    def get_window_data(self, index, min_lag, max_lag):
         """
         Window data is augmented to include data from previous time points and labeled accordingly
         :param min_lag: int
@@ -288,17 +318,8 @@ class Swing(object):
         new_window_list = []
 
         # Enumerate all of the windows except the first
-        for window in self.window_list:
-            window_idx = window.nth_window
-            if max_lag is None:
-                start_idx = 0
-            else:
-                start_idx = max(window_idx-max_lag,0)
-            end_index = max(window_idx-min_lag+1, 0)
-            if max_lag is not None and (end_index-start_idx)<(max_lag-min_lag+1):
-                window.include_window = False
-                continue
 
+        """
             earlier_windows = self.window_list[start_idx:end_index]
             window.earlier_window_idx = [w.nth_window for w in earlier_windows]
             # Add necessary data from earlier windows
@@ -319,7 +340,22 @@ class Swing(object):
             else:
                 window.include_window = False
         self.window_list = new_window_list
+        """
+        return x_data, y_data
 
+    def get_window_object(self, dataframe, window_info_dict):
+        """
+        Return a window object from a data-frame
+
+        Called by:
+            create_windows
+
+        :param dataframe: data-frame
+        :param window_info_dict: dict
+            Dictionary containing information needed for window initialization
+        :return:
+        """
+        window_obj = None
 
         if self.window_type == "Lasso":
             window_obj = LassoWindow(dataframe, window_info_dict, self.norm_data)
