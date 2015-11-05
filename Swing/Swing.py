@@ -84,6 +84,7 @@ class Swing(object):
         # Set lag defaults
         self.min_lag = min_lag
         self.max_lag = max_lag
+        self.check_lags()
 
         # Get overall width of the time-course
         self.time_vec = self.raw_data[self.time_label].unique()
@@ -246,6 +247,17 @@ class Swing(object):
             warnings.warn('a')
         self.window_list = window_list
 
+    def check_lags(self):
+        """
+        Make sure the user specified lags meet necessary criteria
+        :return:
+        """
+        if self.min_lag > self.max_lag and self.max_lag is not None:
+            raise Exception('The minimum lag cannot be greater than the maximum lag')
+
+        if self.min_lag < 0:
+            raise Exception('The minimum lag cannot be negative')
+
     def get_window_object(self, dataframe, window_info_dict):
         """
         Return a window object from a data-frame
@@ -259,24 +271,72 @@ class Swing(object):
         :return:
         """
         window_obj = None
-        #todo: this is a stop gap measure for refactoring. ideally there will not be separate tdWindows
+        # todo: this is a stop gap measure for refactoring. ideally there will not be separate tdWindows
         # If min_lag is 0 and max_lag is 0 then you don't need a tdWindow
         if self.min_lag == 0 and self.max_lag == 0:
-            if self.window_type == "Lasso":
-                window_obj = LassoWindow(dataframe, window_info_dict, self.norm_data)
-            elif self.window_type == "RandomForest":
-                window_obj = RandomForestRegressionWindow(dataframe, window_info_dict, self.norm_data)
-            elif self.window_type == "Dionesus":
-                window_obj = DionesusWindow(dataframe, window_info_dict, self.norm_data)
-
+            td_window = False
         else:
-            if self.window_type == "RandomForest":
-                window_obj = tdRFRWindow(dataframe, window_info_dict, self.norm_data)
-            elif self.window_type =="Lasso":
-                window_obj = tdLassoWindow(dataframe, window_info_dict, self.norm_data)
+            td_window = True
 
-            elif self.window_type =="Dionesus":
-                window_obj = tdDionesusWindow(dataframe, window_info_dict, self.norm_data)
+        """
+        Window data is augmented to include data from previous time points and labeled accordingly
+        :param min_lag: int
+        :param max_lag: int or None
+            if None, all earlier windows will included
+        :return:
+        """
+        new_window_list = []
+
+        # Enumerate all of the windows except the first
+        for window in self.window_list:
+            window_idx = window.nth_window
+            if max_lag is None:
+                start_idx = 0
+            else:
+                start_idx = max(window_idx-max_lag,0)
+            end_index = max(window_idx-min_lag+1, 0)
+            if max_lag is not None and (end_index-start_idx)<(max_lag-min_lag+1):
+                window.include_window = False
+                continue
+
+            earlier_windows = self.window_list[start_idx:end_index]
+            window.earlier_window_idx = [w.nth_window for w in earlier_windows]
+            # Add necessary data from earlier windows
+            for ww, win in enumerate(earlier_windows[::-1]): #Go through the list in reverse because of how the window expects data
+                if ww == 0:
+                    #Initialize values
+                    window.x_data = win.window_values.copy()
+                    #try not to assign these outside the classfile. I could not figure out where these were assigned (they weren't in the file)
+                    window.x_labels = win.data.columns[1:]
+                    window.x_times = np.array([win.nth_window]*len(win.genes))
+
+                else:
+                    window.x_data = np.hstack((window.x_data, win.window_values))
+                    window.x_labels = np.append(window.x_labels, win.data.columns[1:])
+                    window.x_times = np.append(window.x_times, np.array([win.nth_window]*len(win.genes)))
+            if window.x_data is not None:
+                new_window_list.append(window)
+            else:
+                window.include_window = False
+        self.window_list = new_window_list
+
+
+        if self.window_type == "Lasso":
+            window_obj = LassoWindow(dataframe, window_info_dict, self.norm_data)
+        elif self.window_type == "RandomForest":
+            window_obj = RandomForestRegressionWindow(dataframe, window_info_dict, self.norm_data)
+        elif self.window_type == "Dionesus":
+            window_obj = DionesusWindow(dataframe, window_info_dict, self.norm_data)
+
+        """
+        if self.window_type == "RandomForest":
+            window_obj = tdRFRWindow(dataframe, window_info_dict, self.norm_data)
+        elif self.window_type =="Lasso":
+            window_obj = tdLassoWindow(dataframe, window_info_dict, self.norm_data)
+
+        elif self.window_type =="Dionesus":
+            window_obj = tdDionesusWindow(dataframe, window_info_dict, self.norm_data)
+        """
 
         return window_obj
 

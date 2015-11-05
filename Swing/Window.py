@@ -14,7 +14,7 @@ class Window(object):
     should be sub-classed to have network inference specific features and methods.
     """
 
-    def __init__(self, raw_dataframe, window_info, roller_data):
+    def __init__(self, raw_dataframe, window_info, roller_data, td_window):
         #todo: unclear if roller_data is necessary
         """
         Initialize a window object. Extract information from the passed data-frame. Generate edge list.
@@ -45,9 +45,13 @@ class Window(object):
         # Add edge list to edge table
         self.results_table['regulator-target'] = self.edge_list
         self.roller_data = roller_data
+        self.td_window = td_window
 
-        # The training score is a list of descriptors for how well the model fit the training data for each response variable for the current window
-        # the test score is a list of descriptors for how well the model fit the test data for each response variable for the current window.
+        """
+        The training score is a list of descriptors for how well the model fit the training data for each response
+        variable for the current window the test score is a list of descriptors for how well the model fit the test data
+        for each response variable for the current window.
+        """
         self.training_scores = []
         self.test_scores = []
 
