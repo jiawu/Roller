@@ -614,9 +614,6 @@ class tdLassoWindow(LassoWindow):
         :return:
         """
 
-        if not self.include_window:
-            return
-
         # Build indexing method for all possible edges. Length = number of parents * number of children
         parent_index = range(self.edge_importance.shape[1])
         child_index = range(self.edge_importance.shape[0])

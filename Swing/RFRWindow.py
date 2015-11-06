@@ -189,7 +189,8 @@ class RandomForestRegressionWindow(Window):
         all_data, coeff_matrix, model_list, max_nodes =self._initialize_coeffs(data=data)
 
         for col_index, column in enumerate(all_data.T):
-            coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, all_data, col_index, n_trees, n_jobs,crag)
+            coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, all_data, col_index, n_trees,
+                                                             n_jobs, crag)
         return coeff_matrix
 
 class tdRFRWindow(RandomForestRegressionWindow):
@@ -208,10 +209,11 @@ class tdRFRWindow(RandomForestRegressionWindow):
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
         """
-        if self.include_window:
-            print "Regressing window index %i against the following window indices: "%self.nth_window,\
-                self.earlier_window_idx
-            self.edge_importance, self.edge_mse_diff = self.get_coeffs(self.n_trees, crag=False, data=self.x_data, n_jobs=n_jobs, calc_mse=calc_mse)
+        print "Regressing window index %i against the following window indices: "%self.nth_window, \
+            self.earlier_window_idx
+
+        self.edge_importance, self.edge_mse_diff = self.get_coeffs(self.n_trees, crag=False, data=self.x_data,
+                                                                   n_jobs=n_jobs, calc_mse=calc_mse)
 
     def get_coeffs(self, n_trees, crag=False, data=None, n_jobs=-1, calc_mse=False):
         """
@@ -262,9 +264,6 @@ class tdRFRWindow(RandomForestRegressionWindow):
         :return:
         """
 
-        if not self.include_window:
-            return
-
         # Build indexing method for all possible edges. Length = number of parents * number of children
         parent_index = range(self.edge_importance.shape[1])
         child_index = range(self.edge_importance.shape[0])
@@ -292,8 +291,6 @@ class tdRFRWindow(RandomForestRegressionWindow):
         return df
 
     def run_permutation_test(self, n_permutations=1000, n_jobs=1,crag=False):
-        if not self.include_window:
-            return
         #initialize permutation results array
         self.permutation_means = np.empty(self.edge_importance.shape)
         self.permutation_sd = np.empty(self.edge_importance.shape)

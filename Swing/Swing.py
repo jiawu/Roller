@@ -730,7 +730,7 @@ class Swing(object):
         df=pd.read_csv(self.file_path,sep='\t')
         node_list = df.columns.tolist()
         node_list.pop(0)
-        return(node_list)
+        return node_list
 
     def score(self, sorted_edge_list, gold_standard_file=None):
         """
