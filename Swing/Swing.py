@@ -283,10 +283,10 @@ class Swing(object):
                 explanatory_dict, response_dict = self.get_window_data(index, explanatory_indices)
                 window_info = {"time_label": self.time_label, "gene_start": self.gene_start, "gene_end": self.gene_end,
                                "nth_window": index}
-                window_object = self.get_window_object(raw_window, window_info)
+                window_object = self.get_window_object(raw_window, window_info, td_window, explanatory_dict,
+                                                       response_dict)
                 window_list.append(window_object)
 
-        sys.exit()
         self.window_list = window_list
 
     def check_lags(self):
@@ -357,7 +357,7 @@ class Swing(object):
         
         return explanatory_dict, response_dict
 
-    def get_window_object(self, dataframe, window_info_dict):
+    def get_window_object(self, dataframe, window_info_dict, td_window, explanatory_dict, response_dict):
         """
         Return a window object from a data-frame
 
@@ -372,21 +372,14 @@ class Swing(object):
         window_obj = None
 
         if self.window_type == "Lasso":
-            window_obj = LassoWindow(dataframe, window_info_dict, self.norm_data)
+            window_obj = LassoWindow(dataframe, window_info_dict, self.norm_data, td_window, explanatory_dict,
+                                     response_dict)
         elif self.window_type == "RandomForest":
-            window_obj = RandomForestRegressionWindow(dataframe, window_info_dict, self.norm_data)
+            window_obj = RandomForestRegressionWindow(dataframe, window_info_dict, self.norm_data, td_window,
+                                                      explanatory_dict, response_dict)
         elif self.window_type == "Dionesus":
-            window_obj = DionesusWindow(dataframe, window_info_dict, self.norm_data)
-
-        """
-        if self.window_type == "RandomForest":
-            window_obj = tdRFRWindow(dataframe, window_info_dict, self.norm_data)
-        elif self.window_type =="Lasso":
-            window_obj = tdLassoWindow(dataframe, window_info_dict, self.norm_data)
-
-        elif self.window_type =="Dionesus":
-            window_obj = tdDionesusWindow(dataframe, window_info_dict, self.norm_data)
-        """
+            window_obj = DionesusWindow(dataframe, window_info_dict, self.norm_data, td_window, explanatory_dict,
+                                        response_dict)
 
         return window_obj
 

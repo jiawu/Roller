@@ -21,8 +21,9 @@ class DionesusWindow(Window):
 
     """
 
-    def __init__(self, dataframe, window_info, roller_data):
-        super(DionesusWindow, self).__init__(dataframe, window_info, roller_data)
+    def __init__(self, dataframe, window_info, roller_data, td_window, explanatory_dict, response_dict):
+        super(DionesusWindow, self).__init__(dataframe, window_info, roller_data,  td_window, explanatory_dict,
+                                             response_dict)
         self.beta_coefficients = None
         self.vip = None
         self.cv_table = None

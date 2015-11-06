@@ -12,9 +12,11 @@ import time
 
 from Window import Window
 
+
 class RandomForestRegressionWindow(Window):
-    def __init__(self, dataframe, window_info, roller_data):
-        super(RandomForestRegressionWindow, self).__init__(dataframe, window_info, roller_data)
+    def __init__(self, dataframe, window_info, roller_data, td_window, explanatory_dict, response_dict):
+        super(RandomForestRegressionWindow, self).__init__(dataframe, window_info, roller_data, td_window,
+                                                           explanatory_dict, response_dict)
         self.edge_importance = None
         self.n_trees = None
         self.n_jobs = None
