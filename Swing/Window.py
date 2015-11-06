@@ -62,6 +62,7 @@ class Window(object):
         self.response_window = response_dict['response_window']
         self.response_times = response_dict['response_times']
         self.response_labels = response_dict['response_labels']
+        self.earlier_windows = list(set(self.explanatory_window))
 
         # Unpack window information
         self.time_label = window_info['time_label']
@@ -77,7 +78,6 @@ class Window(object):
         self.n_genes = len(self.genes)
         self.results_table = pd.DataFrame()
         self.edge_list = get_possible_edge_list(self.genes, self.genes)
-        self.earlier_windows = list(set(self.explanatory_window))
 
         # Add edge list to edge table
         self.results_table['regulator-target'] = self.edge_list
@@ -116,13 +116,6 @@ class Window(object):
                         'n_genes': self.n_genes}
         return window_stats
 
-    def fit_window(self):
-        """
-        Fit the window with the specified window
-
-        """
-        pass
-
     def resample_window(self):
         """
         Resample window values, along a specific axis
@@ -154,43 +147,9 @@ class Window(object):
         noisy_values = np.multiply(window_values, noise)
         return noisy_values
 
-    def run_permutation_test(self):
-        """
-        Run the permutation test and update the edge_table with p values. It is expected that this method will vary
-        depending on the type of method used by the window
-        :return:
-        """
-        pass
-
-    def run_bootstrap(self, n_bootstraps):
-        """
-        Run bootstrapping and update the edge_table with stability values. It is expected that this method will vary
-        depending on the type of method used by the window
-        :return:
-        """
-        pass
-
-    def sort_edges(self, method):
-        """
-        Rank the edges in the edge table. This may eventually be window type specific.
-
-        :param method: The method to use for ranking the edges in edge_table
-        :return: list of tuples
-            Sorted list [(regulator1, target1), (regulator2, target2)...] that can be scored with aupr or auroc
-        """
-        pass
-
     def initialize_params(self):
         """
         Initialize a model for the window and calculate the necessary parameters
-        :return:
-        """
-        pass
-
-    def get_coeffs(self, *args):
-        """
-        Get the beta coefficients
-        :param args:
         :return:
         """
         pass
@@ -325,4 +284,47 @@ class Window(object):
         test_scores = Rutil.get_cragging_scores(model,predictor_test, response_test)
         return((training_scores, test_scores))
 
+    ###################################################################################################################
+    # Abstract methods listed below
+    ###################################################################################################################
 
+    def run_permutation_test(self):
+        """
+        Run the permutation test and update the edge_table with p values. It is expected that this method will vary
+        depending on the type of method used by the window
+        :return:
+        """
+        pass
+
+    def fit_window(self):
+        """
+        Fit the window with the specified window
+
+        """
+        pass
+
+    def run_bootstrap(self, n_bootstraps):
+        """
+        Run bootstrapping and update the edge_table with stability values. It is expected that this method will vary
+        depending on the type of method used by the window
+        :return:
+        """
+        pass
+
+    def sort_edges(self, method):
+        """
+        Rank the edges in the edge table. This may eventually be window type specific.
+
+        :param method: The method to use for ranking the edges in edge_table
+        :return: list of tuples
+            Sorted list [(regulator1, target1), (regulator2, target2)...] that can be scored with aupr or auroc
+        """
+        pass
+
+    def get_coeffs(self, *args):
+        """
+        Get the beta coefficients
+        :param args:
+        :return:
+        """
+        pass
