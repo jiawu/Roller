@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py" afterPath="$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Swing/DionesusWindow.py" afterPath="$PROJECT_DIR$/Swing/DionesusWindow.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Swing/LassoWindow.py" afterPath="$PROJECT_DIR$/Swing/LassoWindow.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Swing/RFRWindow.py" afterPath="$PROJECT_DIR$/Swing/RFRWindow.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Swing/Swing.py" afterPath="$PROJECT_DIR$/Swing/Swing.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Swing/Window.py" afterPath="$PROJECT_DIR$/Swing/Window.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Roller.iws" />
@@ -29,10 +24,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="20150716_basic_tdRoller.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="20150716_basic_tdRoller.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.22354695">
+            <state vertical-scroll-proportion="0.0">
               <caret line="10" column="14" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
               <folding>
                 <element signature="e#70#80#0" expanded="true" />
@@ -127,12 +122,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RFRWindow.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="RFRWindow.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Swing/RFRWindow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="46" column="48" selection-start-line="46" selection-start-column="48" selection-end-line="46" selection-end-column="48" />
+            <state vertical-scroll-proportion="0.067064084">
+              <caret line="242" column="47" selection-start-line="242" selection-start-column="47" selection-end-line="242" selection-end-column="47" />
               <folding>
+                <element signature="e#361#10462#0" expanded="false" />
                 <element signature="e#5104#5654#0" expanded="false" />
                 <element signature="e#6281#6563#0" expanded="false" />
                 <element signature="e#6686#7939#0" expanded="false" />
@@ -206,9 +202,9 @@
         <option value="$PROJECT_DIR$/Swing/DionesusWindow.py" />
         <option value="$PROJECT_DIR$/Swing/LassoWindow.py" />
         <option value="$PROJECT_DIR$/Swing/Window.py" />
-        <option value="$PROJECT_DIR$/Swing/RFRWindow.py" />
         <option value="$PROJECT_DIR$/Swing/Swing.py" />
         <option value="$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py" />
+        <option value="$PROJECT_DIR$/Swing/RFRWindow.py" />
       </list>
     </option>
   </component>
@@ -553,12 +549,6 @@
       <option name="number" value="Default" />
       <updated>1413916753036</updated>
     </task>
-    <task id="LOCAL-00106" summary="Beta version of tdRoller running. Need to verify outputs">
-      <created>1436383878323</created>
-      <option name="number" value="00106" />
-      <option name="project" value="LOCAL" />
-      <updated>1436383878323</updated>
-    </task>
     <task id="LOCAL-00107" summary="Updated roller fit_windows method to include n_jobs parameter">
       <created>1436383960171</created>
       <option name="number" value="00107" />
@@ -847,7 +837,13 @@
       <option name="project" value="LOCAL" />
       <updated>1446832976067</updated>
     </task>
-    <option name="localTasksCounter" value="155" />
+    <task id="LOCAL-00155" summary="Refactor fit and rank methods for RFRWindow">
+      <created>1446844892110</created>
+      <option name="number" value="00155" />
+      <option name="project" value="LOCAL" />
+      <updated>1446844892111</updated>
+    </task>
+    <option name="localTasksCounter" value="156" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -930,7 +926,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="tdRoller now accounts for edges that don't have meaningful importance scores" />
     <MESSAGE value="Basic plotting added to make a figure for Neda" />
     <MESSAGE value="Basic plotting added to make a figure for Neda. Mostly useless" />
     <MESSAGE value="Added edge ranking" />
@@ -955,7 +950,8 @@
     <MESSAGE value="Change arguments for Windows to accept uniform variables" />
     <MESSAGE value="Remove method augment_windows&#10;&#10;This is unnecessary because all data is now passed to each window during creation" />
     <MESSAGE value="Remove references to include_window&#10;&#10;This is an unnecessary attribute" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remove references to include_window&#10;&#10;This is an unnecessary attribute" />
+    <MESSAGE value="Refactor fit and rank methods for RFRWindow" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor fit and rank methods for RFRWindow" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.9237668" />
   </component>
   <component name="XDebuggerManager">
@@ -1498,18 +1494,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Swing/RFRWindow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="46" column="48" selection-start-line="46" selection-start-column="48" selection-end-line="46" selection-end-column="48" />
-          <folding>
-            <element signature="e#5104#5654#0" expanded="false" />
-            <element signature="e#6281#6563#0" expanded="false" />
-            <element signature="e#6686#7939#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Swing/Swing.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1551,10 +1535,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.22354695">
+        <state vertical-scroll-proportion="0.0">
           <caret line="10" column="14" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
           <folding>
             <element signature="e#70#80#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Swing/RFRWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.067064084">
+          <caret line="242" column="47" selection-start-line="242" selection-start-column="47" selection-end-line="242" selection-end-column="47" />
+          <folding>
+            <element signature="e#361#10462#0" expanded="false" />
+            <element signature="e#5104#5654#0" expanded="false" />
+            <element signature="e#6281#6563#0" expanded="false" />
+            <element signature="e#6686#7939#0" expanded="false" />
           </folding>
         </state>
       </provider>
