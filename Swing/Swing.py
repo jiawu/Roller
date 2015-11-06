@@ -8,7 +8,7 @@ import numpy as np
 import warnings
 from scipy import stats
 from Window import Window
-from RFRWindow import RandomForestRegressionWindow, tdRFRWindow
+from RFRWindow import RandomForestRegressionWindow
 from DionesusWindow import DionesusWindow, tdDionesusWindow
 from LassoWindow import LassoWindow, tdLassoWindow
 from util import utility_module as utility
@@ -512,22 +512,6 @@ class Swing(object):
         mean_sorted_edge_list = aggr_ranks.sort(columns="mean-rank", axis=0)
         self.averaged_ranks = mean_sorted_edge_list
         return self.averaged_ranks
-
-    # todo: this method sucks. sorry.
-    def score(self, sorted_edge_list, gold_standard_file):
-        """
-        Scores some stuff, I think...
-        Called by:
-            pipeline
-        :param sorted_edge_list:
-        :param gold_standard_file:
-        :return:
-        """
-        evaluator = Evaluator(gold_standard_file, sep='\t')
-        edge_cutoff = len(evaluator.gs_flat)
-        precision, recall, aupr = evaluator.calc_pr(sorted_edge_list[0:edge_cutoff + 1])
-        score_dict = {"precision": precision, "recall": recall, "aupr": aupr}
-        return score_dict
 
     def zscore_all_data(self):
         #todo: this should not replace raw_data, a new feature should be made
