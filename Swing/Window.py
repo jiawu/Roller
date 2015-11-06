@@ -25,6 +25,9 @@ class Window(object):
         :return:
         """
         self.include_window = True
+        self.td_window = td_window
+        self.explanatory_dict = explanatory_dict
+        self.response_dict = response_dict
         self.model = []
         self.time_label = window_info['time_label']
         self.gene_start = window_info['gene_start']
@@ -46,9 +49,7 @@ class Window(object):
         self.results_table['regulator-target'] = self.edge_list
         self.roller_data = roller_data
 
-        self.td_window = td_window
-        self.explanatory_dict = explanatory_dict
-        self.response_dict = response_dict
+
 
         """
         The training score is a list of descriptors for how well the model fit the training data for each response
@@ -58,14 +59,10 @@ class Window(object):
         self.training_scores = []
         self.test_scores = []
 
-
     def create_linked_list(self, numpy_array_2D, value_label):
         """labels and array should be in row-major order"""
         linked_list = pd.DataFrame({'regulator-target': self.edge_labels, value_label: numpy_array_2D.flatten()})
         return linked_list
-
-    def aggregate(self):
-        pass
 
     def get_window_stats(self):
         """for each window, get a dict:
@@ -80,7 +77,6 @@ class Window(object):
         window_stats = {'n_samples': self.n_samples,
                         'n_genes': self.n_genes}
         return window_stats
-
 
     def possible_edge_list(self, parents, children, self_edges=True):
         """
