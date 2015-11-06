@@ -1,38 +1,11 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
-import util.utility_module as Rutil
+import util.utility_module as utility
 import sys
 import numpy as np
 import pandas as pd
 from scipy import stats
-
-
-def get_possible_edge_list(parents, children, self_edges=True):
-    """
-    Create a list of all the possible edges between parents and children
-
-    :param parents: array
-        labels for parents
-    :param children: array
-        labels for children
-    :param self_edges:
-    :return: array, length = parents * children
-        array of parent, child combinations for all possible edges
-    """
-    parent_index = range(len(parents))
-    child_index = range(len(children))
-    a, b = np.meshgrid(parent_index, child_index)
-    parent_list = parents[a.flatten()]
-    child_list = children[b.flatten()]
-    possible_edge_list = None
-    if self_edges:
-        possible_edge_list = zip(parent_list, child_list)
-
-    elif not self_edges:
-        possible_edge_list = zip(parent_list[parent_list != child_list], child_list[parent_list != child_list])
-
-    return possible_edge_list
 
 
 class Window(object):
@@ -77,7 +50,7 @@ class Window(object):
         self.genes = self.df.columns.values
         self.n_genes = len(self.genes)
         self.results_table = pd.DataFrame()
-        self.edge_list = get_possible_edge_list(self.genes, self.genes)
+        self.edge_list = utility.make_possible_edge_list(self.genes, self.genes)
 
         # Add edge list to edge table
         self.results_table['regulator-target'] = self.edge_list
@@ -275,13 +248,13 @@ class Window(object):
         response_train = model_params['response']
         predictor_train = model_params['predictor']
         response_col = model_params['col_index']
-        training_scores = Rutil.get_cragging_scores(model, predictor_train, response_train)
-        test_data = Rutil.get_test_set(self.data, self.roller_data)
+        training_scores = utility.get_cragging_scores(model, predictor_train, response_train)
+        test_data = utility.get_test_set(self.data, self.roller_data)
 
         response_test = test_data.ix[:,response_col].values
         predictor_test = test_data.drop(test_data.columns[response_col],1).values
 
-        test_scores = Rutil.get_cragging_scores(model,predictor_test, response_test)
+        test_scores = utility.get_cragging_scores(model,predictor_test, response_test)
         return((training_scores, test_scores))
 
     ###################################################################################################################

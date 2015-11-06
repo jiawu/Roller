@@ -1,6 +1,6 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
-import pdb
+
 import random
 import sys
 import pandas as pd
@@ -9,39 +9,11 @@ import warnings
 from scipy import stats
 from Window import Window
 from RFRWindow import RandomForestRegressionWindow
-from DionesusWindow import DionesusWindow, tdDionesusWindow
-from LassoWindow import LassoWindow, tdLassoWindow
+from DionesusWindow import DionesusWindow
+from LassoWindow import LassoWindow
 from util import utility_module as utility
 from util.Evaluator import Evaluator
 from util.utility_module import elbow_criteria
-import matplotlib.pyplot as plt
-
-
-def make_possible_edge_list(parents, children, self_edges=True):
-    """
-    Create a list of all the possible edges between parents and children
-
-    :param parents: array
-        labels for parents
-    :param children: array
-        labels for children
-    :param self_edges:
-    :return: array, length = parents * children
-        array of parent, child combinations for all possible edges
-    """
-    parent_index = range(len(parents))
-    child_index = range(len(children))
-    a, b = np.meshgrid(parent_index, child_index)
-    parent_list = parents[a.flatten()]
-    child_list = children[b.flatten()]
-    possible_edge_list = None
-    if self_edges:
-        possible_edge_list = zip(parent_list, child_list)
-
-    elif not self_edges:
-        possible_edge_list = zip(parent_list[parent_list != child_list], child_list[parent_list != child_list])
-
-    return possible_edge_list
 
 
 def get_explanatory_indices(index, min_lag, max_lag):
@@ -592,9 +564,6 @@ class Swing(object):
             # Get the edges and associated values in table form
             current_df = window.make_edge_table(calc_mse=calc_mse)
 
-            # Only retain edges if the p_value is below the threshold
-            #current_df = current_df[current_df['p_value'] <= 0.05]
-
             # Only retain edges if the MSE_diff is negative
             if calc_mse:
                 current_df = current_df[current_df['MSE_diff'] < 0]
@@ -608,8 +577,10 @@ class Swing(object):
                 df = current_df.copy()
             else:
                 df = df.append(current_df.copy(), ignore_index=True)
+
         if not self_edges:
             df = df[df.Parent != df.Child]
+
         df['Edge'] = zip(df.Parent, df.Child)
         df['Lag'] = df.C_window - df.P_window
         self.full_edge_list = df.copy()
@@ -634,7 +605,7 @@ class Swing(object):
         edge_set = list(set(df.Edge))
 
         # Calculate the full set of potential edges
-        full_edge_set = set(make_possible_edge_list(self.gene_list, self.gene_list, self_edges=self_edges))
+        full_edge_set = set(utility.make_possible_edge_list(self.gene_list, self.gene_list, self_edges=self_edges))
 
         # Identify edges that could exist, but do not appear in the inferred list
         edge_diff = full_edge_set.difference(edge_set)
@@ -647,7 +618,8 @@ class Swing(object):
             if edge in edge_diff:
                 self.edge_dict[edge] = {"dataframe": None, "mean_importance": 0, 'real_edge': (edge in true_edges),
                                         "max_importance": 0, 'max_edge': None, 'lag_importance': 0,
-                                        'lag_method': lag_method, 'rank_importance':np.nan, 'adj_importance':0}
+                                        'lag_method': lag_method, 'rank_importance': np.nan, 'adj_importance': 0}
+                print self.edge_dict[edge]['adj_importance']
                 continue
             current_df = df[df.Edge == edge]
             max_idx = current_df['Importance'].idxmax()
