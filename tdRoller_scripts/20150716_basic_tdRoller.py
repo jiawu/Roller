@@ -8,10 +8,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import sys
 
-insilico_n = 5
-window_width = 21
+insilico_n = 3
+window_width = 20
 min_lag = 0
-max_lag = 0
+max_lag = 1
 n_trees = 10
 n_permutes = 10
 mse_adjust = False
@@ -51,10 +51,6 @@ print zip(true_edges, gs_ranks)
 # box_data = [tdr.edge_dict[(edge)]['dataframe']['adj_imp'].values for edge in df2['regulator-target'].values]
 print tdr.edge_dict[('G10', 'G7')]['dataframe']
 
-print 'AUROC: ', roc_dict['auroc'][-1]
-print 'AUPR: ', pr_dict['aupr'][-1]#+(1-pr_dict['recall'][-1])
-print 'F1: ', (2*roc_dict['auroc'][-1]*pr_dict['aupr'][-1]/(roc_dict['auroc'][-1]+pr_dict['aupr'][-1]))
-
 print "Network: ", insilico_n
 print 'Window width: ', window_width
 print 'Min lag: ', min_lag
@@ -64,6 +60,10 @@ print 'perms: ', n_permutes
 print 'mse adjusted: ', mse_adjust
 print 'lumping: ', combine_method
 print 'sorting by: ', sort_by
+
+print 'AUROC: ', roc_dict['auroc'][-1]
+print 'AUPR: ', pr_dict['aupr'][-1]#+(1-pr_dict['recall'][-1])
+print 'F1: ', (2*roc_dict['auroc'][-1]*pr_dict['aupr'][-1]/(roc_dict['auroc'][-1]+pr_dict['aupr'][-1]))
 
 # plt.boxplot(box_data)
 # plt.show()

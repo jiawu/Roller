@@ -20,13 +20,6 @@ class RandomForestRegressionWindow(Window):
         self.edge_importance = None
         self.n_trees = None
         self.n_jobs = None
-        self.bootstrap_matrix = None
-        self.freq_matrix = None
-        self.permutation_means = None
-        self.permutation_sd = None
-        self.permutation_p_values = None
-        self.permutation_pvalues = None
-        self.edge_mse_diff = None
 
     def make_edge_table(self, calc_mse=False):
         """
@@ -60,23 +53,14 @@ class RandomForestRegressionWindow(Window):
 
         return df
 
-    def sort_edges(self, rank_by):
-        rank_column_name = rank_by + "-rank"
-        if self.results_table is None:
-            raise ValueError("The edge table must be created before getting edges")
-        if rank_by == "p_value":
-            self.results_table.sort(columns=['p_value', 'importance'], ascending=[True, False], inplace=True)
-        elif rank_by == "importance":
-            self.results_table.sort(columns=['importance', 'p_value'], ascending=[False, True], inplace=True)
-        valid_window = self.results_table
-        valid_window[rank_column_name] = valid_window[rank_by].rank(method="dense", ascending=False)
-        self.results_table = self.results_table.sort(columns=rank_column_name, axis=0)
-        return self.results_table
-
-    def _permute_coeffs(self, zeros, crag, n_permutations, n_jobs, td=False):
+    def _permute_coeffs(self, zeros, crag, n_permutations, n_jobs):
         """
-        Internal method that is shared between window and tdWindow
 
+        :param zeros:
+        :param crag:
+        :param n_permutations:
+        :param n_jobs:
+        :return:
         """
         # initialize running calculation
         result = {'n': zeros.copy(), 'mean': zeros.copy(), 'ss': zeros.copy()}
@@ -98,6 +82,13 @@ class RandomForestRegressionWindow(Window):
         self.permutation_p_values = self.calc_p_value()
 
     def run_permutation_test(self, crag=False, n_permutations=1000, n_jobs=1):
+        """
+
+        :param crag:
+        :param n_permutations:
+        :param n_jobs:
+        :return:
+        """
         # initialize permutation results array
         self.permutation_means = np.empty(self.edge_importance.shape)
         self.permutation_sd = np.empty(self.edge_importance.shape)
@@ -106,6 +97,13 @@ class RandomForestRegressionWindow(Window):
         self._permute_coeffs(zeros, crag=crag, n_permutations=n_permutations, n_jobs=n_jobs)
 
     def calc_p_value(self, value=None, mean=None, sd=None):
+        """
+
+        :param value:
+        :param mean:
+        :param sd:
+        :return:
+        """
         if value is None:
             value = self.edge_importance.copy()
         if mean is None:
@@ -117,10 +115,6 @@ class RandomForestRegressionWindow(Window):
         cdf = stats.norm.cdf((-1 * abs(z_scores)))
         p_values = 2 * cdf
         return p_values
-
-    def get_nth_window_auc(self, nth):
-        auc = self.edge_importance[:, :, nth]
-        return auc
 
     def initialize_params(self, n_trees=None):
         """
@@ -146,6 +140,8 @@ class RandomForestRegressionWindow(Window):
         if self.td_window:
             print "Regressing window index %i against the following window indices: " % self.nth_window,\
                 self.earlier_windows
+        else:
+            print "Regression window index %i" % self.nth_window
 
         self.edge_importance, self.edge_mse_diff = self.get_coeffs(self.n_trees, crag=crag, n_jobs=self.n_jobs,
                                                                    calc_mse=calc_mse)
@@ -224,7 +220,7 @@ class RandomForestRegressionWindow(Window):
             base_mse = mean_squared_error(model_list[col_index]['model'].predict(x_matrix), target_y)
 
             if calc_mse:
-                _, f_coeff_matrix, f_model_list, _ = self._initialize_coeffs(data=x_matrix)
+                f_coeff_matrix, f_model_list = self._initialize_coeffs(data=x_matrix)
                 mse_list = []
                 for idx in range(x_matrix.shape[1]):
                     adj_x_matrix = np.delete(x_matrix, idx, axis=1)
