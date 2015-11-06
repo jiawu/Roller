@@ -44,6 +44,23 @@ def make_possible_edge_list(parents, children, self_edges=True):
     return possible_edge_list
 
 
+def get_explanatory_indices(index, min_lag, max_lag):
+        # In append mode, the start index can always be 0
+        if max_lag is None:
+            start_idx = 0
+        else:
+            start_idx = max(index-max_lag, 0)
+        end_index = max(index-min_lag+1, 0)
+
+        explanatory_indices = range(start_idx, end_index)
+
+        # If the maximum lag required is greater than the index, this window must be left censored
+        if len(explanatory_indices) == 0 or max_lag > index:
+            explanatory_indices = None
+
+        return explanatory_indices
+
+
 class Swing(object):
     """
     A thing that grabs different timepoints of data, can set window and step size.
@@ -233,22 +250,6 @@ class Swing(object):
         """
         self.max_lag = max_lag
 
-    def get_explanatory_indices(self, index, min_lag, max_lag):
-        # In append mode, the start index can always be 0
-        if max_lag is None:
-            start_idx = 0
-        else:
-            start_idx = max(index-max_lag, 0)
-        end_index = max(index-min_lag+1, 0)
-
-        explanatory_indices = range(start_idx, end_index)
-
-        # If the maximum lag required is greater than the index, this window must be left censored
-        if len(explanatory_indices) == 0 or max_lag > index:
-            explanatory_indices = None
-
-        return explanatory_indices
-
     def create_windows(self, random_time=False):
         """
         Create window objects for the roller to use
@@ -277,7 +278,7 @@ class Swing(object):
             if (index + self.window_width) > self.overall_width:
                 raise Exception('Window created that is out of bounds based on parameters')
 
-            explanatory_indices = self.get_explanatory_indices(index, min_lag=self.min_lag, max_lag=self.max_lag)
+            explanatory_indices = get_explanatory_indices(index, min_lag=self.min_lag, max_lag=self.max_lag)
             raw_window = self.get_window_raw(index, random_time)
             if explanatory_indices is not None:
                 explanatory_dict, response_dict = self.get_window_data(index, explanatory_indices)
@@ -450,10 +451,10 @@ class Swing(object):
 
         for window in self.window_list:
             if self.window_type == "Lasso":
-                if alpha != None:
+                if alpha is not None:
                     window.alpha = alpha
             if self.window_type == "RandomForest":
-                if n_trees != None:
+                if n_trees is not None:
                     window.n_trees = n_trees
             if show_progress:
                 print "Fitting window %i of %i" %((window.nth_window+1), len(self.window_list))
@@ -638,52 +639,6 @@ class Swing(object):
         df['Lag'] = df.C_window - df.P_window
         self.full_edge_list = df.copy()
         print "[DONE]"
-        return
-
-    def augment_windows(self, min_lag=0, max_lag=None):
-        """
-        Window data is augmented to include data from previous time points and labeled accordingly
-        :param min_lag: int
-        :param max_lag: int or None
-            if None, all earlier windows will included
-        :return:
-        """
-        new_window_list = []
-
-        if min_lag>max_lag and max_lag is not None:
-            raise Exception('The minimum lag cannot be greater than the maximum lag')
-        # Enumerate all of the windows except the first
-        for window in self.window_list:
-            window_idx = window.nth_window
-            if max_lag is None:
-                start_idx = 0
-            else:
-                start_idx = max(window_idx-max_lag,0)
-            end_index = max(window_idx-min_lag+1, 0)
-            if max_lag is not None and (end_index-start_idx)<(max_lag-min_lag+1):
-                window.include_window = False
-                continue
-
-            earlier_windows = self.window_list[start_idx:end_index]
-            window.earlier_window_idx = [w.nth_window for w in earlier_windows]
-            # Add necessary data from earlier windows
-            for ww, win in enumerate(earlier_windows[::-1]): #Go through the list in reverse because of how the window expects data
-                if ww == 0:
-                    #Initialize values
-                    window.x_data = win.window_values.copy()
-                    #try not to assign these outside the classfile. I could not figure out where these were assigned (they weren't in the file)
-                    window.x_labels = win.data.columns[1:]
-                    window.x_times = np.array([win.nth_window]*len(win.genes))
-
-                else:
-                    window.x_data = np.hstack((window.x_data, win.window_values))
-                    window.x_labels = np.append(window.x_labels, win.data.columns[1:])
-                    window.x_times = np.append(window.x_times, np.array([win.nth_window]*len(win.genes)))
-            if window.x_data is not None:
-                new_window_list.append(window)
-            else:
-                window.include_window = False
-        self.window_list = new_window_list
         return
 
     def make_static_edge_dict(self, true_edges, self_edges=False, lag_method='max_median'):
