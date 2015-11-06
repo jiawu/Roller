@@ -277,16 +277,14 @@ class Swing(object):
             if (index + self.window_width) > self.overall_width:
                 raise Exception('Window created that is out of bounds based on parameters')
 
-            explanatory_windows = self.get_explanatory_indices(index, min_lag=self.min_lag, max_lag=self.max_lag)
-            print explanatory_windows
-
-            continue
+            explanatory_indices = self.get_explanatory_indices(index, min_lag=self.min_lag, max_lag=self.max_lag)
             raw_window = self.get_window_raw(index, random_time)
-            x_data, y_data = self.get_window_data(index, self.min_lag, self.max_lag)
-            window_info = {"time_label": self.time_label, "gene_start": self.gene_start, "gene_end": self.gene_end,
-                           "nth_window": index}
-            window_object = self.get_window_object(raw_window, window_info)
-            window_list.append(window_object)
+            if explanatory_indices is not None:
+                explanatory_dict, response_dict = self.get_window_data(index, explanatory_indices)
+                window_info = {"time_label": self.time_label, "gene_start": self.gene_start, "gene_end": self.gene_end,
+                               "nth_window": index}
+                window_object = self.get_window_object(raw_window, window_info)
+                window_list.append(window_object)
 
         sys.exit()
         self.window_list = window_list
@@ -308,41 +306,56 @@ class Swing(object):
         if self.max_lag >= self.get_n_windows():
             raise Exception('The maximum lag cannot be greater than or equal to the number of windows')
 
-    def get_window_data(self, index, min_lag, max_lag):
+    def strip_dataframe(self, dataframe):
         """
-        Window data is augmented to include data from previous time points and labeled accordingly
-        :param min_lag: int
-        :param max_lag: int or None
-            if None, all earlier windows will included
+        Split dataframe object components into relevant numpy arrays
+        :param dataframe:
         :return:
         """
-        new_window_list = []
+        df = dataframe.copy()
+        df_times = df[self.time_label].values
+        df.drop(self.time_label, axis=1, inplace=True)
+        data = df.values
+        labels = df.columns.values
+        return df_times, data, labels
 
-        # Enumerate all of the windows except the first
-
+    def get_window_data(self, index, explanatory_indices):
         """
-            earlier_windows = self.window_list[start_idx:end_index]
-            window.earlier_window_idx = [w.nth_window for w in earlier_windows]
-            # Add necessary data from earlier windows
-            for ww, win in enumerate(earlier_windows[::-1]): #Go through the list in reverse because of how the window expects data
-                if ww == 0:
-                    #Initialize values
-                    window.x_data = win.window_values.copy()
-                    #try not to assign these outside the classfile. I could not figure out where these were assigned (they weren't in the file)
-                    window.x_labels = win.data.columns[1:]
-                    window.x_times = np.array([win.nth_window]*len(win.genes))
+        Get the appropriate data for the window
+        :param index:
+        :param explanatory_indices:
+        :return:
+        """
+        # Get the data for the current window
+        response_df = self.get_window_raw(index)
+        response_times, response_data, response_labels = self.strip_dataframe(response_df)
+        response_window = np.array([index]*len(response_labels))
+        response_dict = {'response_times': response_times, 'response_data': response_data, 
+                         'response_labels': response_labels, 'response_window': response_window}
 
-                else:
-                    window.x_data = np.hstack((window.x_data, win.window_values))
-                    window.x_labels = np.append(window.x_labels, win.data.columns[1:])
-                    window.x_times = np.append(window.x_times, np.array([win.nth_window]*len(win.genes)))
-            if window.x_data is not None:
-                new_window_list.append(window)
+        explanatory_times, explanatory_data, explanatory_labels, explanatory_window = None, None, None, None
+
+        # Get the data for each lagged window
+        for ii, idx in enumerate(explanatory_indices):
+            current_df = self.get_window_raw(idx)
+            current_times, current_data, current_labels = self.strip_dataframe(current_df)
+            current_window = np.array([idx]*len(current_labels))
+            if ii == 0:
+                # Initialize values
+                explanatory_times = current_times.copy()
+                explanatory_data = current_data.copy()
+                explanatory_labels = current_labels.copy()
+                explanatory_window = current_window.copy()
             else:
-                window.include_window = False
-        self.window_list = new_window_list
-        """
-        return x_data, y_data
+                explanatory_data = np.hstack((explanatory_data, current_data))
+                explanatory_times = np.append(explanatory_times, current_times)
+                explanatory_labels = np.append(explanatory_labels, current_labels)
+                explanatory_window = np.append(explanatory_window, current_window)
+        
+        explanatory_dict = {'explanatory_times': explanatory_times, 'explanatory_data': explanatory_data,
+                            'explanatory_labels': explanatory_labels, 'explanatory_window': explanatory_window}
+        
+        return explanatory_dict, response_dict
 
     def get_window_object(self, dataframe, window_info_dict):
         """

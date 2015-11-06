@@ -29,7 +29,7 @@
         <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="13" column="11" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="11" />
+              <caret line="11" column="17" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="17" />
               <folding>
                 <element signature="e#70#80#0" expanded="true" />
               </folding>
@@ -50,8 +50,8 @@
       <file leaf-file-name="Swing.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Swing/Swing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.17734724">
-              <caret line="227" column="0" selection-start-line="227" selection-start-column="0" selection-end-line="227" selection-end-column="0" />
+            <state vertical-scroll-proportion="1.0685544">
+              <caret line="347" column="58" selection-start-line="347" selection-start-column="58" selection-end-line="347" selection-end-column="58" />
               <folding>
                 <element signature="e#616#1429#0" expanded="false" />
                 <element signature="e#3612#3880#0" expanded="false" />
@@ -63,6 +63,7 @@
                 <element signature="e#6131#6286#0" expanded="false" />
                 <element signature="e#6332#6462#0" expanded="false" />
                 <element signature="e#6508#6638#0" expanded="false" />
+                <element signature="e#8826#9470#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -142,8 +143,8 @@
         <option value="$PROJECT_DIR$/Swing/unittests/test_RF_pipeline.py" />
         <option value="$PROJECT_DIR$/pipelines/Pipelines.py" />
         <option value="$PROJECT_DIR$/Swing/Window.py" />
-        <option value="$PROJECT_DIR$/Swing/Swing.py" />
         <option value="$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py" />
+        <option value="$PROJECT_DIR$/Swing/Swing.py" />
       </list>
     </option>
   </component>
@@ -488,18 +489,6 @@
       <option name="number" value="Default" />
       <updated>1413916753036</updated>
     </task>
-    <task id="LOCAL-00100" summary="Started tdRoller class for granger causality">
-      <created>1436288347523</created>
-      <option name="number" value="00100" />
-      <option name="project" value="LOCAL" />
-      <updated>1436288347523</updated>
-    </task>
-    <task id="LOCAL-00101" summary="Added todo list to Roller.">
-      <created>1436289000081</created>
-      <option name="number" value="00101" />
-      <option name="project" value="LOCAL" />
-      <updated>1436289000081</updated>
-    </task>
     <task id="LOCAL-00102" summary="changed tdRoller zscore_all_data() and added bin_data">
       <created>1436298094888</created>
       <option name="number" value="00102" />
@@ -782,7 +771,19 @@
       <option name="project" value="LOCAL" />
       <updated>1446739041561</updated>
     </task>
-    <option name="localTasksCounter" value="149" />
+    <task id="LOCAL-00149" summary="Add additional criteria for lags to meet. Add methods to set min and max lag">
+      <created>1446762235967</created>
+      <option name="number" value="00149" />
+      <option name="project" value="LOCAL" />
+      <updated>1446762235967</updated>
+    </task>
+    <task id="LOCAL-00150" summary="Calculate the explanatory indices of time delayed windows before creating each window">
+      <created>1446764677935</created>
+      <option name="number" value="00150" />
+      <option name="project" value="LOCAL" />
+      <updated>1446764677935</updated>
+    </task>
+    <option name="localTasksCounter" value="151" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -865,8 +866,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Updated tdRFR method run_permutation()" />
-    <MESSAGE value="Updated tdRFR to run permutation test properly" />
     <MESSAGE value="Minor adjustments to tdRFR window behavior" />
     <MESSAGE value="Modified tdRoller.augment_windows() so that lag length can be set" />
     <MESSAGE value="Minor adjustments and testing" />
@@ -890,7 +889,9 @@
     <MESSAGE value="Modify create_windows method explicit FOR loop and delete get_window method&#10;&#10;The number of windows generated will likely be small and the list comprehension will not affect the speed a lot. The explicit FOR will make for easier changes in the future if different data needs to be passed for time delays" />
     <MESSAGE value="Remove redundant get_window_object methods" />
     <MESSAGE value="Add method to check if lags meet criteria" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add method to check if lags meet criteria" />
+    <MESSAGE value="Add additional criteria for lags to meet. Add methods to set min and max lag" />
+    <MESSAGE value="Calculate the explanatory indices of time delayed windows before creating each window" />
+    <option name="LAST_COMMIT_MESSAGE" value="Calculate the explanatory indices of time delayed windows before creating each window" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.9237668" />
   </component>
   <component name="XDebuggerManager">
@@ -950,6 +951,7 @@
             <element signature="e#6131#6286#0" expanded="false" />
             <element signature="e#6332#6462#0" expanded="false" />
             <element signature="e#6508#6638#0" expanded="false" />
+            <element signature="e#8826#9470#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -997,6 +999,7 @@
             <element signature="e#6131#6286#0" expanded="false" />
             <element signature="e#6332#6462#0" expanded="false" />
             <element signature="e#6508#6638#0" expanded="false" />
+            <element signature="e#8826#9470#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1044,6 +1047,7 @@
             <element signature="e#6131#6286#0" expanded="false" />
             <element signature="e#6332#6462#0" expanded="false" />
             <element signature="e#6508#6638#0" expanded="false" />
+            <element signature="e#8826#9470#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1091,6 +1095,7 @@
             <element signature="e#6131#6286#0" expanded="false" />
             <element signature="e#6332#6462#0" expanded="false" />
             <element signature="e#6508#6638#0" expanded="false" />
+            <element signature="e#8826#9470#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1320,6 +1325,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="11" column="17" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="17" />
+          <folding>
+            <element signature="e#70#80#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Swing/Window.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1328,20 +1343,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="13" column="11" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="11" />
-          <folding>
-            <element signature="e#70#80#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Swing/Swing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.17734724">
-          <caret line="227" column="0" selection-start-line="227" selection-start-column="0" selection-end-line="227" selection-end-column="0" />
+        <state vertical-scroll-proportion="1.0685544">
+          <caret line="347" column="58" selection-start-line="347" selection-start-column="58" selection-end-line="347" selection-end-column="58" />
           <folding>
             <element signature="e#616#1429#0" expanded="false" />
             <element signature="e#3612#3880#0" expanded="false" />
@@ -1353,6 +1358,7 @@
             <element signature="e#6131#6286#0" expanded="false" />
             <element signature="e#6332#6462#0" expanded="false" />
             <element signature="e#6508#6638#0" expanded="false" />
+            <element signature="e#8826#9470#0" expanded="false" />
           </folding>
         </state>
       </provider>

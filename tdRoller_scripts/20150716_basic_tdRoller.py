@@ -9,9 +9,9 @@ import pandas as pd
 import sys
 
 insilico_n = 4
-window_width = 18
+window_width = 10
 min_lag = 0
-max_lag = 1
+max_lag = 3
 n_trees = 10
 n_permutes = 10
 mse_adjust = False
