@@ -40,9 +40,7 @@ tdr.make_static_edge_dict(true_edges, lag_method=combine_method)
 df2 = tdr.make_sort_df(tdr.edge_dict, sort_by)
 df2['Rank'] = np.arange(len(df2))
 
-#print(df2)
 roc_dict, pr_dict = tdr.score(df2)
-#tdr.plot_scoring(roc_dict, pr_dict)
 
 print df2
 
