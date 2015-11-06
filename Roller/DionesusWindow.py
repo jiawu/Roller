@@ -34,7 +34,7 @@ class DionesusWindow(Window):
         self.permutation_p_values = None
         self.permutation_pvalues = None
 
-    def make_edge_table(self):
+    def make_edge_table(self, calc_mse = False):
         """
         if self.permutation_p_values is None:
             raise ValueError("p values must be set before making the edge table. Use method run_permutation test")
@@ -181,7 +181,7 @@ class DionesusWindow(Window):
         """
         pass
 
-    def fit_window(self, pcs=3, crag=False):
+    def fit_window(self, pcs=3, crag=False, calc_mse=False):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
 
@@ -318,7 +318,7 @@ class tdDionesusWindow(DionesusWindow):
         #                               index=self.df.index.values.copy())
         return resample_values 
 
-    def fit_window(self, pcs=3, crag=False):
+    def fit_window(self, pcs=3, crag=False, calc_mse=False):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
@@ -357,7 +357,7 @@ class tdDionesusWindow(DionesusWindow):
         importance_dataframe.columns.name = 'Parent'
         return(importance_dataframe,coeff_matrix)
 
-    def make_edge_table(self):
+    def make_edge_table(self, calc_mse = False):
         """
         Make the edge table
         :return:
