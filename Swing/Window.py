@@ -283,7 +283,6 @@ class Window(object):
 
         return rates_list
 
-
     def get_rate_analysis(self, n=1):
         # get max rates
         rates = self.get_rates(n)

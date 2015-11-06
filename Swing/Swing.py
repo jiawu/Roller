@@ -732,23 +732,3 @@ class Swing(object):
         print "[DONE]"
         return auroc_dict, aupr_dict
 
-    def plot_scoring(self, roc_dict, pr_dict):
-        f, axarr = plt.subplots(2, figsize=(7,10))
-        axarr[0].plot(roc_dict['fpr'], roc_dict['tpr'])
-        axarr[0].plot(roc_dict['fpr'], roc_dict['fpr'])
-        axarr[0].legend(['tdRoller', 'Random'], loc='best')
-        axarr[0].set_xlabel('False Positive Rate')
-        axarr[0].set_ylabel('True Positive Rate')
-        title = 'ROC Curve (AUROC = %0.3f)' %roc_dict['auroc'][-1]
-        axarr[0].set_title(title)
-        axarr[1].plot(pr_dict['recall'], pr_dict['precision'])
-        axarr[1].plot(pr_dict['recall'], pr_dict['aupr_random'])
-        axarr[1].legend(['tdRoller', 'Random'], loc='best')
-        axarr[1].set_xlabel('Recall')
-        axarr[1].set_ylabel('Precision')
-        title = 'PR Curve (AUPR = %0.3f)' %pr_dict['aupr'][-1]
-        axarr[1].set_title(title)
-        plt.tight_layout()
-        plt.show()
-        return
-
