@@ -83,6 +83,12 @@ class Window(object):
         self.results_table['regulator-target'] = self.edge_list
         self.roller_data = roller_data
 
+        # Initialize attributes used for ranking edges
+        self.permutation_means = None
+        self.permutation_sd = None
+        self.permutation_p_values = None
+        self.edge_mse_diff = None
+
         """
         The training score is a list of descriptors for how well the model fit the training data for each response
         variable for the current window the test score is a list of descriptors for how well the model fit the test data

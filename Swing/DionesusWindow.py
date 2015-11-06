@@ -104,7 +104,7 @@ class DionesusWindow(Window):
 
         return (self.results_table)
 
-    def run_permutation_test(self, n_permutations=1000, crag = False):
+    def run_permutation_test(self, n_permutations=1000, crag=False):
 
         # initialize permutation results array
         self.permutation_means = np.empty((self.n_genes, self.n_genes))
@@ -148,7 +148,14 @@ class DionesusWindow(Window):
         return p_values
 
     def update_variance_2D(self, prev_result, new_samples):
-        """incremental calculation of means: accepts new_samples, which is a list of samples. then calculates a new mean. this is a useful function for calculating the means of large arrays"""
+        """
+        incremental calculation of means: accepts new_samples, which is a list of samples.
+        then calculates a new mean. this is a useful function for calculating the means of large arrays
+        :param prev_result:
+        :param new_samples:
+        :return:
+        """
+
         n = prev_result["n"]  # 2D numpy array with all zeros or watev
         mean = prev_result["mean"]  # 2D numpy array
         sum_squares = prev_result["ss"]  # 2D numpy array
