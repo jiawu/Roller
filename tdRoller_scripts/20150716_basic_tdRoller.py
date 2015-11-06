@@ -8,10 +8,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import sys
 
+pd.set_option('display.width', 1000)
 insilico_n = 3
-window_width = 20
+window_width = 21
 min_lag = 0
-max_lag = 1
+max_lag = 0
 n_trees = 10
 n_permutes = 10
 mse_adjust = False
@@ -36,7 +37,7 @@ tdr.create_windows()
 tdr.fit_windows(n_trees=n_trees, show_progress=False, calc_mse=mse_adjust, n_jobs=1)
 tdr.rank_edges(permutation_n=n_permutes, calc_mse=mse_adjust)
 tdr.compile_roller_edges(self_edges=True, calc_mse=mse_adjust)
-tdr.make_static_edge_dict(true_edges, lag_method=combine_method)
+tdr.make_static_edge_dict(true_edges, self_edges=True, lag_method=combine_method)
 df2 = tdr.make_sort_df(tdr.edge_dict, sort_by)
 df2['Rank'] = np.arange(len(df2))
 

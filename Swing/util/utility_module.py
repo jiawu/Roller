@@ -3,6 +3,7 @@ import scipy.stats as ss
 import sklearn.metrics as skmet
 import numpy as np
 
+
 def get_test_set(window_raw_data, roller_raw_data):
     roller_vec = roller_raw_data['Time'].unique()
     window_vec = window_raw_data['Time'].unique()
@@ -21,6 +22,7 @@ def get_cragging_scores(model, predictor, response_true):
     scores['r2'] = skmet.r2_score(response_true, response_pred)
     return(scores)
 
+
 def create_3D_linked_list(labels, numpy_array_3D, value_label):
     """returns a panel with interaction (x-axis) - value (y axis) - time (Z axis)"""
     windows_n = numpy_array_3D.shape[2]
@@ -32,10 +34,12 @@ def create_3D_linked_list(labels, numpy_array_3D, value_label):
         linked_list_3D[i] = linked_list
     return pd.Panel(linked_list_3D)
 
+
 def create_linked_list(labels, numpy_array_2D, value_label):
     """labels and array should be in row-major order"""
     linked_list = pd.DataFrame({'regulator-target':labels, value_label:numpy_array_2D.flatten()})
     return linked_list
+
 
 def average_rank(ranked_result_list, col_string):
     """finds the average rank and standard deviation throughout time"""
@@ -64,19 +68,23 @@ def average_rank(ranked_result_list, col_string):
     aggr_ranks['regulator-target'] = left_df['regulator-target']
     return(aggr_ranks)
 
-def rank_results_3D(result_list, col_string, ascending = True):
+
+def rank_results_3D(result_list, col_string, ascending=True):
     """input: list of result pandas dfs, column name. output: each time window is sorted by column name, most significant to least"""
     rank_column_name = col_string + "-rank"
     for nth_window in result_list:
         nth_window[rank_column_name] = nth_window[col_string].rank(method="dense", ascending = ascending)
     return result_list
 
+
 def rank_index(vector):
         return [vector.index(x) for x in sorted(range(vector), key=vector.__getitem__)]
+
 
 def point_slope(x1,y1, x2,y2):
     slope = (y2-y1)/float(x2-x1)
     return slope
+
 
 def elbow_criteria(x,y):
     x = np.array(x)
@@ -100,5 +108,32 @@ def elbow_criteria(x,y):
     elbow_x = x[index_max]
     elbow_y = y[index_max]
     return elbow_x, elbow_y
+
+
+def make_possible_edge_list(parents, children, self_edges=True):
+    """
+    Create a list of all the possible edges between parents and children
+
+    :param parents: array
+        labels for parents
+    :param children: array
+        labels for children
+    :param self_edges:
+    :return: array, length = parents * children
+        array of parent, child combinations for all possible edges
+    """
+    parent_index = range(len(parents))
+    child_index = range(len(children))
+    a, b = np.meshgrid(parent_index, child_index)
+    parent_list = parents[a.flatten()]
+    child_list = children[b.flatten()]
+    possible_edge_list = None
+    if self_edges:
+        possible_edge_list = zip(parent_list, child_list)
+
+    elif not self_edges:
+        possible_edge_list = zip(parent_list[parent_list != child_list], child_list[parent_list != child_list])
+
+    return possible_edge_list
 
 

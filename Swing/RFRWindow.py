@@ -42,6 +42,7 @@ class RandomForestRegressionWindow(Window):
         # Calculate the window of the child node, which is equivalent to the current window index
         child_values = np.array([self.nth_window] * self.edge_importance.shape[0])
         df['C_window'] = child_values[b.flatten()]
+
         if self.permutation_p_values is not None:
             df["p_value"] = self.permutation_p_values.flatten()
 
@@ -50,7 +51,6 @@ class RandomForestRegressionWindow(Window):
 
         if calc_mse:
             df['MSE_diff'] = self.edge_mse_diff.flatten()
-
         return df
 
     def _permute_coeffs(self, zeros, crag, n_permutations, n_jobs):
@@ -214,9 +214,11 @@ class RandomForestRegressionWindow(Window):
             # If the current window values are in the x_data, remove them
             if self.nth_window in x_windows:
                 keep_columns = ~((x_windows == self.nth_window) & (x_labels == y_labels[col_index]))
+                insert_index = list(keep_columns).index(False)
                 x_matrix = x_matrix[:, keep_columns].copy()
-            coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, x_matrix, target_y, col_index,
+            coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, x_matrix, target_y, insert_index,
                                                              n_trees, n_jobs, crag)
+
             base_mse = mean_squared_error(model_list[col_index]['model'].predict(x_matrix), target_y)
 
             if calc_mse:
