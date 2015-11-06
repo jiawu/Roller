@@ -33,7 +33,6 @@ tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_l
 #tdr.zscore_all_data()
 tdr.set_window(window_width)
 tdr.create_windows()
-tdr.augment_windows(min_lag=min_lag, max_lag=max_lag)
 tdr.fit_windows(n_trees=n_trees, show_progress=False, calc_mse=mse_adjust)
 tdr.rank_edges(permutation_n=n_permutes, calc_mse=mse_adjust)
 tdr.compile_roller_edges(self_edges=True, calc_mse=mse_adjust)
