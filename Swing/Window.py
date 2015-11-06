@@ -1,12 +1,39 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
+import util.utility_module as Rutil
+import sys
 import numpy as np
 import pandas as pd
-import itertools
-import pdb
 from scipy import stats
-import util.utility_module as Rutil
+
+
+def get_possible_edge_list(parents, children, self_edges=True):
+    """
+    Create a list of all the possible edges between parents and children
+
+    :param parents: array
+        labels for parents
+    :param children: array
+        labels for children
+    :param self_edges:
+    :return: array, length = parents * children
+        array of parent, child combinations for all possible edges
+    """
+    parent_index = range(len(parents))
+    child_index = range(len(children))
+    a, b = np.meshgrid(parent_index, child_index)
+    parent_list = parents[a.flatten()]
+    child_list = children[b.flatten()]
+    possible_edge_list = None
+    if self_edges:
+        possible_edge_list = zip(parent_list, child_list)
+
+    elif not self_edges:
+        possible_edge_list = zip(parent_list[parent_list != child_list], child_list[parent_list != child_list])
+
+    return possible_edge_list
+
 
 class Window(object):
     """
@@ -24,32 +51,37 @@ class Window(object):
             Dictionary that provides data that can be used to uniquely identify a window
         :return:
         """
-        self.include_window = True
         self.td_window = td_window
-        self.explanatory_dict = explanatory_dict
-        self.response_dict = response_dict
-        self.model = []
+
+        # Unpack data dictionaries
+        self.explanatory_data = explanatory_dict['explanatory_data']
+        self.explanatory_window = explanatory_dict['explanatory_window']
+        self.explanatory_times = explanatory_dict['explanatory_times']
+        self.explanatory_labels = explanatory_dict['explanatory_labels']
+        self.response_data = response_dict['response_data']
+        self.response_window = response_dict['response_window']
+        self.response_times = response_dict['response_times']
+        self.response_labels = response_dict['response_labels']
+
+        # Unpack window information
         self.time_label = window_info['time_label']
         self.gene_start = window_info['gene_start']
         self.gene_end = window_info['gene_end']
         self.nth_window = window_info['nth_window']
+
+        # Calculate additional attributes for the window
         self.data = raw_dataframe
-        dataframe = raw_dataframe.iloc[:, self.gene_start:self.gene_end]
-        self.df = dataframe
-        self.window_values = dataframe.values
-        self.samples = dataframe.index.values
-        self.n_samples = len(self.samples)
-        self.genes = dataframe.columns.values
+        self.df = raw_dataframe.iloc[:, self.gene_start:self.gene_end].copy()
+        self.n_samples = len(self.response_data)
+        self.genes = self.df.columns.values
         self.n_genes = len(self.genes)
         self.results_table = pd.DataFrame()
-        self.edge_labels = [x for x in itertools.product(self.genes, repeat=2)]
+        self.edge_list = get_possible_edge_list(self.genes, self.genes)
+        self.earlier_windows = list(set(self.explanatory_window))
 
-        self.edge_list = self.possible_edge_list(self.genes, self.genes)
         # Add edge list to edge table
         self.results_table['regulator-target'] = self.edge_list
         self.roller_data = roller_data
-
-
 
         """
         The training score is a list of descriptors for how well the model fit the training data for each response
@@ -61,7 +93,7 @@ class Window(object):
 
     def create_linked_list(self, numpy_array_2D, value_label):
         """labels and array should be in row-major order"""
-        linked_list = pd.DataFrame({'regulator-target': self.edge_labels, value_label: numpy_array_2D.flatten()})
+        linked_list = pd.DataFrame({'regulator-target': self.edge_list, value_label: numpy_array_2D.flatten()})
         return linked_list
 
     def get_window_stats(self):
@@ -78,32 +110,6 @@ class Window(object):
                         'n_genes': self.n_genes}
         return window_stats
 
-    def possible_edge_list(self, parents, children, self_edges=True):
-        """
-        Create a list of all the possible edges between parents and children
-
-        :param parents: array
-            labels for parents
-        :param children: array
-            labels for children
-        :param self_edges:
-        :return: array, length = parents * children
-            array of parent, child combinations for all possible edges
-        """
-        parent_index = range(len(parents))
-        child_index = range(len(children))
-        a, b = np.meshgrid(parent_index, child_index)
-        parent_list = parents[a.flatten()]
-        child_list = children[b.flatten()]
-        possible_edge_list = None
-        if self_edges:
-            possible_edge_list = zip(parent_list, child_list)
-
-        elif not self_edges:
-            possible_edge_list = zip(parent_list[parent_list != child_list], child_list[parent_list != child_list])
-
-        return possible_edge_list
-
     def fit_window(self):
         """
         Fit the window with the specified window
@@ -118,10 +124,10 @@ class Window(object):
 
         :return: array
         """
-        n, p = self.window_values.shape
+        n, p = self.response_data.shape
 
         # For each column randomly choose samples
-        resample_values = np.array([np.random.choice(self.window_values[:, ii], size=n) for ii in range(p)]).T
+        resample_values = np.array([np.random.choice(self.response_data[:, ii], size=n) for ii in range(p)]).T
 
         # resample_window = pd.DataFrame(resample_values, columns=self.df.columns.values.copy(),
         #                               index=self.df.index.values.copy())
@@ -287,17 +293,17 @@ class Window(object):
         return rate_dict
 
     def get_linearity(self):
-        n_genes = self.window_values.shape[1]
+        n_genes = self.response_data.shape[1]
         linearity = []
         for gene_index in range(0,n_genes):
             xi = self.data[self.time_label].unique()
-            y = self.window_values[gene_index,:]
+            y = self.response_data[gene_index,:]
             slope, intercept, r_value, p_value, std_er = stats.linregress(xi, y)
         linearity.append(r_value)
         return linearity
 
     def get_average(self):
-        averages = self.window_values.mean(axis=0)
+        averages = self.response_data.mean(axis=0)
         return averages
 
     def crag_window(self, model_params):

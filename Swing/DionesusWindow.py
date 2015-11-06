@@ -121,7 +121,7 @@ class DionesusWindow(Window):
             # print 'Perm Run: ' +str(nth_perm)
 
             # permute data
-            permuted_data = self.permute_data(self.window_values)
+            permuted_data = self.permute_data(self.response_data)
 
             # fit the data and get coefficients
 
@@ -209,10 +209,10 @@ class DionesusWindow(Window):
         all_data, coeff_matrix, model_list, max_nodes =self._initialize_coeffs(data=data)
         """
         if data is None:
-            all_data = self.window_values.copy()
+            all_data = self.response_data.copy()
         else:
             all_data = data.copy()
-        max_nodes = self.window_values.shape[1]
+        max_nodes = self.response_data.shape[1]
 
         coeff_matrix = np.array([], dtype=np.float_).reshape(0, all_data.shape[1])
         model_list = []
@@ -285,7 +285,7 @@ class tdDionesusWindow(DionesusWindow):
         
     def create_linked_list(self, numpy_array_2D, value_label):
         """labels and array should be in row-major order"""
-        linked_list = pd.DataFrame({'regulator-target': self.edge_labels, value_label: numpy_array_2D.flatten()})
+        linked_list = pd.DataFrame({'regulator-target': self.edge_list, value_label: numpy_array_2D.flatten()})
         return linked_list
     
     def resample_window(self):

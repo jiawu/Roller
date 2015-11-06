@@ -107,7 +107,7 @@ class LassoWindow(Window):
             # print 'Perm Run: ' +str(nth_perm)
 
             # permute data
-            permuted_data = self.permute_data(self.window_values)
+            permuted_data = self.permute_data(self.response_data)
 
             # fit the data and get coefficients
 
@@ -182,7 +182,7 @@ class LassoWindow(Window):
         if self.x_data is not None:
             n_columns = self.x_data.shape[1]
         else:
-            n_columns = self.window_values.shape[1]
+            n_columns = self.response_data.shape[1]
         self.bootstrap_matrix = np.empty((self.n_genes, n_columns, n_bootstraps, n_alphas))
         for ii, alpha in enumerate(alpha_range):
             self.bootstrap_matrix[:, :, :, ii] = self.bootstrap_alpha(alpha, n_bootstraps, noise)
@@ -277,11 +277,11 @@ class LassoWindow(Window):
         warnings.simplefilter("ignore")
         # Get maximum edges, assuming all explanors are also response variables and no self edges
         if self.x_data is not None:
-            [samples, nodes]= self.window_values.shape
+            [samples, nodes]= self.response_data.shape
             [samples, td_nodes] = self.x_data.shape
             max_edges = td_nodes * nodes - nodes
         else:
-            [n, p] = self.window_values.shape
+            [n, p] = self.response_data.shape
             max_edges = p * (p - 1)
         # Raise exception if Lasso doesn't converge with alpha == 0
         if np.count_nonzero(self.get_coeffs(0)) != max_edges:
@@ -380,7 +380,7 @@ class LassoWindow(Window):
         if self.x_data is not None:
             data = self.x_data.copy()
         else:
-            data = self.window_values.copy()
+            data = self.response_data.copy()
         n_elements = len(data)
         kf = KFold(n_elements, n_folds)
 
@@ -390,7 +390,7 @@ class LassoWindow(Window):
         for train_index, test_index in kf:
             x_train = data[train_index]
             x_test = data[test_index]
-            y_test = self.window_values.copy()[test_index]
+            y_test = self.response_data.copy()[test_index]
             # Run Lasso
             current_coef = self.get_coeffs(alpha, data=x_train) 
             
@@ -434,10 +434,10 @@ class LassoWindow(Window):
         all_data, coeff_matrix, model_list, max_nodes = self._initialize_coeffs(data=data)
         """
         if data is None:
-            all_data = self.window_values.copy()
+            all_data = self.response_data.copy()
         else:
             all_data = data.copy()
-        max_nodes = self.window_values.shape[1]
+        max_nodes = self.response_data.shape[1]
 
         coeff_matrix = np.array([], dtype=np.float_).reshape(0, all_data.shape[1])
 
@@ -544,7 +544,7 @@ class tdLassoWindow(LassoWindow):
         
     def create_linked_list(self, numpy_array_2D, value_label):
         """labels and array should be in row-major order"""
-        linked_list = pd.DataFrame({'regulator-target': self.edge_labels, value_label: numpy_array_2D.flatten()})
+        linked_list = pd.DataFrame({'regulator-target': self.edge_list, value_label: numpy_array_2D.flatten()})
         return linked_list
     
     def resample_window(self):
