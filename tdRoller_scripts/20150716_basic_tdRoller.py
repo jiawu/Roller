@@ -8,9 +8,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import sys
 
-insilico_n = 4
-window_width = 10
-min_lag = 0
+insilico_n = 5
+window_width = 12
+min_lag = 1
 max_lag = 3
 n_trees = 10
 n_permutes = 10
@@ -33,7 +33,7 @@ tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_l
 #tdr.zscore_all_data()
 tdr.set_window(window_width)
 tdr.create_windows()
-tdr.fit_windows(n_trees=n_trees, show_progress=False, calc_mse=mse_adjust)
+tdr.fit_windows(n_trees=n_trees, show_progress=False, calc_mse=mse_adjust, n_jobs=1)
 tdr.rank_edges(permutation_n=n_permutes, calc_mse=mse_adjust)
 tdr.compile_roller_edges(self_edges=True, calc_mse=mse_adjust)
 tdr.make_static_edge_dict(true_edges, lag_method=combine_method)

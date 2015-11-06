@@ -196,16 +196,6 @@ class Swing(object):
 
         self.step_size = step
 
-    def reset(self):
-        """
-        Reset the window to the beggining of time
-
-        Called by:
-
-        :return:
-        """
-        self.current_step = 0
-
     # need to do something about this method. keep for now, but currently need a "preprocess" method.
     def remove_blank_rows(self):
         """
@@ -436,7 +426,7 @@ class Swing(object):
             window.initialize_params()
         return self.window_list
 
-    def fit_windows(self, crag=True, alpha=None, n_trees=None, show_progress=True, calc_mse=False):
+    def fit_windows(self, crag=False, alpha=None, n_trees=None, n_jobs=None, show_progress=True, calc_mse=False):
         #todo: need a better way to pass parameters to fit functions
         """
         Fit each window in the list
@@ -456,6 +446,8 @@ class Swing(object):
             if self.window_type == "RandomForest":
                 if n_trees is not None:
                     window.n_trees = n_trees
+                if n_jobs is not None:
+                    window.n_jobs = n_jobs
             if show_progress:
                 print "Fitting window %i of %i" %((window.nth_window+1), len(self.window_list))
             window.fit_window(crag=crag, calc_mse=calc_mse)
@@ -613,26 +605,25 @@ class Swing(object):
         print "Compiling all model edges...",
         df = None
         for ww, window in enumerate(self.window_list):
-            if window.include_window:
-                # Get the edges and associated values in table form
-                current_df = window.make_edge_table(calc_mse=calc_mse)
+            # Get the edges and associated values in table form
+            current_df = window.make_edge_table(calc_mse=calc_mse)
 
-                # Only retain edges if the p_value is below the threshold
-                #current_df = current_df[current_df['p_value'] <= 0.05]
+            # Only retain edges if the p_value is below the threshold
+            #current_df = current_df[current_df['p_value'] <= 0.05]
 
-                # Only retain edges if the MSE_diff is negative
-                if calc_mse:
-                    current_df = current_df[current_df['MSE_diff'] < 0]
+            # Only retain edges if the MSE_diff is negative
+            if calc_mse:
+                current_df = current_df[current_df['MSE_diff'] < 0]
 
-                current_df['adj_imp'] = current_df['Importance']*(1-current_df['p_value'])#*current_df['MSE_diff']
+            current_df['adj_imp'] = current_df['Importance']*(1-current_df['p_value'])#*current_df['MSE_diff']
 
-                current_df.sort(['adj_imp'], ascending=False, inplace=True)
-                current_df['Rank'] = np.arange(len(current_df))
+            current_df.sort(['adj_imp'], ascending=False, inplace=True)
+            current_df['Rank'] = np.arange(len(current_df))
 
-                if df is None:
-                    df = current_df.copy()
-                else:
-                    df = df.append(current_df.copy(), ignore_index=True)
+            if df is None:
+                df = current_df.copy()
+            else:
+                df = df.append(current_df.copy(), ignore_index=True)
         if not self_edges:
             df = df[df.Parent != df.Child]
         df['Edge'] = zip(df.Parent, df.Child)
