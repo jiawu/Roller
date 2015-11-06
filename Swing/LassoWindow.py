@@ -16,7 +16,7 @@ class LassoWindow(Window):
     A window that runs Lasso regression as the network inference method
     """
 
-    def __init__(self, dataframe, window_info, roller_data):
+    def __init__(self, dataframe, window_info, roller_data, td_window, explanatory_dict, response_dict):
         #todo: unclear if roller_data is necessary
         """
         Initialize a LassoWindow with necessary data
@@ -26,7 +26,8 @@ class LassoWindow(Window):
         :param roller_data:
         :return:
         """
-        super(LassoWindow, self).__init__(dataframe, window_info, roller_data)
+        super(LassoWindow, self).__init__(dataframe, window_info, roller_data, td_window, explanatory_dict,
+                                          response_dict)
 
         # Initialize window attributes
         self.alpha = None

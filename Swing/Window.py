@@ -14,7 +14,7 @@ class Window(object):
     should be sub-classed to have network inference specific features and methods.
     """
 
-    def __init__(self, raw_dataframe, window_info, roller_data, td_window):
+    def __init__(self, raw_dataframe, window_info, roller_data, td_window, explanatory_dict, response_dict):
         #todo: unclear if roller_data is necessary
         """
         Initialize a window object. Extract information from the passed data-frame. Generate edge list.
@@ -24,7 +24,7 @@ class Window(object):
             Dictionary that provides data that can be used to uniquely identify a window
         :return:
         """
-        self.include_window=True
+        self.include_window = True
         self.model = []
         self.time_label = window_info['time_label']
         self.gene_start = window_info['gene_start']
@@ -45,7 +45,10 @@ class Window(object):
         # Add edge list to edge table
         self.results_table['regulator-target'] = self.edge_list
         self.roller_data = roller_data
+
         self.td_window = td_window
+        self.explanatory_dict = explanatory_dict
+        self.response_dict = response_dict
 
         """
         The training score is a list of descriptors for how well the model fit the training data for each response
