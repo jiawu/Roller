@@ -43,7 +43,7 @@ class LassoWindow(Window):
         self.x_data = None
 
 
-    def make_edge_table(self):
+    def make_edge_table(self, calc_mse = False):
         """
         Make the edge table the includes the optimized model data
         :return: pandas data-frame
@@ -244,7 +244,7 @@ class LassoWindow(Window):
             raise ValueError("alpha must be float (>=0) or None")
         return
 
-    def fit_window(self, crag=False):
+    def fit_window(self, crag=False, calc_mse=False):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
@@ -468,6 +468,7 @@ class LassoWindow(Window):
         coeffs = np.insert(coeffs, col_index, 0)
         coeff_matrix = np.vstack((coeff_matrix, coeffs))
 
+        crag = False
         if crag == True:
             training_scores, test_scores = self.crag_window(model_params)
             self.training_scores.append(training_scores)
@@ -492,7 +493,7 @@ class LassoWindow(Window):
 
         return coeff_matrix
     
-    def make_edge_table(self):
+    def make_edge_table(self, calc_mse = False):
         """
 
         :return:
@@ -562,7 +563,7 @@ class tdLassoWindow(LassoWindow):
         #                               index=self.df.index.values.copy())
         return resample_values 
 
-    def fit_window(self, alpha=None, crag=False,n_trees=10, show_progress=False):
+    def fit_window(self, alpha=None, crag=False,n_trees=10, show_progress=False, calc_mse=False):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
@@ -607,7 +608,7 @@ class tdLassoWindow(LassoWindow):
         importance_dataframe.columns.name = 'Parent'
         return importance_dataframe
 
-    def make_edge_table(self):
+    def make_edge_table(self, calc_mse = False):
         """
         Make the edge table
         :return:
