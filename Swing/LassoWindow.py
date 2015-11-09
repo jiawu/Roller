@@ -39,24 +39,6 @@ class LassoWindow(Window):
         self.freq_matrix = None
         self.edge_stability_auc = None
 
-    def make_edge_table(self):
-        """
-        Make the edge table the includes the optimized model data
-        :return: pandas data-frame
-
-        Called by:
-            Swing.rank_windows()
-
-        """
-        if self.permutation_p_values is None:
-            raise ValueError("p values must be set before making the edge table. Use method run_permutation test")
-
-        if self.edge_stability_auc is None:
-            raise ValueError("edge stability values must be set before making the edge table. "
-                             "Use method run_permutation test")
-        self.edge_table["p_value"] = self.permutation_p_values.flatten()
-        self.edge_table["stability"] = self.edge_stability_auc.flatten()
-
     def sort_edges(self, method="p_value"):
         """
         Sort the edge table based on the selected edge ranking method
