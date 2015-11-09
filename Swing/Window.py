@@ -96,10 +96,10 @@ class Window(object):
 
         :return: array
         """
-        n, p = self.response_data.shape
+        n, p = self.explanatory_data.shape
 
         # For each column randomly choose samples
-        resample_values = np.array([np.random.choice(self.response_data[:, ii], size=n) for ii in range(p)]).T
+        resample_values = np.array([np.random.choice(self.explanatory_data[:, ii], size=n) for ii in range(p)]).T
 
         # resample_window = pd.DataFrame(resample_values, columns=self.df.columns.values.copy(),
         #                               index=self.df.index.values.copy())

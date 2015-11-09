@@ -198,12 +198,14 @@ class RandomForestRegressionWindow(Window):
         for col_index, column in enumerate(y_data.T):
             target_y = column.copy()
             x_matrix = x_data.copy()
+            insert_index = col_index
 
             # If the current window values are in the x_data, remove them
             if self.nth_window in x_windows:
                 keep_columns = ~((x_windows == self.nth_window) & (x_labels == y_labels[col_index]))
                 insert_index = list(keep_columns).index(False)
                 x_matrix = x_matrix[:, keep_columns].copy()
+
             coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, x_matrix, target_y, insert_index,
                                                              n_trees, n_jobs, crag)
 
