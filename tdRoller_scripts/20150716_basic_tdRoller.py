@@ -30,8 +30,9 @@ pd.options.display.float_format = '{:,.5f}'.format
 
 np.random.seed(8)
 
-tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_lag=min_lag, max_lag=max_lag)
-#tdr.zscore_all_data()
+tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_lag=min_lag, max_lag=max_lag,
+            window_type='Lasso')
+tdr.zscore_all_data()
 tdr.set_window(window_width)
 tdr.create_windows()
 tdr.fit_windows(n_trees=n_trees, show_progress=False, calc_mse=mse_adjust, n_jobs=1, crag=True)
