@@ -147,41 +147,6 @@ class DionesusWindow(Window):
         p_values = 2 * cdf
         return p_values
 
-    def update_variance_2D(self, prev_result, new_samples):
-        """
-        incremental calculation of means: accepts new_samples, which is a list of samples.
-        then calculates a new mean. this is a useful function for calculating the means of large arrays
-        :param prev_result:
-        :param new_samples:
-        :return:
-        """
-
-        n = prev_result["n"]  # 2D numpy array with all zeros or watev
-        mean = prev_result["mean"]  # 2D numpy array
-        sum_squares = prev_result["ss"]  # 2D numpy array
-
-        # new_samples is a list of arrays
-        # x is a 2D array
-        for x in new_samples:
-            n = n + 1
-            # delta = float(x) - mean
-            old_mean = mean.copy()
-            mean = old_mean + np.divide((x - old_mean), n)
-            sum_squares = sum_squares + np.multiply((x - mean), (x - old_mean))
-
-        if (n[0, 0] < 2):
-            result = {"mean": mean,
-                      "ss": sum_squares,
-                      "n": n}
-            return result
-
-        variance = np.divide(sum_squares, (n - 1))
-        result = {"mean": mean,
-                  "ss": sum_squares,
-                  "variance": variance,
-                  "n": n}
-        return result
-
     def initialize_params(self):
         """
         Nothing to initialize for Dionesus
