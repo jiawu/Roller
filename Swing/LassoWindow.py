@@ -474,7 +474,7 @@ class LassoWindow(Window):
         importance_dataframe.columns.name = 'Parent'
         return importance_dataframe, mse_matrix
     
-    def make_edge_table(self):
+    def make_edge_table(self, calc_mse=False):
         """
 
         :return:
@@ -482,144 +482,32 @@ class LassoWindow(Window):
         Called by:
             Swing.rank_edges()
         """
-        # generate edges for initial model
-        initial_edges = self.create_linked_list(self.beta_coefficients, 'B')
-        # permutation edges
-        initial_edges['p-means'] = self.permutation_means.flatten()
-        initial_edges['p-sd'] = self.permutation_sd.flatten()
-        initial_edges['stability'] = self.edge_stability_auc.flatten()
-
-        """
-        permutation_mean_edges = self.create_linked_list(self.permutation_means.values, 'p-means')
-        permutation_sd_edges = self.create_linked_list(self.permutation_sd.values, 'p-sd')
-        stability_edges = self.create_linked_list(self.edge_stability_auc, 'stability')
-
-        aggregated_edges = initial_edges.merge(permutation_mean_edges, on='regulator-target').merge(
-            permutation_sd_edges, on='regulator-target').merge(stability_edges, on='regulator-target')
-
-        # sorry, it is a little messy to do the p-value calculations for permutation tests here...
-        """
-        # valid_indices = aggregated_edges['p-sd'] != 0
-        # valid_indices = aggregated_edges['B'] != 0
-        valid_window = initial_edges
-        initial_B = valid_window['B']
-        sd = valid_window['p-sd']
-        mean = valid_window['p-means']
-        valid_window['final-z-scores-perm'] = (initial_B - mean) / sd
-        valid_window['cdf-perm'] = (-1 * abs(valid_window['final-z-scores-perm'])).apply(scipy.stats.norm.cdf)
-        # calculate t-tailed pvalue
-        valid_window['p-value-perm'] = (2 * valid_window['cdf-perm'])
-        self.results_table = valid_window
-        return self.results_table
-
-
-class tdLassoWindow(LassoWindow):
-    def __init__(self, dataframe, window_info, roller_data):
-        super(tdLassoWindow, self).__init__(dataframe, window_info, roller_data)
-        self.x_data = None
-        self.x_labels = None 
-        self.x_times = None
-        self.edge_table = None
-        self.include_window = True
-        self.earlier_window_idx = None
-        
-    def create_linked_list(self, numpy_array_2D, value_label):
-        """labels and array should be in row-major order"""
-        linked_list = pd.DataFrame({'regulator-target': self.edge_list, value_label: numpy_array_2D.flatten()})
-        return linked_list
-    
-    def resample_window(self):
-        """
-        Resample window values, along a specific axis
-        :param window_values: array
-
-        :return: array
-        """
-        n, p = self.x_data.shape
-
-        # For each column randomly choose samples
-        resample_values = np.array([np.random.choice(self.x_data[:, ii], size=n) for ii in range(p)]).T
-
-        # resample_window = pd.DataFrame(resample_values, columns=self.df.columns.values.copy(),
-        #                               index=self.df.index.values.copy())
-        return resample_values 
-
-    def fit_window(self, alpha=None, crag=False,n_trees=10, show_progress=False):
-        """
-        Set the attributes of the window using expected pipeline procedure and calculate beta values
-        :return:
-        """
-        if self.alpha==None:
-            self.initialize_params()
-            alpha = self.alpha
-        
-        self.beta_coefficients = self.get_coeffs(self.alpha).values
-        #if self.include_window:
-            #print "Regressing window index %i against the following window indices: "%self.nth_window,\
-                #self.earlier_window_idx
-        self.edge_importance = self.get_coeffs(alpha,crag=crag, data=self.x_data)
-
-    def get_coeffs(self, alpha,crag=False, data=None):
-        """
-
-        :param data:
-        :param n_trees:
-        :return: array-like
-            An array in which the rows are children and the columns are the parents
-        """
-        if data is None:
-            data = self.x_data
-        ## initialize items
-        all_data, coeff_matrix, model_list, max_nodes = self._initialize_coeffs(data=data)
-
-        for col_index, column in enumerate(all_data[:,:max_nodes].T):
-            # Once we get through all the nodes at this timepoint we can stop
-            if col_index == max_nodes:
-                break
-            coeff_matrix, model_list = self._fitstack_coeffs(alpha=alpha,coeff_matrix=coeff_matrix, model_list=model_list, all_data=all_data, col_index=col_index,crag=crag)
-
-        """
-        if self.x_labels == None:
-            label = self.raw_data.columns[1:]
-            importance_dataframe = pd.DataFrame(coeff_matrix, index=label[:max_nodes], columns=label)
-        else:
-        """
-        importance_dataframe = pd.DataFrame(coeff_matrix, index=self.x_labels[:max_nodes], columns=self.x_labels)
-        importance_dataframe.index.name = 'Child'
-        importance_dataframe.columns.name = 'Parent'
-        return importance_dataframe
-
-    def make_edge_table(self):
-        """
-        Make the edge table
-        :return:
-        """
-
         # Build indexing method for all possible edges. Length = number of parents * number of children
-        parent_index = range(self.edge_importance.shape[1])
-        child_index = range(self.edge_importance.shape[0])
+        parent_index = range(self.beta_coefficients.shape[1])
+        child_index = range(self.beta_coefficients.shape[0])
         a, b = np.meshgrid(parent_index, child_index)
 
         # Flatten arrays to be used in link list creation
         df = pd.DataFrame()
-        df['Parent'] = self.edge_importance.columns.values[a.flatten()]
-        df['Child'] = self.edge_importance.index.values[b.flatten()]
-        df['Importance'] = self.edge_importance.values.flatten()
-        df['P_window'] = self.x_times[a.flatten()]
-        df['C_window'] = self.x_times[b.flatten()]
+        df['Parent'] = self.beta_coefficients.columns.values[a.flatten()]
+        df['Child'] = self.beta_coefficients.index.values[b.flatten()]
+        df['Beta'] = self.beta_coefficients.values.flatten()
+        df['Stability'] = self.edge_stability_auc.flatten()
+        df['P_window'] = self.explanatory_window[a.flatten()]
+
+        # Calculate the window of the child node, which is equivalent to the current window index
+        child_values = np.array([self.nth_window] * self.beta_coefficients.shape[0])
+        df['C_window'] = child_values[b.flatten()]
+
         if self.permutation_p_values is not None:
             df["p_value"] = self.permutation_p_values.flatten()
 
+        # Remove any self edges
+        df = df[~((df['Parent'] == df['Child']) & (df['P_window'] == df['C_window']))]
+
+        if calc_mse:
+            df['MSE_diff'] = self.edge_mse_diff.flatten()
+
         return df
-
-    def run_permutation_test(self, n_permutations=10, crag=False):
-        #if not self.include_window:
-        #    return
-        #initialize permutation results array
-        self.permutation_means = np.empty(self.edge_importance.shape)
-        self.permutation_sd = np.empty(self.edge_importance.shape)
-
-        zeros = np.zeros(self.edge_importance.shape)
-        self._permute_coeffs(zeros, crag=False, n_permutations=n_permutations)
 
 
