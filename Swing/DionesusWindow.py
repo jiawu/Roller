@@ -197,33 +197,6 @@ class DionesusWindow(Window):
         """
 
         self.beta_coefficients, self.vip = self.get_coeffs(pcs, crag=crag)
-
-    def sum_of_squares(self, X):
-        """
-        Calculate the sum of the squares for each column
-        :param X: array-like
-            The data matrix for which the sum of squares is taken
-        :return: float or array-like
-            The sum of squares, columnwise or total
-        """
-        column_mean = np.mean(X, axis=0)
-        ss = np.sum(np.power(X - column_mean, 2), axis=0)
-        return ss
-
-    def _initialize_coeffs(self, data):
-        """
-        example call:
-        all_data, coeff_matrix, model_list, max_nodes =self._initialize_coeffs(data=data)
-        """
-        if data is None:
-            all_data = self.response_data.copy()
-        else:
-            all_data = data.copy()
-        max_nodes = self.response_data.shape[1]
-
-        coeff_matrix = np.array([], dtype=np.float_).reshape(0, all_data.shape[1])
-        model_list = []
-        return((all_data, coeff_matrix, model_list, max_nodes))
     
     def _fitstack_coeffs(self, num_pcs, coeff_matrix, vip_matrix, model_list, all_data, col_index, crag=False):
       """

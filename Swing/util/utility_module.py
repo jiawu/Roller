@@ -137,3 +137,15 @@ def make_possible_edge_list(parents, children, self_edges=True):
     return possible_edge_list
 
 
+def sum_of_squares(x, axis=0):
+    """
+    Calculate the sum of the squares for each column
+    :param x: array-like
+        The data matrix for which the sum of squares is taken
+    :return: float or array-like
+        The sum of squares, columnwise or total
+    """
+    column_mean = np.mean(x, axis=axis)
+    sse = np.sum(np.power(x - column_mean, 2), axis=axis)
+    return sse
+
