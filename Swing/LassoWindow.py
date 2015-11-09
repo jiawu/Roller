@@ -225,13 +225,14 @@ class LassoWindow(Window):
         warnings.simplefilter("ignore")
         # Get maximum edges, assuming all explanors are also response variables and no self edges
 
-        if self.explanatory_data is not None:
-            [samples, nodes] = self.response_data.shape
-            [samples, td_nodes] = self.explanatory_data.shape
-            max_edges = td_nodes * nodes - nodes
+        child_nodes = self.response_data.shape[1]
+        parent_nodes = self.explanatory_data.shape[1]
+        if self.nth_window in self.explanatory_window:
+            # Can't allow self edges
+            max_edges = parent_nodes*child_nodes-child_nodes
         else:
-            [n, p] = self.response_data.shape
-            max_edges = p * (p - 1)
+            max_edges = parent_nodes*child_nodes
+
         # Raise exception if Lasso doesn't converge with alpha == 0
         zero_alpha_coeffs, _ = self.get_coeffs(0)
         if np.count_nonzero(zero_alpha_coeffs) != max_edges:

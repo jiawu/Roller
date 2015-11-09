@@ -8,14 +8,14 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import sys
 
-pd.set_option('display.width', 1000)
-insilico_n = 3
-window_width = 15
+#pd.set_option('display.width', 1000)
+insilico_n = 5
+window_width = 5
 min_lag = 0
-max_lag = 1
-n_trees = 10
-n_permutes = 10
-mse_adjust = False
+max_lag = 3
+n_trees = 100
+n_permutes = 100
+mse_adjust = True
 combine_method = 'mean_mean'
 sort_by = 'rank'
 file_path = "../data/dream4/insilico_size10_%i_timeseries.tsv"%insilico_n
@@ -31,7 +31,7 @@ pd.options.display.float_format = '{:,.5f}'.format
 np.random.seed(8)
 
 tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_lag=min_lag, max_lag=max_lag,
-            window_type='Dionesus')
+            window_type='RandomForest')
 tdr.zscore_all_data()
 tdr.set_window(window_width)
 tdr.create_windows()
@@ -48,7 +48,8 @@ roc_dict, pr_dict = tdr.score(df2)
 print df2
 
 gs_ranks = [df2['Rank'][df2['regulator-target'] == edge].values[0] for edge in true_edges]
-print zip(true_edges, gs_ranks)
+for ii in zip(true_edges, gs_ranks):
+    print ii
 
 print "Network: ", insilico_n
 print 'Window width: ', window_width
