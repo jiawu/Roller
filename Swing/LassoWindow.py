@@ -211,7 +211,7 @@ class LassoWindow(Window):
             raise ValueError("alpha must be float (>=0) or None")
         return
 
-    def fit_window(self, crag=False):
+    def fit_window(self, crag=False, calc_mse=False):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
@@ -220,7 +220,7 @@ class LassoWindow(Window):
         if self.alpha is None:
             raise ValueError("window alpha value must be set before the window can be fit")
 
-        self.beta_coefficients = self.get_coeffs(self.alpha, crag=crag)
+        self.beta_coefficients, self.edge_mse_diff = self.get_coeffs(self.alpha, crag=crag, calc_mse=calc_mse)
 
     def get_null_alpha(self, max_expected_alpha=1e4, min_step_size=1e-9):
         """
@@ -336,13 +336,13 @@ class LassoWindow(Window):
         return cv_selected_alpha, df.copy()
 
     def cross_validate_alpha(self, alpha, n_folds, condensed=False):
-        '''
+        """
         Get a Q^2 value for each explanatory value (column) at the given alpha value
         :param alpha: float
         :param n_folds: int
             when number of folds is the same as number of samples this is equivalent to leave-one-out
         :return:
-        '''
+        """
         if self.x_data is not None:
             data = self.x_data.copy()
         else:

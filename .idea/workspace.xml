@@ -4,6 +4,8 @@
     <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py" afterPath="$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Swing/LassoWindow.py" afterPath="$PROJECT_DIR$/Swing/LassoWindow.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Swing/RFRWindow.py" afterPath="$PROJECT_DIR$/Swing/RFRWindow.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Swing/Swing.py" afterPath="$PROJECT_DIR$/Swing/Swing.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Roller.iws" />
@@ -19,6 +21,36 @@
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
+  <component name="DockManager">
+    <window id="1">
+      <content type="file-editors">
+        <state>
+          <leaf>
+            <file leaf-file-name="RFRWindow.py" pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/Swing/RFRWindow.py">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state vertical-scroll-proportion="0.3291536">
+                    <caret line="128" column="0" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
+                    <folding>
+                      <element signature="e#685#1944#0" expanded="false" />
+                      <element signature="e#2022#3011#0" expanded="false" />
+                      <element signature="e#3100#3539#0" expanded="false" />
+                      <element signature="e#3609#4061#0" expanded="false" />
+                      <element signature="e#4118#4668#0" expanded="false" />
+                      <element signature="e#4743#5074#0" expanded="false" />
+                      <element signature="e#5124#5406#0" expanded="false" />
+                      <element signature="e#5529#6782#0" expanded="false" />
+                      <element signature="e#6879#9366#0" expanded="false" />
+                    </folding>
+                  </state>
+                </provider>
+              </entry>
+            </file>
+          </leaf>
+        </state>
+      </content>
+    </window>
+  </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
     <favorites_list name="Roller" />
@@ -29,7 +61,7 @@
         <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="36" column="20" selection-start-line="36" selection-start-column="20" selection-end-line="36" selection-end-column="20" />
+              <caret line="37" column="51" selection-start-line="37" selection-start-column="51" selection-end-line="37" selection-end-column="51" />
               <folding>
                 <element signature="e#70#80#0" expanded="true" />
               </folding>
@@ -41,7 +73,7 @@
         <entry file="file://$PROJECT_DIR$/Swing/Swing.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="424" column="0" selection-start-line="424" selection-start-column="0" selection-end-line="424" selection-end-column="0" />
+              <caret line="424" column="34" selection-start-line="424" selection-start-column="34" selection-end-line="424" selection-end-column="34" />
               <folding>
                 <element signature="e#71#84#0" expanded="true" />
                 <element signature="e#521#1023#0" expanded="false" />
@@ -54,17 +86,21 @@
                 <element signature="e#5561#5716#0" expanded="false" />
                 <element signature="e#5762#5892#0" expanded="false" />
                 <element signature="e#5938#6068#0" expanded="false" />
+                <element signature="e#6127#7719#0" expanded="false" />
                 <element signature="e#7755#8399#0" expanded="false" />
                 <element signature="e#8451#8807#0" expanded="false" />
                 <element signature="e#8876#10788#0" expanded="false" />
+                <element signature="e#10904#11904#0" expanded="false" />
                 <element signature="e#11948#12291#0" expanded="false" />
-                <element signature="e#14443#15501#0" expanded="false" />
-                <element signature="e#15559#16565#0" expanded="false" />
-                <element signature="e#16606#17273#0" expanded="false" />
-                <element signature="e#17315#19721#0" expanded="false" />
-                <element signature="e#19800#20951#0" expanded="false" />
-                <element signature="e#21053#23757#0" expanded="false" />
-                <element signature="e#23815#24617#0" expanded="false" />
+                <element signature="e#12385#13124#0" expanded="false" />
+                <element signature="e#13165#13391#0" expanded="false" />
+                <element signature="e#14662#15720#0" expanded="false" />
+                <element signature="e#15778#16784#0" expanded="false" />
+                <element signature="e#16825#17492#0" expanded="false" />
+                <element signature="e#17534#19940#0" expanded="false" />
+                <element signature="e#20019#21170#0" expanded="false" />
+                <element signature="e#21272#23976#0" expanded="false" />
+                <element signature="e#24034#24836#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -95,6 +131,19 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="DionesusWindow.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Swing/DionesusWindow.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-1.5384616">
+              <caret line="87" column="21" selection-start-line="87" selection-start-column="21" selection-end-line="87" selection-end-column="21" />
+              <folding>
+                <element signature="e#71#103#0" expanded="true" />
+                <element signature="e#6205#6555#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="utility_module.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Swing/util/utility_module.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -107,24 +156,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DionesusWindow.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Swing/DionesusWindow.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="87" column="21" selection-start-line="87" selection-start-column="21" selection-end-line="87" selection-end-column="21" />
-              <folding>
-                <element signature="e#71#103#0" expanded="true" />
-                <element signature="e#6205#6555#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LassoWindow.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="LassoWindow.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Swing/LassoWindow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.11764706">
-              <caret line="136" column="23" selection-start-line="136" selection-start-column="23" selection-end-line="136" selection-end-column="23" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="218" column="82" selection-start-line="218" selection-start-column="82" selection-end-line="218" selection-end-column="82" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
                 <element signature="e#1244#1926#0" expanded="false" />
@@ -133,6 +169,12 @@
                 <element signature="e#3734#4535#0" expanded="false" />
                 <element signature="e#4612#4997#0" expanded="false" />
                 <element signature="e#5067#5417#0" expanded="false" />
+                <element signature="e#8806#11621#0" expanded="false" />
+                <element signature="e#11709#14070#0" expanded="false" />
+                <element signature="e#14149#15659#0" expanded="false" />
+                <element signature="e#15702#16075#0" expanded="false" />
+                <element signature="e#16125#16608#0" expanded="false" />
+                <element signature="e#16715#17919#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -187,7 +229,6 @@
         <option value="$PROJECT_DIR$/Swing/__init__.py" />
         <option value="$PROJECT_DIR$/Swing/unittests/test_RF_pipeline.py" />
         <option value="$PROJECT_DIR$/Swing/DionesusWindow.py" />
-        <option value="$PROJECT_DIR$/Swing/RFRWindow.py" />
         <option value="$PROJECT_DIR$/Swing/util/Evaluator.py" />
         <option value="$PROJECT_DIR$/Swing/util/Analyzer.py" />
         <option value="$PROJECT_DIR$/pipelines/run_post_analysis_cragging.py" />
@@ -195,8 +236,9 @@
         <option value="$PROJECT_DIR$/pipelines/run_pipeline_lasso_window_scan_10.py" />
         <option value="$PROJECT_DIR$/Swing/Window.py" />
         <option value="$PROJECT_DIR$/Swing/util/utility_module.py" />
-        <option value="$PROJECT_DIR$/Swing/Swing.py" />
         <option value="$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py" />
+        <option value="$PROJECT_DIR$/Swing/Swing.py" />
+        <option value="$PROJECT_DIR$/Swing/RFRWindow.py" />
         <option value="$PROJECT_DIR$/Swing/LassoWindow.py" />
       </list>
     </option>
@@ -574,12 +616,6 @@
       <option name="number" value="Default" />
       <updated>1413916753036</updated>
     </task>
-    <task id="LOCAL-00114" summary="Moved elbow_criteria function to util.utility_module">
-      <created>1436813201488</created>
-      <option name="number" value="00114" />
-      <option name="project" value="LOCAL" />
-      <updated>1436813201488</updated>
-    </task>
     <task id="LOCAL-00115" summary="get_coeffs() in tdRFRWindows now makes a dataframe with the child nodes as rows and parent nodes and columns">
       <created>1436816015228</created>
       <option name="number" value="00115" />
@@ -868,7 +904,13 @@
       <option name="project" value="LOCAL" />
       <updated>1447087693032</updated>
     </task>
-    <option name="localTasksCounter" value="163" />
+    <task id="LOCAL-00163" summary="Remove update_variance method in LassoWindow&#10;&#10;It appeared redundant with the parent method. No need to overrie">
+      <created>1447089274392</created>
+      <option name="number" value="00163" />
+      <option name="project" value="LOCAL" />
+      <updated>1447089274392</updated>
+    </task>
+    <option name="localTasksCounter" value="164" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -951,7 +993,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fix mse calculations when allowing min lag of 0" />
     <MESSAGE value="Fix function options to calculate mse when desired&#10;&#10;The argument calc_mse gets passed through many objects and functions, but the code should run faster when that is set to False. The MSE calculations will be skipped" />
     <MESSAGE value="Change kwarg to all be calc_mse" />
     <MESSAGE value="Change name from Roller to Swing&#10;&#10;First commit on the new branch. Change names of classes and files from Roller to Swing. Keep original folder directory as Roller to prevent issues with Git. This can be changed later" />
@@ -976,7 +1017,8 @@
     <MESSAGE value="Move abstract methods to bottom of Window methods&#10;&#10;Resolves issue #8" />
     <MESSAGE value="Refactor possible_edge_list methods&#10;&#10;These were streamlined to one method and placed in the utility module. Partially resolves issue #7" />
     <MESSAGE value="Test cragging. Appears to work for RFRWindow" />
-    <option name="LAST_COMMIT_MESSAGE" value="Test cragging. Appears to work for RFRWindow" />
+    <MESSAGE value="Remove update_variance method in LassoWindow&#10;&#10;It appeared redundant with the parent method. No need to overrie" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove update_variance method in LassoWindow&#10;&#10;It appeared redundant with the parent method. No need to overrie" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.9237668" />
   </component>
   <component name="XDebuggerManager">
@@ -998,7 +1040,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="81" />
+      <option name="time" value="83" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -1041,17 +1083,21 @@
             <element signature="e#5561#5716#0" expanded="false" />
             <element signature="e#5762#5892#0" expanded="false" />
             <element signature="e#5938#6068#0" expanded="false" />
+            <element signature="e#6127#7719#0" expanded="false" />
             <element signature="e#7755#8399#0" expanded="false" />
             <element signature="e#8451#8807#0" expanded="false" />
             <element signature="e#8876#10788#0" expanded="false" />
+            <element signature="e#10904#11904#0" expanded="false" />
             <element signature="e#11948#12291#0" expanded="false" />
-            <element signature="e#14443#15501#0" expanded="false" />
-            <element signature="e#15559#16565#0" expanded="false" />
-            <element signature="e#16606#17273#0" expanded="false" />
-            <element signature="e#17315#19721#0" expanded="false" />
-            <element signature="e#19800#20951#0" expanded="false" />
-            <element signature="e#21053#23757#0" expanded="false" />
-            <element signature="e#23815#24617#0" expanded="false" />
+            <element signature="e#12385#13124#0" expanded="false" />
+            <element signature="e#13165#13391#0" expanded="false" />
+            <element signature="e#14662#15720#0" expanded="false" />
+            <element signature="e#15778#16784#0" expanded="false" />
+            <element signature="e#16825#17492#0" expanded="false" />
+            <element signature="e#17534#19940#0" expanded="false" />
+            <element signature="e#20019#21170#0" expanded="false" />
+            <element signature="e#21272#23976#0" expanded="false" />
+            <element signature="e#24034#24836#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1100,17 +1146,21 @@
             <element signature="e#5561#5716#0" expanded="false" />
             <element signature="e#5762#5892#0" expanded="false" />
             <element signature="e#5938#6068#0" expanded="false" />
+            <element signature="e#6127#7719#0" expanded="false" />
             <element signature="e#7755#8399#0" expanded="false" />
             <element signature="e#8451#8807#0" expanded="false" />
             <element signature="e#8876#10788#0" expanded="false" />
+            <element signature="e#10904#11904#0" expanded="false" />
             <element signature="e#11948#12291#0" expanded="false" />
-            <element signature="e#14443#15501#0" expanded="false" />
-            <element signature="e#15559#16565#0" expanded="false" />
-            <element signature="e#16606#17273#0" expanded="false" />
-            <element signature="e#17315#19721#0" expanded="false" />
-            <element signature="e#19800#20951#0" expanded="false" />
-            <element signature="e#21053#23757#0" expanded="false" />
-            <element signature="e#23815#24617#0" expanded="false" />
+            <element signature="e#12385#13124#0" expanded="false" />
+            <element signature="e#13165#13391#0" expanded="false" />
+            <element signature="e#14662#15720#0" expanded="false" />
+            <element signature="e#15778#16784#0" expanded="false" />
+            <element signature="e#16825#17492#0" expanded="false" />
+            <element signature="e#17534#19940#0" expanded="false" />
+            <element signature="e#20019#21170#0" expanded="false" />
+            <element signature="e#21272#23976#0" expanded="false" />
+            <element signature="e#24034#24836#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1159,17 +1209,21 @@
             <element signature="e#5561#5716#0" expanded="false" />
             <element signature="e#5762#5892#0" expanded="false" />
             <element signature="e#5938#6068#0" expanded="false" />
+            <element signature="e#6127#7719#0" expanded="false" />
             <element signature="e#7755#8399#0" expanded="false" />
             <element signature="e#8451#8807#0" expanded="false" />
             <element signature="e#8876#10788#0" expanded="false" />
+            <element signature="e#10904#11904#0" expanded="false" />
             <element signature="e#11948#12291#0" expanded="false" />
-            <element signature="e#14443#15501#0" expanded="false" />
-            <element signature="e#15559#16565#0" expanded="false" />
-            <element signature="e#16606#17273#0" expanded="false" />
-            <element signature="e#17315#19721#0" expanded="false" />
-            <element signature="e#19800#20951#0" expanded="false" />
-            <element signature="e#21053#23757#0" expanded="false" />
-            <element signature="e#23815#24617#0" expanded="false" />
+            <element signature="e#12385#13124#0" expanded="false" />
+            <element signature="e#13165#13391#0" expanded="false" />
+            <element signature="e#14662#15720#0" expanded="false" />
+            <element signature="e#15778#16784#0" expanded="false" />
+            <element signature="e#16825#17492#0" expanded="false" />
+            <element signature="e#17534#19940#0" expanded="false" />
+            <element signature="e#20019#21170#0" expanded="false" />
+            <element signature="e#21272#23976#0" expanded="false" />
+            <element signature="e#24034#24836#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1430,35 +1484,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Swing/DionesusWindow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="87" column="21" selection-start-line="87" selection-start-column="21" selection-end-line="87" selection-end-column="21" />
-          <folding>
-            <element signature="e#71#103#0" expanded="true" />
-            <element signature="e#6205#6555#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Swing/RFRWindow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.28998244">
-          <caret line="23" column="14" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
-          <folding>
-            <element signature="e#808#2067#0" expanded="false" />
-            <element signature="e#2145#3134#0" expanded="false" />
-            <element signature="e#3223#3662#0" expanded="false" />
-            <element signature="e#3732#4184#0" expanded="false" />
-            <element signature="e#4241#4791#0" expanded="false" />
-            <element signature="e#4866#5447#0" expanded="false" />
-            <element signature="e#5497#5779#0" expanded="false" />
-            <element signature="e#5902#7155#0" expanded="false" />
-            <element signature="e#7252#9739#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pipelines/run_pipeline_lasso_window_scan_10.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7918552">
@@ -1473,47 +1498,6 @@
           <caret line="10" column="53" selection-start-line="10" selection-start-column="53" selection-end-line="10" selection-end-column="53" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="36" column="20" selection-start-line="36" selection-start-column="20" selection-end-line="36" selection-end-column="20" />
-          <folding>
-            <element signature="e#70#80#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Swing/Swing.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="424" column="0" selection-start-line="424" selection-start-column="0" selection-end-line="424" selection-end-column="0" />
-          <folding>
-            <element signature="e#71#84#0" expanded="true" />
-            <element signature="e#521#1023#0" expanded="false" />
-            <element signature="e#1354#3167#0" expanded="false" />
-            <element signature="e#3206#3474#0" expanded="false" />
-            <element signature="e#3546#4623#0" expanded="false" />
-            <element signature="e#4666#4830#0" expanded="false" />
-            <element signature="e#4870#5009#0" expanded="false" />
-            <element signature="e#5154#5524#0" expanded="false" />
-            <element signature="e#5561#5716#0" expanded="false" />
-            <element signature="e#5762#5892#0" expanded="false" />
-            <element signature="e#5938#6068#0" expanded="false" />
-            <element signature="e#7755#8399#0" expanded="false" />
-            <element signature="e#8451#8807#0" expanded="false" />
-            <element signature="e#8876#10788#0" expanded="false" />
-            <element signature="e#11948#12291#0" expanded="false" />
-            <element signature="e#14443#15501#0" expanded="false" />
-            <element signature="e#15559#16565#0" expanded="false" />
-            <element signature="e#16606#17273#0" expanded="false" />
-            <element signature="e#17315#19721#0" expanded="false" />
-            <element signature="e#19800#20951#0" expanded="false" />
-            <element signature="e#21053#23757#0" expanded="false" />
-            <element signature="e#23815#24617#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1541,10 +1525,73 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="37" column="51" selection-start-line="37" selection-start-column="51" selection-end-line="37" selection-end-column="51" />
+          <folding>
+            <element signature="e#70#80#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Swing/Swing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="424" column="34" selection-start-line="424" selection-start-column="34" selection-end-line="424" selection-end-column="34" />
+          <folding>
+            <element signature="e#71#84#0" expanded="true" />
+            <element signature="e#521#1023#0" expanded="false" />
+            <element signature="e#1354#3167#0" expanded="false" />
+            <element signature="e#3206#3474#0" expanded="false" />
+            <element signature="e#3546#4623#0" expanded="false" />
+            <element signature="e#4666#4830#0" expanded="false" />
+            <element signature="e#4870#5009#0" expanded="false" />
+            <element signature="e#5154#5524#0" expanded="false" />
+            <element signature="e#5561#5716#0" expanded="false" />
+            <element signature="e#5762#5892#0" expanded="false" />
+            <element signature="e#5938#6068#0" expanded="false" />
+            <element signature="e#6127#7719#0" expanded="false" />
+            <element signature="e#7755#8399#0" expanded="false" />
+            <element signature="e#8451#8807#0" expanded="false" />
+            <element signature="e#8876#10788#0" expanded="false" />
+            <element signature="e#10904#11904#0" expanded="false" />
+            <element signature="e#11948#12291#0" expanded="false" />
+            <element signature="e#12385#13124#0" expanded="false" />
+            <element signature="e#13165#13391#0" expanded="false" />
+            <element signature="e#14662#15720#0" expanded="false" />
+            <element signature="e#15778#16784#0" expanded="false" />
+            <element signature="e#16825#17492#0" expanded="false" />
+            <element signature="e#17534#19940#0" expanded="false" />
+            <element signature="e#20019#21170#0" expanded="false" />
+            <element signature="e#21272#23976#0" expanded="false" />
+            <element signature="e#24034#24836#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Swing/RFRWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3291536">
+          <caret line="128" column="0" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
+          <folding>
+            <element signature="e#685#1944#0" expanded="false" />
+            <element signature="e#2022#3011#0" expanded="false" />
+            <element signature="e#3100#3539#0" expanded="false" />
+            <element signature="e#3609#4061#0" expanded="false" />
+            <element signature="e#4118#4668#0" expanded="false" />
+            <element signature="e#4743#5074#0" expanded="false" />
+            <element signature="e#5124#5406#0" expanded="false" />
+            <element signature="e#5529#6782#0" expanded="false" />
+            <element signature="e#6879#9366#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Swing/LassoWindow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.11764706">
-          <caret line="136" column="23" selection-start-line="136" selection-start-column="23" selection-end-line="136" selection-end-column="23" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="218" column="82" selection-start-line="218" selection-start-column="82" selection-end-line="218" selection-end-column="82" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
             <element signature="e#1244#1926#0" expanded="false" />
@@ -1553,6 +1600,23 @@
             <element signature="e#3734#4535#0" expanded="false" />
             <element signature="e#4612#4997#0" expanded="false" />
             <element signature="e#5067#5417#0" expanded="false" />
+            <element signature="e#8806#11621#0" expanded="false" />
+            <element signature="e#11709#14070#0" expanded="false" />
+            <element signature="e#14149#15659#0" expanded="false" />
+            <element signature="e#15702#16075#0" expanded="false" />
+            <element signature="e#16125#16608#0" expanded="false" />
+            <element signature="e#16715#17919#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Swing/DionesusWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.5384616">
+          <caret line="87" column="21" selection-start-line="87" selection-start-column="21" selection-end-line="87" selection-end-column="21" />
+          <folding>
+            <element signature="e#71#103#0" expanded="true" />
+            <element signature="e#6205#6555#0" expanded="false" />
           </folding>
         </state>
       </provider>
