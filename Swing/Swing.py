@@ -421,7 +421,11 @@ class Swing(object):
                 if n_jobs is not None:
                     window.n_jobs = n_jobs
             if show_progress:
-                print "Fitting window %i of %i" %((window.nth_window+1), len(self.window_list))
+                if window.td_window:
+                    print "Fitting window index %i against the following window indices: " % window.nth_window,\
+                        window.earlier_windows
+                else:
+                    print "Fitting window %i of %i" % (window.nth_window, self.get_n_windows())
             window.fit_window(crag=crag, calc_mse=calc_mse)
 
         return self.window_list

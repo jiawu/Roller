@@ -1,14 +1,8 @@
-import warnings
-import sys
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.cross_validation import KFold
-from scipy import integrate
 from sklearn.metrics import mean_squared_error
 from scipy import stats
-import scipy
-import time
 
 from Window import Window
 
@@ -137,12 +131,6 @@ class RandomForestRegressionWindow(Window):
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
         """
-        if self.td_window:
-            print "Regressing window index %i against the following window indices: " % self.nth_window,\
-                self.earlier_windows
-        else:
-            print "Regression window index %i" % self.nth_window
-
         self.edge_importance, self.edge_mse_diff = self.get_coeffs(self.n_trees, crag=crag, n_jobs=self.n_jobs,
                                                                    calc_mse=calc_mse)
 
