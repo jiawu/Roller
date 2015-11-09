@@ -572,7 +572,7 @@ class Swing(object):
             if calc_mse:
                 current_df = current_df[current_df['MSE_diff'] < 0]
 
-            current_df['adj_imp'] = current_df['Importance']*(1-current_df['p_value'])#*current_df['MSE_diff']
+            current_df['adj_imp'] = np.abs(current_df['Importance'])*(1-current_df['p_value'])
 
             current_df.sort(['adj_imp'], ascending=False, inplace=True)
             current_df['Rank'] = np.arange(len(current_df))
@@ -623,7 +623,6 @@ class Swing(object):
                 self.edge_dict[edge] = {"dataframe": None, "mean_importance": 0, 'real_edge': (edge in true_edges),
                                         "max_importance": 0, 'max_edge': None, 'lag_importance': 0,
                                         'lag_method': lag_method, 'rank_importance': np.nan, 'adj_importance': 0}
-                print self.edge_dict[edge]['adj_importance']
                 continue
             current_df = df[df.Edge == edge]
             max_idx = current_df['Importance'].idxmax()
@@ -653,7 +652,7 @@ class Swing(object):
         sort_field = sort_by+"_importance"
 
         print "Calculating %s edge importance..." %sort_by,
-        temp_dict = {edge:df[edge][sort_field] for edge in df.keys()}
+        temp_dict = {edge: df[edge][sort_field] for edge in df.keys()}
         sort_df = pd.DataFrame.from_dict(temp_dict, orient='index')
         sort_df.columns = [sort_field]
         if sort_by.lower() == 'rank':

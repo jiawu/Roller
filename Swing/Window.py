@@ -189,6 +189,16 @@ class Window(object):
                   "n": n}
         return result
 
+    def _initialize_coeffs(self, data):
+        """ Returns a copy of the vector, an empty array with a defined shape, an empty list, and the maximum number of
+        nodes
+        """
+
+        coeff_matrix = np.array([], dtype=np.float_).reshape(0, data.shape[1])
+
+        model_list = []
+        return coeff_matrix, model_list
+
     def pack_values(self, df):
         #pack the values into separate time series. It outputs a list of pandasdataframes such that each series can be analyzed separately.
         #this is important because otherwise the algorithm will combine calculations from separate time series
