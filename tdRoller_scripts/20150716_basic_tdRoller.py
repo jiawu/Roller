@@ -12,7 +12,7 @@ pd.set_option('display.width', 1000)
 insilico_n = 3
 window_width = 20
 min_lag = 0
-max_lag = 0
+max_lag = 1
 n_trees = 10
 n_permutes = 10
 mse_adjust = False
@@ -35,8 +35,9 @@ tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_l
 tdr.zscore_all_data()
 tdr.set_window(window_width)
 tdr.create_windows()
-tdr.fit_windows(n_trees=n_trees, show_progress=True, calc_mse=mse_adjust, n_jobs=1, crag=True)
-tdr.rank_edges(permutation_n=n_permutes, calc_mse=mse_adjust)
+tdr.optimize_params()
+tdr.fit_windows(n_trees=n_trees, show_progress=True, calc_mse=mse_adjust, n_jobs=1, crag=False)
+tdr.rank_edges(permutation_n=n_permutes, calc_mse=mse_adjust, n_bootstraps=10)
 tdr.compile_roller_edges(self_edges=False, calc_mse=mse_adjust)
 tdr.make_static_edge_dict(true_edges, self_edges=False, lag_method=combine_method)
 df2 = tdr.make_sort_df(tdr.edge_dict, sort_by)

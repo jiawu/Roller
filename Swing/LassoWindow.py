@@ -5,8 +5,9 @@ from sklearn import linear_model
 from sklearn.cross_validation import KFold
 from scipy import integrate
 from scipy import stats
+from sklearn.metrics import mean_squared_error
 import scipy
-import pdb
+import sys
 
 from Window import Window
 
@@ -101,13 +102,11 @@ class LassoWindow(Window):
             # print 'Perm Run: ' +str(nth_perm)
 
             # permute data
-            permuted_data = self.permute_data(self.response_data)
+            permuted_data = self.permute_data(self.explanatory_data)
 
             # fit the data and get coefficients
-
-            permuted_coeffs = self.get_coeffs(self.alpha, permuted_data)
-            dummy_list = []
-            dummy_list.append(permuted_coeffs)
+            permuted_coeffs, _ = self.get_coeffs(self.alpha, x_data=permuted_data)
+            dummy_list = [permuted_coeffs]
             result = self.update_variance_2D(result, dummy_list)
 
         self.permutation_means = result['mean'].copy()
@@ -118,8 +117,8 @@ class LassoWindow(Window):
         # initialize permutation results array
         self.permutation_means = np.empty((self.n_genes, self.n_genes))
         self.permutation_sd = np.empty((self.n_genes, self.n_genes))
-        nth_window = self.nth_window
-        zeros = np.zeros((self.n_genes, self.n_genes))
+        zeros = np.zeros(self.beta_coefficients.shape)
+
         # initialize running calculation
         self._permute_coeffs(zeros=zeros, n_permutations=n_permutations)
 
@@ -145,11 +144,10 @@ class LassoWindow(Window):
                 warnings.warn("Could not set null_alpha with default parameters. Set manually")
         alpha_range = np.linspace(0, self.null_alpha, n_alphas)
 
-        if self.x_data is not None:
-            n_columns = self.x_data.shape[1]
-        else:
-            n_columns = self.response_data.shape[1]
+        n_columns = self.explanatory_data.shape[1]
+
         self.bootstrap_matrix = np.empty((self.n_genes, n_columns, n_bootstraps, n_alphas))
+
         for ii, alpha in enumerate(alpha_range):
             self.bootstrap_matrix[:, :, :, ii] = self.bootstrap_alpha(alpha, n_bootstraps, noise)
 
@@ -171,9 +169,10 @@ class LassoWindow(Window):
             sample_window = self.resample_window()
             noisy_window = self.add_noise_to_values(sample_window, noise)
             if ii == 0:
-                boot_matrix = self.get_coeffs(alpha, data=noisy_window)
+                boot_matrix, _ = self.get_coeffs(alpha, x_data=noisy_window)
             else:
-                boot_matrix = np.dstack((boot_matrix, self.get_coeffs(alpha, data=noisy_window)))
+                current_coeff, _ = self.get_coeffs(alpha, x_data=noisy_window)
+                boot_matrix = np.dstack((boot_matrix, current_coeff))
 
         return boot_matrix
 
@@ -242,19 +241,22 @@ class LassoWindow(Window):
         """
         warnings.simplefilter("ignore")
         # Get maximum edges, assuming all explanors are also response variables and no self edges
-        if self.x_data is not None:
-            [samples, nodes]= self.response_data.shape
-            [samples, td_nodes] = self.x_data.shape
+
+        if self.explanatory_data is not None:
+            [samples, nodes] = self.response_data.shape
+            [samples, td_nodes] = self.explanatory_data.shape
             max_edges = td_nodes * nodes - nodes
         else:
             [n, p] = self.response_data.shape
             max_edges = p * (p - 1)
         # Raise exception if Lasso doesn't converge with alpha == 0
-        if np.count_nonzero(self.get_coeffs(0)) != max_edges:
+        zero_alpha_coeffs, _ = self.get_coeffs(0)
+        if np.count_nonzero(zero_alpha_coeffs) != max_edges:
             raise ValueError('Lasso does not converge with alpha = 0')
 
         # Raise exception if max_expected_alpha does not return all zero betas
-        if np.count_nonzero(self.get_coeffs(max_expected_alpha)) != 0:
+        high_alpha_coeffs, _ = self.get_coeffs(max_expected_alpha)
+        if np.count_nonzero(high_alpha_coeffs) != 0:
             raise ValueError('max_expected_alpha not high enough, coefficients still exist. Guess higher')
 
         # Set ranges of step sizes, assumed to be powers of 10
@@ -278,7 +280,8 @@ class LassoWindow(Window):
 
             # In the current range, check when coefficients start popping up
             for cur_alpha in cur_range:
-                num_coef = np.count_nonzero(self.get_coeffs(cur_alpha))
+                cur_coeffs, _ = self.get_coeffs(cur_alpha)
+                num_coef = np.count_nonzero(cur_coeffs)
                 if num_coef > 0:
                     cur_min = cur_alpha
                 elif num_coef == 0:
@@ -305,10 +308,8 @@ class LassoWindow(Window):
         """
         if self.null_alpha is None:
             # Try set the null alpha value using default parameters.
-            try:
-                self.null_alpha = self.get_null_alpha()
-            except ValueError:
-                warnings.warn("Could not set null_alpha with default parameters. Set manually")
+            self.null_alpha = self.get_null_alpha()
+
         if alpha_range is None:
             alpha_range = np.linspace(0, self.null_alpha, num=25)
 
@@ -343,22 +344,22 @@ class LassoWindow(Window):
             when number of folds is the same as number of samples this is equivalent to leave-one-out
         :return:
         """
-        if self.x_data is not None:
-            data = self.x_data.copy()
-        else:
-            data = self.response_data.copy()
-        n_elements = len(data)
+        x_data = self.explanatory_data.copy()
+        y_data = self.response_data.copy()
+        n_elements = len(x_data)
         kf = KFold(n_elements, n_folds)
 
         press = 0.0
         ss = 0.0
 
         for train_index, test_index in kf:
-            x_train = data[train_index]
-            x_test = data[test_index]
-            y_test = self.response_data.copy()[test_index]
+            x_train = x_data[train_index]
+            y_train = y_data[train_index]
+            x_test = x_data[test_index]
+            y_test = y_data[test_index]
+
             # Run Lasso
-            current_coef = self.get_coeffs(alpha, data=x_train) 
+            current_coef, _ = self.get_coeffs(alpha, x_data=x_train, y_data=y_train)
             
             y_predicted = np.dot(x_test, current_coef.T)
 
@@ -393,71 +394,103 @@ class LassoWindow(Window):
         return ss
 
     def _initialize_coeffs(self, data):
+        """ Returns a copy of the vector, an empty array with a defined shape, an empty list, and the maximum number of
+        nodes
         """
 
-        example call:
-
-        all_data, coeff_matrix, model_list, max_nodes = self._initialize_coeffs(data=data)
-        """
-        if data is None:
-            all_data = self.response_data.copy()
-        else:
-            all_data = data.copy()
-        max_nodes = self.response_data.shape[1]
-
-        coeff_matrix = np.array([], dtype=np.float_).reshape(0, all_data.shape[1])
+        coeff_matrix = np.array([], dtype=np.float_).reshape(0, data.shape[1])
 
         model_list = []
-        
-        return((all_data, coeff_matrix, model_list, max_nodes))
+        return coeff_matrix, model_list
 
-    def _fitstack_coeffs(self, alpha,coeff_matrix, model_list, all_data, col_index, crag=False):
+    def _fitstack_coeffs(self, alpha, coeff_matrix, model_list, x_matrix, target_y, col_index, crag=False):
         """
                                       
         example call:
         coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, all_data, col_index, n_trees, n_jobs,crag)
         """
+        # Initialize the model
         clf = linear_model.Lasso(alpha)
 
-        # delete the column that is currently being tested
-        X_matrix = np.delete(all_data, col_index, axis=1)
-        # take out the column so that the gene does not regress on itself
-        target_TF = all_data[:, col_index]
-        clf.fit(X_matrix, target_TF)
+        # Fit the model
+        clf.fit(x_matrix, target_y)
+
         model_params = {'col_index': col_index,
-                        'response': target_TF,
-                        'predictor': X_matrix,
+                        'response': target_y,
+                        'predictor': x_matrix,
                         'model': clf}
         model_list.append(model_params)
         coeffs = clf.coef_
+
         # artificially add a 0 to where the col_index is
         # to prevent self-edges
-        coeffs = np.insert(coeffs, col_index, 0)
+        if coeff_matrix.shape[1] - len(coeffs) == 1:
+            coeffs = np.insert(coeffs, col_index, 0)
+
+        # Stack coefficients
         coeff_matrix = np.vstack((coeff_matrix, coeffs))
 
-        if crag == True:
+        if crag:
             training_scores, test_scores = self.crag_window(model_params)
             self.training_scores.append(training_scores)
             self.test_scores.append(test_scores)
-        return((coeff_matrix,model_list))
 
-    def get_coeffs(self, alpha, data=None, crag=False):
+        return coeff_matrix, model_list
+
+    def get_coeffs(self, alpha, crag=False, x_data=None, y_data=None, calc_mse=False):
         """
-        returns a 2D array with target as rows and regulators as columns
-        :param alpha: float
-            value to use for lasso fitting
-        :param data: array-like, optional
-            Data to fit. If none, will use the window values. Default is None
-        :return:
+        :param x_data:
+        :param n_trees:
+        :return: array-like
+            An array in which the rows are children and the columns are the parents
         """
-        # loop that iterates through the target genes
-        all_data, coeff_matrix, model_list, max_nodes = self._initialize_coeffs(data=data)
-        for col_index, column in enumerate(all_data.T):
-            # Instantiate a new Lasso object
-            coeff_matrix, model_list = self._fitstack_coeffs(alpha=alpha,coeff_matrix=coeff_matrix, model_list=model_list, all_data=all_data, col_index=col_index,crag=crag)
+        # initialize items
+        if y_data is None:
+            y_data = self.response_data.copy()
+        if x_data is None:
+            x_data = self.explanatory_data.copy()
 
+        y_labels = self.response_labels.copy()
+        x_windows = self.explanatory_window.copy()
+        x_labels = self.explanatory_labels.copy()
+        coeff_matrix, model_list = self._initialize_coeffs(x_data)
+        mse_matrix = None
 
-        return coeff_matrix
+        # Calculate a model for each target column
+        for col_index, column in enumerate(y_data.T):
+            target_y = column.copy()
+            x_matrix = x_data.copy()
+            insert_index = col_index
+
+            # If the current window values are in the x_data, remove them
+            if self.nth_window in x_windows:
+                keep_columns = ~((x_windows == self.nth_window) & (x_labels == y_labels[col_index]))
+                insert_index = list(keep_columns).index(False)
+                x_matrix = x_matrix[:, keep_columns].copy()
+
+            coeff_matrix, model_list = self._fitstack_coeffs(alpha, coeff_matrix, model_list, x_matrix, target_y,
+                                                             insert_index, crag=crag)
+
+            base_mse = mean_squared_error(model_list[col_index]['model'].predict(x_matrix), target_y)
+
+            if calc_mse:
+                f_coeff_matrix, f_model_list = self._initialize_coeffs(data=x_matrix)
+                mse_list = []
+                for idx in range(x_matrix.shape[1]):
+                    adj_x_matrix = np.delete(x_matrix, idx, axis=1)
+                    f_coeff_matrix, f_model_list = self._fitstack_coeffs(alpha, f_coeff_matrix, f_model_list,
+                                                                         adj_x_matrix, target_y, idx, crag)
+                    mse_diff = base_mse - mean_squared_error(f_model_list[idx]['model'].predict(adj_x_matrix), target_y)
+                    mse_list.append(mse_diff)
+                if mse_matrix is None:
+                    mse_matrix = np.array(mse_list)
+                else:
+                    mse_matrix = np.vstack((mse_matrix, np.array(mse_list)))
+
+        importance_dataframe = pd.DataFrame(coeff_matrix, index=y_labels, columns=x_labels)
+        importance_dataframe.index.name = 'Child'
+        importance_dataframe.columns.name = 'Parent'
+        return importance_dataframe, mse_matrix
     
     def make_edge_table(self):
         """
