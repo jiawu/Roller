@@ -68,7 +68,7 @@ if __name__ == "__main__":
 
     current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
 
-    default_params = {'data_folder':data_folder, 'file_path':target_dataset, 'td_window':14,'min_lag':0,'max_lag':4,'n_trees':500,'permutation_n':5, 'lag_method':'median_median','sort_by':'rank', 'calc_mse':False, 'n_trials':n_trials, 'run_time':current_time, 'iterating_param':my_iterating_param}
+    default_params = {'data_folder':data_folder, 'file_path':target_dataset, 'td_window':6,'min_lag':0,'max_lag':4,'n_trees':500,'permutation_n':5, 'lag_method':'median_median','sort_by':'rank', 'calc_mse':False, 'n_trials':n_trials, 'run_time':current_time, 'iterating_param':my_iterating_param}
 
     overall_df = pd.DataFrame()
 
@@ -79,7 +79,7 @@ if __name__ == "__main__":
             run_params = default_params.copy()
             run_params[my_iterating_param]=current_param_value
             
-            roc,pr = pl.get_td_stats(**run_params)
+            roc,pr = pl.get_td_stats_test(**run_params)
             run_params['auroc']=roc
             run_params['aupr']=pr
             

@@ -16,8 +16,8 @@ Script that loads data from a dataframe and generates boxplots
 
 output_path = "/home/jjw036/"
 input_folder = "/projects/p20519/roller_output/stability_analysis/RandomForest/"
-test_statistic = 'aupr'
-save_tag = "Insilico_aupr_n_perms_stability"
+test_statistic = 'auroc'
+save_tag = "Insilico_auroc_sort_by"
 n_trials = 200
 
 agg_df = pd.DataFrame()
@@ -33,20 +33,23 @@ auroc_list = []
 #stability analysis
 for dataset in datasets:
     current_df = agg_df[agg_df['file_path'].str.contains(dataset)]
-    test_stat_10 = current_df[(current_df['n_trees'] ==500) & (current_df['permutation_n']==10)]
-    test_stat_100 = current_df[(current_df['n_trees'] ==500) & (current_df['permutation_n']==100)]
+    test_stat_10 = current_df[(current_df['iterating_param'] =='sort_by') & (current_df['sort_by']=="adj")]
+    pdb.set_trace()
+    test_stat_100 = current_df[(current_df['iterating_param'] =='sort_by') & (current_df['sort_by']=="mean")]
+    test_stat_500 = current_df[(current_df['iterating_param'] =='sort_by') & (current_df['sort_by']=="rank")]
+    """
     test_stat_500 = current_df[(current_df['n_trees'] ==500) & (current_df['permutation_n']==500)]
     test_stat_1000 = current_df[(current_df['n_trees'] ==500) & (current_df['permutation_n']==1000)]
-    pdb.set_trace()
+    """
     auroc_list.append(test_stat_10[test_statistic][0:n_trials].tolist())
     auroc_list.append(test_stat_100[test_statistic][0:n_trials].tolist())
     auroc_list.append(test_stat_500[test_statistic][0:n_trials].tolist())
-    auroc_list.append(test_stat_1000[test_statistic][0:n_trials].tolist())
+    #auroc_list.append(test_stat_1000[test_statistic][0:n_trials].tolist())
     
-    label_list.append("n_perm = 10")
-    label_list.append("n_perm = 100")
-    label_list.append("n_perm = 500")
-    label_list.append("n_perm = 1000")
+    label_list.append("SortBy = Adj")
+    label_list.append("SortBy = Mean")
+    label_list.append("SortBy = Rank")
+    #label_list.append("n_perm = 1000")
 
 
 bp_data = auroc_list

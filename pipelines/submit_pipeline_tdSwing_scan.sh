@@ -17,8 +17,9 @@ module load python/anaconda
 cd /home/jjw036/Roller/pipelines
 
 
-iterating_param="td_window"
-iterating_style="minmax 1 6"
+iterating_param="sort_by"
+iterating_style="string mean rank adj"
+#iterating_style="string min_min min_max min_mean min_median max_min max_max max_mean max_median mean_min mean_max mean_mean mean_median median_min median_max median_mean mean_median median_min median_max median_mean median_median"
 if [ $param_set -eq 1 ] 
 then
     #echo "param_set is ${param_set}"
