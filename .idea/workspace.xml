@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Swing/DionesusWindow.py" afterPath="$PROJECT_DIR$/Swing/DionesusWindow.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Swing/LassoWindow.py" afterPath="$PROJECT_DIR$/Swing/LassoWindow.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Swing/util/utility_module.py" afterPath="$PROJECT_DIR$/Swing/util/utility_module.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Roller.iws" />
@@ -131,8 +129,8 @@
       <file leaf-file-name="DionesusWindow.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Swing/DionesusWindow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7414806">
-              <caret line="182" column="21" selection-start-line="182" selection-start-column="21" selection-end-line="182" selection-end-column="21" />
+            <state vertical-scroll-proportion="0.12455934">
+              <caret line="147" column="23" selection-start-line="147" selection-start-column="23" selection-end-line="147" selection-end-column="23" />
               <folding>
                 <element signature="e#71#103#0" expanded="true" />
                 <element signature="e#6205#6555#0" expanded="false" />
@@ -620,12 +618,6 @@
       <option name="number" value="Default" />
       <updated>1413916753036</updated>
     </task>
-    <task id="LOCAL-00120" summary="Testing multiple edge lumping strategies with tdRoller">
-      <created>1436992797823</created>
-      <option name="number" value="00120" />
-      <option name="project" value="LOCAL" />
-      <updated>1436992797823</updated>
-    </task>
     <task id="LOCAL-00121" summary="tdRoller testing moved to script. Roller __init__ updated">
       <created>1436994457809</created>
       <option name="number" value="00121" />
@@ -914,7 +906,13 @@
       <option name="project" value="LOCAL" />
       <updated>1447103426928</updated>
     </task>
-    <option name="localTasksCounter" value="169" />
+    <task id="LOCAL-00169" summary="Move method sum_of_squares to utility module&#10;&#10;This is shared by many methods but is a static method">
+      <created>1447103729430</created>
+      <option name="number" value="00169" />
+      <option name="project" value="LOCAL" />
+      <updated>1447103729430</updated>
+    </task>
+    <option name="localTasksCounter" value="170" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -997,7 +995,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Change default arguments for Swing object&#10;&#10;All parameters that a user might want to change should be set when the object is initialized. These can be changed later when creating windows. Future work should make methods for handling this" />
     <MESSAGE value="Change make_possible_edge list to static method" />
     <MESSAGE value="Modify create_windows method explicit FOR loop and delete get_window method&#10;&#10;The number of windows generated will likely be small and the list comprehension will not affect the speed a lot. The explicit FOR will make for easier changes in the future if different data needs to be passed for time delays" />
     <MESSAGE value="Remove redundant get_window_object methods" />
@@ -1022,7 +1019,8 @@
     <MESSAGE value="Remove old make_edge_table method&#10;&#10;Not used any longer" />
     <MESSAGE value="Remove tdLassoWindow class. Refactor make_edge_table.&#10;&#10;The child class should no longer be necessary. The refactor of the make_edge_table helps the results mimic those in randomforest" />
     <MESSAGE value="Move method _initialize_coeffs to class Window" />
-    <option name="LAST_COMMIT_MESSAGE" value="Move method _initialize_coeffs to class Window" />
+    <MESSAGE value="Move method sum_of_squares to utility module&#10;&#10;This is shared by many methods but is a static method" />
+    <option name="LAST_COMMIT_MESSAGE" value="Move method sum_of_squares to utility module&#10;&#10;This is shared by many methods but is a static method" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.9237668" />
   </component>
   <component name="XDebuggerManager">
@@ -1607,8 +1605,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Swing/DionesusWindow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7414806">
-          <caret line="182" column="21" selection-start-line="182" selection-start-column="21" selection-end-line="182" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.12455934">
+          <caret line="147" column="23" selection-start-line="147" selection-start-column="23" selection-end-line="147" selection-end-column="23" />
           <folding>
             <element signature="e#71#103#0" expanded="true" />
             <element signature="e#6205#6555#0" expanded="false" />
