@@ -6,6 +6,7 @@ from sklearn.cross_validation import KFold
 from scipy import integrate
 from scipy import stats
 from sklearn.metrics import mean_squared_error
+from Swing.util.utility_module import sum_of_squares
 import scipy
 import sys
 
@@ -87,7 +88,7 @@ class LassoWindow(Window):
             permuted_data = self.permute_data(self.explanatory_data)
 
             # fit the data and get coefficients
-            permuted_coeffs, _ = self.get_coeffs(self.alpha, x_data=permuted_data)
+            permuted_coeffs, _ = self.get_coeffs(self.alpha, x_data=permuted_data, crag=crag)
             dummy_list = [permuted_coeffs]
             result = self.update_variance_2D(result, dummy_list)
 
@@ -347,7 +348,7 @@ class LassoWindow(Window):
 
             # Calculate PRESS and SS
             current_press = np.sum(np.power(y_predicted - y_test, 2), axis=0)
-            current_ss = self.sum_of_squares(y_test)
+            current_ss = sum_of_squares(y_test)
 
             press += current_press
             ss += current_ss
@@ -362,18 +363,6 @@ class LassoWindow(Window):
             return np.append(q_squared, [model_q_squared, np.sum(q_squared > 0)])
         else:
             return q_squared, model_q_squared
-
-    def sum_of_squares(self, X):
-        """
-        Calculate the sum of the squares for each column
-        :param X: array-like
-            The data matrix for which the sum of squares is taken
-        :return: float or array-like
-            The sum of squares, columnwise or total
-        """
-        column_mean = np.mean(X, axis=0)
-        ss = np.sum(np.power(X - column_mean, 2), axis=0)
-        return ss
 
     def _fitstack_coeffs(self, alpha, coeff_matrix, model_list, x_matrix, target_y, col_index, crag=False):
         """
