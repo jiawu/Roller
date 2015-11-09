@@ -1,4 +1,4 @@
-from Swing_old.util.Analyzer import Analyzer
+from Swing.util.Analyzer import Analyzer
 for i in range(1,6):
     path = '/projects/p20519/roller_output/optimizing_window_size/RandomForest/insilico_size10_' + str(i)
 

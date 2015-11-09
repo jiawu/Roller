@@ -251,7 +251,7 @@ class Window(object):
         training_scores = utility.get_cragging_scores(model, predictor_train, response_train)
         test_data = utility.get_test_set(self.data, self.roller_data)
 
-        response_test = test_data.ix[:,response_col].values
+        response_test = test_data.ix[:, response_col].values
         predictor_test = test_data.drop(test_data.columns[response_col],1).values
 
         test_scores = utility.get_cragging_scores(model,predictor_test, response_test)
