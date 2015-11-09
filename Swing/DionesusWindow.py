@@ -6,6 +6,7 @@ from scipy import stats
 from sklearn.cross_decomposition import PLSRegression
 import numpy as np
 from Window import Window
+from sklearn.metrics import mean_squared_error
 import pandas as pd
 
 
@@ -154,53 +155,114 @@ class DionesusWindow(Window):
         """
         pass
 
-    def fit_window(self, pcs=3, crag=False):
+    def fit_window(self, pcs=3, crag=False, calc_mse=False):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
 
         :return:
         """
 
-        self.beta_coefficients, self.vip = self.get_coeffs(pcs, crag=crag)
+        self.beta_coefficients, self.vip, self.edge_mse_diff = self.get_coeffs(pcs, crag=crag, calc_mse=calc_mse)
     
-    def _fitstack_coeffs(self, num_pcs, coeff_matrix, vip_matrix, model_list, all_data, col_index, crag=False):
-      """
-      example call:
-      coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, all_data, col_index, n_trees, n_jobs,crag)
-      """
-      pls = PLSRegression(num_pcs, False)
+    def _fitstack_coeffs(self, n_pcs, coeff_matrix, vip_matrix, model_list, x_matrix, target_y, col_index, crag=False):
+        """
+        :param n_pcs:
+        :param coeff_matrix:
+        :param vip_matrix:
+        :param model_list:
+        :param x_matrix:
+        :param target_y:
+        :param col_index:
+        :param crag:
+        :return:
+        """
+        pls = PLSRegression(n_pcs, False)
 
-      # delete the column that is currently being tested
-      X_matrix = np.delete(all_data, col_index, axis=1)
+        # Fit the model
+        pls.fit(x_matrix, target_y)
 
-      # take out the column so that the gene does not regress on itself
-      target_TF = all_data[:, col_index]
-      pls.fit(X_matrix, target_TF)
-      model_params = {'col_index': col_index,
-                      'response': target_TF,
-                      'predictor': X_matrix,
-                      'model': pls}
+        model_params = {'col_index': col_index,
+                          'response': target_y,
+                          'predictor': x_matrix,
+                          'model': pls}
 
-      model_list.append(model_params)
+        model_list.append(model_params)
 
-      # artificially add a 0 to where the col_index is to prevent self-edges
-      coeffs = pls.coefs
-      coeffs = np.insert(coeffs, col_index, 0)
-      coeff_matrix = np.vstack((coeff_matrix, coeffs))
+        # artificially add a 0 to where the col_index is to prevent self-edges
+        coeffs = pls.coefs
+        vips = vipp(x_matrix, target_y, pls.x_scores_, pls.x_weights_)
+        if coeff_matrix.shape[1] - len(coeffs) == 1:
+            coeffs = np.insert(coeffs, col_index, 0)
+            vips = np.insert(vips, col_index, 0)
 
-      # Calculate and store VIP scores
-      vips = vipp(X_matrix, target_TF, pls.x_scores_, pls.x_weights_)
-      vips = np.insert(vips, col_index, 0)
-      vip_matrix = np.vstack((vip_matrix, vips))
+        coeff_matrix = np.vstack((coeff_matrix, coeffs))
+        vip_matrix = np.vstack((vip_matrix, vips))
 
-      # scoping issues
-      if crag:
-          training_scores, test_scores = self.crag_window(model_params)
-          self.training_scores.append(training_scores)
-          self.test_scores.append(test_scores)
-      return((coeff_matrix, vip_matrix, model_list))
+        # scoping issues
+        if crag:
+            training_scores, test_scores = self.crag_window(model_params)
+            self.training_scores.append(training_scores)
+            self.test_scores.append(test_scores)
+        return coeff_matrix, vip_matrix, model_list
     
-    def get_coeffs(self, num_pcs=3, data=None, crag=False):
+    def get_coeffs(self, num_pcs=3, x_data=None, y_data=None, crag=False, calc_mse=False):
+        """
+        :param x_data:
+        :param n_trees:
+        :return: array-like
+            An array in which the rows are children and the columns are the parents
+        """
+        # initialize items
+        if y_data is None:
+            y_data = self.response_data.copy()
+        if x_data is None:
+            x_data = self.explanatory_data.copy()
+
+        y_labels = self.response_labels.copy()
+        x_windows = self.explanatory_window.copy()
+        x_labels = self.explanatory_labels.copy()
+        coeff_matrix, model_list = self._initialize_coeffs(x_data)
+        vip_matrix = coeff_matrix.copy()
+        mse_matrix = None
+
+        # Calculate a model for each target column
+        for col_index, column in enumerate(y_data.T):
+            target_y = column.copy()
+            x_matrix = x_data.copy()
+            insert_index = col_index
+
+            # If the current window values are in the x_data, remove them
+            if self.nth_window in x_windows:
+                keep_columns = ~((x_windows == self.nth_window) & (x_labels == y_labels[col_index]))
+                insert_index = list(keep_columns).index(False)
+                x_matrix = x_matrix[:, keep_columns].copy()
+
+            coeff_matrix, vip_matrix, model_list = self._fitstack_coeffs(num_pcs, coeff_matrix, vip_matrix, model_list,
+                                                                         x_matrix, target_y, insert_index, crag=crag)
+
+            base_mse = mean_squared_error(model_list[col_index]['model'].predict(x_matrix), target_y)
+
+            if calc_mse:
+                f_coeff_matrix, f_model_list = self._initialize_coeffs(data=x_matrix)
+                f_vip_matrix = f_coeff_matrix.copy()
+                mse_list = []
+                for idx in range(x_matrix.shape[1]):
+                    adj_x_matrix = np.delete(x_matrix, idx, axis=1)
+                    f_coeff_matrix, f_vip_matrix, f_model_list = self._fitstack_coeffs(num_pcs, f_coeff_matrix,
+                                                                                       f_vip_matrix, f_model_list,
+                                                                                       adj_x_matrix, target_y,
+                                                                                       idx, crag)
+                    mse_diff = base_mse - mean_squared_error(f_model_list[idx]['model'].predict(adj_x_matrix), target_y)
+                    mse_list.append(mse_diff)
+                if mse_matrix is None:
+                    mse_matrix = np.array(mse_list)
+                else:
+                    mse_matrix = np.vstack((mse_matrix, np.array(mse_list)))
+
+        importance_dataframe = pd.DataFrame(coeff_matrix, index=y_labels, columns=x_labels)
+        importance_dataframe.index.name = 'Child'
+        importance_dataframe.columns.name = 'Parent'
+        return importance_dataframe, mse_matrix
         """
         returns a 2D array with target as rows and regulators as columns
         :param alpha: float

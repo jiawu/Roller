@@ -6,7 +6,7 @@ from sklearn.cross_validation import KFold
 from scipy import integrate
 from scipy import stats
 from sklearn.metrics import mean_squared_error
-from Swing.util.utility_module import sum_of_squares
+from util.utility_module import sum_of_squares
 import scipy
 import sys
 

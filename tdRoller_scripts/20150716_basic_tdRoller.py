@@ -31,7 +31,7 @@ pd.options.display.float_format = '{:,.5f}'.format
 np.random.seed(8)
 
 tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_lag=min_lag, max_lag=max_lag,
-            window_type='Lasso')
+            window_type='Dionesus')
 tdr.zscore_all_data()
 tdr.set_window(window_width)
 tdr.create_windows()
