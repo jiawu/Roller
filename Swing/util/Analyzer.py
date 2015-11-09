@@ -9,7 +9,9 @@ import pdb
 
 class Analyzer:
     
-    """ Analyzer is a object that analyzes groups of Rollers. Figures out the completeness if your experiment. Checks for errored Rollers. Helps open and sort pickle files. It also has methods that ranks Rollers by their model and cragging scores."""
+    """ Analyzer is a object that analyzes groups of Rollers. Figures out the completeness if your experiment.
+    Checks for errored Rollers. Helps open and sort pickle files. It also has methods that ranks Rollers by their model
+    and cragging scores."""
 
     def __init__(self, my_arg):
         """Constructor: check if the argument supplied is a folder string or a roller object. If it is a folder, process many rollers. If it is a roller object, process one roller and return a dataframe"""

@@ -7,8 +7,8 @@ import numpy as np
 def get_test_set(window_raw_data, roller_raw_data):
     roller_vec = roller_raw_data['Time'].unique()
     window_vec = window_raw_data['Time'].unique()
-    test_set_vec = np.setdiff1d(roller_vec,window_vec)
-    test_data = roller_raw_data.loc[roller_raw_data['Time'].isin(test_set_vec)].drop('Time',1)
+    test_set_vec = np.setdiff1d(roller_vec, window_vec)
+    test_data = roller_raw_data.loc[roller_raw_data['Time'].isin(test_set_vec)].drop('Time', 1)
     return(test_data)
 
 
