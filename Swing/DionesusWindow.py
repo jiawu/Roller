@@ -8,6 +8,7 @@ import numpy as np
 from Window import Window
 from sklearn.metrics import mean_squared_error
 import pandas as pd
+import sys
 
 
 class DionesusWindow(Window):
@@ -36,20 +37,41 @@ class DionesusWindow(Window):
         self.permutation_p_values = None
         self.permutation_pvalues = None
 
-    def make_edge_table(self):
+    def make_edge_table(self, calc_mse=False):
         """
-        if self.permutation_p_values is None:
-            raise ValueError("p values must be set before making the edge table. Use method run_permutation test")
 
-        if self.edge_stability_auc is None:
-            raise ValueError("edge stability values must be set before making the edge table. "
-                             "Use method run_permutation test")
-        self.edge_table["p_value"] = self.permutation_p_values.flatten()
-        self.edge_table["stability"] = self.edge_stability_auc.flatten()
+        :return:
+
+        Called by:
+            Swing.rank_edges()
         """
-        # For now, the edge table will only consist of VIP scores
-        self.results_table['p_value'] = self.permutation_p_values.flatten()
-        self.results_table['importance'] = np.asarray(self.vip).flatten()
+        # Build indexing method for all possible edges. Length = number of parents * number of children
+        parent_index = range(self.beta_coefficients.shape[1])
+        child_index = range(self.beta_coefficients.shape[0])
+        a, b = np.meshgrid(parent_index, child_index)
+
+        # Flatten arrays to be used in link list creation
+        df = pd.DataFrame()
+        df['Parent'] = self.beta_coefficients.columns.values[a.flatten()]
+        df['Child'] = self.beta_coefficients.index.values[b.flatten()]
+        df['Importance'] = self.vip.values.flatten()
+        df['Beta'] = self.beta_coefficients.values.flatten()
+        df['P_window'] = self.explanatory_window[a.flatten()]
+
+        # Calculate the window of the child node, which is equivalent to the current window index
+        child_values = np.array([self.nth_window] * self.beta_coefficients.shape[0])
+        df['C_window'] = child_values[b.flatten()]
+
+        if self.permutation_p_values is not None:
+            df["p_value"] = self.permutation_p_values.flatten()
+
+        # Remove any self edges
+        df = df[~((df['Parent'] == df['Child']) & (df['P_window'] == df['C_window']))]
+
+        if calc_mse:
+            df['MSE_diff'] = self.edge_mse_diff.flatten()
+
+        return df
         
     def sort_edges(self, method="importance"):
         if self.results_table is None:
@@ -110,8 +132,7 @@ class DionesusWindow(Window):
         # initialize permutation results array
         self.permutation_means = np.empty((self.n_genes, self.n_genes))
         self.permutation_sd = np.empty((self.n_genes, self.n_genes))
-        nth_window = self.nth_window
-        zeros = np.zeros((self.n_genes, self.n_genes))
+        zeros = np.zeros(self.beta_coefficients.shape)
 
         # initialize running calculation
         result = {'n': zeros.copy(), 'mean': zeros.copy(), 'ss': zeros.copy()}
@@ -122,13 +143,12 @@ class DionesusWindow(Window):
             # print 'Perm Run: ' +str(nth_perm)
 
             # permute data
-            permuted_data = self.permute_data(self.response_data)
+            permuted_data = self.permute_data(self.explanatory_data)
 
             # fit the data and get coefficients
 
-            permuted_coeffs, permuted_vip = self.get_coeffs(data=permuted_data)
-            dummy_list = []
-            dummy_list.append(permuted_coeffs)
+            permuted_coeffs, permuted_vip, _ = self.get_coeffs(x_data=permuted_data)
+            dummy_list = [permuted_coeffs]
             result = self.update_variance_2D(result, dummy_list)
 
         self.permutation_means = result['mean'].copy()
@@ -190,7 +210,9 @@ class DionesusWindow(Window):
 
         # artificially add a 0 to where the col_index is to prevent self-edges
         coeffs = pls.coefs
+        coeffs = np.reshape(coeffs, (len(coeffs),))
         vips = vipp(x_matrix, target_y, pls.x_scores_, pls.x_weights_)
+        vips = np.reshape(vips, (len(vips),))
         if coeff_matrix.shape[1] - len(coeffs) == 1:
             coeffs = np.insert(coeffs, col_index, 0)
             vips = np.insert(vips, col_index, 0)
@@ -259,125 +281,11 @@ class DionesusWindow(Window):
                 else:
                     mse_matrix = np.vstack((mse_matrix, np.array(mse_list)))
 
-        importance_dataframe = pd.DataFrame(coeff_matrix, index=y_labels, columns=x_labels)
+        coeff_dataframe = pd.DataFrame(coeff_matrix, index=y_labels, columns=x_labels)
+        coeff_dataframe.index.name = 'Child'
+        coeff_dataframe.columns.name = 'Parent'
+
+        importance_dataframe = pd.DataFrame(vip_matrix, index=y_labels, columns=x_labels)
         importance_dataframe.index.name = 'Child'
         importance_dataframe.columns.name = 'Parent'
-        return importance_dataframe, mse_matrix
-        """
-        returns a 2D array with target as rows and regulators as columns
-        :param alpha: float
-            value to use for lasso fitting
-        :param data: array-like, optional
-            Data to fit. If none, will use the window values. Default is None
-        :return:
-        """
-        all_data, coeff_matrix, model_list, max_nodes = self._initialize_coeffs(data=data)
-        vip_matrix = coeff_matrix.copy()
-
-        for col_index, column in enumerate(all_data.T):
-            # Instantiate a new PLSR object
-            coeff_matrix, vip_matrix, model_list = self._fitstack_coeffs(num_pcs = num_pcs, coeff_matrix=coeff_matrix, vip_matrix=vip_matrix, model_list=model_list, all_data=all_data, col_index=col_index, crag=crag)
-
-        return coeff_matrix, vip_matrix
-
-class tdDionesusWindow(DionesusWindow):
-    def __init__(self, dataframe, window_info, roller_data):
-        super(tdDionesusWindow, self).__init__(dataframe, window_info, roller_data)
-        self.x_data = None
-        self.x_labels = None 
-        self.x_times = None
-        self.edge_table = None
-        self.include_window = True
-        self.earlier_window_idx = None
-        
-    def create_linked_list(self, numpy_array_2D, value_label):
-        """labels and array should be in row-major order"""
-        linked_list = pd.DataFrame({'regulator-target': self.edge_list, value_label: numpy_array_2D.flatten()})
-        return linked_list
-    
-    def resample_window(self):
-        """
-        Resample window values, along a specific axis
-        :param window_values: array
-
-        :return: array
-        """
-        n, p = self.x_data.shape
-
-        # For each column randomly choose samples
-        resample_values = np.array([np.random.choice(self.x_data[:, ii], size=n) for ii in range(p)]).T
-
-        # resample_window = pd.DataFrame(resample_values, columns=self.df.columns.values.copy(),
-        #                               index=self.df.index.values.copy())
-        return resample_values 
-
-    def fit_window(self, pcs=3, crag=False):
-        """
-        Set the attributes of the window using expected pipeline procedure and calculate beta values
-        :return:
-        """
-        self.beta_coefficients, self.vip = self.get_coeffs(pcs, crag=crag, data=self.x_data)
-        self.edge_importance = self.vip.copy()
-        
-    def get_coeffs(self, num_pcs=3,crag=False, data=None):
-        """
-        :param data:
-        :param n_trees:
-        :return: array-like
-            An array in which the rows are children and the columns are the parents
-        """
-        if data is None:
-            data = self.x_data
-        ## initialize items
-        all_data, coeff_matrix, model_list, max_nodes = self._initialize_coeffs(data=data)
-        vip_matrix = coeff_matrix.copy()
-
-        for col_index, column in enumerate(all_data[:,:max_nodes].T):
-            # Once we get through all the nodes at this timepoint we can stop
-            if col_index == max_nodes:
-                break
-            coeff_matrix, model_list = self._fitstack_coeffs(num_pcs=num_pcs,coeff_matrix=coeff_matrix, vip_matrix=vip_matrix, model_list=model_list, all_data=all_data, col_index=col_index,crag=crag)
-            
-        """
-        if self.x_labels == None:
-            label = self.raw_data.columns[1:]
-            importance_dataframe = pd.DataFrame(coeff_matrix, index=label[:max_nodes], columns=label)
-        else:
-        """
-        importance_dataframe = pd.DataFrame(vip_matrix, index=self.x_labels[:max_nodes], columns=self.x_labels)
-        importance_dataframe.index.name = 'Child'
-        importance_dataframe.columns.name = 'Parent'
-        return importance_dataframe
-
-    def make_edge_table(self):
-        """
-        Make the edge table
-        :return:
-        """
-
-        # Build indexing method for all possible edges. Length = number of parents * number of children
-        parent_index = range(self.edge_importance.shape[1])
-        child_index = range(self.edge_importance.shape[0])
-        a, b = np.meshgrid(parent_index, child_index)
-
-        # Flatten arrays to be used in link list creation
-        df = pd.DataFrame()
-        df['Parent'] = self.edge_importance.columns.values[a.flatten()]
-        df['Child'] = self.edge_importance.index.values[b.flatten()]
-        df['Importance'] = self.edge_importance.values.flatten()
-        df['P_window'] = self.x_times[a.flatten()]
-        df['C_window'] = self.x_times[b.flatten()]
-        if self.permutation_p_values is not None:
-            df["p_value"] = self.permutation_p_values.flatten()
-
-        return df
-
-    def run_permutation_test(self, n_permutations=10, crag=False):
-        #if not self.include_window:
-        #    return
-        #initialize permutation results array
-        self.permutation_means = np.empty(self.edge_importance.shape)
-        self.permutation_sd = np.empty(self.edge_importance.shape)
-
-        zeros = np.zeros(self.edge_importance.shape)
-        self._permute_coeffs(zeros, crag=False, n_permutations=n_permutations)
+        return coeff_dataframe, importance_dataframe, mse_matrix

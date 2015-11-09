@@ -149,7 +149,6 @@ class RandomForestRegressionWindow(Window):
                         'model': rfr}
         model_list.append(model_params)
         importance_vector = rfr.feature_importances_
-
         # artificially add a 0 to where the col_index is
         # to prevent self-edges
         if coeff_matrix.shape[1] - len(importance_vector) == 1:
