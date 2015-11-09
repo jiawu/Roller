@@ -134,16 +134,6 @@ class RandomForestRegressionWindow(Window):
         self.edge_importance, self.edge_mse_diff = self.get_coeffs(self.n_trees, crag=crag, n_jobs=self.n_jobs,
                                                                    calc_mse=calc_mse)
 
-    def _initialize_coeffs(self, data):
-        """ Returns a copy of the vector, an empty array with a defined shape, an empty list, and the maximum number of
-        nodes
-        """
-
-        coeff_matrix = np.array([], dtype=np.float_).reshape(0, data.shape[1])
-
-        model_list = []
-        return coeff_matrix, model_list
-
     def _fitstack_coeffs(self, coeff_matrix, model_list, x_matrix, target_y, col_index, n_trees, n_jobs, crag):
 
         # Initialize the random forest object

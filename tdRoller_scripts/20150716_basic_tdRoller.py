@@ -10,14 +10,14 @@ import sys
 
 pd.set_option('display.width', 1000)
 insilico_n = 3
-window_width = 20
+window_width = 15
 min_lag = 0
 max_lag = 1
 n_trees = 10
 n_permutes = 10
 mse_adjust = False
 combine_method = 'mean_mean'
-sort_by = 'adj'
+sort_by = 'rank'
 file_path = "../data/dream4/insilico_size10_%i_timeseries.tsv"%insilico_n
 gene_start_column = 1
 time_label = "Time"

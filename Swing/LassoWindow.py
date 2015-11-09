@@ -375,16 +375,6 @@ class LassoWindow(Window):
         ss = np.sum(np.power(X - column_mean, 2), axis=0)
         return ss
 
-    def _initialize_coeffs(self, data):
-        """ Returns a copy of the vector, an empty array with a defined shape, an empty list, and the maximum number of
-        nodes
-        """
-
-        coeff_matrix = np.array([], dtype=np.float_).reshape(0, data.shape[1])
-
-        model_list = []
-        return coeff_matrix, model_list
-
     def _fitstack_coeffs(self, alpha, coeff_matrix, model_list, x_matrix, target_y, col_index, crag=False):
         """
                                       
@@ -491,7 +481,7 @@ class LassoWindow(Window):
         df = pd.DataFrame()
         df['Parent'] = self.beta_coefficients.columns.values[a.flatten()]
         df['Child'] = self.beta_coefficients.index.values[b.flatten()]
-        df['Beta'] = self.beta_coefficients.values.flatten()
+        df['Importance'] = self.beta_coefficients.values.flatten()
         df['Stability'] = self.edge_stability_auc.flatten()
         df['P_window'] = self.explanatory_window[a.flatten()]
 
