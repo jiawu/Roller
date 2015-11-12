@@ -23,6 +23,36 @@ class TestDionesusWindow(unittest.TestCase):
         self.test_dionesus = self.roller.window_list[0]
         self.permutes = 10
 
+    def test_make_edge_table(self):
+        pass
+
+    def test_sort_edges(self):
+        pass
+
+    def test_generate_results_table(self):
+        pass
+
+    def test_rank_results(self):
+        pass
+
+    def test_run_permutation_test(self):
+        pass
+
+    def test_calc_p_value(self):
+        pass
+
+    def test_initialize_params(self):
+        pass
+
+    def test_fit_window(self):
+        pass
+
+    def test_fitstack_coeffs(self):
+        pass
+
+    def test_get_coeffs(self):
+        pass
+    
     def test_get_coeffs(self):
         # All coefficients and vip scores should be nonzero except along the diagonal
         expected_non_zero = len(self.test_dionesus.genes)**2-len(self.test_dionesus.genes)
