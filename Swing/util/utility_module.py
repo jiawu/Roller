@@ -4,6 +4,22 @@ import sklearn.metrics as skmet
 import numpy as np
 
 
+def get_explanatory_indices(index, min_lag, max_lag):
+        # In append mode, the start index can always be 0
+        if max_lag is None:
+            start_idx = 0
+        else:
+            start_idx = max(index-max_lag, 0)
+        end_index = max(index-min_lag+1, 0)
+
+        explanatory_indices = range(start_idx, end_index)
+
+        # If the maximum lag required is greater than the index, this window must be left censored
+        if len(explanatory_indices) == 0 or max_lag > index:
+            explanatory_indices = None
+
+        return explanatory_indices
+
 def get_test_set(window_raw_data, roller_raw_data):
     roller_vec = roller_raw_data['Time'].unique()
     window_vec = window_raw_data['Time'].unique()
