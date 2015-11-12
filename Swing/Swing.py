@@ -13,24 +13,6 @@ from DionesusWindow import DionesusWindow
 from LassoWindow import LassoWindow
 from util import utility_module as utility
 from util.Evaluator import Evaluator
-from util.utility_module import elbow_criteria
-
-
-def get_explanatory_indices(index, min_lag, max_lag):
-        # In append mode, the start index can always be 0
-        if max_lag is None:
-            start_idx = 0
-        else:
-            start_idx = max(index-max_lag, 0)
-        end_index = max(index-min_lag+1, 0)
-
-        explanatory_indices = range(start_idx, end_index)
-
-        # If the maximum lag required is greater than the index, this window must be left censored
-        if len(explanatory_indices) == 0 or max_lag > index:
-            explanatory_indices = None
-
-        return explanatory_indices
 
 
 class Swing(object):
@@ -240,7 +222,7 @@ class Swing(object):
             if (index + self.window_width) > self.overall_width:
                 raise Exception('Window created that is out of bounds based on parameters')
 
-            explanatory_indices = get_explanatory_indices(index, min_lag=self.min_lag, max_lag=self.max_lag)
+            explanatory_indices = utility.get_explanatory_indices(index, min_lag=self.min_lag, max_lag=self.max_lag)
             raw_window = self.get_window_raw(index, random_time)
             if explanatory_indices is not None:
                 explanatory_dict, response_dict = self.get_window_data(index, explanatory_indices)
@@ -671,7 +653,7 @@ class Swing(object):
         :param df:
         :return: dict
         """
-        x, y = elbow_criteria(range(len(df.Importance)), df.Importance.values.astype(np.float64))
+        x, y = utility.elbow_criteria(range(len(df.Importance)), df.Importance.values.astype(np.float64))
         elbow_dict = {'num_edges':x, 'importance_threshold':y}
 
         return elbow_dict
