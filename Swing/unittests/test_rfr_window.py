@@ -25,6 +25,27 @@ class TestRFRWindow(unittest.TestCase):
         self.trees = 10
         self.permutes = 10
 
+    def test_make_edge_table(self):
+        pass
+
+    def test_permute_coeffs(self):
+        pass
+
+    def test_calc_p_value(self):
+        pass
+
+    def test_initialize_params(self):
+        pass
+
+    def test_fit_window(self):
+        pass
+
+    def test_fitstack_coeffs(self):
+        pass
+
+    def test_get_coeffs(self):
+        pass
+
     def test_get_coeffs(self):
         # With alpha at 0 everything should be nonzero except the diagonal values
         expected_non_zero = len(self.test_rfr.genes)**2-len(self.test_rfr.genes)

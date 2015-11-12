@@ -19,6 +19,61 @@ class TestLassoWindow(unittest.TestCase):
         self.roller = Swing.Swing(file_path, gene_start_column, gene_end, time_label, separator, window_type = "Lasso")
         self.test_lassoWindow = Swing.LassoWindow(self.roller.current_window)
 
+    def test_sort_edges(self):
+        pass
+
+    def test_rank_results(self):
+        pass
+
+    def test_permute_coeffs(self):
+        pass
+
+    def test_run_permutation_test(self):
+        pass
+
+    def test_calc_p_value(self):
+        pass
+
+    def test_run_bootstrap(self):
+        pass
+
+    def test_bootstrap_alpha(self):
+        pass
+
+    def test_calc_edge_freq(self):
+        pass
+
+    def test_auc(self):
+        pass
+
+    def test_get_nth_window_auc(self):
+        pass
+
+    def test_initialize_params(self):
+        pass
+    
+    def test_fit_window(self):
+        pass
+
+    def test_get_null_alpha(self):
+        pass
+
+    def test_cv_select_alpha(self):
+        pass
+
+    def test_cross_validate_alpha(self):
+        pass
+
+    def test_fitstack_coeffs(self):
+        pass
+
+    def test_get_coeffs(self):
+        pass
+
+    def test_make_edge_table(self):
+        pass
+
+    
     def test_initialize_params_default(self):
         """ Test parameter initialization with default arguments """
         expected_alpha = self.test_lassoWindow.cv_select_alpha()
