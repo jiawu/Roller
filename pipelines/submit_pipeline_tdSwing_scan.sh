@@ -1,12 +1,12 @@
 #!/bin/bash
 #MSUB -A p20519
-#MSUB -l walltime=140:00:00
+#MSUB -l walltime=24:00:00
 #MSUB -l nodes=1:ppn=1
 #MSUB -M jiawu@u.northwestern.edu
 #MSUB -j oe
 #MSUB -o /projects/p20519/jia_output/td_scan.txt
 #MSUB -m bae
-#MSUB -q long
+#MSUB -q normal
 #MSUB -N td_scan_ntrees_log
 #MSUB -V
 
@@ -18,7 +18,7 @@ cd /home/jjw036/Roller/pipelines
 
 
 iterating_param="td_window"
-iterating_style="minmax 1 6"
+iterating_style="num 21"
 if [ $param_set -eq 1 ] 
 then
     #echo "param_set is ${param_set}"
@@ -49,6 +49,15 @@ fi
 
 echo "python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}"
 python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
-#python run_tdSwing_scan.py /projects/p20519/roller_output/optimizing_window_size/RandomForest/janes /projects/p20519/roller_output/stability_analysis/RandomForest/janes_${iterating_param}_ /projects/p20519/Roller/data/invitro/janes_timeseries.tsv n_trees log
+
+#data_folder=${data_folder/RandomForest/Lasso}
+#output_folder=${output_folder/RandomForest/Lasso}
+#python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
+
+#data_folder=${data_folder/Lasso/Dionesus}
+#output_folder=${output_folder/Lasso/Dionesus}
+#python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
+
+#python run_tdSwing_scan.py /projects/p20519/roller_output/optimizing_window_size/RandomForest/janes /projects/p20519/roller_output/stability_analysis/Lasso/janes_${iterating_param}_ /projects/p20519/Roller/data/invitro/janes_timeseries.tsv n_trees log
 #python run_pipeline_RF_window_scan_janes.py ${nwindows}
 
