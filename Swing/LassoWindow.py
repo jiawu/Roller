@@ -9,6 +9,7 @@ from sklearn.metrics import mean_squared_error
 from util.utility_module import sum_of_squares
 import scipy
 import sys
+import pdb
 
 from Window import Window
 
@@ -204,7 +205,7 @@ class LassoWindow(Window):
 
         self.beta_coefficients, self.edge_mse_diff = self.get_coeffs(self.alpha, crag=crag, calc_mse=calc_mse)
 
-    def get_null_alpha(self, max_expected_alpha=1e4, min_step_size=1e-9):
+    def get_null_alpha(self, max_expected_alpha=1e4, min_step_size=1e-9, s_edges=False):
         """
         Get the smallest value of alpha that returns a lasso coefficient matrix of all zeros
 
@@ -227,14 +228,20 @@ class LassoWindow(Window):
 
         child_nodes = self.response_data.shape[1]
         parent_nodes = self.explanatory_data.shape[1]
-        if self.nth_window in self.explanatory_window:
-            # Can't allow self edges
-            max_edges = parent_nodes*child_nodes-child_nodes
-        else:
-            max_edges = parent_nodes*child_nodes
+
+        if s_edges is False:
+            max_edges = parent_nodes*child_nodes-parent_nodes
+
+        else:            
+            if self.nth_window in self.explanatory_window:
+                # Can't allow self edges
+                max_edges = parent_nodes*child_nodes-child_nodes
+            else:
+              max_edges = parent_nodes*child_nodes
 
         # Raise exception if Lasso doesn't converge with alpha == 0
         zero_alpha_coeffs, _ = self.get_coeffs(0)
+        
         if np.count_nonzero(zero_alpha_coeffs) != max_edges:
             raise ValueError('Lasso does not converge with alpha = 0')
 
@@ -386,8 +393,8 @@ class LassoWindow(Window):
 
         # artificially add a 0 to where the col_index is
         # to prevent self-edges
-        if coeff_matrix.shape[1] - len(coeffs) == 1:
-            coeffs = np.insert(coeffs, col_index, 0)
+        if coeff_matrix.shape[1] - len(coeffs) == len(col_index):
+            coeffs = np.insert(coeffs, [x-n for n,x in enumerate(col_index)], 0)
 
         # Stack coefficients
         coeff_matrix = np.vstack((coeff_matrix, coeffs))
@@ -399,6 +406,20 @@ class LassoWindow(Window):
 
         return coeff_matrix, model_list
 
+    def remove_self_edges(self, data_array, insert_index):
+        """
+        remove self_edges by removing columns in the the matrices in data_list that have the same name as the response variable column.
+
+        """
+        target_label = self.response_labels[insert_index]
+        #find all instances of this label
+        target_indices = [x for x, label in enumerate(self.explanatory_labels) if label == target_label]
+
+        altered_data_list = []
+        
+        parsed_array = np.delete(data_array, target_indices, 1)
+        return(parsed_array, target_indices)
+    
     def get_coeffs(self, alpha, crag=False, x_data=None, y_data=None, calc_mse=False):
         """
         :param x_data:
@@ -408,39 +429,29 @@ class LassoWindow(Window):
         """
         # initialize items
         if y_data is None:
-            y_data = self.response_data.copy()
+            y_data = self.response_data
         if x_data is None:
-            x_data = self.explanatory_data.copy()
+            x_data = self.explanatory_data
 
-        y_labels = self.response_labels.copy()
-        x_windows = self.explanatory_window.copy()
-        x_labels = self.explanatory_labels.copy()
-        coeff_matrix, model_list = self._initialize_coeffs(x_data)
+        coeff_matrix, model_list, model_inputs = self._initialize_coeffs(data = x_data, y_data = y_data, x_labels = self.explanatory_labels, y_labels = self.response_labels, x_window = self.explanatory_window, nth_window = self.nth_window)
         mse_matrix = None
-
         # Calculate a model for each target column
-        for col_index, column in enumerate(y_data.T):
-            target_y = column.copy()
-            x_matrix = x_data.copy()
-            insert_index = col_index
+        for target_y, x_matrix, insert_index in model_inputs:
+            if len(self.earlier_windows) != 1:
+                x_matrix, target_indices= self.remove_self_edges(x_matrix, insert_index)
+            else:
+                target_indices = [insert_index]
+            coeff_matrix, vip_matrix = self._fitstack_coeffs(alpha, coeff_matrix, model_list, x_matrix, target_y, target_indices, crag=crag)
+          
 
-            # If the current window values are in the x_data, remove them
-            if self.nth_window in x_windows:
-                keep_columns = ~((x_windows == self.nth_window) & (x_labels == y_labels[col_index]))
-                insert_index = list(keep_columns).index(False)
-                x_matrix = x_matrix[:, keep_columns].copy()
-
-            coeff_matrix, model_list = self._fitstack_coeffs(alpha, coeff_matrix, model_list, x_matrix, target_y,
-                                                             insert_index, crag=crag)
-
-            base_mse = mean_squared_error(model_list[col_index]['model'].predict(x_matrix), target_y)
+            base_mse = mean_squared_error(model_list[insert_index]['model'].predict(x_matrix), target_y)
 
             if calc_mse:
-                f_coeff_matrix, f_model_list = self._initialize_coeffs(data=x_matrix)
+                f_coeff_matrix, f_model_list = self._initialize_coeffs(data=x_matrix, y_data=y_data, x_labels=self.explanatory_labels,y_labels = self.response_labels, x_window = self.explanatory_window, nth_window = self.nth_window)
                 mse_list = []
                 for idx in range(x_matrix.shape[1]):
                     adj_x_matrix = np.delete(x_matrix, idx, axis=1)
-                    f_coeff_matrix, f_model_list = self._fitstack_coeffs(alpha, f_coeff_matrix, f_model_list,
+                    f_coeff_matrix, f_model_list, f_model_inputs = self._fitstack_coeffs(alpha, f_coeff_matrix, f_model_list,
                                                                          adj_x_matrix, target_y, idx, crag)
                     mse_diff = base_mse - mean_squared_error(f_model_list[idx]['model'].predict(adj_x_matrix), target_y)
                     mse_list.append(mse_diff)
@@ -449,7 +460,7 @@ class LassoWindow(Window):
                 else:
                     mse_matrix = np.vstack((mse_matrix, np.array(mse_list)))
 
-        importance_dataframe = pd.DataFrame(coeff_matrix, index=y_labels, columns=x_labels)
+        importance_dataframe = pd.DataFrame(coeff_matrix, index=self.response_labels, columns=self.explanatory_labels)
         importance_dataframe.index.name = 'Child'
         importance_dataframe.columns.name = 'Parent'
         return importance_dataframe, mse_matrix
