@@ -9,6 +9,9 @@ from Window import Window
 from sklearn.metrics import mean_squared_error
 import pandas as pd
 import sys
+import pdb
+from sklearn.decomposition import PCA
+from util import utility_module as utility
 
 
 class DionesusWindow(Window):
@@ -26,6 +29,8 @@ class DionesusWindow(Window):
     def __init__(self, dataframe, window_info, roller_data, td_window, explanatory_dict, response_dict):
         super(DionesusWindow, self).__init__(dataframe, window_info, roller_data,  td_window, explanatory_dict,
                                              response_dict)
+        self.num_pcs = None
+        
         self.beta_coefficients = None
         self.vip = None
         self.cv_table = None
@@ -147,7 +152,10 @@ class DionesusWindow(Window):
 
             # fit the data and get coefficients
 
-            permuted_coeffs, permuted_vip, _ = self.get_coeffs(x_data=permuted_data)
+            result_tuple  = self.get_coeffs(x_data=permuted_data)
+            permuted_coeffs = result_tuple[0]
+            permuted_vip = result_tuple[1]
+
             dummy_list = [permuted_coeffs]
             result = self.update_variance_2D(result, dummy_list)
 
@@ -170,10 +178,32 @@ class DionesusWindow(Window):
 
     def initialize_params(self):
         """
-        Nothing to initialize for Dionesus
+        Optimize the number of PCs to use.
+
         :return:
         """
-        pass
+        
+        # calculate the Q2 score using PC=1,2,3,4,5
+        
+        # pick the PCs that maximizes the Q2 score-PCs tradeoff, using the elbow rule, maximizing the second derivative or maximum curvature.
+        result_tuple = self.get_coeffs(crag=False, calc_mse=False)
+        mse_diff = result_tuple[2]
+        model_list = result_tuple[3]
+        model_inputs = result_tuple[4]
+
+        explained_variances = None
+        for response, explanatory, index in model_inputs:
+            pca = PCA()
+            pca.fit(explanatory)
+            if explained_variances is None:
+                explained_variances = pca.explained_variance_ratio_
+            else:
+                explained_variances = np.vstack((explained_variances, pca.explained_variance_ratio_))
+        
+        explained_variances_mean = np.mean(explained_variances, axis = 0)
+        test_pcs = [x for x in range(1, len(explained_variances_mean)+1)]
+        elbow_x, elbow_y = utility.elbow_criteria(test_pcs, explained_variances_mean)
+        self.num_pcs = elbow_x
 
     def fit_window(self, pcs=3, crag=False, calc_mse=False):
         """
@@ -181,8 +211,15 @@ class DionesusWindow(Window):
 
         :return:
         """
+        if self.num_pcs is not None:
+            pcs = self.num_pcs
+        result_tuple = self.get_coeffs(pcs, crag = crag, calc_mse = calc_mse)
+        
+        self.beta_coefficients = result_tuple[0]
+        self.vip = result_tuple[1]
+        self.edge_mse_diff = result_tuple[2]
+        self.model_list = result_tuple[3]
 
-        self.beta_coefficients, self.vip, self.edge_mse_diff = self.get_coeffs(pcs, crag=crag, calc_mse=calc_mse)
     
     def _fitstack_coeffs(self, n_pcs, coeff_matrix, vip_matrix, model_list, x_matrix, target_y, col_index, crag=False):
         """
@@ -236,36 +273,23 @@ class DionesusWindow(Window):
         """
         # initialize items
         if y_data is None:
-            y_data = self.response_data.copy()
+            y_data = self.response_data
         if x_data is None:
-            x_data = self.explanatory_data.copy()
+            x_data = self.explanatory_data
 
-        y_labels = self.response_labels.copy()
-        x_windows = self.explanatory_window.copy()
-        x_labels = self.explanatory_labels.copy()
-        coeff_matrix, model_list = self._initialize_coeffs(x_data)
+        coeff_matrix, model_list, model_inputs = self._initialize_coeffs(data = x_data, y_data = y_data, x_labels = self.explanatory_labels, y_labels = self.response_labels, x_window = self.explanatory_window, nth_window = self.nth_window)
         vip_matrix = coeff_matrix.copy()
         mse_matrix = None
 
         # Calculate a model for each target column
-        for col_index, column in enumerate(y_data.T):
-            target_y = column.copy()
-            x_matrix = x_data.copy()
-            insert_index = col_index
-
-            # If the current window values are in the x_data, remove them
-            if self.nth_window in x_windows:
-                keep_columns = ~((x_windows == self.nth_window) & (x_labels == y_labels[col_index]))
-                insert_index = list(keep_columns).index(False)
-                x_matrix = x_matrix[:, keep_columns].copy()
-
+        for target_y, x_matrix, insert_index in model_inputs:
             coeff_matrix, vip_matrix, model_list = self._fitstack_coeffs(num_pcs, coeff_matrix, vip_matrix, model_list,
                                                                          x_matrix, target_y, insert_index, crag=crag)
 
-            base_mse = mean_squared_error(model_list[col_index]['model'].predict(x_matrix), target_y)
+            base_mse = mean_squared_error(model_list[insert_index]['model'].predict(x_matrix), target_y)
 
             if calc_mse:
-                f_coeff_matrix, f_model_list = self._initialize_coeffs(data=x_matrix)
+                f_coeff_matrix, f_model_list, f_model_inputs = self._initialize_coeffs(data=x_matrix, y_data=y_data, x_labels=self.explanatory_labels, y_labels = self.response_labels, x_window = self.explanatory_window, nth_window = self.nth_window)
                 f_vip_matrix = f_coeff_matrix.copy()
                 mse_list = []
                 for idx in range(x_matrix.shape[1]):
@@ -281,11 +305,12 @@ class DionesusWindow(Window):
                 else:
                     mse_matrix = np.vstack((mse_matrix, np.array(mse_list)))
 
-        coeff_dataframe = pd.DataFrame(coeff_matrix, index=y_labels, columns=x_labels)
+
+        coeff_dataframe = pd.DataFrame(coeff_matrix, index=self.response_labels, columns=self.explanatory_labels)
         coeff_dataframe.index.name = 'Child'
         coeff_dataframe.columns.name = 'Parent'
 
-        importance_dataframe = pd.DataFrame(vip_matrix, index=y_labels, columns=x_labels)
+        importance_dataframe = pd.DataFrame(vip_matrix, index=self.response_labels, columns=self.explanatory_labels)
         importance_dataframe.index.name = 'Child'
         importance_dataframe.columns.name = 'Parent'
-        return coeff_dataframe, importance_dataframe, mse_matrix
+        return coeff_dataframe, importance_dataframe, mse_matrix, model_list, model_inputs
