@@ -173,32 +173,19 @@ class RandomForestRegressionWindow(Window):
             An array in which the rows are children and the columns are the parents
         """
         # initialize items
-        y_data = self.response_data.copy()
+        y_data = self.response_data
         if x_data is None:
-            x_data = self.explanatory_data.copy()
+            x_data = self.explanatory_data
 
-        y_labels = self.response_labels.copy()
-        x_windows = self.explanatory_window.copy()
-        x_labels = self.explanatory_labels.copy()
-        coeff_matrix, model_list = self._initialize_coeffs(x_data)
+        coeff_matrix, model_list, model_inputs = self._initialize_coeffs(data = x_data, y_data = y_data, x_labels = self.explanatory_labels, y_labels = self.response_labels, x_window = self.explanatory_window, nth_window = self.nth_window)
+
         mse_matrix = None
 
-        # Calculate a model for each target column
-        for col_index, column in enumerate(y_data.T):
-            target_y = column.copy()
-            x_matrix = x_data.copy()
-            insert_index = col_index
-
-            # If the current window values are in the x_data, remove them
-            if self.nth_window in x_windows:
-                keep_columns = ~((x_windows == self.nth_window) & (x_labels == y_labels[col_index]))
-                insert_index = list(keep_columns).index(False)
-                x_matrix = x_matrix[:, keep_columns].copy()
-
+        for target_y, x_matrix, insert_index in model_inputs:
             coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, x_matrix, target_y, insert_index,
                                                              n_trees, n_jobs, crag)
 
-            base_mse = mean_squared_error(model_list[col_index]['model'].predict(x_matrix), target_y)
+            base_mse = mean_squared_error(model_list[insert_index]['model'].predict(x_matrix), target_y)
 
             if calc_mse:
                 f_coeff_matrix, f_model_list = self._initialize_coeffs(data=x_matrix)
@@ -214,7 +201,7 @@ class RandomForestRegressionWindow(Window):
                 else:
                     mse_matrix = np.vstack((mse_matrix, np.array(mse_list)))
 
-        importance_dataframe = pd.DataFrame(coeff_matrix, index=y_labels, columns=x_labels)
+        importance_dataframe = pd.DataFrame(coeff_matrix, index=self.response_labels, columns=self.explanatory_labels)
         importance_dataframe.index.name = 'Child'
         importance_dataframe.columns.name = 'Parent'
         return importance_dataframe, mse_matrix
