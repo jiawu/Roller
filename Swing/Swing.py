@@ -13,7 +13,7 @@ from DionesusWindow import DionesusWindow
 from LassoWindow import LassoWindow
 from util import utility_module as utility
 from util.Evaluator import Evaluator
-
+import pdb
 
 class Swing(object):
     """
@@ -378,6 +378,8 @@ class Swing(object):
 
         for window in self.window_list:
             window.initialize_params()
+
+        
         return self.window_list
 
     def fit_windows(self, crag=False, alpha=None, n_trees=None, n_jobs=None, show_progress=True, calc_mse=False):
@@ -554,9 +556,14 @@ class Swing(object):
             if calc_mse:
                 current_df = current_df[current_df['MSE_diff'] < 0]
 
-            current_df['adj_imp'] = np.abs(current_df['Importance'])*(1-current_df['p_value'])
 
+            current_df['adj_imp'] = np.abs(current_df['Importance'])*(1-current_df['p_value'])
+            if self.window_type is "Dionesus":
+                current_df['adj_imp'] = np.abs(current_df['Importance'])
+            elif self.window_type is "Lasso":
+                current_df['adj_imp'] = np.abs(current_df['Stability'])
             current_df.sort(['adj_imp'], ascending=False, inplace=True)
+            #current_df.sort(['Importance'], ascending=False, inplace=True)
             current_df['Rank'] = np.arange(len(current_df))
 
             if df is None:

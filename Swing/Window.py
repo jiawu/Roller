@@ -6,7 +6,7 @@ import sys
 import numpy as np
 import pandas as pd
 from scipy import stats
-
+import pdb
 
 class Window(object):
     """
@@ -189,7 +189,7 @@ class Window(object):
                   "n": n}
         return result
 
-    def _initialize_coeffs(self, data):
+    def _initialize_coeffs(self, data, y_data, x_labels, y_labels, x_window, nth_window, s_edges = False):
         """ Returns a copy of the vector, an empty array with a defined shape, an empty list, and the maximum number of
         nodes
         """
@@ -197,7 +197,25 @@ class Window(object):
         coeff_matrix = np.array([], dtype=np.float_).reshape(0, data.shape[1])
 
         model_list = []
-        return coeff_matrix, model_list
+
+        model_inputs = []
+        
+        # Construct a list of tuples:
+        # Tuple = (Response, Explanatory, Index)
+
+        for col_index, target_y in enumerate(y_data.T):
+            x_matrix = data.copy()
+            insert_index = col_index
+
+            if nth_window in x_window:
+                keep_columns = ~((x_window == self.nth_window) & (x_labels == y_labels[col_index]))
+                insert_index = list(keep_columns).index(False)
+                x_matrix = x_matrix[:, keep_columns].copy()
+
+            input_tuple = (target_y, x_matrix, insert_index)
+            model_inputs.append(input_tuple)
+
+        return(coeff_matrix, model_list, model_inputs)
 
     def pack_values(self, df):
         #pack the values into separate time series. It outputs a list of pandasdataframes such that each series can be analyzed separately.
