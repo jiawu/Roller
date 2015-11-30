@@ -9,15 +9,15 @@ import pandas as pd
 import sys
 
 #pd.set_option('display.width', 1000)
-insilico_n = 5
-window_width = 5
-min_lag = 0
+insilico_n = 2
+window_width = 15
+min_lag = 1
 max_lag = 3
-n_trees = 100
-n_permutes = 100
-mse_adjust = True
+n_trees = 10
+n_permutes = 10
+mse_adjust = False
 combine_method = 'mean_mean'
-sort_by = 'rank'
+sort_by = 'adj'
 file_path = "../data/dream4/insilico_size10_%i_timeseries.tsv"%insilico_n
 gene_start_column = 1
 time_label = "Time"
@@ -46,7 +46,7 @@ df2['Rank'] = np.arange(len(df2))
 roc_dict, pr_dict = tdr.score(df2)
 
 print df2
-
+box_data = [tdr.edge_dict[edge]['dataframe']['adj_imp'].values for edge in df2['regulator-target'].values]
 gs_ranks = [df2['Rank'][df2['regulator-target'] == edge].values[0] for edge in true_edges]
 for ii in zip(true_edges, gs_ranks):
     print ii
@@ -64,3 +64,8 @@ print 'sorting by: ', sort_by
 print 'AUROC: ', roc_dict['auroc'][-1]
 print 'AUPR: ', pr_dict['aupr'][-1]
 print 'F1: ', (2*roc_dict['auroc'][-1]*pr_dict['aupr'][-1]/(roc_dict['auroc'][-1]+pr_dict['aupr'][-1]))
+plt.boxplot(box_data)
+plt.xlabel('Ranked Edges', size=20)
+plt.ylabel('Adjusted Importance Score', size=20)
+plt.tight_layout()
+plt.show()

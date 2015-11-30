@@ -613,7 +613,8 @@ class Swing(object):
                                         "max_importance": 0, 'max_edge': None, 'lag_importance': 0,
                                         'lag_method': lag_method, 'rank_importance': np.nan, 'adj_importance': 0}
                 continue
-            current_df = df[df.Edge == edge]
+
+            current_df = df[df['Edge'] == edge]
             max_idx = current_df['Importance'].idxmax()
             lag_set = list(set(current_df.Lag))
             lag_imp = score_method([lump_method(current_df.Importance[current_df.Lag == lag]) for lag in lag_set])
