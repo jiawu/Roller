@@ -188,7 +188,7 @@ class RandomForestRegressionWindow(Window):
             base_mse = mean_squared_error(model_list[insert_index]['model'].predict(x_matrix), target_y)
 
             if calc_mse:
-                f_coeff_matrix, f_model_list = self._initialize_coeffs(data=x_matrix)
+                f_coeff_matrix, f_model_list, _ = self._initialize_coeffs(data=x_matrix, y_data=y_data, x_labels = self.explanatory_labels, y_labels = self.response_labels, x_window = self.explanatory_window, nth_window = self.nth_window)
                 mse_list = []
                 for idx in range(x_matrix.shape[1]):
                     adj_x_matrix = np.delete(x_matrix, idx, axis=1)
