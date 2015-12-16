@@ -151,16 +151,15 @@ if __name__ == '__main__':
                  'Ecoli': '/Users/jfinkle/Documents/Northwestern/MoDyLS/gnw/src/ch/epfl/lis/networks/'
                           'ecoli_transcriptional_network_regulonDB_6_7.tsv'}
     n_nodes = 10
-    num_nets = 10
+    num_nets = 20
     mode = {'Yeast': ['--scc-seed', str(n_nodes)], 'Ecoli': ['--random-seed']}
     base_net = path_dict[network]
     jar_file = jar_location + 'gnw-3.1.2b.jar'
     sim_settings = directory + 'settings.txt'
-    structures = directory + 'network_structures/' + network + '/'
     data_out = directory + 'network_data/' + network + '/'
     optional_args = mode[network]+['--greedy-selection', '--subnet-size='+str(n_nodes)]
 
     make_files = False
 
     gnw = GnwWrapper(jar_file, sim_settings)
-    gnw.make_networks(base_net, 4, structures, num_nets, optional_args, out_name=network)
+    gnw.make_networks(base_net, 4, data_out, num_nets, optional_args, out_name=network)
