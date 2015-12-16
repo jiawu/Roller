@@ -1,1 +1,0 @@
-java -jar gnw-3.1.2b.jar --extract -c settings.txt --input-net /Volumes/Hephaestus/jfinkle/Documents/Northwestern/MoDyLS/gnw/src/ch/epfl/lis/networks/yeast_transcriptional_network_Balaji2006.tsv --scc-seed 10 --greedy-selection --subnet-size=10 --num-subnets=100 --output-net-format=4 --output-path ./insilico_nets/
