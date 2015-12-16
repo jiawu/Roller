@@ -64,10 +64,10 @@ class GnwWrapper(object):
                 graph_matcher = isomorphism.DiGraphMatcher(net, graph)
                 if graph_matcher.is_isomorphic():
                     unique_net = False
-                    print 'ISOMORPHIC!'
                     break
 
             if not unique_net:
+                print 'isomorphic'
                 os.remove(network_file)
                 os.remove(transformed_file)
                 continue
@@ -83,16 +83,14 @@ class GnwWrapper(object):
             # Remove the base networks
             os.remove(network_file)
             os.remove(transformed_file)
-            if len(os.listdir(temp_path)) == 36:
+            if len(os.listdir(temp_path)) == 44:
                 # Rename files
                 for fn in os.listdir(temp_path):
                     new_fn = fn.replace('1.', str(net_num)+'.').replace('1_', str(net_num)+'_')
                     os.rename(temp_path+fn, out_path+new_fn)
                 network_list.append(net)
-
-
-            # If the simulation happened properly then save the network!
-
+            else:
+                print 'not simulated properly. check settings if this persists'
 
     def anonymize_genes(self, file_path, in_place=True):
         """
@@ -138,31 +136,6 @@ class GnwWrapper(object):
             subprocess.call(self.jar_call+call_list, stdout=self.devnull, stderr=self.devnull)
 
 
-def anonymize_genes(structure_directory):
-    for net in os.listdir(structure_directory):
-        if '.xml' not in net:
-            continue
-
-        current_num = net.split('_')[3].split('-')[1].split('.')[0]
-        tree = ET.parse(structure_directory+net)
-        model = tree.getroot()[0]
-        species_list = model[2]
-        species_dict = {s.attrib['name']: ('G'+str(idx+1)) for idx, s in enumerate(species_list)
-                        if s.attrib['name'] != '_void_'}
-
-        new_file = structure_directory + 'anonymous/yeast_anon_' + current_num + '.xml'
-        with open(new_file, "wt") as fout:
-            with open(structure_directory+net, "rt") as fin:
-                for line in fin:
-                    for species, anon_id in species_dict.iteritems():
-                        line = line.replace(species, anon_id)
-                    fout.write(line)
-        fout.close()
-
-def transform(input, ouput, settings, out_format):
-    pass
-
-
 if __name__ == '__main__':
     """
     READ FIRST!
@@ -177,48 +150,17 @@ if __name__ == '__main__':
                           'yeast_transcriptional_network_Balaji2006.tsv',
                  'Ecoli': '/Users/jfinkle/Documents/Northwestern/MoDyLS/gnw/src/ch/epfl/lis/networks/'
                           'ecoli_transcriptional_network_regulonDB_6_7.tsv'}
+    n_nodes = 10
+    num_nets = 10
+    mode = {'Yeast': ['--scc-seed', str(n_nodes)], 'Ecoli': ['--random-seed']}
     base_net = path_dict[network]
     jar_file = jar_location + 'gnw-3.1.2b.jar'
     sim_settings = directory + 'settings.txt'
     structures = directory + 'network_structures/' + network + '/'
     data_out = directory + 'network_data/' + network + '/'
-    optional_args = ['--random-seed', '--greedy-selection', '--subnet-size=10']
-    num_nets = 10
+    optional_args = mode[network]+['--greedy-selection', '--subnet-size='+str(n_nodes)]
+
     make_files = False
 
     gnw = GnwWrapper(jar_file, sim_settings)
     gnw.make_networks(base_net, 4, structures, num_nets, optional_args, out_name=network)
-
-    sys.exit()
-    # Make files
-    if make_files:
-        for (path, names, filenames) in os.walk(structures):
-            for filename in filenames:
-                if '.xml' in filename:
-                    network = filename.replace('.xml', '')
-                    # if not os.path.exists(output+network):
-                    #     os.makedirs(output+network)
-                    # Simulate
-                    code = subprocess.call(['java', '-jar', jar_file, '--simulate', '-c', sim_settings, '--input-net',
-                                            structures+filename])
-
-    sys.exit()
-
-    # Remove files
-    ii=1
-    jj=1
-    for (path, names, filenames) in os.walk(output):
-            for filename in filenames:
-                if ('.py' not in filename and 'timeseries.tsv' not in filename and 'goldstandard.tsv' not in filename) \
-                        or 'noise' in filename or 'proteins' in filename:
-                    os.remove(filename)
-                if 'tsv' in filename:
-                    net_num = filename.split('_')[3].split('-')[1]
-                    if 'timeseries.tsv' in filename:
-                        print net_num,
-                        df = pd.read_csv(filename, sep='\t')
-                        print df.columns
-                    if 'goldstandard.tsv' in filename:
-                        df = pd.read_csv(filename, sep='\t', header=None)
-                        print df.head()
-                        sys.exit()
