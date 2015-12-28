@@ -4,7 +4,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
 from scipy import stats
 
-from Window import Window
+from .Window import Window
 
 
 class RandomForestRegressionWindow(Window):

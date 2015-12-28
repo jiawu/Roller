@@ -1,7 +1,7 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
-import util.utility_module as utility
+from .util import utility_module as utility
 import sys
 import numpy as np
 import pandas as pd
@@ -199,7 +199,7 @@ class Window(object):
         model_list = []
 
         model_inputs = []
-        
+
         # Construct a list of tuples:
         # Tuple = (Response, Explanatory, Index)
 
@@ -236,7 +236,7 @@ class Window(object):
         for series in series_list:
             rise = np.diff(series, n, axis = 0)
             time = self.data[self.time_label].unique()
-            rrun = np.array([j-i for i,j in zip(time[:-1], time[1:])])
+            rrun = np.array([j-i for i,j in list(zip(time[:-1], time[1:]))])
             #the vector represents the scalars used to divide each row
             rates = rise/rrun[:,None]
             rates_list.append(rates)

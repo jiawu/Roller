@@ -1,8 +1,8 @@
-from Swing_old.util.Evaluator import Evaluator
-from Swing_old.tdSwing import tdSwing
+from Swing.util.Evaluator import Evaluator
+from Swing.tdSwing import tdSwing
 import pandas as pd
 import pdb
-def get_td_stats(file_path, min_lag = 0): 
+def get_td_stats(file_path, min_lag = 0):
     gene_start_column = 1
     time_label = "Time"
     separator = "\t"
@@ -29,10 +29,10 @@ def get_td_stats(file_path, min_lag = 0):
     tdr.full_edge_list.loc[tdr.full_edge_list.p_value>=0.05, 'Importance'] = 0
     tdr.make_static_edge_dict(true_edges, lag_method='median_median')
     df2 = tdr.make_sort_df(tdr.edge_dict, 'lag')
-    print len(df2)
+    print(len(df2))
     roc_dict, pr_dict = tdr.score(df2)
-    print roc_dict['auroc'][-1]
-    print pr_dict['aupr'][-1]#+(1-pr_dict['recall'][-1])
+    print(roc_dict['auroc'][-1])
+    print(pr_dict['aupr'][-1])#+(1-pr_dict['recall'][-1])
     #return((roc_dict['auroc'][-1],pr_dict['aupr'][-1]))
     return((roc_dict, pr_dict, df2))
 

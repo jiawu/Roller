@@ -3,7 +3,6 @@ import scipy.stats as ss
 import sklearn.metrics as skmet
 import numpy as np
 
-
 def get_explanatory_indices(index, min_lag, max_lag):
         # In append mode, the start index can always be 0
         if max_lag is None:
@@ -72,7 +71,7 @@ def average_rank(ranked_result_list, col_string):
 
     aggr_ranks = left_df.drop(['regulator-target'], axis = 1)
     #assign to temporary variables to prevent the calc columns to be involved in other calculations
-    range_col = zip(aggr_ranks.min(axis = 1), aggr_ranks.max(axis = 1))
+    range_col = list(zip(aggr_ranks.min(axis = 1), aggr_ranks.max(axis = 1)))
     mean_col = aggr_ranks.mean(axis = 1)
     median_col = aggr_ranks.median(axis = 1)
     sd_col = aggr_ranks.std(axis = 1, ddof=1)
@@ -140,15 +139,16 @@ def make_possible_edge_list(parents, children, self_edges=True):
     """
     parent_index = range(len(parents))
     child_index = range(len(children))
+
     a, b = np.meshgrid(parent_index, child_index)
-    parent_list = parents[a.flatten()]
-    child_list = children[b.flatten()]
+    parent_list = list(parents[a.flatten()])
+    child_list = list(children[b.flatten()])
     possible_edge_list = None
     if self_edges:
-        possible_edge_list = zip(parent_list, child_list)
+        possible_edge_list = list(zip(parent_list, child_list))
 
     elif not self_edges:
-        possible_edge_list = zip(parent_list[parent_list != child_list], child_list[parent_list != child_list])
+        possible_edge_list = [x for x in zip(parent_list, child_list) if x[0] != x[1]]
 
     return possible_edge_list
 

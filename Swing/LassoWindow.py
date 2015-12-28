@@ -6,12 +6,12 @@ from sklearn.cross_validation import KFold
 from scipy import integrate
 from scipy import stats
 from sklearn.metrics import mean_squared_error
-from util.utility_module import sum_of_squares
+from .util.utility_module import sum_of_squares
 import scipy
 import sys
 import pdb
 
-from Window import Window
+from .Window import Window
 
 
 class LassoWindow(Window):
@@ -232,7 +232,7 @@ class LassoWindow(Window):
         if s_edges is False:
             max_edges = parent_nodes*child_nodes-parent_nodes
 
-        else:            
+        else:
             if self.nth_window in self.explanatory_window:
                 # Can't allow self edges
                 max_edges = parent_nodes*child_nodes-child_nodes
@@ -241,7 +241,7 @@ class LassoWindow(Window):
 
         # Raise exception if Lasso doesn't converge with alpha == 0
         zero_alpha_coeffs, _ = self.get_coeffs(0)
-        
+
         if np.count_nonzero(zero_alpha_coeffs) != max_edges:
             raise ValueError('Lasso does not converge with alpha = 0')
 
@@ -351,7 +351,7 @@ class LassoWindow(Window):
 
             # Run Lasso
             current_coef, _ = self.get_coeffs(alpha, x_data=x_train, y_data=y_train)
-            
+
             y_predicted = np.dot(x_test, current_coef.T)
 
             # Calculate PRESS and SS
@@ -374,7 +374,7 @@ class LassoWindow(Window):
 
     def _fitstack_coeffs(self, alpha, coeff_matrix, model_list, x_matrix, target_y, col_index, crag=False):
         """
-                                      
+
         example call:
         coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, all_data, col_index, n_trees, n_jobs,crag)
         """
@@ -416,10 +416,10 @@ class LassoWindow(Window):
         target_indices = [x for x, label in enumerate(self.explanatory_labels) if label == target_label]
 
         altered_data_list = []
-        
+
         parsed_array = np.delete(data_array, target_indices, 1)
         return(parsed_array, target_indices)
-    
+
     def get_coeffs(self, alpha, crag=False, x_data=None, y_data=None, calc_mse=False):
         """
         :param x_data:
@@ -442,7 +442,7 @@ class LassoWindow(Window):
             else:
                 target_indices = [insert_index]
             coeff_matrix, vip_matrix = self._fitstack_coeffs(alpha, coeff_matrix, model_list, x_matrix, target_y, target_indices, crag=crag)
-          
+
 
             base_mse = mean_squared_error(model_list[insert_index]['model'].predict(x_matrix), target_y)
 
@@ -464,7 +464,7 @@ class LassoWindow(Window):
         importance_dataframe.index.name = 'Child'
         importance_dataframe.columns.name = 'Parent'
         return importance_dataframe, mse_matrix
-    
+
     def make_edge_table(self, calc_mse=False):
         """
 
