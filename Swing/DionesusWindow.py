@@ -1,17 +1,18 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
-from util.pls_nipals import vipp
 from scipy import stats
 from sklearn.cross_decomposition import PLSRegression
 import numpy as np
-from Window import Window
 from sklearn.metrics import mean_squared_error
 import pandas as pd
 import sys
 import pdb
 from sklearn.decomposition import PCA
-from util import utility_module as utility
+
+from .Window import Window
+from .util import utility_module as utility
+from .util.pls_nipals import vipp
 
 
 class DionesusWindow(Window):
@@ -30,7 +31,7 @@ class DionesusWindow(Window):
         super(DionesusWindow, self).__init__(dataframe, window_info, roller_data,  td_window, explanatory_dict,
                                              response_dict)
         self.num_pcs = None
-        
+
         self.beta_coefficients = None
         self.vip = None
         self.cv_table = None
@@ -77,7 +78,7 @@ class DionesusWindow(Window):
             df['MSE_diff'] = self.edge_mse_diff.flatten()
 
         return df
-        
+
     def sort_edges(self, method="importance"):
         if self.results_table is None:
             raise ValueError("The edge table must be created before getting edges")
@@ -182,9 +183,9 @@ class DionesusWindow(Window):
 
         :return:
         """
-        
+
         # calculate the Q2 score using PC=1,2,3,4,5
-        
+
         # pick the PCs that maximizes the Q2 score-PCs tradeoff, using the elbow rule, maximizing the second derivative or maximum curvature.
         result_tuple = self.get_coeffs(crag=False, calc_mse=False)
         mse_diff = result_tuple[2]
@@ -199,7 +200,7 @@ class DionesusWindow(Window):
                 explained_variances = pca.explained_variance_ratio_
             else:
                 explained_variances = np.vstack((explained_variances, pca.explained_variance_ratio_))
-        
+
         explained_variances_mean = np.mean(explained_variances, axis = 0)
         test_pcs = [x for x in range(1, len(explained_variances_mean)+1)]
         elbow_x, elbow_y = utility.elbow_criteria(test_pcs, explained_variances_mean)
@@ -214,13 +215,13 @@ class DionesusWindow(Window):
         if self.num_pcs is not None:
             pcs = self.num_pcs
         result_tuple = self.get_coeffs(pcs, crag = crag, calc_mse = calc_mse)
-        
+
         self.beta_coefficients = result_tuple[0]
         self.vip = result_tuple[1]
         self.edge_mse_diff = result_tuple[2]
         self.model_list = result_tuple[3]
 
-    
+
     def _fitstack_coeffs(self, n_pcs, coeff_matrix, vip_matrix, model_list, x_matrix, target_y, col_index, crag=False):
         """
         :param n_pcs:
@@ -263,7 +264,7 @@ class DionesusWindow(Window):
             self.training_scores.append(training_scores)
             self.test_scores.append(test_scores)
         return coeff_matrix, vip_matrix, model_list
-    
+
     def get_coeffs(self, num_pcs=3, x_data=None, y_data=None, crag=False, calc_mse=False):
         """
         :param x_data:

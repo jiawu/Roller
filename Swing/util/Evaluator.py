@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import integrate
-from sets import Set
 import pandas as pd
 import pdb
 
@@ -12,7 +11,7 @@ class Evaluator:
         self.gs_file = gold_standard_file
         self.gs_data = pd.read_csv(gold_standard_file, sep=sep, header=None)
         self.gs_data.columns = ['regulator','target','exists']
-        self.gs_data['regulator-target'] = zip(self.gs_data.regulator, self.gs_data.target)
+        self.gs_data['regulator-target'] = list(zip(self.gs_data.regulator, self.gs_data.target))
         self.interaction_label = interaction_label
         self.gs_flat = self.gs_data[self.gs_data['exists'] > 0]['regulator-target']
         self.gs_neg = self.gs_data[self.gs_data['exists'] == 0]['regulator-target']
@@ -23,7 +22,7 @@ class Evaluator:
             self.full_list = tuple(map(tuple,self.possible_edges(np.array(self.regulators),np.array(self.targets))))
             self.full_list = [ x for x in self.full_list if x[0] != x[1] ]
             self.full_list = pd.Series(self.full_list)
-        elif node_list:  
+        elif node_list:
             all_regulators = np.array(list(set(node_list)))
             self.full_list = tuple(map(tuple,self.possible_edges(all_regulators,all_regulators)))
             self.full_list=[ x for x in self.full_list if x[0] != x[1]]
@@ -34,7 +33,7 @@ class Evaluator:
             all_targets = self.gs_data['target'].unique().tolist()
             all_regulators.extend(all_targets)
             all_regulators = np.array(list(set(all_regulators)))
-            
+
             self.full_list = tuple(map(tuple,self.possible_edges(all_regulators,
               all_regulators)))
             #remove self edges
@@ -57,7 +56,7 @@ class Evaluator:
         a, b = np.meshgrid(parent_index, child_index)
         parent_list = parents[a.flatten()]
         child_list = children[b.flatten()]
-        possible_edge_list = np.array(zip(parent_list, child_list))
+        possible_edge_list = np.array(list(zip(parent_list, child_list)))
         return possible_edge_list
 
     def create_link_list(self,df, w):
@@ -68,7 +67,7 @@ class Evaluator:
         children = edges[:, 1]
         directed_edges = df.values.flatten()
         all_edges = np.abs(directed_edges)
-        ll_array = [parents, children, zip(parents, children), directed_edges, all_edges, w]
+        ll_array = [parents, children, list(zip(parents, children)), directed_edges, all_edges, w]
         link_list = pd.DataFrame(ll_array).transpose()
         link_list.columns = ['Parent', 'Child', 'Edge', 'Directed_Edge', 'Edge_Exists', 'W']
         #link_list.sort(columns='Edge_Exists', ascending=False, inplace=True)
@@ -78,7 +77,7 @@ class Evaluator:
         tpr = []
         fpr = []
         pred = pred.drop(pred.index[[i for i,v in enumerate(pred['regulator-target']) if v[0]==v[1]]], axis=0)
-        
+
         pred['tp']=pred['regulator-target'].isin(self.gs_flat)
         pred['fp']=~pred['regulator-target'].isin(self.gs_flat)
 
@@ -92,14 +91,14 @@ class Evaluator:
         pred['fp_cs'] = pred['fp'].cumsum()
         pred['fn_cs'] = total_positive - pred['tp_cs']
         pred['tn_cs'] = total_negative - pred['fp_cs']
-        
+
         pred['recall']=pred['tp_cs']/(pred['tp_cs']+pred['fn_cs'])
         pred['precision']=pred['tp_cs']/(pred['tp_cs']+pred['fp_cs'])
         aupr = integrate.cumtrapz(x=pred['recall'], y=pred['precision']).tolist()
         aupr.insert(0,0)
         pred['aupr'] = aupr
         return pred['precision'], pred['recall'], pred['aupr']
-      
+
     def calc_pr_old(self, pred, sort_on = 'exists'):
         # True Positive Rate (TPR) = TP/(TP+FN)
         # False Positive Rate (FPR) = FP/(FP+TN)
@@ -139,9 +138,9 @@ class Evaluator:
 
     def _evaluate(self, current_list):
         """ evaluate the list using sets hooray, packs it up in dict """
-        gold_standard = Set(self.gs_flat)
-        prediction = Set(current_list)
-        full = Set(self.full_list)
+        gold_standard = set(self.gs_flat)
+        prediction = set(current_list)
+        full = set(self.full_list)
 
         tp = len(prediction.intersection(gold_standard))
         #both in prediction and gold_standard
@@ -169,7 +168,7 @@ class Evaluator:
         tpr = []
         fpr = []
         pred = pred.drop(pred.index[[i for i,v in enumerate(pred['regulator-target']) if v[0]==v[1]]], axis=0)
-        
+
         pred['tp']=pred['regulator-target'].isin(self.gs_flat)
         pred['fp']=~pred['regulator-target'].isin(self.gs_flat)
 
@@ -183,14 +182,14 @@ class Evaluator:
         pred['fp_cs'] = pred['fp'].cumsum()
         pred['fn_cs'] = total_positive - pred['tp_cs']
         pred['tn_cs'] = total_negative - pred['fp_cs']
-        
+
         pred['tpr']=pred['tp_cs']/total_positive
         pred['fpr']=pred['fp_cs']/total_negative
         auroc = integrate.cumtrapz(x=pred['fpr'], y=pred['tpr']).tolist()
         auroc.insert(0,0)
         pred['auroc'] = auroc
         return pred['tpr'], pred['fpr'], pred['auroc']
-    
+
     def calc_roc_old(self, pred):
         # True Positive Rate (TPR) = TP/(TP+FN)
         # False Positive Rate (FPR) = FP/(FP+TN)
@@ -236,7 +235,7 @@ if __name__ == '__main__':
     plt.xlabel('Recall')
     plt.ylabel('Precision')
     plt.legend(['Test', 'Random'])
-    print area
+    print(area)
     plt.show()
 
     tpr, fpr, area = self.calc_roc(reference, prediction)
@@ -244,6 +243,6 @@ if __name__ == '__main__':
     plt.xlabel('FPR')
     plt.ylabel('TPR')
     plt.legend(['Test', 'Random'], loc='best')
-    print area
+    print(area)
     plt.show()
 # Load adjacency matrices
