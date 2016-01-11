@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Exploring Dream8 In Silico data.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/Exploring Dream8 In Silico data.ipynb" afterPath="$PROJECT_DIR$/scripts/Exploring Dream8 In Silico data.ipynb" />
     </list>
     <ignored path="Roller.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -472,12 +472,6 @@
       <option name="number" value="Default" />
       <updated>1413916753036</updated>
     </task>
-    <task id="LOCAL-00092" summary="Changed LassoWindow.get_coef so that a new lasso object is made with each iteration">
-      <created>1435265730102</created>
-      <option name="number" value="00092" />
-      <option name="project" value="LOCAL" />
-      <updated>1435265730102</updated>
-    </task>
     <task id="LOCAL-00093" summary="Added unittest for dionesus window">
       <created>1435327951579</created>
       <option name="number" value="00093" />
@@ -766,7 +760,13 @@
       <option name="project" value="LOCAL" />
       <updated>1452476885640</updated>
     </task>
-    <option name="localTasksCounter" value="141" />
+    <task id="LOCAL-00141" summary="JDF start exploring Dream8 data">
+      <created>1452478602112</created>
+      <option name="number" value="00141" />
+      <option name="project" value="LOCAL" />
+      <updated>1452478602112</updated>
+    </task>
+    <option name="localTasksCounter" value="142" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -849,7 +849,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Functionalized some tdRoller code" />
     <MESSAGE value="added optimized function for compiling tdRoller results" />
     <MESSAGE value="overwrote score() for tdRoller" />
     <MESSAGE value="Changed tdRoller so method make_sort_df() can sort based on different ways" />
@@ -874,7 +873,8 @@
     <MESSAGE value="Fix mse calculations when allowing min lag of 0" />
     <MESSAGE value="Fix function options to calculate mse when desired&#10;&#10;The argument calc_mse gets passed through many objects and functions, but the code should run faster when that is set to False. The MSE calculations will be skipped" />
     <MESSAGE value="Test window size selection in ipython notebook" />
-    <option name="LAST_COMMIT_MESSAGE" value="Test window size selection in ipython notebook" />
+    <MESSAGE value="JDF start exploring Dream8 data" />
+    <option name="LAST_COMMIT_MESSAGE" value="JDF start exploring Dream8 data" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.10526317" />
   </component>
   <component name="XDebuggerManager">
