@@ -85,6 +85,7 @@ def get_td_stats(**kwargs):
     df = pd.read_csv(file_path,sep=separator)
     current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
     node_list = df.columns.tolist()
+    print(node_list)
     node_list.pop(0)
 
     evaluator = Evaluator(current_gold_standard, '\t', node_list=node_list)
