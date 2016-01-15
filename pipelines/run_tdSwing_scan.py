@@ -11,7 +11,7 @@ def main(data_folder, output_path, target_dataset, my_iterating_param, param_tes
 
     current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
 
-    default_params = {'data_folder':data_folder, 'file_path':target_dataset, 'td_window':15,'min_lag':1,'max_lag':3,'n_trees':500,'permutation_n':100, 'lag_method':'mean_mean', 'calc_mse':False, 'bootstrap_n':1000,'n_trials':n_trials, 'run_time':current_time, 'sort_by': 'rank','iterating_param':my_iterating_param}
+    default_params = {'data_folder':data_folder, 'file_path':target_dataset, 'td_window':15,'min_lag':1,'max_lag':1,'n_trees':500,'permutation_n':100, 'lag_method':'mean_mean', 'calc_mse':False, 'bootstrap_n':1000,'n_trials':n_trials, 'run_time':current_time, 'sort_by': 'rank','iterating_param':my_iterating_param}
 
     overall_df = pd.DataFrame()
 
@@ -27,6 +27,7 @@ def main(data_folder, output_path, target_dataset, my_iterating_param, param_tes
                 run_params['max_lag'] = 0
             
             roc,pr, tdr = pl.get_td_stats(**run_params)
+            pdb.set_trace()
             run_params['auroc']=roc
             run_params['aupr']=pr
             

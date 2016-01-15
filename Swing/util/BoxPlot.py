@@ -27,11 +27,11 @@ class BoxPlot(BasePlot):
         bp=self.axes.boxplot(y_values, labels=labels, widths = 0.3,medianprops = self.medianprops, whiskerprops=self.whiskerprops,flierprops=self.flierprops, meanprops=self.meanpointprops,showmeans=True, boxprops=self.boxprops, capprops=self.capprops)
         return(bp)
 
-    def add_formatting(self):
-        self.axes.set_title('tdRoller Parameter Sensitivity', fontsize=25)
+    def add_formatting(self, test_statistic, title):
+        self.axes.set_title(title, fontsize=25)
         self.axes.set_aspect(25)
 
-        self.axes.set_ylabel('AUPR', fontsize=30)
+        self.axes.set_ylabel(test_statistic, fontsize=30)
 
         ylabels = self.axes.get_yticklabels()
         xlabels = self.axes.get_xticklabels()
