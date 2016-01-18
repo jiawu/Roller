@@ -1,13 +1,13 @@
 #!/bin/bash
 #MSUB -A p20519
-#MSUB -l walltime=4:00:00
+#MSUB -l walltime=24:00:00
 #MSUB -l nodes=1:ppn=1
 #MSUB -M jiawu@u.northwestern.edu
 #MSUB -j oe
 #MSUB -o /projects/p20519/jia_output/td_scan.txt
 #MSUB -m bae
-#MSUB -q short
-#MSUB -N sampling
+#MSUB -q normal
+#MSUB -N filter_scans_for_dream4_rfr
 #MSUB -V
 
 param_set=${MOAB_JOBARRAYINDEX}
@@ -17,8 +17,11 @@ module load python/anaconda
 cd /home/jjw036/Roller/pipelines
 
 
-iterating_param="td_window"
-iterating_style="num 5 10 15 21"
+iterating_param="filter_noisy"
+iterating_style="boolean true false"
+
+iterating_param2="td_window"
+iterating_style2="num 20"
 
 if [[ ${param_set} == 1 ]] 
 then
@@ -137,16 +140,16 @@ elif [[ ${param_set} -ge 92 && ${param_set} -lt 112 ]]
 then
     insilico_dataset_index=$((${param_set}-91))
 
-    data_folder="/projects/p20519/roller_output/community/yeast-insilico_size10_${insilico_dataset_index}"
-    output_folder="/projects/p20519/roller_output/community/yeast-insilico_size10_${insilico_dataset_index}_"
+    data_folder="/projects/p20519/roller_output/community_rfd/yeast-insilico_size10_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/community_rfd/yeast-insilico_size10_${insilico_dataset_index}_"
     file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Yeast/Yeast-${insilico_dataset_index}_timeseries.tsv"
 
 elif [[ ${param_set} -ge 112 && ${param_set} -lt 132 ]]
 then
     insilico_dataset_index=$((${param_set}-111))
 
-    data_folder="/projects/p20519/roller_output/community/ecoli-insilico_size10_${insilico_dataset_index}"
-    output_folder="/projects/p20519/roller_output/community/ecoli-insilico_size10_${insilico_dataset_index}_"
+    data_folder="/projects/p20519/roller_output/community_rfd/ecoli-insilico_size10_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/community_rfd/ecoli-insilico_size10_${insilico_dataset_index}_"
     file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Ecoli/Ecoli-${insilico_dataset_index}_timeseries.tsv"
   
 
@@ -157,6 +160,7 @@ fi
 
 echo "python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}"
 python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
+#python run_tdSwing_scan_vgranger.py ${data_folder} ${output_folder} ${file_path} ${iterating_param2} ${iterating_style2}
 
 #data_folder=${data_folder/RandomForest/Lasso}
 #output_folder=${output_folder/RandomForest/Lasso}

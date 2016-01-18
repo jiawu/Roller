@@ -1,13 +1,13 @@
 #!/bin/bash
 #MSUB -A p20519
-#MSUB -l walltime=4:00:00
+#MSUB -l walltime=24:00:00
 #MSUB -l nodes=1:ppn=1
 #MSUB -M jiawu@u.northwestern.edu
 #MSUB -j oe
 #MSUB -o /projects/p20519/jia_output/td_scan.txt
 #MSUB -m bae
-#MSUB -q short
-#MSUB -N sampling
+#MSUB -q normal
+#MSUB -N td_window_scans_for_dream4
 #MSUB -V
 
 param_set=${MOAB_JOBARRAYINDEX}
@@ -137,16 +137,16 @@ elif [[ ${param_set} -ge 92 && ${param_set} -lt 112 ]]
 then
     insilico_dataset_index=$((${param_set}-91))
 
-    data_folder="/projects/p20519/roller_output/community/yeast-insilico_size10_${insilico_dataset_index}"
-    output_folder="/projects/p20519/roller_output/community/yeast-insilico_size10_${insilico_dataset_index}_"
+    data_folder="/projects/p20519/roller_output/community_rfd/yeast-insilico_size10_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/community_rfd/yeast-insilico_size10_${insilico_dataset_index}_"
     file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Yeast/Yeast-${insilico_dataset_index}_timeseries.tsv"
 
 elif [[ ${param_set} -ge 112 && ${param_set} -lt 132 ]]
 then
     insilico_dataset_index=$((${param_set}-111))
 
-    data_folder="/projects/p20519/roller_output/community/ecoli-insilico_size10_${insilico_dataset_index}"
-    output_folder="/projects/p20519/roller_output/community/ecoli-insilico_size10_${insilico_dataset_index}_"
+    data_folder="/projects/p20519/roller_output/community_rfd/ecoli-insilico_size10_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/community_rfd/ecoli-insilico_size10_${insilico_dataset_index}_"
     file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Ecoli/Ecoli-${insilico_dataset_index}_timeseries.tsv"
   
 
