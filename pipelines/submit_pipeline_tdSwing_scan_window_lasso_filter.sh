@@ -1,13 +1,13 @@
 #!/bin/bash
 #MSUB -A p20519
-#MSUB -l walltime=4:00:00
+#MSUB -l walltime=24:00:00
 #MSUB -l nodes=1:ppn=1
 #MSUB -M jiawu@u.northwestern.edu
 #MSUB -j oe
 #MSUB -o /projects/p20519/jia_output/td_scan.txt
 #MSUB -m bae
-#MSUB -q short
-#MSUB -N sampling
+#MSUB -q normal
+#MSUB -N filter_scans_for_dream4_lasso
 #MSUB -V
 
 param_set=${MOAB_JOBARRAYINDEX}
@@ -17,24 +17,27 @@ module load python/anaconda
 cd /home/jjw036/Roller/pipelines
 
 
-iterating_param="td_window"
-iterating_style="num 5 10 15 21"
+iterating_param="filter_noisy"
+iterating_style="boolean true false"
+
+iterating_param2="td_window"
+iterating_style2="num 20"
 
 if [[ ${param_set} == 1 ]] 
 then
     #echo "param_set is ${param_set}"
-    data_folder="/projects/p20519/roller_output/optimizing_window_size/RandomForest/janes"
-    output_folder="/projects/p20519/roller_output/stability_analysis/RandomForest/janes_${iterating_param}_"
+    data_folder="/projects/p20519/roller_output/optimizing_window_size/Lasso/janes"
+    output_folder="/projects/p20519/roller_output/stability_analysis/Lasso/janes_${iterating_param}_"
     file_path="/projects/p20519/Roller/data/invitro/janes_timeseries.tsv"
 elif [[ ${param_set} == 2 ]]
 then
-    data_folder="/projects/p20519/roller_output/optimizing_window_size/RandomForest/whitfield_muk"
-    output_folder="/projects/p20519/roller_output/stability_analysis/RandomForest/whitfield_muk_${iterating_param}_"
+    data_folder="/projects/p20519/roller_output/optimizing_window_size/Lasso/whitfield_muk"
+    output_folder="/projects/p20519/roller_output/stability_analysis/Lasso/whitfield_muk_${iterating_param}_"
     file_path="/projects/p20519/Roller/data/invitro/whitfield_muk_timeseries.tsv"
 elif [[ ${param_set} == 3 ]]
 then
-    data_folder="/projects/p20519/roller_output/optimizing_window_size/RandomForest/whitfield_shojaie"
-    output_folder="/projects/p20519/roller_output/stability_analysis/RandomForest/whitfield_shojaie_${iterating_param}_"
+    data_folder="/projects/p20519/roller_output/optimizing_window_size/Lasso/whitfield_shojaie"
+    output_folder="/projects/p20519/roller_output/stability_analysis/Lasso/whitfield_shojaie_${iterating_param}_"
     file_path="/projects/p20519/Roller/data/invitro/whitfield_shojaie_timeseries.tsv"
 elif [[ "${param_set}" -ge 4 && "${param_set}" -lt 9 ]]
 then
@@ -42,47 +45,47 @@ then
     #param_set 4 = dataset 1, param_set 5 = dataset 2, etc etc
     insilico_dataset_index=$((${param_set}-3))
 
-    data_folder="/projects/p20519/roller_output/stability_analysis/RandomForest/insilico_size10_${insilico_dataset_index}"
-    output_folder="/projects/p20519/roller_output/stability_analysis/RandomForest/insilico_size10_${insilico_dataset_index}_ntrees_"
+    data_folder="/projects/p20519/roller_output/stability_analysis/Lasso/insilico_size10_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/stability_analysis/Lasso/insilico_size10_${insilico_dataset_index}_ntrees_"
     file_path="/home/jjw036/Roller/data/dream4/insilico_size10_${insilico_dataset_index}_timeseries.tsv"
     
 elif [[ "${param_set}" -ge 9 && "${param_set}" -lt 14 ]]
 then
     insilico_dataset_index=$((${param_set}-8))
 
-    data_folder="/projects/p20519/roller_output/sampling/RandomForest/uniform_samplinginsilico_size10_${insilico_dataset_index}"
-    output_folder="/projects/p20519/roller_output/sampling/RandomForest/uniform_samplinginsilico_size10_${insilico_dataset_index}_ntrees_"
+    data_folder="/projects/p20519/roller_output/sampling/Lasso/uniform_samplinginsilico_size10_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/sampling/Lasso/uniform_samplinginsilico_size10_${insilico_dataset_index}_ntrees_"
     file_path="/home/jjw036/Roller/data/dream4/uniform_sampling/uniform_samplinginsilico_size10_${insilico_dataset_index}_timeseries.tsv"
 
 elif [[ ${param_set} -ge 14 && ${param_set} -lt 19 ]]
 then
     insilico_dataset_index=$((${param_set}-13))
 
-    data_folder="/projects/p20519/roller_output/sampling/RandomForest/nonuniform_samplinginsilico_size10_${insilico_dataset_index}"
-    output_folder="/projects/p20519/roller_output/sampling/RandomForest/nonuniform_samplinginsilico_size10_${insilico_dataset_index}_ntrees_"
+    data_folder="/projects/p20519/roller_output/sampling/Lasso/nonuniform_samplinginsilico_size10_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/sampling/Lasso/nonuniform_samplinginsilico_size10_${insilico_dataset_index}_ntrees_"
     file_path="/home/jjw036/Roller/data/dream4/nonuniform_sampling/nonuniform_samplinginsilico_size10_${insilico_dataset_index}_timeseries.tsv"
 
 elif [[ ${param_set} -ge 19 && ${param_set} -lt 39 ]]
 then
     insilico_dataset_index=$((${param_set}-18))
 
-    data_folder="/projects/p20519/roller_output/gnw/RandomForest/yeast-insilico_size10_${insilico_dataset_index}"
-    output_folder="/projects/p20519/roller_output/gnw/RandomForest/yeast-insilico_size10_${insilico_dataset_index}_"
+    data_folder="/projects/p20519/roller_output/gnw/Lasso/yeast-insilico_size10_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/gnw/Lasso/yeast-insilico_size10_${insilico_dataset_index}_"
     file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Yeast/Yeast-${insilico_dataset_index}_timeseries.tsv"
 
 elif [[ ${param_set} -ge 39 && ${param_set} -lt 59 ]]
 then
     insilico_dataset_index=$((${param_set}-38))
 
-    data_folder="/projects/p20519/roller_output/gnw/RandomForest/ecoli-insilico_size10_${insilico_dataset_index}"
-    output_folder="/projects/p20519/roller_output/gnw/RandomForest/ecoli-insilico_size10_${insilico_dataset_index}_"
+    data_folder="/projects/p20519/roller_output/gnw/Lasso/ecoli-insilico_size10_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/gnw/Lasso/ecoli-insilico_size10_${insilico_dataset_index}_"
     file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Ecoli/Ecoli-${insilico_dataset_index}_timeseries.tsv"
 
 elif [[ ${param_set} -ge 59 && ${param_set} -lt 60 ]]
 then
 
-    data_folder="/projects/p20519/roller_output/dream8/RandomForest/insilico"
-    output_folder="/projects/p20519/roller_output/dream8/RandomForest/insilico"
+    data_folder="/projects/p20519/roller_output/dream8/Lasso/insilico"
+    output_folder="/projects/p20519/roller_output/dream8/Lasso/insilico"
     file_path="/home/jjw036/Roller/data/dream8/insilico/insilico_timeseries.tsv"
 
 elif [[ ${param_set} -ge 60 && ${param_set} -lt 92 ]]
@@ -129,24 +132,24 @@ then
     then
         cell_type="BT20"
     fi
-    data_folder="/projects/p20519/roller_output/dream8/RandomForest/${cell_type}_${perturb}_"
-    output_folder="/projects/p20519/roller_output/dream8/RandomForest/${cell_type}_${perturb}_"
+    data_folder="/projects/p20519/roller_output/dream8/Lasso/${cell_type}_${perturb}_"
+    output_folder="/projects/p20519/roller_output/dream8/Lasso/${cell_type}_${perturb}_"
     file_path="/home/jjw036/Roller/data/dream8/invitro/${cell_type}_${perturb}_timeseries.tsv"
 
 elif [[ ${param_set} -ge 92 && ${param_set} -lt 112 ]]
 then
     insilico_dataset_index=$((${param_set}-91))
 
-    data_folder="/projects/p20519/roller_output/community/yeast-insilico_size10_${insilico_dataset_index}"
-    output_folder="/projects/p20519/roller_output/community/yeast-insilico_size10_${insilico_dataset_index}_"
+    data_folder="/projects/p20519/roller_output/community_rfd/yeast-insilico_size10_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/community_rfd/yeast-insilico_size10_${insilico_dataset_index}_"
     file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Yeast/Yeast-${insilico_dataset_index}_timeseries.tsv"
 
 elif [[ ${param_set} -ge 112 && ${param_set} -lt 132 ]]
 then
     insilico_dataset_index=$((${param_set}-111))
 
-    data_folder="/projects/p20519/roller_output/community/ecoli-insilico_size10_${insilico_dataset_index}"
-    output_folder="/projects/p20519/roller_output/community/ecoli-insilico_size10_${insilico_dataset_index}_"
+    data_folder="/projects/p20519/roller_output/community_rfd/ecoli-insilico_size10_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/community_rfd/ecoli-insilico_size10_${insilico_dataset_index}_"
     file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Ecoli/Ecoli-${insilico_dataset_index}_timeseries.tsv"
   
 
@@ -157,14 +160,15 @@ fi
 
 echo "python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}"
 python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
+#python run_tdSwing_scan_vgranger.py ${data_folder} ${output_folder} ${file_path} ${iterating_param2} ${iterating_style2}
 
-#data_folder=${data_folder/RandomForest/Lasso}
-#output_folder=${output_folder/RandomForest/Lasso}
-#python run_tdRandomForest_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
+#data_folder=${data_folder/Lasso/Lasso}
+#output_folder=${output_folder/Lasso/Lasso}
+#python run_tdLasso_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
 
-#data_folder=${data_folder/RandomForest/Dionesus}
-#output_folder=${output_folder/RandomForest/Dionesus}
-#python run_tdRandomForest_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
+#data_folder=${data_folder/Lasso/Dionesus}
+#output_folder=${output_folder/Lasso/Dionesus}
+#python run_tdLasso_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
 
-#python run_tdRandomForest_scan.py /projects/p20519/roller_output/optimizing_window_size/Swing/janes /projects/p20519/roller_output/stability_analysis/Lasso/janes_${iterating_param}_ /projects/p20519/Roller/data/invitro/janes_timeseries.tsv n_trees log
+#python run_tdLasso_scan.py /projects/p20519/roller_output/optimizing_window_size/Swing/janes /projects/p20519/roller_output/stability_analysis/Lasso/janes_${iterating_param}_ /projects/p20519/Roller/data/invitro/janes_timeseries.tsv n_trees log
 #python run_pipeline_RF_window_scan_janes.py ${nwindows}

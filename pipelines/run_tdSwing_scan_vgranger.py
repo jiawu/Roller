@@ -8,7 +8,6 @@ import time
 
 # saving the models for the iteration tests:
 # to save the models for the iteration tests, we will save a dataframe (in the form of the final dataframe from Analyzer...) instead of a full model, because it is too computationally expensive, and as of this day, we are running out of room on QUEST.
-
 def str2bool(v):
     return v.lower() in ("yes", "true", "t", "1")
 
@@ -16,7 +15,7 @@ def main(data_folder, output_path, target_dataset, my_iterating_param, param_tes
 
     current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
 
-    default_params = {'data_folder':data_folder, 'file_path':target_dataset, 'td_window':10,'min_lag':1,'max_lag':3,'n_trees':500,'permutation_n':5, 'lag_method':'mean_mean', 'calc_mse':False, 'bootstrap_n':500,'n_trials':n_trials, 'run_time':current_time, 'sort_by': 'rank','iterating_param':my_iterating_param, 'filter_noisy':False}
+    default_params = {'data_folder':data_folder, 'file_path':target_dataset, 'td_window':10,'min_lag':1,'max_lag':1,'n_trees':500,'permutation_n':5, 'lag_method':'mean_mean', 'calc_mse':False, 'bootstrap_n':500,'n_trials':n_trials, 'run_time':current_time, 'sort_by': 'rank','iterating_param':my_iterating_param, 'filter_noisy':False}
 
     overall_df = pd.DataFrame()
 
@@ -82,10 +81,9 @@ if __name__ == "__main__":
         
     elif param_test_style == "string":
         param_tests = [str(x) for x in sys.argv[6:]]
-    
+        
     elif param_test_style == "boolean":
         param_tests = [str2bool(x) for x in sys.argv[6:]]
-        
     n_trials = 10
 
     #always save the full parameter list and date in the dataframe for each test. for posterity!
