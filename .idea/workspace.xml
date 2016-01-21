@@ -2,18 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/dream4/nonuniform_sampling/nonuniform_samplinginsilico_size10_1_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/dream4/nonuniform_sampling/nonuniform_samplinginsilico_size10_2_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/dream4/nonuniform_sampling/nonuniform_samplinginsilico_size10_3_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/dream4/nonuniform_sampling/nonuniform_samplinginsilico_size10_4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/dream4/nonuniform_sampling/nonuniform_samplinginsilico_size10_5_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/dream4/uniform_sampling/uniform_samplinginsilico_size10_1_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/dream4/uniform_sampling/uniform_samplinginsilico_size10_2_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/dream4/uniform_sampling/uniform_samplinginsilico_size10_3_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/dream4/uniform_sampling/uniform_samplinginsilico_size10_4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/dream4/uniform_sampling/uniform_samplinginsilico_size10_5_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Uniform vs Nonuniform Sampling.ipynb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Autocorrelation and Lag order selection.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/Convolutions.ipynb" afterPath="$PROJECT_DIR$/scripts/Convolutions.ipynb" />
     </list>
     <ignored path="Roller.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -49,8 +41,8 @@
       <file leaf-file-name="Pipelines.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pipelines/Pipelines.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.15768725">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.53571427">
+              <caret line="32" column="54" selection-start-line="32" selection-start-column="54" selection-end-line="32" selection-end-column="54" />
               <folding />
             </state>
           </provider>
@@ -186,7 +178,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -220,40 +211,9 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="swing" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Roller" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="data" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="swing" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Roller" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="data" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dream4" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -524,12 +484,6 @@
       <created>1413916753036</created>
       <option name="number" value="Default" />
       <updated>1413916753036</updated>
-    </task>
-    <task id="LOCAL-00094" summary="Updated Roller init">
-      <created>1435328145444</created>
-      <option name="number" value="00094" />
-      <option name="project" value="LOCAL" />
-      <updated>1435328145444</updated>
     </task>
     <task id="LOCAL-00095" summary="Most Dionesus Window methods working">
       <created>1435331223664</created>
@@ -819,7 +773,13 @@
       <option name="project" value="LOCAL" />
       <updated>1452481027304</updated>
     </task>
-    <option name="localTasksCounter" value="143" />
+    <task id="LOCAL-00143" summary="Add uniform and nonuniform sampling for Dream4">
+      <created>1452884791694</created>
+      <option name="number" value="00143" />
+      <option name="project" value="LOCAL" />
+      <updated>1452884791694</updated>
+    </task>
+    <option name="localTasksCounter" value="144" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -846,11 +806,11 @@
     <frame x="-1280" y="23" width="1280" height="997" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21207307" sideWeight="0.70035464" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31930104" sideWeight="0.70035464" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33015874" sideWeight="0.50080776" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.10442679" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.110102154" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23272438" sideWeight="0.2996454" order="2" side_tool="true" content_ui="tabs" />
@@ -902,7 +862,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="overwrote score() for tdRoller" />
     <MESSAGE value="Changed tdRoller so method make_sort_df() can sort based on different ways" />
     <MESSAGE value="Testing multiple edge lumping strategies with tdRoller" />
     <MESSAGE value="tdRoller testing moved to script. Roller __init__ updated" />
@@ -927,7 +886,8 @@
     <MESSAGE value="Test window size selection in ipython notebook" />
     <MESSAGE value="JDF start exploring Dream8 data" />
     <MESSAGE value="Compare DREAM8 and DREAM4 data" />
-    <option name="LAST_COMMIT_MESSAGE" value="Compare DREAM8 and DREAM4 data" />
+    <MESSAGE value="Add uniform and nonuniform sampling for Dream4" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add uniform and nonuniform sampling for Dream4" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.10526317" />
   </component>
   <component name="XDebuggerManager">
@@ -954,6 +914,70 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="34" />
+          <folding>
+            <element signature="e#70#80#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pipelines/Pipelines.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Swing/DionesusWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="61" column="70" selection-start-line="60" selection-start-column="8" selection-end-line="61" selection-end-column="70" />
+          <folding>
+            <element signature="e#71#94#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Swing/util/Evaluator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Swing/RFRWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Swing/Window.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="314" column="13" selection-start-line="314" selection-start-column="8" selection-end-line="314" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Swing/Swing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="675" column="38" selection-start-line="675" selection-start-column="31" selection-end-line="675" selection-end-column="38" />
+          <folding>
+            <element signature="e#71#84#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1287,6 +1311,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/pipelines/Pipelines.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.53571427">
+          <caret line="32" column="54" selection-start-line="32" selection-start-column="54" selection-end-line="32" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Swing/DionesusWindow.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1330,14 +1362,6 @@
           <folding>
             <element signature="e#71#84#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pipelines/Pipelines.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.15768725">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
