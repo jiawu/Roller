@@ -6,6 +6,7 @@ from scipy import stats
 
 from .Window import Window
 
+import pdb
 
 class RandomForestRegressionWindow(Window):
     def __init__(self, dataframe, window_info, roller_data, td_window, explanatory_dict, response_dict):
@@ -185,9 +186,10 @@ class RandomForestRegressionWindow(Window):
             coeff_matrix, model_list = self._fitstack_coeffs(coeff_matrix, model_list, x_matrix, target_y, insert_index,
                                                              n_trees, n_jobs, crag)
 
-            base_mse = mean_squared_error(model_list[insert_index]['model'].predict(x_matrix), target_y)
 
             if calc_mse:
+                base_mse = mean_squared_error(model_list[insert_index]['model'].predict(x_matrix), target_y)
+
                 f_coeff_matrix, f_model_list, _ = self._initialize_coeffs(data=x_matrix, y_data=y_data, x_labels = self.explanatory_labels, y_labels = self.response_labels, x_window = self.explanatory_window, nth_window = self.nth_window)
                 mse_list = []
                 for idx in range(x_matrix.shape[1]):

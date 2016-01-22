@@ -7,6 +7,8 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 import pdb
+import statsmodels.stats.stattools as st
+import statsmodels.stats.diagnostic as std
 
 class Window(object):
     """
@@ -70,6 +72,11 @@ class Window(object):
         self.training_scores = []
         self.test_scores = []
 
+        # Additional options for window slicing
+
+        self.remove_stationary_ts = False
+        self.var_threshold = 0.10
+        
     def create_linked_list(self, numpy_array_2D, value_label):
         """labels and array should be in row-major order"""
         linked_list = pd.DataFrame({'regulator-target': self.edge_list, value_label: numpy_array_2D.flatten()})
@@ -189,6 +196,27 @@ class Window(object):
                   "n": n}
         return result
 
+    def identify_stationary_experiments(self,timeseries):
+        """Test if the experiments are equivalent to flat lines. Flat lines have a variance of 0. Arbitrary threshold set by self.var_threshold"""
+        time_vec = self.response_times
+        # find unique number of timepoints, and calc number of experiments
+        time_n = len(set(self.response_times))
+        split_n = len(self.response_times)/time_n
+        # generate a list of separate experiments
+        ts_list = np.split(timeseries, split_n)
+
+        var_list = []
+        for ts in ts_list:
+            residuals = ts - np.mean(ts)
+            var = ((residuals**2).sum())/len(ts)
+            var_list.append(var)
+
+        remove_exp_idx = [i for i,v in enumerate(var_list) if v < self.var_threshold]
+        
+        return((remove_exp_idx,ts_list))
+
+
+    
     def _initialize_coeffs(self, data, y_data, x_labels, y_labels, x_window, nth_window, s_edges = False):
         """ Returns a copy of the vector, an empty array with a defined shape, an empty list, and the maximum number of
         nodes
@@ -203,8 +231,28 @@ class Window(object):
         # Construct a list of tuples:
         # Tuple = (Response, Explanatory, Index)
 
+        
         for col_index, target_y in enumerate(y_data.T):
-            x_matrix = data.copy()
+            if self.remove_stationary_ts is True:
+                exclude_list,ts_list = self.identify_stationary_experiments(target_y)
+                if exclude_list:
+                    ts_list2 = [idx for i, idx in enumerate(ts_list) if i not in exclude_list]
+                    target_y = np.hstack(ts_list2)
+                    time_n = len(set(self.response_times))
+                    split_n = len(self.response_times)/time_n
+                    x_matrix = data.copy()
+                    x_series = np.split(x_matrix, split_n)
+                    x_series2 = [idx for i, idx in enumerate(x_series) if i not in exclude_list]
+                    x_matrix = np.vstack(x_series2)
+                else:
+                    x_matrix = data.copy()
+            else:
+                x_matrix = data.copy()
+
+
+                
+            # Identify experiments that are stationary
+
             insert_index = col_index
 
             if nth_window in x_window:
