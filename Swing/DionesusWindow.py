@@ -38,10 +38,6 @@ class DionesusWindow(Window):
         self.bootstrap_matrix = None
         self.freq_matrix = None
         self.edge_stability_auc = None
-        self.permutation_means = None
-        self.permutation_sd = None
-        self.permutation_p_values = None
-        self.permutation_pvalues = None
 
     def make_edge_table(self, calc_mse=False):
         """
@@ -187,7 +183,10 @@ class DionesusWindow(Window):
         # calculate the Q2 score using PC=1,2,3,4,5
 
         # pick the PCs that maximizes the Q2 score-PCs tradeoff, using the elbow rule, maximizing the second derivative or maximum curvature.
+        temp = self.remove_stationary_ts    
+        self.remove_stationary_ts = False
         result_tuple = self.get_coeffs(crag=False, calc_mse=False)
+        self.remove_stationary_ts = temp
         mse_diff = result_tuple[2]
         model_list = result_tuple[3]
         model_inputs = result_tuple[4]
@@ -247,7 +246,7 @@ class DionesusWindow(Window):
         model_list.append(model_params)
 
         # artificially add a 0 to where the col_index is to prevent self-edges
-        coeffs = pls.coefs
+        coeffs = pls.coef_
         coeffs = np.reshape(coeffs, (len(coeffs),))
         vips = vipp(x_matrix, target_y, pls.x_scores_, pls.x_weights_)
         vips = np.reshape(vips, (len(vips),))
@@ -287,9 +286,9 @@ class DionesusWindow(Window):
             coeff_matrix, vip_matrix, model_list = self._fitstack_coeffs(num_pcs, coeff_matrix, vip_matrix, model_list,
                                                                          x_matrix, target_y, insert_index, crag=crag)
 
-            base_mse = mean_squared_error(model_list[insert_index]['model'].predict(x_matrix), target_y)
 
             if calc_mse:
+                base_mse = mean_squared_error(model_list[insert_index]['model'].predict(x_matrix), target_y)
                 f_coeff_matrix, f_model_list, f_model_inputs = self._initialize_coeffs(data=x_matrix, y_data=y_data, x_labels=self.explanatory_labels, y_labels = self.response_labels, x_window = self.explanatory_window, nth_window = self.nth_window)
                 f_vip_matrix = f_coeff_matrix.copy()
                 mse_list = []

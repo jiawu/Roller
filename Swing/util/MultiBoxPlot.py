@@ -3,18 +3,16 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import os, pdb
-from Swing.util.BasePlot import BasePlot
+from BoxPlot import BoxPlot
 
-class BoxPlot(BasePlot):
+class MultiBoxPlot(BoxPlot):
     
     def __init__(self):
-        BasePlot.__init__(self)
-        self.meanpointprops = dict(marker='D', markersize=6)
-        self.flierprops = dict(marker='o', markersize=6, markerfacecolor='black', markeredgecolor='black', linewidth=8.0)
-        self.boxprops = dict(color='black', linewidth=3.0)
-        self.whiskerprops = dict(color='black', linewidth=2.0)
-        self.capprops = self.whiskerprops
-        self.medianprops = dict(color='blue', linewidth=2.5)
+        BoxPlot.__init__(self)
+        self.axes_list = []
+        self.axes_list.append(plt.subplot(2,1,1))
+        self.axes_list.append(plt.subplot(2,1,2))
+
     
     def plot_box(self, y_values, labels = None):
         """

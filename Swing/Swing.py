@@ -14,6 +14,7 @@ from .DionesusWindow import DionesusWindow
 from .LassoWindow import LassoWindow
 from .util import utility_module as utility
 from .util.Evaluator import Evaluator
+import pdb
 
 class Swing(object):
     """
@@ -51,6 +52,9 @@ class Swing(object):
         self.window_width = window_width
         self.step_size = step_size
         self.time_label = time_label
+
+        self.crag = False
+        self.calc_mse = False
 
         # Get overall width of the time-course
         self.time_vec = self.raw_data[self.time_label].unique()
@@ -93,6 +97,10 @@ class Swing(object):
         """
         total_windows = int((self.overall_width - self.window_width + 1.0) / self.step_size)
         return(int(total_windows))
+
+    def filter_noisy(self):
+        for window in self.window_list:
+            window.remove_stationary_ts = True
 
     def get_window_raw(self, start_index, random_time=False):
         """
@@ -292,6 +300,7 @@ class Swing(object):
                 explanatory_labels = current_labels.copy()
                 explanatory_window = current_window.copy()
             else:
+                # concatenate relevant windows horizontally.
                 explanatory_data = np.hstack((explanatory_data, current_data))
                 explanatory_times = np.append(explanatory_times, current_times)
                 explanatory_labels = np.append(explanatory_labels, current_labels)
@@ -340,7 +349,7 @@ class Swing(object):
         """
         for window in self.window_list:
             window.initialize_params()
-            window.fit_window(crag=False)
+            window.fit_window(crag=self.crag)
 
     def rank_windows(self, n_permutes=10, n_bootstraps=10, n_alphas=20, noise=0.2):
         """
@@ -382,7 +391,7 @@ class Swing(object):
 
         return self.window_list
 
-    def fit_windows(self, crag=False, alpha=None, n_trees=None, n_jobs=None, show_progress=True, calc_mse=False):
+    def fit_windows(self, alpha=None, n_trees=None, n_jobs=None, show_progress=True):
         #todo: need a better way to pass parameters to fit functions
         """
         Fit each window in the list
@@ -409,11 +418,11 @@ class Swing(object):
                     print("Fitting window index %i against the following window indices: ")
                 else:
                     print("Fitting window {} of {}".format(window.nth_window, self.get_n_windows()))
-            window.fit_window(crag=crag, calc_mse=calc_mse)
+            window.fit_window(crag=self.crag, calc_mse=self.calc_mse)
 
         return self.window_list
 
-    def rank_edges(self, n_bootstraps=1000, permutation_n=1000, crag=True, calc_mse=False):
+    def rank_edges(self, n_bootstraps=1000, permutation_n=1000):
         """
         Run tests to rank edges in windows
 
@@ -439,7 +448,7 @@ class Swing(object):
             for window in self.window_list:
                 print("Running permutation on window {}...".format(window.nth_window))
                 window.run_permutation_test(n_permutations=permutation_n, crag=False)
-                window.make_edge_table(calc_mse=calc_mse)
+                window.make_edge_table(calc_mse=self.calc_mse)
         return self.window_list
 
     def average_rank(self, rank_by, ascending):
@@ -540,7 +549,7 @@ class Swing(object):
                         'window_index': window_index}
         return window_stats
 
-    def compile_roller_edges(self, self_edges=False, calc_mse=True):
+    def compile_roller_edges(self, self_edges=False):
         """
         Edges across all windows will be compiled into a single edge list
         :return:
@@ -549,10 +558,10 @@ class Swing(object):
         df = None
         for ww, window in enumerate(self.window_list):
             # Get the edges and associated values in table form
-            current_df = window.make_edge_table(calc_mse=calc_mse)
+            current_df = window.make_edge_table(calc_mse=self.calc_mse)
 
             # Only retain edges if the MSE_diff is negative
-            if calc_mse:
+            if self.calc_mse:
                 current_df = current_df[current_df['MSE_diff'] < 0]
 
 
@@ -579,7 +588,7 @@ class Swing(object):
         print("[DONE]")
         return
 
-    def compile_roller_edges2(self, self_edges=False, calc_mse=True):
+    def compile_roller_edges2(self, self_edges=False):
         """
         Edges across all windows will be compiled into a single edge list
         :return:
@@ -588,10 +597,10 @@ class Swing(object):
         df = None
         for ww, window in enumerate(self.window_list):
             # Get the edges and associated values in table form
-            current_df = window.make_edge_table(calc_mse=calc_mse)
+            current_df = window.make_edge_table(calc_mse=self.calc_mse)
 
             # Only retain edges if the MSE_diff is negative
-            if calc_mse:
+            if self.calc_mse:
                 current_df = current_df[current_df['MSE_diff'] < 0]
 
 

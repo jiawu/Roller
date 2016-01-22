@@ -411,13 +411,19 @@ class LassoWindow(Window):
         remove self_edges by removing columns in the the matrices in data_list that have the same name as the response variable column.
 
         """
-        target_label = self.response_labels[insert_index]
+        target_label = self.explanatory_labels[insert_index]
+        
         #find all instances of this label
         target_indices = [x for x, label in enumerate(self.explanatory_labels) if label == target_label]
-
-        altered_data_list = []
-
+        # if the min lag is 0, then _initialize_coeffs will automatically remove one of the columns (the response column) from the data_array. the if statement below will detect if the column has already been removed and will avoid removing more column. 
+        
+        if data_array.shape[1] < len(self.explanatory_labels):
+            target_indices.remove(insert_index)
+        
         parsed_array = np.delete(data_array, target_indices, 1)
+        target_indices.append(insert_index)
+        target_indices = list(set(target_indices))        
+
         return(parsed_array, target_indices)
 
     def get_coeffs(self, alpha, crag=False, x_data=None, y_data=None, calc_mse=False):
@@ -433,6 +439,7 @@ class LassoWindow(Window):
         if x_data is None:
             x_data = self.explanatory_data
 
+
         coeff_matrix, model_list, model_inputs = self._initialize_coeffs(data = x_data, y_data = y_data, x_labels = self.explanatory_labels, y_labels = self.response_labels, x_window = self.explanatory_window, nth_window = self.nth_window)
         mse_matrix = None
         # Calculate a model for each target column
@@ -444,9 +451,9 @@ class LassoWindow(Window):
             coeff_matrix, vip_matrix = self._fitstack_coeffs(alpha, coeff_matrix, model_list, x_matrix, target_y, target_indices, crag=crag)
 
 
-            base_mse = mean_squared_error(model_list[insert_index]['model'].predict(x_matrix), target_y)
 
             if calc_mse:
+                base_mse = mean_squared_error(model_list[insert_index]['model'].predict(x_matrix), target_y)
                 f_coeff_matrix, f_model_list = self._initialize_coeffs(data=x_matrix, y_data=y_data, x_labels=self.explanatory_labels,y_labels = self.response_labels, x_window = self.explanatory_window, nth_window = self.nth_window)
                 mse_list = []
                 for idx in range(x_matrix.shape[1]):
