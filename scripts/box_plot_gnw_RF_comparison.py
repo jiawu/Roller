@@ -11,7 +11,6 @@ import pandas as pd
 import sys
 import os
 
-
 """
 Script that loads data from a dataframe and generates boxplots
 
