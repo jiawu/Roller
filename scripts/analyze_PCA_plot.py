@@ -26,7 +26,7 @@ for network_index in range(1,6):
         run_params['min_lag'] = 1
         run_params['max_lag'] = 3
         run_params['n_trees'] = 500
-        run_params['bootstrap_n'] = 1000
+        run_params['bootstrap_n'] = 50
         
         roc, pr, tdr = pl.get_td_stats(**run_params)
         result_table = tdr.make_sort_df(tdr.edge_dict, sort_by = 'rank')
