@@ -18,7 +18,7 @@ cd /home/jjw036/Roller/pipelines
 
 
 iterating_param="td_window"
-iterating_style="num 5 10 15 21"
+iterating_style="num 5 10 15 18 21"
 
 if [[ ${param_set} == 1 ]] 
 then

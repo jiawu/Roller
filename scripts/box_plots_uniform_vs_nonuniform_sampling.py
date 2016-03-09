@@ -37,32 +37,29 @@ def parse_tdr_results(agg_df,test_statistic, datasets):
     for dataset in datasets:
         current_df = agg_df[agg_df['file_path'].str.contains(dataset)]
 
-        uniform_td7 = current_df[(current_df['data_folder'].str.contains('/uniform_sampling')) & (current_df['td_window'] == 7)]
+        td5 = current_df[(current_df['td_window'] == 5)]
+        td10 = current_df[(current_df['td_window'] == 10)]
+        td15 = current_df[(current_df['td_window'] == 15)]
+        td20 = current_df[(current_df['td_window'] == 20)]
 
-        nonuniform_td7 = current_df[(current_df['data_folder'].str.contains('/nonuniform_sampling')) & (current_df['td_window'] == 7)]
-
-        uniform_td3 = current_df[(current_df['data_folder'].str.contains('/uniform_sampling')) & (current_df['td_window'] == 3)]
-
-        nonuniform_td3 = current_df[(current_df['data_folder'].str.contains('/nonuniform_sampling')) & (current_df['td_window'] == 3)]
-
-        comparisons = [uniform_td7, nonuniform_td7, uniform_td3, nonuniform_td3]
+        comparisons = [td5, td10, td15, td20]
 
         
         for category in comparisons:
             auroc_list.append(category[test_statistic][0:n_trials].tolist())
         
-        label_list.append("Uniform, w=7")
-        label_list.append("Nonuniform, w=7")
-        label_list.append("Uniform, w=3")
-        label_list.append("Nonuniform, w=3")
+        label_list.append("td window = 5")
+        label_list.append("td window = 10")
+        label_list.append("td window = 15")
+        label_list.append("td window = 20")
     
     return((label_list, auroc_list))
 
 output_path = "/home/jjw036/"
 
-input_folder_list = ["/projects/p20519/roller_output/sampling/RandomForest/"]  
+input_folder_list = ["/projects/p20519/roller_output/gnw/RandomForest/"]  
 test_statistic = ['aupr', 'auroc']
-save_tag = "SamplingComparison"
+save_tag = "Window Sensitivity Comparison"
 n_trials = 50
 
 
@@ -74,7 +71,7 @@ with PdfPages(output_path+save_tag+'.pdf') as pdf:
         label_list, auroc_list = parse_tdr_results(agg_df,test, datasets)
         bp_data = auroc_list
         bp = BoxPlot()
-
+        title = save_tag
         bp.plot_box(bp_data, label_list)             
         bp.add_formatting(title, y_label=test.upper())        
         pdf.savefig(bp.f)
