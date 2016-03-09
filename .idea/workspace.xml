@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="">
+    <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="Port code from ipython notebook into lag ident module">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/edge_promotion.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/lag_identification.py" afterPath="$PROJECT_DIR$/scripts/lag_identification.py" />
     </list>
     <ignored path="Roller.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,10 +36,22 @@
       <file leaf-file-name="lag_identification.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/lag_identification.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.083333336">
+            <state vertical-scroll-proportion="-0.25">
               <caret line="3" column="48" selection-start-line="3" selection-start-column="48" selection-end-line="3" selection-end-column="48" />
               <folding>
                 <element signature="e#121#135#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="edge_promotion.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="20" column="36" selection-start-line="20" selection-start-column="36" selection-end-line="20" selection-end-column="36" />
+              <folding>
+                <element signature="e#71#81#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -88,6 +100,7 @@
         <option value="$PROJECT_DIR$/Swing/DionesusWindow.py" />
         <option value="$PROJECT_DIR$/scripts/DREAM4 true lag identification.ipynb" />
         <option value="$PROJECT_DIR$/scripts/lag_identification.py" />
+        <option value="$PROJECT_DIR$/scripts/edge_promotion.py" />
       </list>
     </option>
   </component>
@@ -193,7 +206,7 @@
       <recent name="$PROJECT_DIR$/Roller" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.lag_identification">
+  <component name="RunManager" selected="Python.edge_promotion">
     <configuration default="false" name="20150716_basic_tdRoller" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -207,23 +220,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="Roller" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="20150719_tdRoller_basic figure" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tdRoller_scripts" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="Roller" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tdRoller_scripts/20150719_tdRoller_basic figure.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -275,6 +271,23 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="swing" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/lag_identification.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="edge_promotion" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="swing" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/edge_promotion.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -403,18 +416,18 @@
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.20150716_basic_tdRoller" />
-      <item index="1" class="java.lang.String" itemvalue="Python.20150719_tdRoller_basic figure" />
-      <item index="2" class="java.lang.String" itemvalue="Python.granger_testing" />
-      <item index="3" class="java.lang.String" itemvalue="Python.goldbetter_model" />
-      <item index="4" class="java.lang.String" itemvalue="Python.lag_identification" />
+      <item index="1" class="java.lang.String" itemvalue="Python.granger_testing" />
+      <item index="2" class="java.lang.String" itemvalue="Python.goldbetter_model" />
+      <item index="3" class="java.lang.String" itemvalue="Python.lag_identification" />
+      <item index="4" class="java.lang.String" itemvalue="Python.edge_promotion" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.lag_identification" />
-        <item index="1" class="java.lang.String" itemvalue="Python.goldbetter_model" />
-        <item index="2" class="java.lang.String" itemvalue="Python.20150716_basic_tdRoller" />
-        <item index="3" class="java.lang.String" itemvalue="Python.granger_testing" />
-        <item index="4" class="java.lang.String" itemvalue="Python.20150719_tdRoller_basic figure" />
+        <item index="0" class="java.lang.String" itemvalue="Python.edge_promotion" />
+        <item index="1" class="java.lang.String" itemvalue="Python.lag_identification" />
+        <item index="2" class="java.lang.String" itemvalue="Python.goldbetter_model" />
+        <item index="3" class="java.lang.String" itemvalue="Python.20150716_basic_tdRoller" />
+        <item index="4" class="java.lang.String" itemvalue="Python.granger_testing" />
       </list>
     </recent_temporary>
   </component>
@@ -428,12 +441,6 @@
       <created>1413916753036</created>
       <option name="number" value="Default" />
       <updated>1413916753036</updated>
-    </task>
-    <task id="LOCAL-00101" summary="Added todo list to Roller.">
-      <created>1436289000081</created>
-      <option name="number" value="00101" />
-      <option name="project" value="LOCAL" />
-      <updated>1436289000081</updated>
     </task>
     <task id="LOCAL-00102" summary="changed tdRoller zscore_all_data() and added bin_data">
       <created>1436298094888</created>
@@ -723,7 +730,13 @@
       <option name="project" value="LOCAL" />
       <updated>1457563010544</updated>
     </task>
-    <option name="localTasksCounter" value="150" />
+    <task id="LOCAL-00150" summary="Port code from ipython notebook into lag ident module">
+      <created>1457563421706</created>
+      <option name="number" value="00150" />
+      <option name="project" value="LOCAL" />
+      <updated>1457563421706</updated>
+    </task>
+    <option name="localTasksCounter" value="151" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -806,7 +819,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Updated tdRFR method run_permutation()" />
     <MESSAGE value="Updated tdRFR to run permutation test properly" />
     <MESSAGE value="Minor adjustments to tdRFR window behavior" />
     <MESSAGE value="Modified tdRoller.augment_windows() so that lag length can be set" />
@@ -831,7 +843,8 @@
     <MESSAGE value="Try polyfit for lag identification&#10;&#10;Does not appear very effective. Noise doesn't lower the R2 enough to eliminate noisy lines." />
     <MESSAGE value="Use sign changes for signal filtering&#10;&#10;In combination with signal max it seems to eliminate noisy signals.  There should be fewer sign changes for a good signal because it doesn't vary as widely. Need to try on high sampled data" />
     <MESSAGE value="Start lag identification module" />
-    <option name="LAST_COMMIT_MESSAGE" value="Start lag identification module" />
+    <MESSAGE value="Port code from ipython notebook into lag ident module" />
+    <option name="LAST_COMMIT_MESSAGE" value="Port code from ipython notebook into lag ident module" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.10526317" />
   </component>
   <component name="XDebuggerManager">
@@ -858,22 +871,12 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Swing/DionesusWindow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="61" column="70" selection-start-line="60" selection-start-column="8" selection-end-line="61" selection-end-column="70" />
-          <folding>
-            <element signature="e#71#94#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Swing/util/Evaluator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -899,7 +902,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="675" column="38" selection-start-line="675" selection-start-column="31" selection-end-line="675" selection-end-column="38" />
           <folding>
-            <element signature="e#71#84#0" expanded="true" />
+            <element signature="e#71#84#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -937,7 +940,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -963,7 +966,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="675" column="38" selection-start-line="675" selection-start-column="31" selection-end-line="675" selection-end-column="38" />
           <folding>
-            <element signature="e#71#84#0" expanded="true" />
+            <element signature="e#71#84#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -993,7 +996,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1019,7 +1022,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="675" column="38" selection-start-line="675" selection-start-column="31" selection-end-line="675" selection-end-column="38" />
           <folding>
-            <element signature="e#71#84#0" expanded="true" />
+            <element signature="e#71#84#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1049,7 +1052,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1087,7 +1090,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1248,7 +1251,7 @@
         <state vertical-scroll-proportion="0.017626323">
           <caret line="684" column="38" selection-start-line="684" selection-start-column="31" selection-end-line="684" selection-end-column="38" />
           <folding>
-            <element signature="e#71#84#0" expanded="true" />
+            <element signature="e#71#84#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1258,7 +1261,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1298,9 +1301,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="20" column="36" selection-start-line="20" selection-start-column="36" selection-end-line="20" selection-end-column="36" />
+          <folding>
+            <element signature="e#71#81#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/lag_identification.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.083333336">
+        <state vertical-scroll-proportion="-0.25">
           <caret line="3" column="48" selection-start-line="3" selection-start-column="48" selection-end-line="3" selection-end-column="48" />
           <folding>
             <element signature="e#121#135#0" expanded="true" />
