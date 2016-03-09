@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/lag_identification.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/DREAM4 true lag identification.ipynb" afterPath="$PROJECT_DIR$/scripts/DREAM4 true lag identification.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/lag_identification.py" afterPath="$PROJECT_DIR$/scripts/lag_identification.py" />
     </list>
     <ignored path="Roller.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,7 +28,7 @@
         <entry file="file://$PROJECT_DIR$/scripts/DREAM4 true lag identification.ipynb">
           <provider selected="true" editor-type-id="ipnb-editor">
             <state>
-              <selected id="20" />
+              <selected id="18" />
             </state>
           </provider>
         </entry>
@@ -37,9 +36,11 @@
       <file leaf-file-name="lag_identification.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/lag_identification.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.052878965">
-              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-              <folding />
+            <state vertical-scroll-proportion="0.083333336">
+              <caret line="3" column="48" selection-start-line="3" selection-start-column="48" selection-end-line="3" selection-end-column="48" />
+              <folding>
+                <element signature="e#121#135#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -192,7 +193,7 @@
       <recent name="$PROJECT_DIR$/Roller" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.20150716_basic_tdRoller">
+  <component name="RunManager" selected="Python.lag_identification">
     <configuration default="false" name="20150716_basic_tdRoller" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -227,23 +228,6 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
-    <configuration default="false" name="connectionstyle_demo" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Downloads" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="Roller" />
-      <option name="SCRIPT_NAME" value="$USER_HOME$/Downloads/connectionstyle_demo.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
     <configuration default="false" name="granger_testing" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -274,6 +258,23 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="swing" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/goldbetter_model/goldbetter_model.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="lag_identification" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="swing" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/lag_identification.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -403,17 +404,17 @@
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.20150716_basic_tdRoller" />
       <item index="1" class="java.lang.String" itemvalue="Python.20150719_tdRoller_basic figure" />
-      <item index="2" class="java.lang.String" itemvalue="Python.connectionstyle_demo" />
-      <item index="3" class="java.lang.String" itemvalue="Python.granger_testing" />
-      <item index="4" class="java.lang.String" itemvalue="Python.goldbetter_model" />
+      <item index="2" class="java.lang.String" itemvalue="Python.granger_testing" />
+      <item index="3" class="java.lang.String" itemvalue="Python.goldbetter_model" />
+      <item index="4" class="java.lang.String" itemvalue="Python.lag_identification" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.goldbetter_model" />
-        <item index="1" class="java.lang.String" itemvalue="Python.20150716_basic_tdRoller" />
-        <item index="2" class="java.lang.String" itemvalue="Python.granger_testing" />
-        <item index="3" class="java.lang.String" itemvalue="Python.20150719_tdRoller_basic figure" />
-        <item index="4" class="java.lang.String" itemvalue="Python.connectionstyle_demo" />
+        <item index="0" class="java.lang.String" itemvalue="Python.lag_identification" />
+        <item index="1" class="java.lang.String" itemvalue="Python.goldbetter_model" />
+        <item index="2" class="java.lang.String" itemvalue="Python.20150716_basic_tdRoller" />
+        <item index="3" class="java.lang.String" itemvalue="Python.granger_testing" />
+        <item index="4" class="java.lang.String" itemvalue="Python.20150719_tdRoller_basic figure" />
       </list>
     </recent_temporary>
   </component>
@@ -427,12 +428,6 @@
       <created>1413916753036</created>
       <option name="number" value="Default" />
       <updated>1413916753036</updated>
-    </task>
-    <task id="LOCAL-00100" summary="Started tdRoller class for granger causality">
-      <created>1436288347523</created>
-      <option name="number" value="00100" />
-      <option name="project" value="LOCAL" />
-      <updated>1436288347523</updated>
     </task>
     <task id="LOCAL-00101" summary="Added todo list to Roller.">
       <created>1436289000081</created>
@@ -722,7 +717,13 @@
       <option name="project" value="LOCAL" />
       <updated>1457562697876</updated>
     </task>
-    <option name="localTasksCounter" value="149" />
+    <task id="LOCAL-00149" summary="Start lag identification module">
+      <created>1457563010544</created>
+      <option name="number" value="00149" />
+      <option name="project" value="LOCAL" />
+      <updated>1457563010544</updated>
+    </task>
+    <option name="localTasksCounter" value="150" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -756,19 +757,19 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32448378" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.10807736" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35381114" sideWeight="0.49919224" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23272438" sideWeight="0.2996454" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24914676" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35414302" sideWeight="0.49919224" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24914676" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -805,7 +806,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added basic script for running tdRoller" />
     <MESSAGE value="Updated tdRFR method run_permutation()" />
     <MESSAGE value="Updated tdRFR to run permutation test properly" />
     <MESSAGE value="Minor adjustments to tdRFR window behavior" />
@@ -830,7 +830,8 @@
     <MESSAGE value="Test high sampling&#10;&#10;Need a more robust way to determine where the true lag is. This fails for high sampling, but visually there is a clear way to tell." />
     <MESSAGE value="Try polyfit for lag identification&#10;&#10;Does not appear very effective. Noise doesn't lower the R2 enough to eliminate noisy lines." />
     <MESSAGE value="Use sign changes for signal filtering&#10;&#10;In combination with signal max it seems to eliminate noisy signals.  There should be fewer sign changes for a good signal because it doesn't vary as widely. Need to try on high sampled data" />
-    <option name="LAST_COMMIT_MESSAGE" value="Use sign changes for signal filtering&#10;&#10;In combination with signal max it seems to eliminate noisy signals.  There should be fewer sign changes for a good signal because it doesn't vary as widely. Need to try on high sampled data" />
+    <MESSAGE value="Start lag identification module" />
+    <option name="LAST_COMMIT_MESSAGE" value="Start lag identification module" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.10526317" />
   </component>
   <component name="XDebuggerManager">
@@ -1299,9 +1300,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/lag_identification.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.052878965">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
+        <state vertical-scroll-proportion="0.083333336">
+          <caret line="3" column="48" selection-start-line="3" selection-start-column="48" selection-end-line="3" selection-end-column="48" />
+          <folding>
+            <element signature="e#121#135#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
