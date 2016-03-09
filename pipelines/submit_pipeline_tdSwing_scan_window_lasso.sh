@@ -18,7 +18,7 @@ cd /home/jjw036/Roller/pipelines
 
 
 iterating_param="td_window"
-iterating_style="num 5 10 15 21"
+iterating_style="15 18 19 21"
 
 iterating_param2="td_window"
 iterating_style2="num 20"
