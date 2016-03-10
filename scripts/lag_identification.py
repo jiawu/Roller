@@ -1,12 +1,12 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 
-#todo: Clean this up! Make it into a real module
+# todo: Clean this up! Make it into a real module
 
-import os, sys
+import os, sys, itertools
 import networkx as nx
 import pandas as pd
-from scipy import stats
+from scipy import stats, signal
 from statsmodels.tsa.stattools import acf, ccf
 from sklearn.metrics import r2_score
 import matplotlib.pyplot as plt
@@ -15,7 +15,8 @@ from Swing import Swing
 from Swing.util.Evaluator import Evaluator
 from collections import Counter
 import matplotlib as mpl
-mpl.rcParams['pdf.fonttype']=42
+
+mpl.rcParams['pdf.fonttype'] = 42
 mpl.rcParams['font.sans-serif'] = 'Arial'
 
 
@@ -24,92 +25,139 @@ def get_experiment_list(filename, timepoints=21, perturbs=5):
     timecourse = pd.read_csv(filename, sep="\t")
     # divide into list of dataframes
     experiments = []
-    for i in range(0,timepoints*perturbs-timepoints+1, timepoints):
-        experiments.append(timecourse.ix[i:i+timepoints-1])
-    #reformat
-    for idx,exp in enumerate(experiments):
+    for i in range(0, timepoints * perturbs - timepoints + 1, timepoints):
+        experiments.append(timecourse.ix[i:i + timepoints - 1])
+    # reformat
+    for idx, exp in enumerate(experiments):
         exp = exp.set_index('Time')
-        experiments[idx]=exp
-    return(experiments)
+        experiments[idx] = exp
+    return (experiments)
+
 
 def xcorr_experiments(experiments, gene_axis=1):
-    #### NOTE #####
-    #### SCIPY may have a way to do this efficiently for 2d arrays. Take a look when possible ##############
-    return np.array([cc_experiment(experiment.values.T) if gene_axis==1 else cc_experiment(experiment.values)
-            for experiment in experiments])
+    """
+    Cross correlate the g
+    :param experiments: list
+        list of dataframes
+    :param gene_axis: int
+        axis corresponding to each gene. 0 for rows, 1 for columns
+    :return:
+    """
+    return np.array([cc_experiment(experiment.values.T) if gene_axis == 1 else cc_experiment(experiment.values)
+                     for experiment in experiments])
 
-def cc_experiment(x):
+
+def cc_experiment(experiment):
     """
     For one experiment.
     x should be n rows (genes) by m columns (timepoints)
+    :param experiment:
+    :return:
     """
-    ccf_array = np.zeros((x.shape[0], x.shape[0], x.shape[1]))
-    for ii, static in enumerate(x):
-        for jj, moving in enumerate(x):
-            if ii==jj:
-                unbiased=True
+    ccf_array = np.zeros((experiment.shape[0], experiment.shape[0], experiment.shape[1]))
+    for ii, static in enumerate(experiment):
+        for jj, moving in enumerate(experiment):
+            if ii == jj:
+                unbiased = True
             else:
-                unbiased=False
+                unbiased = False
             ccf_array[ii][jj] = ccf(static, moving, unbiased=unbiased)
     return ccf_array
 
+
+def calc_edge_lag(xcorr, genes, sc_frac=0.1, min_ccf=0.5):
+    """
+
+    :param xcorr: 4d array
+        4 axes in order: experiments, parent, child, time
+    :param genes: list
+    :return:
+    """
+    e, p, c, t = xcorr.shape
+    edges = itertools.product(genes, genes)
+    lag_estimate = np.zeros((p,c))
+    sc_thresh = sc_frac * t
+    print(t)
+    for edge in edges:
+        # Ignore self edges
+        if edge[0] == edge[1]:
+            continue
+        p_idx = genes.index(edge[0])
+        c_idx = genes.index(edge[1])
+
+        # The ccf keeps the parent static and moves the child. Therefore the reversed xcorr would show the true lag
+        reverse = xcorr[:, c_idx, p_idx]
+        filtered = filter_ccfs(reverse, sc_thresh, min_ccf)
+        if filtered.shape[0] > 0:
+            # f, axarr = plt.subplots(1,2)
+            # axarr[0].plot(reverse.T)
+            # axarr[1].plot(filtered.T)
+            # plt.show()
+            lag_estimate[p_idx, c_idx] = np.ceil(float(np.mean(np.argmax(np.abs(filtered), axis=1))))
+            # print(edge, np.argmax(filtered, axis=0), np.mean(np.argmax(filtered, axis=0)))
+    col, row = np.meshgrid(range(len(genes)), range(len(genes)))
+    edge_lag = pd.DataFrame()
+    edge_lag['Parent'] = np.array(genes)[row.flatten()]
+    edge_lag['Child'] = np.array(genes)[col.flatten()]
+    edge_lag['Lag'] = lag_estimate.flatten()
+    edge_lag['Edge'] = list(zip(edge_lag['Parent'], edge_lag['Child']))
+    return edge_lag
+
+
+def round_to(x, base, type='ceil'):
+    if type == 'ceil':
+        r = np.ceil(x/base)*base
+    elif type == 'round':
+        r = round(x/base, 0)*base
+    elif type == 'floor':
+        r = np.floor(x/base)*base
+
+    return r
+
+def filter_ccfs(ccfs, sc_thresh, min_ccf):
+    """
+    Remove noisy ccfs from irrelevant experiments
+    :param ccfs: 2d array
+    :param sc_thresh: int
+        number of sign changes expected
+    :param min_ccf: float
+        cutoff value for a ccf to be above the noise threshold
+    :return:
+    """
+    if sc_thresh is None:
+        sc_thresh = np.inf
+    asign = np.sign(ccfs)
+    signchange = ((np.roll(asign, 1) - asign) != 0).astype(int)
+    signchange[:, 0] = 0
+    # (np.sum(signchange, axis=1) <= sc_thresh) &
+    filtered_ccf = ccfs[(np.sum(signchange, axis=1) <= sc_thresh) & (np.max(np.abs(ccfs), axis=1) > min_ccf), :]
+    return filtered_ccf
+
 if __name__ == '__main__':
-    data_folder = "../data/dream4/"
+    data_folder = "../data/dream4/high_sampling/"
     nets = 5
-    thresh=0.5
-    insilico_dict = {ii:{} for ii in range(1, nets+1)}
+    thresh = 0.3
+    insilico_dict = {ii: {} for ii in range(1, nets + 1)}
     lags = []
     for net in insilico_dict:
-        data_file = data_folder + "insilico_size10_%i_timeseries.tsv"%(net)
-        gold_file = data_folder + "insilico_size10_%i_goldstandard.tsv"%(net)
-        perturb_file = data_folder + "insilico_size10_%i_timeseries_perturbations.tsv"%(net)
-
-        # Calculate the xcorr for each gene pair
-        df = pd.read_csv(data_file, sep="\t")
-        gene_list = df.columns.values[1:].tolist()
-        experiments=get_experiment_list(data_file)
-        xcorr_list = xcorr_experiments(experiments)
+        data_file = data_folder + "insilico_size10_%i_dream4_timeseries.tsv" % (net)
+        gold_file = data_folder + "insilico_size10_%i_goldstandard.tsv" % (net)
+        perturb_file = data_folder + "insilico_size10_%i_timeseries_perturbations.tsv" % (net)
 
         # Get the true edges
         evaluator = Evaluator(gold_file, '\t')
         true_edges = evaluator.gs_flat.tolist()
-        dg = nx.DiGraph()
-        dg.add_edges_from(true_edges)
-    #     print(nx.shortest_path(dg, 'G9', 'G7'))
 
-        # Get the true perturbations
-        true_perturbs = pd.read_csv(perturb_file, sep="\t")
-        edge_max_ccf= pd.DataFrame(np.max(np.max(np.abs(xcorr_list), axis=3), axis=0), index=gene_list, columns=gene_list)
-        a, b = np.meshgrid(range(len(gene_list)), range(len(gene_list)))
-        ll = pd.DataFrame()
-        gene_list = np.array(gene_list)
-        ll['Parent'] = gene_list[a.flatten()]
-        ll['Child'] = gene_list[b.flatten()]
-        ll['Max_ccf'] = edge_max_ccf.values.flatten()
-        ll['is_lag'] = ll['Max_ccf']>=thresh
-        ll['Edge'] = list(zip(ll['Parent'], ll['Child']))
-        ll['True_Edge'] = ll['Edge'].isin(true_edges)
-    #     print(ll[ll['is_lag']==False], '\n')
-        false_neg = ll[(ll['is_lag']==False) & (ll['True_Edge']==True)]['Edge'].values
-        genes = list(gene_list)
-        x = np.ma.masked_where((np.max(np.abs(xcorr_list), axis=3)<thresh),
-                               np.argmax(np.abs(xcorr_list), axis=3))
-        for edge in true_edges:
-            p_idx = list(gene_list).index(edge[0])
-            c_idx = list(gene_list).index(edge[1])
-            print(edge, np.ceil(float(np.ma.mean(x[:, c_idx,p_idx]))))
-            lags.append(np.ceil(float(np.ma.mean(x[:, c_idx,p_idx]))))
-        for falsey in false_neg:
-            p_idx = genes.index(falsey[0])
-            c_idx = genes.index(falsey[1])
-            forward = xcorr_list[:, p_idx, c_idx].T
-            reverse = xcorr_list[:, c_idx, p_idx].T
-            diff = (forward-reverse)
-            diff = diff/np.max(np.abs(diff))/np.array(range(1,len(diff)+1))[:, None]
-            max_abs = np.max(np.abs(reverse))
-    #         plt.figure()
-    #         plt.plot(reverse, 'o-')
-    #         plt.title(falsey)
+        # Calculate the xcorr for each gene pair
+        df = pd.read_csv(data_file, sep="\t")
+        gene_list = df.columns.values[1:].tolist()
+        experiment_list = get_experiment_list(data_file, 501, 10)
+        xcorr_array = xcorr_experiments(experiment_list)
+        edge_lags = calc_edge_lag(xcorr_array, gene_list, 0.1, 0.3)
+        true_lags = edge_lags[edge_lags['Edge'].isin(true_edges)]
+        lags += true_lags['Lag'].values.tolist()
+
+    print(len(lags))
     z = np.nan_to_num(np.array(lags))
     data = pd.DataFrame(np.asarray(list(Counter(z).items())))
     data.sort_values(0, inplace=True)
