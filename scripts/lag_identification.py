@@ -65,7 +65,7 @@ def cc_experiment(experiment):
     return ccf_array
 
 
-def calc_edge_lag(xcorr, genes, sc_frac=0.1, min_ccf=0.5):
+def calc_edge_lag(xcorr, genes, sc_frac=0.1, min_ccf=0.5, timestep=1):
     """
 
     :param xcorr: 4d array
@@ -77,7 +77,7 @@ def calc_edge_lag(xcorr, genes, sc_frac=0.1, min_ccf=0.5):
     edges = itertools.product(genes, genes)
     lag_estimate = np.zeros((p,c))
     sc_thresh = sc_frac * t
-    print(t)
+
     for edge in edges:
         # Ignore self edges
         if edge[0] == edge[1]:
@@ -93,7 +93,7 @@ def calc_edge_lag(xcorr, genes, sc_frac=0.1, min_ccf=0.5):
             # axarr[0].plot(reverse.T)
             # axarr[1].plot(filtered.T)
             # plt.show()
-            lag_estimate[p_idx, c_idx] = np.ceil(float(np.mean(np.argmax(np.abs(filtered), axis=1))))
+            lag_estimate[p_idx, c_idx] = np.ceil(float(np.mean(np.argmax(np.abs(filtered), axis=1))))*timestep
             # print(edge, np.argmax(filtered, axis=0), np.mean(np.argmax(filtered, axis=0)))
     col, row = np.meshgrid(range(len(genes)), range(len(genes)))
     edge_lag = pd.DataFrame()
@@ -113,6 +113,7 @@ def round_to(x, base, type='ceil'):
         r = np.floor(x/base)*base
 
     return r
+
 
 def filter_ccfs(ccfs, sc_thresh, min_ccf):
     """
@@ -153,15 +154,16 @@ if __name__ == '__main__':
         gene_list = df.columns.values[1:].tolist()
         experiment_list = get_experiment_list(data_file, 501, 10)
         xcorr_array = xcorr_experiments(experiment_list)
-        edge_lags = calc_edge_lag(xcorr_array, gene_list, 0.1, 0.3)
+        edge_lags = calc_edge_lag(xcorr_array, gene_list, 0.1, 0.3, timestep=2)
         true_lags = edge_lags[edge_lags['Edge'].isin(true_edges)]
         lags += true_lags['Lag'].values.tolist()
 
-    print(len(lags))
+    lags = [round_to(lag, 50) for lag in lags]
     z = np.nan_to_num(np.array(lags))
     data = pd.DataFrame(np.asarray(list(Counter(z).items())))
     data.sort_values(0, inplace=True)
     plt.plot(data[0].values, data[1]/len(lags), 'o-', lw=5, ms=10, markerfacecolor='w', mew=3, mec='b')
+    # plt.hist(lags, bins=71, cumulative=True, normed=1)
     plt.xlabel('Peak Lag', fontsize=20)
     plt.ylabel('% of True Edges', fontsize=20)
     plt.tick_params(axis='both', which='major', labelsize=18)
