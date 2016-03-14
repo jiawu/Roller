@@ -6,12 +6,9 @@ __email__ = 'jfinkle@u.northwestern.edu'
 import os, sys, itertools
 import networkx as nx
 import pandas as pd
-from scipy import stats, signal
-from statsmodels.tsa.stattools import acf, ccf
-from sklearn.metrics import r2_score
+from statsmodels.tsa.stattools import ccf
 import matplotlib.pyplot as plt
 import numpy as np
-from Swing import Swing
 from Swing.util.Evaluator import Evaluator
 from collections import Counter
 import matplotlib as mpl
