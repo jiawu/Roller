@@ -40,7 +40,7 @@ class GnwWrapper(object):
         network_list = []
         while len(network_list) < n:
             net_num = n-len(network_list)
-            print net_num
+            print(net_num)
             # Make network
             self.extract_sub_net(input_net, out_fmt, out_path, arg_list, settings, out_name)
             network_file = out_path + out_name + '-1.xml'
@@ -67,7 +67,7 @@ class GnwWrapper(object):
                     break
 
             if not unique_net:
-                print 'isomorphic'
+                print('isomorphic')
                 os.remove(network_file)
                 os.remove(transformed_file)
                 continue
@@ -90,7 +90,8 @@ class GnwWrapper(object):
                     os.rename(temp_path+fn, out_path+new_fn)
                 network_list.append(net)
             else:
-                print 'not simulated properly. check settings if this persists'
+                print('not simulated properly. check settings if this persists')
+        os.removedirs(temp_path)
 
     def anonymize_genes(self, file_path, in_place=True):
         """
@@ -104,10 +105,10 @@ class GnwWrapper(object):
                         if s.attrib['name'] != '_void_'}
         fout = fileinput.input(file_path, inplace=in_place)
         for line in fout:
-            for species, anon_id in species_dict.iteritems():
+            for species, anon_id in species_dict.items():
                 line = line.replace(species, anon_id)
             # Print the modified line to the output buffer
-            print line
+            print(line)
         fout.close()
         return
 
@@ -145,18 +146,18 @@ if __name__ == '__main__':
 
     directory = '/Users/jfinkle/Documents/Northwestern/MoDyLS/Python/Roller/data/gnw_insilico/'
     jar_location = '/Users/jfinkle/Documents/Northwestern/MoDyLS/gnw/'
-    network = 'Ecoli'
+    network = 'Yeast'
     path_dict = {'Yeast': '/Users/jfinkle/Documents/Northwestern/MoDyLS/gnw/src/ch/epfl/lis/networks/'
                           'yeast_transcriptional_network_Balaji2006.tsv',
                  'Ecoli': '/Users/jfinkle/Documents/Northwestern/MoDyLS/gnw/src/ch/epfl/lis/networks/'
                           'ecoli_transcriptional_network_regulonDB_6_7.tsv'}
-    n_nodes = 10
+    n_nodes = 100
     num_nets = 20
     mode = {'Yeast': ['--scc-seed', str(n_nodes)], 'Ecoli': ['--random-seed']}
     base_net = path_dict[network]
     jar_file = jar_location + 'gnw-3.1.2b.jar'
     sim_settings = directory + 'settings.txt'
-    data_out = directory + 'network_data/' + network + '/'
+    data_out = directory + 'network_data/' + network + str(n_nodes)+ '/'
     optional_args = mode[network]+['--greedy-selection', '--subnet-size='+str(n_nodes)]
 
     make_files = False
