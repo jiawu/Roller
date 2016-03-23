@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 from lag_identification import get_experiment_list, xcorr_experiments, calc_edge_lag
 
-def get_network_changes(data_file, gold_file, pickle_file, edge_str='regulator-target',
+def get_network_changes(gold_file, pickle_file, edge_str='regulator-target',
                         base_str='rank_importance_RF-td_21', shortener_str='rank_importance_'):
     dg = nx.DiGraph()
     evaluator = Evaluator(gold_file, '\t')
@@ -61,7 +61,12 @@ if __name__ == "__main__":
     gold_file = "../data/gnw_insilico/network_data/Ecoli/Ecoli-%i_goldstandard.tsv" % net
     data_file = "../data/gnw_insilico/network_data/Ecoli/Ecoli-%i_timeseries.tsv" % net
     pickle_file = "Ecoli_net%i_promotion.pkl" % net
-    print(get_network_changes(data_file, gold_file, pickle_file).head())
+    print(get_network_changes(gold_file, pickle_file).head())
+
+    # Wilcoxon test for each network to see if it changed? - may not be appropriate
+    # Hypergeometric test for promoted edges enriched for lagged edges?
+        # Calculate for each experimental condition
+        # Get true edge lag
 
 
 
