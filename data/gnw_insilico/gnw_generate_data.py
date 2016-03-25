@@ -37,7 +37,8 @@ class GnwWrapper(object):
         if out_name is None:
             out_name = input_net.split('/')[-1].split('.')[0]
 
-        network_list = []
+        network_list = self.get_existing_networks(out_path)
+
         while len(network_list) < n:
             net_num = n-len(network_list)
             print(net_num)
@@ -52,17 +53,12 @@ class GnwWrapper(object):
             # Transform
             self.transform(network_file, 3, out_path)
             transformed_file = network_file.replace('.xml', '.tsv')
-            df = pd.read_csv(transformed_file, sep='\t', header=None)
-            nodes = np.append(df.loc[:, 0].values, df.loc[:, 1].values)
-            df = df[df.loc[:, 2] == 1]
-            edges = zip(df.loc[:, 0], df.loc[:, 1])
-            net = nx.DiGraph()
-            net.add_nodes_from(nodes)
-            net.add_edges_from(edges)
+            net = self.gold_to_nx(transformed_file)
             unique_net = True
             for graph in network_list:
                 graph_matcher = isomorphism.DiGraphMatcher(net, graph)
                 if graph_matcher.is_isomorphic():
+                    #todo: pause? several sequential isomorphisms appear, perhaps the clock needs to advance?)
                     unique_net = False
                     break
 
@@ -76,6 +72,7 @@ class GnwWrapper(object):
             # Delete files in the temp folder
             for fn in os.listdir(temp_path):
                 os.remove(fn)
+            print('Generating data for network %i' % net_num)
             subprocess.call(self.jar_call + ['--simulate', '-c', settings, '--input-net', network_file],
                             stdout=self.devnull, stderr=self.devnull)
 
@@ -92,6 +89,20 @@ class GnwWrapper(object):
             else:
                 print('not simulated properly. check settings if this persists')
         os.removedirs(temp_path)
+
+    def get_existing_networks(self, path):
+        network_list = [self.gold_to_nx(path+file) for file in os.listdir(path) if 'goldstandard.tsv' in file]
+        return network_list
+
+    def gold_to_nx(self, file_name):
+        df = pd.read_csv(file_name, sep='\t', header=None)
+        nodes = np.append(df.loc[:, 0].values, df.loc[:, 1].values)
+        df = df[df.loc[:, 2] == 1]
+        edges = zip(df.loc[:, 0], df.loc[:, 1])
+        net = nx.DiGraph()
+        net.add_nodes_from(nodes)
+        net.add_edges_from(edges)
+        return net
 
     def anonymize_genes(self, file_path, in_place=True):
         """
