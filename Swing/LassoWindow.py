@@ -178,7 +178,7 @@ class LassoWindow(Window):
         auc = self.edge_stability_auc[:, :, nth]
         return auc
 
-    def initialize_params(self, alpha=None):
+    def initialize_params(self, alpha=0.15):
         """
         Choose the value of alpha to use for fitting
         :param alpha: float, optional
@@ -188,6 +188,7 @@ class LassoWindow(Window):
         if alpha is None:
             "Select alpha with default parameters"
             self.alpha, self.cv_table = self.cv_select_alpha()
+            print("alpha_score",self.alpha)
         elif alpha >= 0:
             self.alpha = alpha
         else:
@@ -281,7 +282,7 @@ class LassoWindow(Window):
                     break
         return alpha_max
 
-    def cv_select_alpha(self, alpha_range=None, method='modelQ2', n_folds=5):
+    def cv_select_alpha(self, alpha_range=None, method='max_posQ2', n_folds=5):
         """
         Calculate the cross-validation metrics for a range of alpha values and select the best one based on the chosen
         method

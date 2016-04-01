@@ -39,7 +39,7 @@ def parse_tdr_results(agg_df,test_statistic, datasets):
 
         RF = current_df[(current_df['td_window'] == 11)]
         granger_RF = current_df[(current_df['td_window'] == 10) & (current_df['min_lag']==1) ]
-        SWING_RF = current_df[(current_df['td_window'] == 4) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3)]
+        SWING_RF = current_df[(current_df['td_window'] == 4) & (current_df['min_lag']==1)]
 
 
         comparisons = [RF, granger_RF, SWING_RF]
@@ -77,6 +77,13 @@ with PdfPages(output_path+save_tag+'.pdf') as pdf:
         bp.add_formatting(title, y_label=test.upper())        
         pdf.savefig(bp.f)
    
+        scoring_scheme = [(1,2)]
+        #scoring_scheme = [(x,x+1) for x in range(0, 19, 2)]
+        #print(scoring_scheme)
+        tests = bp.sigtest(bp_data, score=scoring_scheme)
+        print(tests)
+        print(len(bp_data[0]))
+        bp.add_significance(tests)
 
 
 
