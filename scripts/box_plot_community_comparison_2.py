@@ -26,15 +26,15 @@ def read_tdr_results(folder_list):
 
 def parse_tdr_results(agg_df,test_statistic, datasets):
     label_list = []
-    auroc_list = []
 
     ## Analyze:
       # nonuniform
       # uniform
       # for all networks 1 2 3 4 5
       # parsing for windows = 7, windows = 4
-
+    cum_aurocs = []
     for dataset in datasets:
+        auroc_list = []
         current_df = agg_df[agg_df['file_path'].str.contains(dataset)]
 
         RF = current_df[(current_df['td_window'] == 21) & (current_df['data_folder'].str.contains('RandomForest')) & (current_df['data_folder'].str.contains('yeast'))]
@@ -55,36 +55,69 @@ def parse_tdr_results(agg_df,test_statistic, datasets):
         
         for category in comparisons:
             auroc_list.append(category[test_statistic][0:n_trials].tolist())
+
+        #for each dataset, add up the test statistics. Take the mean of the reference box. Subtract each item from the mean
+        reference_box = auroc_list[0]
+        ref_mean = np.mean(reference_box)
+
+        for box in auroc_list[0:5]:
+            cum_aurocs.append(box-ref_mean)
         
-        label_list.append("RandomForest")
-        label_list.append("SWING RF")
-        label_list.append("SWING Lasso")
-        label_list.append("SWING Dionesus")
-        label_list.append("SWING Community")
-        label_list.append("RandomForest")
-        label_list.append("SWING RF")
-        label_list.append("SWING Lasso")
-        label_list.append("SWING Dionesus")
-        label_list.append("SWING Community")
+        reference_box2 = auroc_list[5]
+        ref_mean2 = np.mean(reference_box2)
+
+        
+        for box in auroc_list[5:]:
+            cum_aurocs.append(box-ref_mean2)
+
+
+    final_RF = np.hstack(cum_aurocs[0::10]).tolist()        
+    final_SWING_RF = np.hstack(cum_aurocs[1::10]).tolist()        
+    final_SWING_Lasso = np.hstack(cum_aurocs[2::10]).tolist()        
+    final_SWING_Dionesus = np.hstack(cum_aurocs[3::10]).tolist()        
+    final_SWING_Community = np.hstack(cum_aurocs[4::10]).tolist()        
     
-    return((label_list, auroc_list))
+    final_RF2 = np.hstack(cum_aurocs[5::10]).tolist()        
+    final_SWING_RF2 = np.hstack(cum_aurocs[6::10]).tolist()        
+    final_SWING_Lasso2 = np.hstack(cum_aurocs[7::10]).tolist()        
+    final_SWING_Dionesus2 = np.hstack(cum_aurocs[8::10]).tolist()        
+    final_SWING_Community2 = np.hstack(cum_aurocs[9::10]).tolist()
+
+    final_auroc_list = [final_RF, final_SWING_RF, final_SWING_Lasso, final_SWING_Dionesus, final_SWING_Community, final_RF2, final_SWING_RF2, final_SWING_Lasso2, final_SWING_Dionesus2, final_SWING_Community2]
+        
+    label_list.append("RandomForest")
+    label_list.append("SWING RF")
+    label_list.append("SWING Lasso")
+    label_list.append("SWING Dionesus")
+    label_list.append("SWING Community")
+    label_list.append("RandomForest")
+    label_list.append("SWING RF")
+    label_list.append("SWING Lasso")
+    label_list.append("SWING Dionesus")
+    label_list.append("SWING Community")
+    
+    return((label_list, final_auroc_list))
 
 output_path = "/home/jjw036/"
 
 input_folder_list = ["/projects/p20519/roller_output/community/", "/projects/p20519/roller_output/gnw/RandomForest/", "/projects/p20519/roller_output/gnw/Lasso/", "/projects/p20519/roller_output/gnw/Dionesus/"]  
 test_statistic = ['aupr', 'auroc']
-save_tag = "gnw_community_comparison_aggregate_network_comparison_test"
+save_tag = "gnw_community_comparison_aggregate_network_comparison_differences_mean"
 n_trials = 100
 
-datasets = ["_"]
+#datasets = ["_"]
 
-#datasets = ["Yeast-"+str(index)+"_" for index in range(1,5)]
+datasets = ["-"+str(index)+"_" for index in range(1,21)]
 #datasets = ['insilico_size10_1','insilico_size10_2','insilico_size10_3','insilico_size10_4','insilico_size10_5']
 agg_df = read_tdr_results(input_folder_list)
 
 with PdfPages(output_path+save_tag+'.pdf') as pdf:
     for test in test_statistic:
         label_list, auroc_list = parse_tdr_results(agg_df,test, datasets)
+
+        #200 box plots -> each out being SWING, etc
+
+        #condense into 10, adding up each dataset
         bp_data = auroc_list
         bp = BoxPlot()
 
@@ -98,7 +131,7 @@ with PdfPages(output_path+save_tag+'.pdf') as pdf:
         bp.add_formatting(title, y_label=test.upper())
         labels = ['Yeast', 'E. Coli']
         bp.add_sections(5, labels, offset=0.25)
-        tests = bp.add_significance(tests, style = 'cascade')
+        #tests = bp.add_significance(tests, style = 'cascade')
         
         pdf.savefig(bp.f)
    
