@@ -36,11 +36,12 @@ def parse_tdr_results(agg_df,test_statistic, datasets):
 
     for dataset in datasets:
         current_df = agg_df[agg_df['file_path'].str.contains(dataset)]
+        current_df = current_df[current_df['run_time'].str.contains('2016-02')]
 
         RF = current_df[(current_df['td_window'] == 21)]
-        SWING_RF = current_df[(current_df['td_window'] == 10) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3)]
+        SWING_RF = current_df[(current_df['td_window'] == 15) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3)]
 
-
+        pdb.set_trace()
         comparisons = [RF, SWING_RF]
 
         
@@ -56,7 +57,7 @@ output_path = "/home/jjw036/"
 
 input_folder_list = ["/projects/p20519/roller_output/gnw/Lasso/"]  
 test_statistic = ['aupr', 'auroc']
-save_tag = "gnw_lasso_comparison_yeast_110"
+save_tag = "gnw_lasso_comparison_yeast_110_alpha"
 n_trials = 100
 
 datasets = ["Yeast-"+str(index)+"_" for index in range(1,11)]
