@@ -11,6 +11,7 @@ import time
 import xml.etree.ElementTree as ET
 import networkx as nx
 from networkx.algorithms import isomorphism
+import nxpd
 
 class GnwWrapper(object):
     """
@@ -24,7 +25,11 @@ class GnwWrapper(object):
         self.settings_default = settings
         self.devnull = open(os.devnull, 'w')
 
-    def make_networks(self, input_net, out_fmt, out_path, n, arg_list, settings=None, out_name=None):
+    def make_networks(self, input_net, out_fmt, out_path, n, arg_list, settings=None, out_name=None, graphviz=False):
+        # Make the top level directory if it doesn't exist
+        if not os.path.exists(out_path):
+            os.makedirs(out_path)
+
         # Change working directory because simulating data output-path doesn't work
         temp_path = out_path+'/temp/'
         try:
@@ -38,12 +43,16 @@ class GnwWrapper(object):
             out_name = input_net.split('/')[-1].split('.')[0]
 
         network_list = self.get_existing_networks(out_path)
+        if len(network_list) == n:
+            sys.exit('The requested number of networks already exists')
+        if len(network_list) > 0:
+            print('%i networks already exists. Generating %i more' % (len(network_list), n-len(network_list)))
 
         while len(network_list) < n:
             net_num = n-len(network_list)
-            print(net_num)
+            net_num = 5
             # Make network
-            self.extract_sub_net(input_net, out_fmt, out_path, arg_list, settings, out_name)
+            call_string = self.extract_sub_net(input_net, out_fmt, out_path, arg_list, settings, out_name)
             network_file = out_path + out_name + '-1.xml'
 
             # Anonymize gene names
@@ -58,7 +67,6 @@ class GnwWrapper(object):
             for graph in network_list:
                 graph_matcher = isomorphism.DiGraphMatcher(net, graph)
                 if graph_matcher.is_isomorphic():
-                    #todo: pause? several sequential isomorphisms appear, perhaps the clock needs to advance?)
                     unique_net = False
                     break
 
@@ -85,16 +93,29 @@ class GnwWrapper(object):
                 for fn in os.listdir(temp_path):
                     new_fn = fn.replace('1.', str(net_num)+'.').replace('1_', str(net_num)+'_')
                     os.rename(temp_path+fn, out_path+new_fn)
+
+                # Save networks and add to list
+                if graphviz:
+                    graph_name = out_path + out_name + '-%i.png' % net_num
+                    nxpd.draw(net, filename=graph_name, format='png', show=False, layout='circo')
                 network_list.append(net)
             else:
                 print('not simulated properly. check settings if this persists')
+
+        # Cleanup - remove temporary directory and make settings file
+        print('Cleaning up...')
         os.removedirs(temp_path)
+        with open(out_path+'settings.txt', 'w') as f:
+            f.write(call_string)
 
     def get_existing_networks(self, path):
         network_list = [self.gold_to_nx(path+file) for file in os.listdir(path) if 'goldstandard.tsv' in file]
         return network_list
 
     def gold_to_nx(self, file_name):
+        """
+        Make a gold standard file into a networkx DiGraph
+        """
         df = pd.read_csv(file_name, sep='\t', header=None)
         nodes = np.append(df.loc[:, 0].values, df.loc[:, 1].values)
         df = df[df.loc[:, 2] == 1]
@@ -130,7 +151,7 @@ class GnwWrapper(object):
         call_list = ['--input-net', input_net, '--num-subnets=1', '--output-net-format=%i' % out_fmt, '--output-path',
                      out_path, '--network-name', out_name] + arg_list
         subprocess.call(extract_call+call_list, stdout=self.devnull, stderr=self.devnull)
-        return
+        return ' '.join(extract_call+call_list)
 
     def transform(self, in_list, out_fmt, out_path, settings=None):
         """
@@ -157,21 +178,22 @@ if __name__ == '__main__':
 
     directory = '/Users/jfinkle/Documents/Northwestern/MoDyLS/Python/Roller/data/gnw_insilico/'
     jar_location = '/Users/jfinkle/Documents/Northwestern/MoDyLS/gnw/'
-    network = 'Yeast'
     path_dict = {'Yeast': '/Users/jfinkle/Documents/Northwestern/MoDyLS/gnw/src/ch/epfl/lis/networks/'
                           'yeast_transcriptional_network_Balaji2006.tsv',
                  'Ecoli': '/Users/jfinkle/Documents/Northwestern/MoDyLS/gnw/src/ch/epfl/lis/networks/'
                           'ecoli_transcriptional_network_regulonDB_6_7.tsv'}
-    n_nodes = 100
-    num_nets = 20
-    mode = {'Yeast': ['--scc-seed', str(n_nodes)], 'Ecoli': ['--random-seed']}
+    network = 'Ecoli'
+    n_nodes = 1000
+    num_nets = 5
+    scc_fraction = 0.5
+    scc_num = round(n_nodes*scc_fraction)
+    mode = {'Yeast': ['--scc-seed', str(scc_num)], 'Ecoli': ['--random-seed']}
+    # mode = {'Yeast': ['--random-seed'], 'Ecoli': ['--random-seed']}
     base_net = path_dict[network]
     jar_file = jar_location + 'gnw-3.1.2b.jar'
     sim_settings = directory + 'settings.txt'
-    data_out = directory + 'network_data/' + network + str(n_nodes)+ '/'
+    data_out = directory + 'network_data/' + network + str(n_nodes) + '/'
     optional_args = mode[network]+['--greedy-selection', '--subnet-size='+str(n_nodes)]
 
-    make_files = False
-
     gnw = GnwWrapper(jar_file, sim_settings)
-    gnw.make_networks(base_net, 4, data_out, num_nets, optional_args, out_name=network)
+    gnw.make_networks(base_net, 4, data_out, num_nets, optional_args, out_name=network+str(n_nodes))
