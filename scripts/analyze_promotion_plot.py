@@ -59,7 +59,7 @@ run_params = {}
 inf_list = ["Dionesus", "RandomForest", "Lasso"]
 inf_list2 = ["Dionesus-td10", "RandomForest-td10", "Lasso-td10", "Dionesus-td15", "RandomForest-td15", "Lasso-td15"]
 
-methods_of_interest = ['RF-td_2', 'RF-td_10', 'RF-td_15','RF-td_21', 'RF-ml_0', 'RF-ml_1', 'RF-ml_2','RF-ml_3','RF-ml_4', 'RF-ml_5']
+methods_of_interest = ['Dionesus-td_2', 'Dionesus-td_10', 'Dionesus-td_15','Dionesus-td_21', 'Dionesus-ml_0', 'Dionesus-ml_1', 'Dionesus-ml_2','Dionesus-ml_3','Dionesus-ml_4', 'Dionesus-ml_5']
 
 inf_method_key = {'RF':'RandomForest', 'Dionesus': 'Dionesus', 'Lasso':'Lasso'}
 
@@ -104,8 +104,8 @@ for organism in organisms:
         true_only = current_results[current_results['regulator-target'].isin(true_edges)]
         
         for method in methods_of_interest:
-            diff_name = 'RF-td_21-' + method
-            true_only[diff_name] = true_only['rank_importance_RF-td_21']-true_only['rank_importance_'+method]
+            diff_name = 'Dionesus-td_21-' + method
+            true_only[diff_name] = true_only['rank_importance_Dionesus-td_21']-true_only['rank_importance_'+method]
         pickle_name = organism + '_net' + str(network_index) + '_promotion.pkl'
         pickle.dump(current_results, open(pickle_name, 'wb'))
 
