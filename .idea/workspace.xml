@@ -1,19 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="Updated data generation script&#10;&#10;Ecoli and yeast networks made for size 10, 100, and 1000">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/.ipynb_checkpoints/Exploring Cross Correlation in Dream4-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/.ipynb_checkpoints/Exploring Effect of Sampling Strategies on SWING Performance-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/.ipynb_checkpoints/Investigating Active Windows-Network1-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/.ipynb_checkpoints/Investigating Active Windows-Network2-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/.ipynb_checkpoints/Investigating Active Windows-Network3-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/.ipynb_checkpoints/Investigating Active Windows-Network4-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/.ipynb_checkpoints/Investigating Active Windows-Network5-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/.ipynb_checkpoints/Investigating Dream8 Networks-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/.ipynb_checkpoints/Parsing Dream8 Data-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/.ipynb_checkpoints/Untitled-checkpoint.ipynb" afterPath="" />
+    <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/gnw_insilico/gnw_generate_data.py" afterPath="$PROJECT_DIR$/data/gnw_insilico/gnw_generate_data.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/edge_promotion.py" afterPath="$PROJECT_DIR$/scripts/edge_promotion.py" />
     </list>
     <ignored path="Roller.iws" />
@@ -48,8 +37,8 @@
       <file leaf-file-name="edge_promotion.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="185" column="19" selection-start-line="185" selection-start-column="18" selection-end-line="185" selection-end-column="19" />
+            <state relative-caret-position="30">
+              <caret line="165" column="76" selection-start-line="165" selection-start-column="76" selection-end-line="165" selection-end-column="76" />
               <folding>
                 <element signature="e#71#81#0" expanded="true" />
               </folding>
@@ -168,6 +157,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="swing" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Roller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
@@ -206,6 +209,157 @@
       <recent name="$PROJECT_DIR$/Roller/unittests" />
       <recent name="$PROJECT_DIR$/Roller" />
     </key>
+  </component>
+  <component name="RestoreUpdateTree" date="Moments ago" ActionInfo="_Update">
+    <UpdatedFiles>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Updated from server" />
+        <option name="myStatusName" value="Changed on server" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="CHANGED_ON_SERVER" />
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Updated" />
+          <option name="myStatusName" value="Changed" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="UPDATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/analyze_promotion_plot.py</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Created" />
+          <option name="myStatusName" value="Created" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="CREATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net10_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net11_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net12_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net13_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net14_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net15_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net16_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net17_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net18_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net19_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net1_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net20_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net2_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net3_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net4_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net5_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net6_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net7_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net8_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Ecoli_net9_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net10_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net11_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net12_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net13_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net14_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net15_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net16_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net17_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net18_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net19_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net1_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net20_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net2_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net3_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net4_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net5_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net6_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net7_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net8_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/Yeast_net9_dionesus_promotion.pkl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/scripts/renaming_gnw.py</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Deleted" />
+          <option name="myStatusName" value="Deleted" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="true" />
+          <option name="myId" value="REMOVED_FROM_REPOSITORY" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Restored" />
+          <option name="myStatusName" value="Will be restored" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="RESTORED" />
+        </FILE-GROUP>
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Modified" />
+        <option name="myStatusName" value="Modified" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MODIFIED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Skipped" />
+        <option name="myStatusName" value="Skipped" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SKIPPED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with conflicts" />
+        <option name="myStatusName" value="Will be merged with conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_CONFLICTS" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with tree conflicts" />
+        <option name="myStatusName" value="Merged with tree conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with property conflicts" />
+        <option name="myStatusName" value="Will be merged with property conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged" />
+        <option name="myStatusName" value="Will be merged" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Not in repository" />
+        <option name="myStatusName" value="Not in repository" />
+        <option name="mySupportsDeletion" value="true" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="UNKNOWN" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally added" />
+        <option name="myStatusName" value="Locally added" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_ADDED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally removed" />
+        <option name="myStatusName" value="Locally removed" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_REMOVED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Switched" />
+        <option name="myStatusName" value="Switched" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SWITCHED" />
+      </FILE-GROUP>
+    </UpdatedFiles>
   </component>
   <component name="RunManager" selected="Python.edge_promotion">
     <configuration default="false" name="goldbetter_model" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -457,13 +611,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1413916753036</updated>
-    </task>
-    <task id="LOCAL-00109" summary="tdRoller appears to work. It needs additional functionalization and tweaking">
-      <created>1436394150692</created>
-      <option name="number" value="00109" />
-      <option name="presentableId" value="LOCAL-00109" />
-      <option name="project" value="LOCAL" />
-      <updated>1436394150692</updated>
     </task>
     <task id="LOCAL-00110" summary="Testing edge evaluation for tdRoller">
       <created>1436473127903</created>
@@ -801,7 +948,14 @@
       <option name="project" value="LOCAL" />
       <updated>1458920615070</updated>
     </task>
-    <option name="localTasksCounter" value="158" />
+    <task id="LOCAL-00158" summary="Work on edge promotion and lag trends&#10;&#10;SWING enriches promotion of lagged edges in Yeast networks, but not Ecoli.">
+      <created>1460564057944</created>
+      <option name="number" value="00158" />
+      <option name="presentableId" value="LOCAL-00158" />
+      <option name="project" value="LOCAL" />
+      <updated>1460564057945</updated>
+    </task>
+    <option name="localTasksCounter" value="159" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -828,7 +982,7 @@
     <frame x="-1280" y="23" width="1280" height="997" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32168388" sideWeight="0.70035464" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2025417" sideWeight="0.70035464" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33015874" sideWeight="0.50080776" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32423207" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -884,7 +1038,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added edge ranking" />
     <MESSAGE value="Edges are now ranked based on adjusted importance score (adj_imp), which is weighted by p_value" />
     <MESSAGE value="Fix method for getting coefficients&#10;&#10;The get_coeffs method did not function correctly for minimum lags greater than zero.  Changes to the function _fitstack_coeffs were necessary as well" />
     <MESSAGE value="Add MSE calculations during model building in tdRFRWindow&#10;&#10;If the MSE of the full model is lower than the MSE of the model without the particular explanatory variable, then that edge should be in the model. If it is not higher than it should be eliminated." />
@@ -909,7 +1062,8 @@
     <MESSAGE value="Generate 100 node networks for yeast and E coli.&#10;&#10;Code modified to work for Python 3" />
     <MESSAGE value="Start network creation where it was halted" />
     <MESSAGE value="Updated data generation script&#10;&#10;Ecoli and yeast networks made for size 10, 100, and 1000" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated data generation script&#10;&#10;Ecoli and yeast networks made for size 10, 100, and 1000" />
+    <MESSAGE value="Work on edge promotion and lag trends&#10;&#10;SWING enriches promotion of lagged edges in Yeast networks, but not Ecoli." />
+    <option name="LAST_COMMIT_MESSAGE" value="Work on edge promotion and lag trends&#10;&#10;SWING enriches promotion of lagged edges in Yeast networks, but not Ecoli." />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.10526317" />
   </component>
   <component name="XDebuggerManager">
@@ -941,29 +1095,11 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="77" />
+      <option name="time" value="80" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/data/gnw_insilico/gnw_generate_data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#71#81#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/lag_identification.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="128" column="24" selection-start-line="128" selection-start-column="24" selection-end-line="128" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1309,10 +1445,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///anaconda/lib/python3.5/site-packages/networkx/algorithms/triads.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="124" column="0" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///anaconda/lib/python3.5/site-packages/networkx/classes/digraph.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="1148" column="0" selection-start-line="1148" selection-start-column="0" selection-end-line="1148" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="185" column="19" selection-start-line="185" selection-start-column="18" selection-end-line="185" selection-end-column="19" />
+        <state relative-caret-position="30">
+          <caret line="165" column="76" selection-start-line="165" selection-start-column="76" selection-end-line="165" selection-end-column="76" />
           <folding>
             <element signature="e#71#81#0" expanded="true" />
           </folding>
