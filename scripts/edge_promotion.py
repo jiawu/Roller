@@ -10,17 +10,9 @@ from nxpd import draw
 from nxpd import nxpdParams
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-from scipy.stats import fisher_exact, linregress
+from scipy.stats import fisher_exact, linregress, ttest_rel
 
 from lag_identification import get_experiment_list, xcorr_experiments, calc_edge_lag
-
-
-def clean_axis(ax):
-    """Remove ticks, tick labels, and frame from axis"""
-    ax.get_xaxis().set_ticks([])
-    ax.get_yaxis().set_ticks([])
-    for sp in ax.spines.values():
-        sp.set_visible(False)
 
 
 def is_square(n):
@@ -84,11 +76,11 @@ def get_edge_lags(data_filename):
     experiment_list = get_experiment_list(data_filename, 21, 10)
     xcorr_array = xcorr_experiments(experiment_list)
     lags = calc_edge_lag(xcorr_array, gene_list, 0.1, 0.5, timestep=1)
-    return lags
+    return lags, df
 
 
 def get_network_changes(pickle_filename, edge_str='regulator-target',
-                        base_str='rank_importance_RF-td_21', shortener_str='rank_importance_'):
+                        base_str='rank_importance_RF-td_21', shortener_str='rank_importance_', replace_str=""):
 
     results_df = pd.read_pickle(pickle_filename)
     edges = results_df[edge_str].values
@@ -102,7 +94,7 @@ def get_network_changes(pickle_filename, edge_str='regulator-target',
     rank_df['base_rank'] = baseline
     for column in results_df.columns:
         if column != edge_str and column != base_str:
-            short_name = column.replace(shortener_str, "")
+            short_name = column.replace(shortener_str, replace_str)
             diff_df[short_name] = baseline - results_df[column].values
             rank_df[short_name] = results_df[column].values
     return diff_df, rank_df
@@ -145,11 +137,15 @@ elif X = 5; min_lag = 2, max_lag = 3
 
 
 if __name__ == "__main__":
+    lag_range = {'ml_0': [0, 1], 'ml_1': [0, 2], 'ml_2': [0, 3], 'ml_3': [1, 2], 'ml_4': [1, 4], 'ml_5': [2, 3]}
     num_nets = 20
     models = ['Ecoli', 'Yeast']
     true_edge_df = pd.DataFrame()
     roc_df = pd.DataFrame()
     pr_df = pd.DataFrame()
+    averages = []
+    weighted = []
+    control = []
     for model in models:
         for net in range(1, num_nets+1):
             gold_file = "../data/gnw_insilico/network_data/%s/%s-%i_goldstandard.tsv" % (model, model, net)
@@ -158,52 +154,119 @@ if __name__ == "__main__":
             pd.set_option('display.width', 500)
             true_edges = get_true_edges(gold_file)
             ee = Evaluator(gold_file, sep='\t')
-            edge_lags = get_edge_lags(data_file)
+            edge_lags, data = get_edge_lags(data_file)
+            dg = nx.DiGraph()
+            dg.add_edges_from(true_edges)
+            degree = nx.degree_centrality(dg)
+            b_cent = pd.DataFrame.from_dict({k: [v] for k, v in nx.edge_betweenness_centrality(dg).items()}, 'index')
+            b_cent.columns = ['Bcent']
 
             # Remove self edges
             #todo: functionalize this better
             edge_lags = edge_lags[edge_lags['Parent'] != edge_lags['Child']]
             edge_df = pd.DataFrame(edge_lags['Lag'].values, index=edge_lags['Edge'].values, columns=['Lag'])
-            change_df, ranks_df = get_network_changes(pickle_file)
+
+            change_df, ranks_df = get_network_changes(pickle_file, base_str='rank_importance_RF-td_21')
+                                                      # shortener_str='rank_importance_Dionesus', replace_str='D')
             conditions = ranks_df.columns[1:].values
+
+            lagged_df = pd.concat([edge_df, ranks_df.set_index(['regulator-target'])], axis=1, join='inner')
+
+            lag_set = set(lagged_df['Lag'])
+            avg_rank = None
+            for lag in lag_set:
+                current_edges = lagged_df[lagged_df['Lag'] == lag]
+                relevant_runs = []
+                for ii, run in enumerate(conditions):
+                    if 'ml' in run:
+                        key = run.split('-')[1]
+                        min_lag = lag_range[key][0]
+                        max_lag = lag_range[key][1]
+                        if lag >=min_lag and lag <= max_lag:
+                            relevant_runs.append(ii)
+                if len(relevant_runs) > 0:
+                    current_edges = current_edges.iloc[:, relevant_runs]
+                    avg = np.mean(current_edges, axis=1)
+                else:
+                    avg = current_edges.iloc[:, 1]
+                if avg_rank is None:
+                    avg_rank = avg.copy()
+                else:
+                    avg_rank = pd.concat([avg_rank, avg])
+
+            avg_rank = avg_rank.to_frame()
+            avg_rank['regulator-target'] = avg_rank.index
+            avg_rank.sort_values(0, inplace=True)
+            weighted.append(ee.calc_roc(avg_rank)[2].values[-1])
+
+
+            a = pd.DataFrame(np.mean(ranks_df.iloc[:, 1:], axis=1), columns=['mean_rank'])
+            a['regulator-target'] = ranks_df['regulator-target'].values
+            a.sort_values(['mean_rank'], inplace=True)
+            averages.append(ee.calc_roc(a)[2].values[-1])
+
+            baseline = np.reshape(np.repeat(ranks_df.values[:, 1], len(conditions)), (len(ranks_df), len(conditions)))
+            rank_mean = ranks_df.copy()
+            rank_mean.iloc[:, 1:] = (ranks_df.values[:, 1:] + baseline) / 2
+            filtered_ranks = ranks_df.copy()
             roc = []
             aupr = []
             for c in conditions:
-                ranks_df.sort_values(ranks_df.columns[1], inplace=True)
-                roc.append(ee.calc_roc(ranks_df.iloc[:, :2])[2].values[-1])
-                aupr.append(ee.calc_pr(ranks_df.iloc[:, :2])[2].values[-1])
-                ranks_df.drop(c, axis=1, inplace=True)
+                filtered_ranks.sort_values(filtered_ranks.columns[1], inplace=True)
+                roc.append(ee.calc_roc(filtered_ranks.iloc[:, :2])[2].values[-1])
+                aupr.append(ee.calc_pr(filtered_ranks.iloc[:, :2])[2].values[-1])
+                filtered_ranks.drop(c, axis=1, inplace=True)
             roc_df[model + str(net)] = roc
+
+            control.append(roc[0])
+
             pr_df[model + str(net)] = aupr
             full_df = pd.concat([edge_df, change_df.set_index(['regulator-target'])], axis=1, join='inner')
-            true_edge_df = true_edge_df.append(full_df[full_df.index.isin(true_edges)])
-    roc_df.index = conditions
-    roc_df = roc_df.T
-    baseline = np.reshape(np.repeat(roc_df.values[:, 0], len(conditions)), (len(roc_df), len(conditions)))
-    roc_delta = roc_df-baseline
-    pr_df.index = conditions
-    pr_df = pr_df.T
-    baseline = np.reshape(np.repeat(pr_df.values[:, 0], len(conditions)), (len(pr_df), len(conditions)))
-    pr_delta = pr_df - baseline
-    roc_mean = np.mean(roc_delta, axis=0)
-    roc_std = np.std(roc_delta, axis=0)
-    pr_mean = np.mean(pr_delta, axis=0)
-    pr_std = np.std(pr_delta, axis=0)
-    plt.errorbar(roc_mean, pr_mean, roc_std, pr_std, '.')
+            current_true = full_df[full_df.index.isin(true_edges)].join(b_cent)
+            current_true['P_deg'] = [degree[edge[0]] for edge in current_true.index.values]
+            current_true['C_deg'] = [degree[edge[1]] for edge in current_true.index.values]
+            true_edge_df = true_edge_df.append(current_true)
+
+    # roc_df.index = conditions
+    # roc_df = roc_df.T
+    # baseline = np.reshape(np.repeat(roc_df.values[:, 0], len(conditions)), (len(roc_df), len(conditions)))
+    # roc_delta = roc_df-baseline
+    # print(np.mean(roc_delta, axis=0))
+    # sys.exit()
+
+    roc_diff = np.array(weighted) - np.array(control)
+    print(np.mean(roc_diff))
+    plt.plot(control, control, '-')
+    plt.plot(control, weighted, '.')
     plt.show()
-    print(roc_mean)
     sys.exit()
-    for ii, c in enumerate(conditions):
-        plt.plot(roc_df.iloc[:, ii], pr_df.iloc[:, ii], '.', label=c)
-    x = roc_df.values.flatten()
-    y = pr_df.values.flatten()
-    fit = linregress(x, y)
-    # plt.plot(x, y, '.')
-    plt.plot(x, fit[0]*x+fit[1], c='0.75', label=('R2 = %0.3f' % (fit[2])))
-    plt.xlabel('AUROC')
-    plt.ylabel('AUPR')
-    plt.legend(loc='best')
-    plt.show()
+    # roc_df.index = conditions
+    # roc_df = roc_df.T
+    # baseline = np.reshape(np.repeat(roc_df.values[:, 0], len(conditions)), (len(roc_df), len(conditions)))
+    # roc_delta = roc_df-baseline
+    # pr_df.index = conditions
+    # pr_df = pr_df.T
+    # baseline = np.reshape(np.repeat(pr_df.values[:, 0], len(conditions)), (len(pr_df), len(conditions)))
+    # pr_delta = pr_df - baseline
+    # roc_mean = np.mean(roc_delta, axis=0)
+    # roc_std = np.std(roc_delta, axis=0)
+    # pr_mean = np.mean(pr_delta, axis=0)
+    # pr_std = np.std(pr_delta, axis=0)
+    # # plt.errorbar(roc_mean, pr_mean, roc_std, pr_std, '.')
+    # plt.violinplot(roc_df.values, showmedians=True)
+    # plt.show()
+    # sys.exit()
+    # for ii, c in enumerate(conditions):
+    #     plt.plot(roc_df.iloc[:, ii], pr_df.iloc[:, ii], '.', label=c)
+    # x = roc_df.values.flatten()
+    # y = pr_df.values.flatten()
+    # fit = linregress(x, y)
+    # # plt.plot(x, y, '.')
+    # plt.plot(x, fit[0]*x+fit[1], c='0.75', label=('R2 = %0.3f' % (fit[2])))
+    # plt.xlabel('AUROC')
+    # plt.ylabel('AUPR')
+    # plt.legend(loc='best')
+    # plt.show()
     # figure1 = plt.figure()
     # heatmap = figure1.add_subplot(1, 1, 1)
     # my_axis = heatmap.imshow(roc_df)
@@ -216,47 +279,70 @@ if __name__ == "__main__":
     # heatmap.xaxis.set_ticks_position('top')
     # # xlabelsL = heatmap.set_xticklabels(col_labels)
     # plt.show()
-    sys.exit()
+    # sys.exit()
 
-    t_promoted = np.sum(true_edge_df.iloc[:, 2:].values > 0, axis=0)
-    t_demoted = np.sum(true_edge_df.iloc[:, 2:].values < 0, axis=0)
-    t_same = np.sum(true_edge_df.iloc[:, 2:].values == 0, axis=0)
-    print(t_promoted/len(true_edge_df), '\n')
+    t_promoted = np.sum(true_edge_df.iloc[:, 2:11].values > 0, axis=0)
+    t_demoted = np.sum(true_edge_df.iloc[:, 2:11].values < 0, axis=0)
+    t_same = np.sum(true_edge_df.iloc[:, 2:11].values == 0, axis=0)
 
     t_lagged = true_edge_df[true_edge_df['Lag'] > 0]
-    l_promoted = np.sum(t_lagged.iloc[:, 2:].values > 0, axis=0)
-    l_demoted = np.sum(t_lagged.iloc[:, 2:].values < 0, axis=0)
-    l_same = np.sum(t_lagged.iloc[:, 2:].values == 0, axis=0)
-    print(l_promoted / len(t_lagged))
+    l_promoted = np.sum(t_lagged.iloc[:, 2:11].values > 0, axis=0)
+    l_demoted = np.sum(t_lagged.iloc[:, 2:11].values < 0, axis=0)
+    l_same = np.sum(t_lagged.iloc[:, 2:11].values == 0, axis=0)
+
     c_table = np.array([[l_promoted, t_promoted-l_promoted], [l_demoted+l_same, t_demoted+t_same-l_demoted-l_same]])
-    conditions = true_edge_df.columns[2:].values
-    for run in range(c_table.shape[2]):
-        print(conditions[run])
-        print(fisher_exact(c_table[:, :, run]))
+    conditions = true_edge_df.columns[2:11].values
+    # for run in range(c_table.shape[2]):
+    #     print(conditions[run])
+    #     print(fisher_exact(c_table[:, :, run]))
+
+    # #Lag
+    # f = plt.figure()
+    # for idx in range(2, 11):
+    #     ax = f.add_subplot(3, 3, idx-1)
+    #     ax.plot(true_edge_df.iloc[:, 0], true_edge_df.iloc[:, idx], '.')
+    #     ax.set_title(conditions[idx-2])
+    # plt.suptitle('Lag')
+    # plt.tight_layout()
+    #
+    # # Betweenness centrality
+    # f = plt.figure()
+    # for idx in range(2, 11):
+    #     ax = f.add_subplot(3, 3, idx - 1)
+    #     ax.plot(true_edge_df.iloc[:, -3], true_edge_df.iloc[:, idx], '.')
+    #     ax.set_title(conditions[idx - 2])
+    # plt.suptitle('Betweenness Centrality')
+    # plt.tight_layout()
+    # plt.show()
+    # sys.exit()
 
     lag_set = sorted(list(set(true_edge_df['Lag'].values)))
-    conditions = true_edge_df.columns[1:].values
+
     f = plt.figure()
     n_rows, n_cols = calc_subplot_dimensions(len(conditions))
     for ii, run in enumerate(conditions):
-        ax = f.add_subplot(n_rows, n_cols, ii+1)
-        # plot_data = [true_edge_df[true_edge_df['Lag'] == lag][[run]].values for lag in lag_set]
-        ax.plot([0, 90], [0, 0], '-', c='k', lw=3)
-        base_zero = true_edge_df[true_edge_df['Lag'] == 0][['base_rank']].values
-        new_zero = true_edge_df[true_edge_df['Lag'] == 0][[run]].values
-        base = true_edge_df[true_edge_df['Lag'] > 0][['base_rank']].values
-        new = true_edge_df[true_edge_df['Lag'] > 0][[run]].values
-        ax.plot(base_zero, new_zero, '.', c='b')
-        ax.plot(base, new, '.', c='r')
-        ax.set_title(run)
-        ax.set_ylim([-90, 90])
-    plt.tight_layout()
-    plt.show()
+        if 'ml' in run:
+            key = run.split('-')[1]
+            min_lag = lag_range[key][0]
+            max_lag = lag_range[key][1]
+            in_range = true_edge_df[(true_edge_df['Lag'] >= min_lag) & (true_edge_df['Lag'] <= max_lag)][[run]]
+            print(run, np.sum(in_range.values > 0)/len(in_range))
 
-    # Wilcoxon test for each network to see if it changed? - may not be appropriate
-    # Hypergeometric test for promoted edges enriched for lagged edges?
-    # Calculate for each experimental condition
-    # Get true edge lag
+    #     ax = f.add_subplot(n_rows, n_cols, ii+1)
+    #     # plot_data = [true_edge_df[true_edge_df['Lag'] == lag][[run]].values for lag in lag_set]
+    #     ax.plot([0, 90], [0, 0], '-', c='k', lw=3)
+    #     ax.plot([0, 90], [0, 90], '-', c='k', lw=3)
+    #     ax.plot([0, 90], [-90, 0], '-', c='k', lw=3)
+    #     base_zero = true_edge_df[true_edge_df['Lag'] == 0][['base_rank']].values
+    #     new_zero = true_edge_df[true_edge_df['Lag'] == 0][[run]].values
+    #     base = true_edge_df[true_edge_df['Lag'] > 0][['base_rank']].values
+    #     new = true_edge_df[true_edge_df['Lag'] > 0][[run]].values
+    #     ax.plot(base_zero, new_zero, '.', c='b')
+    #     ax.plot(base, new, '.', c='r')
+    #     ax.set_title(run)
+    #     ax.set_ylim([-90, 90])
+    # plt.tight_layout()
+    # plt.show()
 
 
 
