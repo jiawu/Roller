@@ -395,6 +395,7 @@ class LassoWindow(Window):
         # artificially add a 0 to where the col_index is
         # to prevent self-edges
         if coeff_matrix.shape[1] - len(coeffs) == len(col_index):
+            col_index = sorted(col_index)
             coeffs = np.insert(coeffs, [x-n for n,x in enumerate(col_index)], 0)
 
         # Stack coefficients
@@ -447,6 +448,7 @@ class LassoWindow(Window):
         for target_y, x_matrix, insert_index in model_inputs:
             if len(self.earlier_windows) != 1:
                 x_matrix, target_indices= self.remove_self_edges(x_matrix, insert_index)
+
             else:
                 target_indices = [insert_index]
             coeff_matrix, vip_matrix = self._fitstack_coeffs(alpha, coeff_matrix, model_list, x_matrix, target_y, target_indices, crag=crag)
