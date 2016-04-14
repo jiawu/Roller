@@ -86,7 +86,7 @@ if __name__ == "__main__":
     elif param_test_style == "boolean":
         param_tests = [str2bool(x) for x in sys.argv[6:]]
         
-    n_trials = 2
+    n_trials = 5
 
     #always save the full parameter list and date in the dataframe for each test. for posterity!
 
