@@ -64,6 +64,7 @@ def calc_subplot_dimensions(x):
 
     return rows, columns
 
+
 def get_true_edges(gold_filename):
     evaluator = Evaluator(gold_filename, '\t')
     edges = evaluator.gs_flat.tolist()
@@ -169,36 +170,6 @@ if __name__ == "__main__":
             change_df, ranks_df = get_network_changes(pickle_file, base_str='rank_importance_RF-td_21')
                                                       # shortener_str='rank_importance_Dionesus', replace_str='D')
             conditions = ranks_df.columns[1:].values
-
-            lagged_df = pd.concat([edge_df, ranks_df.set_index(['regulator-target'])], axis=1, join='inner')
-
-            lag_set = set(lagged_df['Lag'])
-            avg_rank = None
-            for lag in lag_set:
-                current_edges = lagged_df[lagged_df['Lag'] == lag]
-                relevant_runs = []
-                for ii, run in enumerate(conditions):
-                    if 'ml' in run:
-                        key = run.split('-')[1]
-                        min_lag = lag_range[key][0]
-                        max_lag = lag_range[key][1]
-                        if lag >=min_lag and lag <= max_lag:
-                            relevant_runs.append(ii)
-                if len(relevant_runs) > 0:
-                    current_edges = current_edges.iloc[:, relevant_runs]
-                    avg = np.mean(current_edges, axis=1)
-                else:
-                    avg = current_edges.iloc[:, 1]
-                if avg_rank is None:
-                    avg_rank = avg.copy()
-                else:
-                    avg_rank = pd.concat([avg_rank, avg])
-
-            avg_rank = avg_rank.to_frame()
-            avg_rank['regulator-target'] = avg_rank.index
-            avg_rank.sort_values(0, inplace=True)
-            weighted.append(ee.calc_roc(avg_rank)[2].values[-1])
-
 
             a = pd.DataFrame(np.mean(ranks_df.iloc[:, 1:], axis=1), columns=['mean_rank'])
             a['regulator-target'] = ranks_df['regulator-target'].values
