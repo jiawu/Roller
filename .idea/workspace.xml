@@ -2,86 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net10_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net11_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net12_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net13_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net14_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net15_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net16_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net17_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net18_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net19_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net1_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net20_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net2_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net3_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net4_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net5_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net6_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net7_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net8_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Ecoli_net9_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net10_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net11_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net12_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net13_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net14_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net15_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net16_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net17_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net18_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net19_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net1_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net20_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net2_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net3_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net4_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net5_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net6_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net7_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net8_RF_promotion.pkl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Yeast_net9_RF_promotion.pkl" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net10_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net11_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net12_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net13_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net14_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net15_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net16_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net17_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net18_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net19_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net1_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net20_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net2_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net3_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net4_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net5_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net6_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net7_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net8_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Ecoli_net9_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net10_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net11_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net12_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net13_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net14_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net15_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net16_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net17_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net18_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net19_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net1_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net20_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net2_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net3_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net4_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net5_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net6_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net7_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net8_promotion.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Yeast_net9_promotion.pkl" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/edge_promotion.ipynb" afterPath="$PROJECT_DIR$/scripts/edge_promotion.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/edge_promotion.py" afterPath="$PROJECT_DIR$/scripts/edge_promotion.py" />
@@ -118,8 +38,8 @@
       <file leaf-file-name="edge_promotion.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="141" column="12" selection-start-line="141" selection-start-column="12" selection-end-line="141" selection-end-column="12" />
+            <state relative-caret-position="465">
+              <caret line="139" column="26" selection-start-line="139" selection-start-column="26" selection-end-line="139" selection-end-column="26" />
               <folding>
                 <element signature="e#71#81#0" expanded="true" />
                 <element signature="e#485#707#0" expanded="false" />
@@ -549,13 +469,6 @@
       <option name="presentableId" value="Default" />
       <updated>1413916753036</updated>
     </task>
-    <task id="LOCAL-00114" summary="Moved elbow_criteria function to util.utility_module">
-      <created>1436813201488</created>
-      <option name="number" value="00114" />
-      <option name="presentableId" value="LOCAL-00114" />
-      <option name="project" value="LOCAL" />
-      <updated>1436813201488</updated>
-    </task>
     <task id="LOCAL-00115" summary="get_coeffs() in tdRFRWindows now makes a dataframe with the child nodes as rows and parent nodes and columns">
       <created>1436816015228</created>
       <option name="number" value="00115" />
@@ -892,7 +805,14 @@
       <option name="project" value="LOCAL" />
       <updated>1460992629285</updated>
     </task>
-    <option name="localTasksCounter" value="163" />
+    <task id="LOCAL-00163" summary="Renamed promotion pickles to RF promotion&#10;&#10;To avoid future confusion">
+      <created>1460994180456</created>
+      <option name="number" value="00163" />
+      <option name="presentableId" value="LOCAL-00163" />
+      <option name="project" value="LOCAL" />
+      <updated>1460994180456</updated>
+    </task>
+    <option name="localTasksCounter" value="164" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -917,9 +837,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1280" y="23" width="1280" height="997" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2573471" sideWeight="0.70035464" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25178713" sideWeight="0.70035464" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33015874" sideWeight="0.50080776" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
@@ -975,7 +895,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fix mse calculations when allowing min lag of 0" />
     <MESSAGE value="Fix function options to calculate mse when desired&#10;&#10;The argument calc_mse gets passed through many objects and functions, but the code should run faster when that is set to False. The MSE calculations will be skipped" />
     <MESSAGE value="Test window size selection in ipython notebook" />
     <MESSAGE value="JDF start exploring Dream8 data" />
@@ -1000,7 +919,8 @@
     <MESSAGE value="Commit before transitioning to ipynb&#10;&#10;Need to make a meaningful edge promotion figure." />
     <MESSAGE value="Start ipynb and move lag_identification to util" />
     <MESSAGE value="Revert promotion pickles to previous version&#10;&#10;They were replaced by dionesus pickles" />
-    <option name="LAST_COMMIT_MESSAGE" value="Revert promotion pickles to previous version&#10;&#10;They were replaced by dionesus pickles" />
+    <MESSAGE value="Renamed promotion pickles to RF promotion&#10;&#10;To avoid future confusion" />
+    <option name="LAST_COMMIT_MESSAGE" value="Renamed promotion pickles to RF promotion&#10;&#10;To avoid future confusion" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.10526317" />
   </component>
   <component name="XDebuggerManager">
@@ -1391,8 +1311,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="141" column="12" selection-start-line="141" selection-start-column="12" selection-end-line="141" selection-end-column="12" />
+        <state relative-caret-position="465">
+          <caret line="139" column="26" selection-start-line="139" selection-start-column="26" selection-end-line="139" selection-end-column="26" />
           <folding>
             <element signature="e#71#81#0" expanded="true" />
             <element signature="e#485#707#0" expanded="false" />
