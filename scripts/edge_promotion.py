@@ -11,8 +11,7 @@ from nxpd import nxpdParams
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from scipy.stats import fisher_exact, linregress, ttest_rel
-
-from lag_identification import get_experiment_list, xcorr_experiments, calc_edge_lag
+from Swing.util.lag_identification import get_experiment_list, xcorr_experiments, calc_edge_lag
 
 
 def is_square(n):
@@ -205,12 +204,12 @@ if __name__ == "__main__":
     # print(np.mean(roc_delta, axis=0))
     # sys.exit()
 
-    roc_diff = np.array(weighted) - np.array(control)
-    print(np.mean(roc_diff))
-    plt.plot(control, control, '-')
-    plt.plot(control, weighted, '.')
-    plt.show()
-    sys.exit()
+    # roc_diff = np.array(weighted) - np.array(control)
+    # print(np.mean(roc_diff))
+    # plt.plot(control, control, '-')
+    # plt.plot(control, weighted, '.')
+    # plt.show()
+    # sys.exit()
     # roc_df.index = conditions
     # roc_df = roc_df.T
     # baseline = np.reshape(np.repeat(roc_df.values[:, 0], len(conditions)), (len(roc_df), len(conditions)))
