@@ -138,10 +138,6 @@ elif X = 5; min_lag = 2, max_lag = 3
 
 
 if __name__ == "__main__":
-    for f in os.listdir():
-        if 'promotion.pkl' in f and 'dionesus' not in f:
-            os.rename(f, f.replace('_promotion', '_RF_promotion'))
-    sys.exit()
     lag_range = {'ml_0': [0, 1], 'ml_1': [0, 2], 'ml_2': [0, 3], 'ml_3': [1, 2], 'ml_4': [1, 4], 'ml_5': [2, 3]}
     num_nets = 20
     models = ['Ecoli', 'Yeast']
