@@ -18,10 +18,8 @@ cd /home/jjw036/Roller/pipelines
 
 
 iterating_param="td_window"
-iterating_style="num 5 10 15 21"
+iterating_style="num 9 12 15 18 21"
 
-iterating_param2="td_window"
-iterating_style2="num 20"
 
 if [[ ${param_set} == 1 ]] 
 then
@@ -152,6 +150,55 @@ then
     output_folder="/projects/p20519/roller_output/community_rfd/ecoli-insilico_size10_${insilico_dataset_index}_"
     file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Ecoli/Ecoli-${insilico_dataset_index}_timeseries.tsv"
   
+elif [[ "${param_set}" -ge 132 && "${param_set}" -lt 137 ]]
+then
+    #process the in silico datasets a little bit more smoothly
+    #param_set 4 = dataset 1, param_set 5 = dataset 2, etc etc
+    insilico_dataset_index=$((${param_set}-131))
+
+    data_folder="/projects/p20519/roller_output/large_networks/Dionesus/insilico_size100_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/large_networks/Dionesus/insilico_size100_${insilico_dataset_index}_ntrees_"
+    file_path="/home/jjw036/Roller/data/dream4/insilico_size100_${insilico_dataset_index}_timeseries.tsv"
+
+elif [[ "${param_set}" -ge 137 && "${param_set}" -lt 157 ]]
+then
+    #process the in silico datasets a little bit more smoothly
+    #param_set 4 = dataset 1, param_set 5 = dataset 2, etc etc
+    insilico_dataset_index=$((${param_set}-136))
+
+    data_folder="/projects/p20519/roller_output/large_networks/Dionesus/yeast-insilico_size100_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/large_networks/Dionesus/yeast-insilico_size100_${insilico_dataset_index}_"
+    file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Yeast100/Yeast-${insilico_dataset_index}_timeseries.tsv"
+
+elif [[ "${param_set}" -ge 157 && "${param_set}" -lt 177 ]]
+then
+    #process the in silico datasets a little bit more smoothly
+    #param_set 4 = dataset 1, param_set 5 = dataset 2, etc etc
+    insilico_dataset_index=$((${param_set}-156))
+
+    data_folder="/projects/p20519/roller_output/large_networks/Dionesus/ecoli-insilico_size100_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/large_networks/Dionesus/ecoli-insilico_size100_${insilico_dataset_index}_"
+    file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Ecoli100/Ecoli-${insilico_dataset_index}_timeseries.tsv"
+
+  elif [[ "${param_set}" -ge 177 && "${param_set}" -lt 182 ]]
+then
+    #process the in silico datasets a little bit more smoothly
+    #param_set 4 = dataset 1, param_set 5 = dataset 2, etc etc
+    insilico_dataset_index=$((${param_set}-176))
+
+    data_folder="/projects/p20519/roller_output/large_networks/Dionesus/yeast-insilico_size1000_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/large_networks/Dionesus/yeast-insilico_size1000_${insilico_dataset_index}_"
+    file_path="/projects/p20519/Roller_large_dataset/Yeast1000/Yeast-${insilico_dataset_index}_timeseries.tsv"
+  
+  elif [[ "${param_set}" -ge 182 && "${param_set}" -lt 187 ]]
+then
+    #process the in silico datasets a little bit more smoothly
+    #param_set 4 = dataset 1, param_set 5 = dataset 2, etc etc
+    insilico_dataset_index=$((${param_set}-181))
+
+    data_folder="/projects/p20519/roller_output/large_networks/Dionesus/ecoli-insilico_size1000_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/large_networks/Dionesus/ecoli-insilico_size1000_${insilico_dataset_index}_"
+    file_path="/projects/p20519/Roller_large_dataset/Ecoli1000/Ecoli-${insilico_dataset_index}_timeseries.tsv"
 
   
 else
@@ -160,7 +207,7 @@ fi
 
 echo "python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}"
 python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
-python run_tdSwing_scan_vgranger.py ${data_folder} ${output_folder} ${file_path} ${iterating_param2} ${iterating_style2}
+#python run_tdSwing_scan_vgranger.py ${data_folder} ${output_folder} ${file_path} ${iterating_param2} ${iterating_style2}
 
 #data_folder=${data_folder/Dionesus/Lasso}
 #output_folder=${output_folder/Dionesus/Lasso}
