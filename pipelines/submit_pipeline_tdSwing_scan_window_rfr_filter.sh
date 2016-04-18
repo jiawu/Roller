@@ -152,6 +152,56 @@ then
     output_folder="/projects/p20519/roller_output/community_rfd/ecoli-insilico_size10_${insilico_dataset_index}_"
     file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Ecoli/Ecoli-${insilico_dataset_index}_timeseries.tsv"
   
+elif [[ "${param_set}" -ge 132 && "${param_set}" -lt 137 ]]
+then
+    #process the in silico datasets a little bit more smoothly
+    #param_set 4 = dataset 1, param_set 5 = dataset 2, etc etc
+    insilico_dataset_index=$((${param_set}-131))
+
+    data_folder="/projects/p20519/roller_output/stability_analysis/RandomForest/insilico_size100_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/stability_analysis/RandomForest/insilico_size100_${insilico_dataset_index}_ntrees_"
+    file_path="/home/jjw036/Roller/data/dream4/insilico_size100_${insilico_dataset_index}_timeseries.tsv"
+
+elif [[ "${param_set}" -ge 137 && "${param_set}" -lt 157 ]]
+then
+    #process the in silico datasets a little bit more smoothly
+    #param_set 4 = dataset 1, param_set 5 = dataset 2, etc etc
+    insilico_dataset_index=$((${param_set}-136))
+
+    data_folder="/projects/p20519/roller_output/large_networks/RandomForest/yeast-insilico_size100_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/large_networks/RandomForest/yeast-insilico_size100_${insilico_dataset_index}_"
+    file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Yeast100/Yeast-${insilico_dataset_index}_timeseries.tsv"
+
+elif [[ "${param_set}" -ge 157 && "${param_set}" -lt 177 ]]
+then
+    #process the in silico datasets a little bit more smoothly
+    #param_set 4 = dataset 1, param_set 5 = dataset 2, etc etc
+    insilico_dataset_index=$((${param_set}-156))
+
+    data_folder="/projects/p20519/roller_output/large_networks/RandomForest/ecoli-insilico_size100_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/large_networks/RandomForest/ecoli-insilico_size100_${insilico_dataset_index}_"
+    file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Ecoli100/Ecoli-${insilico_dataset_index}_timeseries.tsv"
+
+  elif [[ "${param_set}" -ge 177 && "${param_set}" -lt 182 ]]
+then
+    #process the in silico datasets a little bit more smoothly
+    #param_set 4 = dataset 1, param_set 5 = dataset 2, etc etc
+    insilico_dataset_index=$((${param_set}-176))
+
+    data_folder="/projects/p20519/roller_output/large_networks/RandomForest/yeast-insilico_size1000_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/large_networks/RandomForest/yeast-insilico_size1000_${insilico_dataset_index}_"
+    file_path="/projects/p20519/Roller_large_dataset/Yeast1000/Yeast-${insilico_dataset_index}_timeseries.tsv"
+  
+  elif [[ "${param_set}" -ge 182 && "${param_set}" -lt 187 ]]
+then
+    #process the in silico datasets a little bit more smoothly
+    #param_set 4 = dataset 1, param_set 5 = dataset 2, etc etc
+    insilico_dataset_index=$((${param_set}-181))
+
+    data_folder="/projects/p20519/roller_output/large_networks/RandomForest/ecoli-insilico_size1000_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/large_networks/RandomForest/ecoli-insilico_size1000_${insilico_dataset_index}_"
+    file_path="/projects/p20519/Roller_large_dataset/Ecoli1000/Ecoli-${insilico_dataset_index}_timeseries.tsv"
+
 
   
 else
