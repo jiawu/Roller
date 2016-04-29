@@ -76,7 +76,7 @@ def get_edge_lags(data_filename):
     gene_list = df.columns.values[1:].tolist()
     experiment_list = get_experiment_list(data_filename, 21, 10)
     xcorr_array = xcorr_experiments(experiment_list)
-    lags = calc_edge_lag(xcorr_array, gene_list, 0.1, 0.5, timestep=1)
+    lags = calc_edge_lag(xcorr_array, gene_list, 0.1, 0.2, timestep=1)
     return lags, df
 
 
@@ -151,7 +151,7 @@ if __name__ == "__main__":
         for net in range(1, num_nets+1):
             gold_file = "../data/gnw_insilico/network_data/%s/%s-%i_goldstandard.tsv" % (model, model, net)
             data_file = "../data/gnw_insilico/network_data/%s/%s-%i_timeseries.tsv" % (model, model, net)
-            pickle_file = "%s_net%i_promotion.pkl" % (model, net)
+            pickle_file = "%s_net%i_RF_promotion.pkl" % (model, net)
             pd.set_option('display.width', 500)
             true_edges = get_true_edges(gold_file)
             ee = Evaluator(gold_file, sep='\t')
@@ -292,28 +292,33 @@ if __name__ == "__main__":
     f = plt.figure()
     n_rows, n_cols = calc_subplot_dimensions(len(conditions))
     for ii, run in enumerate(conditions):
-        if 'ml' in run:
-            key = run.split('-')[1]
-            min_lag = lag_range[key][0]
-            max_lag = lag_range[key][1]
-            in_range = true_edge_df[(true_edge_df['Lag'] >= min_lag) & (true_edge_df['Lag'] <= max_lag)][[run]]
-            print(run, np.sum(in_range.values > 0)/len(in_range))
+        # if 'ml' in run:
+        #     key = run.split('-')[1]
+        #     min_lag = lag_range[key][0]
+        #     max_lag = lag_range[key][1]
+        #     in_range = true_edge_df[(true_edge_df['Lag'] >= min_lag) & (true_edge_df['Lag'] <= max_lag)][[run]]
+        #     print(run, np.sum(in_range.values > 0)/len(in_range))
 
-    #     ax = f.add_subplot(n_rows, n_cols, ii+1)
-    #     # plot_data = [true_edge_df[true_edge_df['Lag'] == lag][[run]].values for lag in lag_set]
-    #     ax.plot([0, 90], [0, 0], '-', c='k', lw=3)
-    #     ax.plot([0, 90], [0, 90], '-', c='k', lw=3)
-    #     ax.plot([0, 90], [-90, 0], '-', c='k', lw=3)
-    #     base_zero = true_edge_df[true_edge_df['Lag'] == 0][['base_rank']].values
-    #     new_zero = true_edge_df[true_edge_df['Lag'] == 0][[run]].values
-    #     base = true_edge_df[true_edge_df['Lag'] > 0][['base_rank']].values
-    #     new = true_edge_df[true_edge_df['Lag'] > 0][[run]].values
-    #     ax.plot(base_zero, new_zero, '.', c='b')
-    #     ax.plot(base, new, '.', c='r')
-    #     ax.set_title(run)
-    #     ax.set_ylim([-90, 90])
-    # plt.tight_layout()
-    # plt.show()
+        ax = f.add_subplot(n_rows, n_cols, ii+1)
+        # plot_data = [true_edge_df[true_edge_df['Lag'] == lag][[run]].values for lag in lag_set]
+        ax.plot([0, 90], [0, 0], '-', c='k', lw=3)
+        ax.plot([0, 90], [0, 90], '-', c='k', lw=3)
+        ax.plot([0, 90], [-90, 0], '-', c='k', lw=3)
+        base = true_edge_df[true_edge_df['Lag'] == 0][['base_rank']].values
+        new = true_edge_df[true_edge_df['Lag'] == 0][[run]].values
+        ax.plot(base, new, '.', c='0.5')
+        ax.set_title(run)
+        ax.set_ylim([-90, 90])
+        for lag in lag_set:
+            if lag !=0 and lag<=5:
+                base = true_edge_df[true_edge_df['Lag'] == lag][['base_rank']].values
+                new = true_edge_df[true_edge_df['Lag'] == lag][[run]].values
+                ax.plot(base, new, '.', label=lag)#, c=str(0.05*lag))
+                ax.set_title(run)
+        ax.set_ylim([-90, 90])
+        ax.legend(loc='best')
+    plt.tight_layout()
+    plt.show()
 
 
 
