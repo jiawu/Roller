@@ -132,15 +132,15 @@ def filter_ccfs(ccfs, sc_thresh, min_ccf):
     return filtered_ccf
 
 if __name__ == '__main__':
-    data_folder = "../data/dream4/high_sampling/"
-    nets = 5
+    data_folder = "../data/gnw_insilico/network_data/Yeast100/"
+    nets = 20
     thresh = 0.3
     insilico_dict = {ii: {} for ii in range(1, nets + 1)}
     lags = []
     for net in insilico_dict:
-        data_file = data_folder + "insilico_size10_%i_dream4_timeseries.tsv" % (net)
-        gold_file = data_folder + "insilico_size10_%i_goldstandard.tsv" % (net)
-        perturb_file = data_folder + "insilico_size10_%i_timeseries_perturbations.tsv" % (net)
+        data_file = data_folder + "Yeast100-%i_dream4_timeseries.tsv" % (net)
+        gold_file = data_folder + "Yeast100-%i_goldstandard.tsv" % (net)
+        perturb_file = data_folder + "Yeast100-%i_dream4__timeseries_perturbations.tsv" % (net)
 
         # Get the true edges
         evaluator = Evaluator(gold_file, '\t')
@@ -149,9 +149,10 @@ if __name__ == '__main__':
         # Calculate the xcorr for each gene pair
         df = pd.read_csv(data_file, sep="\t")
         gene_list = df.columns.values[1:].tolist()
-        experiment_list = get_experiment_list(data_file, 501, 10)
+        experiment_list = get_experiment_list(data_file, 21, 10)
         xcorr_array = xcorr_experiments(experiment_list)
-        edge_lags = calc_edge_lag(xcorr_array, gene_list, 0.1, 0.3, timestep=2)
+        edge_lags = calc_edge_lag(xcorr_array, gene_list, 0.1, 0.3, timestep=50)
+
         true_lags = edge_lags[edge_lags['Edge'].isin(true_edges)]
         lags += true_lags['Lag'].values.tolist()
 
@@ -159,10 +160,15 @@ if __name__ == '__main__':
     z = np.nan_to_num(np.array(lags))
     data = pd.DataFrame(np.asarray(list(Counter(z).items())))
     data.sort_values(0, inplace=True)
-    plt.plot(data[0].values, data[1]/len(lags), 'o-', lw=5, ms=10, markerfacecolor='w', mew=3, mec='b')
+    # plt.plot(data[0].values, data[1]/len(lags), 'o-', lw=5, ms=10, markerfacecolor='w', mew=3, mec='b')
+    plt.bar(range(len(data[0].values)), data[1]/len(lags), width=0.7, color='k')
     # plt.hist(lags, bins=71, cumulative=True, normed=1)
-    plt.xlabel('Peak Lag', fontsize=20)
-    plt.ylabel('% of True Edges', fontsize=20)
+    plt.xlabel('Apparent Lag', fontsize=20)
+    plt.ylabel('% of Edges', fontsize=20)
+    # labels = [ii if ii==0 else str(data[0].values.astype(int)[ii-1])+"-"+str(val) for ii, val in enumerate(data[0].values.astype(int))]
+    labels = [val for val in data[0].values.astype(int)]
+    plt.xticks(np.arange(len(data[0]))+0.35, labels)
     plt.tick_params(axis='both', which='major', labelsize=18)
+    plt.tight_layout()
     plt.show()
     # plt.savefig('../manuscript/Figures/true_lag_DREAM4.pdf', fmt='pdf')
