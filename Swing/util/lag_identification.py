@@ -132,15 +132,15 @@ def filter_ccfs(ccfs, sc_thresh, min_ccf):
     return filtered_ccf
 
 if __name__ == '__main__':
-    data_folder = "../data/gnw_insilico/network_data/Yeast100/"
+    data_folder = "../data/gnw_insilico/network_data/Ecoli/"
     nets = 20
     thresh = 0.3
     insilico_dict = {ii: {} for ii in range(1, nets + 1)}
     lags = []
     for net in insilico_dict:
-        data_file = data_folder + "Yeast100-%i_dream4_timeseries.tsv" % (net)
-        gold_file = data_folder + "Yeast100-%i_goldstandard.tsv" % (net)
-        perturb_file = data_folder + "Yeast100-%i_dream4__timeseries_perturbations.tsv" % (net)
+        data_file = data_folder + "Ecoli-%i_timeseries.tsv" % (net)
+        gold_file = data_folder + "Ecoli-%i_goldstandard.tsv" % (net)
+        perturb_file = data_folder + "Ecoli-%i_timeseries_perturbations.tsv" % (net)
 
         # Get the true edges
         evaluator = Evaluator(gold_file, '\t')
@@ -161,14 +161,15 @@ if __name__ == '__main__':
     data = pd.DataFrame(np.asarray(list(Counter(z).items())))
     data.sort_values(0, inplace=True)
     # plt.plot(data[0].values, data[1]/len(lags), 'o-', lw=5, ms=10, markerfacecolor='w', mew=3, mec='b')
-    plt.bar(range(len(data[0].values)), data[1]/len(lags), width=0.7, color='k')
+    plt.figure(figsize=(6, 5))
+    bar_width = 0.95
+    plt.bar(range(len(data[0].values)), data[1]/len(lags), width=bar_width, color='k')
     # plt.hist(lags, bins=71, cumulative=True, normed=1)
-    plt.xlabel('Apparent Lag', fontsize=20)
+    plt.xlabel('Apparent Lag (min)', fontsize=20)
     plt.ylabel('% of Edges', fontsize=20)
     # labels = [ii if ii==0 else str(data[0].values.astype(int)[ii-1])+"-"+str(val) for ii, val in enumerate(data[0].values.astype(int))]
     labels = [val for val in data[0].values.astype(int)]
-    plt.xticks(np.arange(len(data[0]))+0.35, labels)
-    plt.tick_params(axis='both', which='major', labelsize=18)
+    plt.xticks(np.arange(len(data[0]))+bar_width/2, labels)
+    plt.tick_params(axis='both', which='major', labelsize=14)
     plt.tight_layout()
-    plt.show()
-    # plt.savefig('../manuscript/Figures/true_lag_DREAM4.pdf', fmt='pdf')
+    plt.savefig('../manuscript/Figures/true_lag_ecoli10_0.1_0.3.pdf', fmt='pdf')
