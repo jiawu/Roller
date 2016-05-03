@@ -7,12 +7,16 @@ import pandas as pd
 import numpy as np
 import networkx as nx
 from Swing.util.Evaluator import Evaluator
+from Swing.util.lag_identification import get_experiment_list, xcorr_experiments, calc_edge_lag
 from nxpd import draw
 from nxpd import nxpdParams
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-from scipy.stats import fisher_exact, linregress, ttest_rel
-from Swing.util.lag_identification import get_experiment_list, xcorr_experiments, calc_edge_lag
+from matplotlib import rcParams
+from matplotlib.patches import Polygon
+import brewer2mpl
+import seaborn as sns
+from scipy.stats import fisher_exact, linregress, ttest_rel, mannwhitneyu, ttest_ind
 
 
 def is_square(n):
@@ -68,7 +72,7 @@ def calc_subplot_dimensions(x):
 def get_true_edges(gold_filename):
     evaluator = Evaluator(gold_filename, '\t')
     edges = evaluator.gs_flat.tolist()
-    return edges
+    return edges, evaluator
 
 
 def get_edge_lags(data_filename):
@@ -76,49 +80,228 @@ def get_edge_lags(data_filename):
     gene_list = df.columns.values[1:].tolist()
     experiment_list = get_experiment_list(data_filename, 21, 10)
     xcorr_array = xcorr_experiments(experiment_list)
-    lags = calc_edge_lag(xcorr_array, gene_list, 0.1, 0.2, timestep=1)
+    lags = calc_edge_lag(xcorr_array, gene_list, 0.1, 0.5, timestep=1)
     return lags, df
 
 
-def get_network_changes(pickle_filename, edge_str='regulator-target',
-                        base_str='rank_importance_RF-td_21', shortener_str='rank_importance_', replace_str=""):
-
+def get_network_changes(pickle_filename, edge_str='regulator-target', base_str='rank_importance_RF-td_21',
+                        shortener_str='rank_importance_', replace=''):
     results_df = pd.read_pickle(pickle_filename)
     edges = results_df[edge_str].values
     baseline = results_df[base_str].values
 
-    diff_df = pd.DataFrame()
-    diff_df[edge_str] = edges
-    diff_df['base_rank'] = baseline
     rank_df = pd.DataFrame()
     rank_df[edge_str] = edges
-    rank_df['base_rank'] = baseline
+    rank_df[('Base_%s' %replace)] = baseline
     for column in results_df.columns:
-        if column != edge_str and column != base_str:
-            short_name = column.replace(shortener_str, replace_str)
-            diff_df[short_name] = baseline - results_df[column].values
+        if column != edge_str and column!=base_str:
+            short_name = column.replace(shortener_str, replace)
             rank_df[short_name] = results_df[column].values
-    return diff_df, rank_df
+    rank_df.set_index(['regulator-target'], inplace=True)
+    diff_df = (rank_df.T.iloc[0]-rank_df.T).T
+    parameters = set(rank_df.columns[1:].values)
+    return diff_df, rank_df, parameters
 
 
-def calc_stats(df, edges, lags):
-    true_df = df[df['regulator-target'].isin(edges)]
-    false_df = df[~df['regulator-target'].isin(edges)]
+def get_network_data(goldstandard, timeseries, ignore_self=True):
+    # Get true network
+    true_edges, evaluator = get_true_edges(goldstandard)
+    dg = nx.DiGraph()
+    dg.add_edges_from(true_edges)
+
+    #Network statistics - deprecated
+    #degree = nx.degree_centrality(dg)
+    #b_cent = pd.DataFrame.from_dict({k: [v] for k, v in nx.edge_betweenness_centrality(dg).items()}, 'index')
+    #b_cent.columns = ['Bcent']
+
+    #Calculate edge lags
+    edge_lags, data = get_edge_lags(timeseries)
+    if ignore_self:
+        edge_lags = edge_lags[edge_lags['Parent'] != edge_lags['Child']]
+    edge_df = pd.DataFrame(edge_lags['Lag'].values, index=edge_lags['Edge'].values, columns=['Lag'])
+
+    return true_edges, edge_df, data, dg, evaluator
 
 
-    t_promoted, t_demoted, t_same = count_change(np.sign(true_df.iloc[:, 2:].values))
-    f_promoted, f_demoted, f_same = count_change(np.sign(false_df.iloc[:, 2:].values))
+def get_signed_edges(signed):
+    df = pd.read_csv(signed, sep='\t', header=None)
+    df['regulator-target'] = list(zip(df[0], df[1]))
+    df.set_index(['regulator-target'], inplace=True)
+    df.drop([0, 1], axis=1, inplace=True)
+    df.columns=['sign']
+    return df
 
 
-def count_change(x, axis=0, normalized=True):
-    frac = 1
-    if normalized:
-        frac = x.shape[axis]
-    # x is 2-d np array of signed values
-    p = np.sum(x == 1, axis=axis)/frac
-    d = np.sum(x == -1, axis=axis)/frac
-    s = np.sum(x == 0, axis=axis)/frac
-    return p, d, s
+def calc_scores(ranking_df, evaluator):
+    filtered_ranks = ranking_df.copy()
+    filtered_ranks.reset_index(level=0, inplace=True)
+    roc = []
+    aupr = []
+    for c in filtered_ranks.columns[1:]:
+        filtered_ranks.sort_values(filtered_ranks.columns[1], inplace=True)
+        roc.append(evaluator.calc_roc(filtered_ranks.iloc[:, :2])[2].values[-1])
+        aupr.append(evaluator.calc_pr(filtered_ranks.iloc[:, :2])[2].values[-1])
+        filtered_ranks.drop(c, axis=1, inplace=True)
+    return roc, aupr
+
+
+def calc_promotion(change_df, columns):
+    t_promoted = np.sum(change_df.loc[:, columns].values > 0, axis=0)
+    t_demoted = np.sum(change_df.loc[:, columns].values < 0, axis=0)
+    t_same = np.sum(change_df.loc[:, columns].values == 0, axis=0)
+
+    t_lagged = change_df[change_df['Lag'] > 0]
+    l_promoted = np.sum(t_lagged.loc[:, columns].values > 0, axis=0)
+    l_demoted = np.sum(t_lagged.loc[:, columns].values < 0, axis=0)
+    l_same = np.sum(t_lagged.loc[:, columns].values == 0, axis=0)
+    rows = ['true+', 'true-', 'true=', 'lag+', 'lag-', 'lag=']
+    return pd.DataFrame([t_promoted, t_demoted, t_same, l_promoted, l_demoted, l_same], index=rows, columns=columns).T
+
+
+def get_net_stats(dg):
+    g = dg.to_undirected()
+    assort = nx.degree_pearson_correlation_coefficient(dg)
+    if np.isnan(assort):
+        assort = 0
+    clust = nx.average_clustering(g)
+    trans= nx.transitivity(g)
+    try:
+        rad = nx.radius(g)
+    except nx.NetworkXError:
+        rad = 0
+    try:
+        diam = nx.diameter(g)
+    except nx.NetworkXError:
+        diam = 0
+    return [assort, clust, trans, rad, diam]
+
+
+def get_c_table(summary_df):
+    """
+    C table format: [[lagged_promoted, lagged_not_promoted],
+                 [not_lagged_promoted, not_lagged_not_promoted]]
+    """
+
+    c_table = np.array([[summary_df['lag+'], summary_df['lag-']+summary_df['lag=']],
+                        [summary_df['true+']-summary_df['lag+'],
+                         summary_df['true-']+summary_df['true=']-summary_df['lag-']-summary_df['lag=']]])
+    c_table = np.array([c_table[:, :, ii] for ii in range(c_table.shape[2])])
+    return c_table
+
+
+def get_enrichment(c_array, conditions):
+    pvals = pd.DataFrame([fisher_exact(c_tab)[1] for c_tab in c_array], index=conditions, columns=['pval'])
+    return pvals
+
+
+def make_dictionary(methods, replace_dict, models, num_nets=20, directory_path="../data/gnw_insilico/network_data/"):
+    lag_range = {'ml_0': [0, 1], 'ml_1': [0, 2], 'ml_2': [0, 3], 'ml_3': [1, 2], 'ml_4': [1, 4], 'ml_5': [2, 3]}
+
+    s_dict = {}
+    for ii, method in enumerate(methods):
+        s_dict[method] = {"aupr": pd.DataFrame(), "auroc": pd.DataFrame(),
+                          "te_change": pd.DataFrame(), "te_rank": pd.DataFrame()}
+        for model in models:
+            s_dict[method][model] = {"aupr": pd.DataFrame(), "auroc": pd.DataFrame(),
+                                     "te_change": pd.DataFrame(), "te_rank": pd.DataFrame()}
+            for net in range(1, num_nets + 1):
+                s_dict[method][model][net] = {"aupr": pd.DataFrame(), "auroc": pd.DataFrame(),
+                                              "te_change": pd.DataFrame(), "te_rank": pd.DataFrame()}
+                short = 'rank_importance_%s' % method
+                pickle_file = "%s_net%i_%s_promotion.pkl" % (model, net, method.lower())
+                base_str = ('rank_importance_%s-td_21' % method)
+
+                roc_df = pd.DataFrame()
+                pr_df = pd.DataFrame()
+                # Get the network information
+                gold_file = directory_path+"%s/%s-%i_goldstandard.tsv" % (model, model, net)
+                signed_file = gold_file.replace('.tsv', '_signed.tsv')
+                data_file = directory_path+"%s/%s-%i_timeseries.tsv" % (model, model, net)
+                true_edges, edge_df, data, dg, evaluator = get_network_data(gold_file, data_file)
+                signed_edges = get_signed_edges(signed_file)
+
+                change, ranks, params = get_network_changes(pickle_file, base_str=base_str,
+                                                            shortener_str=short, replace=replace_dict[method])
+
+                change_df = change.reindex_axis(sorted(change.columns), axis=1)
+                ranks_df = ranks.reindex_axis(sorted(ranks.columns), axis=1)
+                conditions = change_df.columns.values
+                s_dict[method][model][net]['rank'] = ranks_df
+                s_dict[method][model][net]['rank_change'] = change_df
+
+                # Calculate the auroc and aupr for each parameter set of the network
+                roc_df[model + str(net)], pr_df[model + str(net)] = calc_scores(ranks_df, evaluator)
+                roc_df.index = conditions
+                pr_df.index = conditions
+                s_dict[method][model][net]['auroc'] = roc_df.T
+                s_dict[method][model][net]['aupr'] = pr_df.T
+
+                # Compile results
+                full_change = pd.concat([edge_df, change_df], axis=1, join='inner')
+                full_rank = pd.concat([edge_df, ranks_df], axis=1, join='inner')
+                te_rank = pd.concat([signed_edges, full_rank[full_rank.index.isin(true_edges)]],
+                                    axis=1, join='inner')
+                te_change = pd.concat([signed_edges, full_change[full_change.index.isin(true_edges)]],
+                                      axis=1, join='inner')
+                promotions = calc_promotion(te_change, conditions)
+                contingency = get_c_table(promotions)
+                s_dict[method][model][net]['conditions'] = conditions
+                s_dict[method][model][net]['change'] = full_change
+                s_dict[method][model][net]['rank'] = full_rank
+                s_dict[method][model][net]['te_change'] = te_change
+                s_dict[method][model][net]['te_rank'] = te_rank
+                s_dict[method][model][net]['promotion'] = promotions
+                s_dict[method][model][net]['contingency'] = contingency
+                s_dict[method][model][net]['enrich_pvals'] = get_enrichment(contingency, conditions)
+                s_dict[method][model][net]['stats'] = pd.DataFrame(get_net_stats(dg), index=['assort', 'clust',
+                                                                                             'trans', 'rad', 'diam'])
+                # Summarize it for each model organism
+                s_dict[method][model]['aupr'] = pd.concat([s_dict[method][model]['aupr'], pr_df.T], join='inner')
+                s_dict[method][model]['auroc'] = pd.concat([s_dict[method][model]['auroc'], roc_df.T], join='inner')
+                s_dict[method][model]['te_change'] = pd.concat([s_dict[method][model]['te_change'], te_change],
+                                                               join='outer')
+                s_dict[method][model]['te_rank'] = pd.concat([s_dict[method][model]['te_rank'], te_rank], join='outer')
+            auroc = s_dict[method][model]['auroc']
+            aupr = s_dict[method][model]['aupr']
+            s_dict[method][model]['auroc_diff'] = pd.DataFrame((auroc.values.T - auroc.values[:, 0]).T,
+                                                               index=auroc.index, columns=auroc.columns)
+            s_dict[method][model]['aupr_diff'] = pd.DataFrame((aupr.values.T - aupr.values[:, 0]).T,
+                                                              index=aupr.index, columns=aupr.columns)
+            s_dict[method][model]['promotion'] = calc_promotion(s_dict[method][model]['te_change'], conditions)
+            s_dict[method][model]['contingency'] = get_c_table(s_dict[method][model]['promotion'])
+            s_dict[method][model]['enrich_pvals'] = get_enrichment(s_dict[method][model]['contingency'], conditions)
+
+            # Summarize it for each method
+            s_dict[method]['aupr'] = pd.concat([s_dict[method]['aupr'], s_dict[method][model]['aupr']], join='inner')
+            s_dict[method]['auroc'] = pd.concat([s_dict[method]['auroc'], s_dict[method][model]['auroc']], join='inner')
+            s_dict[method]['te_change'] = pd.concat([s_dict[method]['te_change'],
+                                                     s_dict[method][model]['te_change']], join='outer')
+            s_dict[method]['te_rank'] = pd.concat([s_dict[method]['te_rank'], s_dict[method][model]['te_rank']],
+                                                  join='outer')
+
+        auroc = s_dict[method]['auroc']
+        aupr = s_dict[method]['aupr']
+        s_dict[method]['auroc_diff'] = pd.DataFrame((auroc.values.T - auroc.values[:, 0]).T,
+                                                    index=auroc.index, columns=auroc.columns)
+        s_dict[method]['aupr_diff'] = pd.DataFrame((aupr.values.T - aupr.values[:, 0]).T,
+                                                   index=aupr.index, columns=aupr.columns)
+        s_dict[method]['promotion'] = calc_promotion(s_dict[method]['te_change'], s_dict[method]['aupr'].columns)
+        s_dict[method]['contingency'] = get_c_table(s_dict[method]['promotion'])
+        s_dict[method]['enrich_pvals'] = get_enrichment(s_dict[method]['contingency'], conditions)
+    return s_dict
+
+
+def stars(p):
+    if p < 0.0001:
+        return "****"
+    elif (p < 0.001):
+        return "***"
+    elif (p < 0.01):
+        return "**"
+    elif (p < 0.05):
+        return "*"
+    else:
+        return "-"
 
 #NOTES FROM JIA
 """
@@ -138,217 +321,141 @@ elif X = 5; min_lag = 2, max_lag = 3
 
 
 if __name__ == "__main__":
-    lag_range = {'ml_0': [0, 1], 'ml_1': [0, 2], 'ml_2': [0, 3], 'ml_3': [1, 2], 'ml_4': [1, 4], 'ml_5': [2, 3]}
-    num_nets = 20
-    models = ['Ecoli', 'Yeast']
-    true_edge_df = pd.DataFrame()
-    roc_df = pd.DataFrame()
-    pr_df = pd.DataFrame()
-    averages = []
-    weighted = []
-    control = []
-    for model in models:
-        for net in range(1, num_nets+1):
-            gold_file = "../data/gnw_insilico/network_data/%s/%s-%i_goldstandard.tsv" % (model, model, net)
-            data_file = "../data/gnw_insilico/network_data/%s/%s-%i_timeseries.tsv" % (model, model, net)
-            pickle_file = "%s_net%i_RF_promotion.pkl" % (model, net)
-            pd.set_option('display.width', 500)
-            true_edges = get_true_edges(gold_file)
-            ee = Evaluator(gold_file, sep='\t')
-            edge_lags, data = get_edge_lags(data_file)
-            dg = nx.DiGraph()
-            dg.add_edges_from(true_edges)
-            degree = nx.degree_centrality(dg)
-            b_cent = pd.DataFrame.from_dict({k: [v] for k, v in nx.edge_betweenness_centrality(dg).items()}, 'index')
-            b_cent.columns = ['Bcent']
+    params = {
+        'axes.labelsize': 8,
+        'font.size': 8,
+        'legend.fontsize': 10,
+        'xtick.labelsize': 10,
+        'ytick.labelsize': 10,
+        'text.usetex': False,
+        'figure.figsize': [2.5, 4.5]
+    }
+    bmap = brewer2mpl.get_map('Set2', 'qualitative', 7)
+    colors = bmap.mpl_colors
+    rcParams.update(params)
+    m = ['Dionesus', 'RF']
+    rd = {'Dionesus': 'D', 'RF': 'RF'}
+    mod = ['Ecoli', 'Yeast']
+    try:
+        print("Loading_pickle")
+        summary = pd.read_pickle('./param_sweep_summary.pickle')
+    except FileNotFoundError:
+        print("Pickle doesn't exist. Summarizing data now")
+        summary = make_dictionary(m, rd, mod)
+        pd.to_pickle(summary, './param_sweep_summary.pickle')
 
-            # Remove self edges
-            #todo: functionalize this better
-            edge_lags = edge_lags[edge_lags['Parent'] != edge_lags['Child']]
-            edge_df = pd.DataFrame(edge_lags['Lag'].values, index=edge_lags['Edge'].values, columns=['Lag'])
+    scores = ['aupr', 'auroc']
+    bprops = dict(linewidth=3)
+    mprops = dict(linewidth=3, color='r')
+    wprops = dict(linewidth=3, linestyle='--')
+    for method in m:
+        diffs = pd.DataFrame()
+        for model in mod:
+            for score in scores:
+                #             print('\n', method, model, score)
+                avg_diff = pd.DataFrame(np.mean(summary[method][model][(score + '_diff')], axis=0),
+                                        columns=[model + "_" + score])
+                avg_diff['_'.join([model, score, 'pval'])] = [ttest_rel(summary[method][model][score].iloc[:, 0],
+                                                                        summary[method][model][score].iloc[:, ii]).pvalue
+                                                              for ii in
+                                                              range(len(summary[method][model][score].columns))]
+                x_array = np.array([[0] * len(summary[method][model][score]), [1] * len(summary[method][model][score])])
+                f = plt.figure(figsize=(10, 10))
+                for ii, idx in enumerate(avg_diff.index):
+                    if ii == 0:
+                        continue
+                    y_array = np.array(
+                        [summary[method][model][score].iloc[:, 0], summary[method][model][score].iloc[:, ii]])
+                    ax = f.add_subplot(3, 3, ii)
+                    ax.plot(x_array, y_array, '.-', c='k', alpha=0.4, zorder=2)
+                    if score == 'aupr':
+                        ax.plot([-0.50, 1.5], [.17, .17], c='g', lw=3, zorder=1)
+                    else:
+                        ax.plot([-0.50, 1.5], [0.5, 0.5], c='g', lw=3, zorder=1)
+                    p_value = avg_diff.iloc[ii, 1]
+                    s = stars(p_value)
+                    bp = ax.boxplot(y_array.T, positions=[0, 1])
+                    y_max = np.max(np.concatenate((y_array[0], y_array[1])))
+                    y_min = np.min(np.concatenate((y_array[0], y_array[1])))
+                    ax.annotate("", xy=(0, y_max + .01), xycoords='data',
+                                xytext=(1, y_max + .01), textcoords='data',
+                                arrowprops=dict(arrowstyle="-", ec='#aaaaaa',
+                                                connectionstyle="bar,fraction=0.1"))
+                    ax.text(0.5, y_max + abs(y_max - y_min) * 0.1, stars(p_value),
+                            horizontalalignment='center',
+                            verticalalignment='center')
+                    #                 for i in range(0, len(bp['boxes'])):
+                    #                     bp['boxes'][i].set_color(colors[i])
+                    #                     # we have two whiskers!
+                    #                     bp['whiskers'][i*2].set_color(colors[i])
+                    #                     bp['whiskers'][i*2 + 1].set_color(colors[i])
+                    #                     bp['whiskers'][i*2].set_linewidth(2)
+                    #                     bp['whiskers'][i*2 + 1].set_linewidth(2)
+                    #                     # top and bottom fliers
+                    #                     # (set allows us to set many parameters at once)
+                    #                     bp['fliers'][i].set(markerfacecolor=colors[i],
+                    #                                    marker='o', alpha=0.75, markersize=6,
+                    #                                    markeredgecolor='none')
+                    #                     bp['fliers'][i].set(markerfacecolor=colors[i],
+                    #                                    marker='o', alpha=0.75, markersize=6,
+                    #                                    markeredgecolor='none')
+                    #                     bp['medians'][i].set_color('black')
+                    #                     bp['medians'][i].set_linewidth(3)
+                    #                     # and 4 caps to remove
+                    #                     for c in bp['caps']:
+                    #                         c.set_linewidth(0)
+                    #                 for i in range(len(bp['boxes'])):
+                    #                     box = bp['boxes'][i]
+                    #                     box.set_linewidth(0)
+                    #                     boxX = []
+                    #                     boxY = []
+                    #                     for j in range(5):
+                    #                         boxX.append(box.get_xdata()[j])
+                    #                         boxY.append(box.get_ydata()[j])
+                    #                         boxCoords = zip(boxX,boxY)
+                    #                         print(boxCoords)
+                    #                         boxPolygon = Polygon(boxCoords, facecolor = colors[i], linewidth=0)
+                    #                         ax.add_patch(boxPolygon)
+                    ax.spines['top'].set_visible(False)
+                    ax.spines['right'].set_visible(False)
+                    ax.spines['left'].set_visible(False)
+                    ax.get_xaxis().tick_bottom()
+                    ax.get_yaxis().tick_left()
+                    ax.tick_params(axis='x', direction='out')
+                    ax.tick_params(axis='y', length=0)
+                    ax.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
+                    ax.set_axisbelow(True)
+                    ax.set_xlim([-0.5, 1.5])
+                    #                 ax.set_title(' '.join([idx, model, score]))
+                plt.tight_layout()
+                plt.close()
+                # plt.show()
 
-            change_df, ranks_df = get_network_changes(pickle_file, base_str='rank_importance_RF-td_21')
-                                                      # shortener_str='rank_importance_Dionesus', replace_str='D')
-            conditions = ranks_df.columns[1:].values
+                diffs = pd.concat([diffs, avg_diff], axis=1)
 
-            a = pd.DataFrame(np.mean(ranks_df.iloc[:, 1:], axis=1), columns=['mean_rank'])
-            a['regulator-target'] = ranks_df['regulator-target'].values
-            a.sort_values(['mean_rank'], inplace=True)
-            averages.append(ee.calc_roc(a)[2].values[-1])
-
-            baseline = np.reshape(np.repeat(ranks_df.values[:, 1], len(conditions)), (len(ranks_df), len(conditions)))
-            rank_mean = ranks_df.copy()
-            rank_mean.iloc[:, 1:] = (ranks_df.values[:, 1:] + baseline) / 2
-            filtered_ranks = ranks_df.copy()
-            roc = []
-            aupr = []
-            for c in conditions:
-                filtered_ranks.sort_values(filtered_ranks.columns[1], inplace=True)
-                roc.append(ee.calc_roc(filtered_ranks.iloc[:, :2])[2].values[-1])
-                aupr.append(ee.calc_pr(filtered_ranks.iloc[:, :2])[2].values[-1])
-                filtered_ranks.drop(c, axis=1, inplace=True)
-            roc_df[model + str(net)] = roc
-
-            control.append(roc[0])
-
-            pr_df[model + str(net)] = aupr
-            full_df = pd.concat([edge_df, change_df.set_index(['regulator-target'])], axis=1, join='inner')
-            current_true = full_df[full_df.index.isin(true_edges)].join(b_cent)
-            current_true['P_deg'] = [degree[edge[0]] for edge in current_true.index.values]
-            current_true['C_deg'] = [degree[edge[1]] for edge in current_true.index.values]
-            true_edge_df = true_edge_df.append(current_true)
-
-    # roc_df.index = conditions
-    # roc_df = roc_df.T
-    # baseline = np.reshape(np.repeat(roc_df.values[:, 0], len(conditions)), (len(roc_df), len(conditions)))
-    # roc_delta = roc_df-baseline
-    # print(np.mean(roc_delta, axis=0))
-    # sys.exit()
-
-    # roc_diff = np.array(weighted) - np.array(control)
-    # print(np.mean(roc_diff))
-    # plt.plot(control, control, '-')
-    # plt.plot(control, weighted, '.')
-    # plt.show()
-    # sys.exit()
-    # roc_df.index = conditions
-    # roc_df = roc_df.T
-    # baseline = np.reshape(np.repeat(roc_df.values[:, 0], len(conditions)), (len(roc_df), len(conditions)))
-    # roc_delta = roc_df-baseline
-    # pr_df.index = conditions
-    # pr_df = pr_df.T
-    # baseline = np.reshape(np.repeat(pr_df.values[:, 0], len(conditions)), (len(pr_df), len(conditions)))
-    # pr_delta = pr_df - baseline
-    # roc_mean = np.mean(roc_delta, axis=0)
-    # roc_std = np.std(roc_delta, axis=0)
-    # pr_mean = np.mean(pr_delta, axis=0)
-    # pr_std = np.std(pr_delta, axis=0)
-    # # plt.errorbar(roc_mean, pr_mean, roc_std, pr_std, '.')
-    # plt.violinplot(roc_df.values, showmedians=True)
-    # plt.show()
-    # sys.exit()
-    # for ii, c in enumerate(conditions):
-    #     plt.plot(roc_df.iloc[:, ii], pr_df.iloc[:, ii], '.', label=c)
-    # x = roc_df.values.flatten()
-    # y = pr_df.values.flatten()
-    # fit = linregress(x, y)
-    # # plt.plot(x, y, '.')
-    # plt.plot(x, fit[0]*x+fit[1], c='0.75', label=('R2 = %0.3f' % (fit[2])))
-    # plt.xlabel('AUROC')
-    # plt.ylabel('AUPR')
-    # plt.legend(loc='best')
-    # plt.show()
-    # figure1 = plt.figure()
-    # heatmap = figure1.add_subplot(1, 1, 1)
-    # my_axis = heatmap.imshow(roc_df)
-    # my_axi = my_axis.get_axes()
-    # clean_axis(my_axi)
-    # heatmap.set_yticks(np.arange(roc_df.shape[0]))
-    # heatmap.yaxis.set_ticks_position('left')
-    # # heatmap.set_yticklabels(row_labels)
-    # heatmap.set_xticks(np.arange(roc_df.shape[1]))
-    # heatmap.xaxis.set_ticks_position('top')
-    # # xlabelsL = heatmap.set_xticklabels(col_labels)
-    # plt.show()
-    # sys.exit()
-
-    t_promoted = np.sum(true_edge_df.iloc[:, 2:11].values > 0, axis=0)
-    t_demoted = np.sum(true_edge_df.iloc[:, 2:11].values < 0, axis=0)
-    t_same = np.sum(true_edge_df.iloc[:, 2:11].values == 0, axis=0)
-
-    t_lagged = true_edge_df[true_edge_df['Lag'] > 0]
-    l_promoted = np.sum(t_lagged.iloc[:, 2:11].values > 0, axis=0)
-    l_demoted = np.sum(t_lagged.iloc[:, 2:11].values < 0, axis=0)
-    l_same = np.sum(t_lagged.iloc[:, 2:11].values == 0, axis=0)
-
-    c_table = np.array([[l_promoted, t_promoted-l_promoted], [l_demoted+l_same, t_demoted+t_same-l_demoted-l_same]])
-    conditions = true_edge_df.columns[2:11].values
-    # for run in range(c_table.shape[2]):
-    #     print(conditions[run])
-    #     print(fisher_exact(c_table[:, :, run]))
-
-    # #Lag
-    # f = plt.figure()
-    # for idx in range(2, 11):
-    #     ax = f.add_subplot(3, 3, idx-1)
-    #     ax.plot(true_edge_df.iloc[:, 0], true_edge_df.iloc[:, idx], '.')
-    #     ax.set_title(conditions[idx-2])
-    # plt.suptitle('Lag')
-    # plt.tight_layout()
-    #
-    # # Betweenness centrality
-    # f = plt.figure()
-    # for idx in range(2, 11):
-    #     ax = f.add_subplot(3, 3, idx - 1)
-    #     ax.plot(true_edge_df.iloc[:, -3], true_edge_df.iloc[:, idx], '.')
-    #     ax.set_title(conditions[idx - 2])
-    # plt.suptitle('Betweenness Centrality')
-    # plt.tight_layout()
-    # plt.show()
-    # sys.exit()
-
-    lag_set = sorted(list(set(true_edge_df['Lag'].values)))
-
-    f = plt.figure()
-    n_rows, n_cols = calc_subplot_dimensions(len(conditions))
-    for ii, run in enumerate(conditions):
-        # if 'ml' in run:
-        #     key = run.split('-')[1]
-        #     min_lag = lag_range[key][0]
-        #     max_lag = lag_range[key][1]
-        #     in_range = true_edge_df[(true_edge_df['Lag'] >= min_lag) & (true_edge_df['Lag'] <= max_lag)][[run]]
-        #     print(run, np.sum(in_range.values > 0)/len(in_range))
-
-        ax = f.add_subplot(n_rows, n_cols, ii+1)
-        # plot_data = [true_edge_df[true_edge_df['Lag'] == lag][[run]].values for lag in lag_set]
-        ax.plot([0, 90], [0, 0], '-', c='k', lw=3)
-        ax.plot([0, 90], [0, 90], '-', c='k', lw=3)
-        ax.plot([0, 90], [-90, 0], '-', c='k', lw=3)
-        base = true_edge_df[true_edge_df['Lag'] == 0][['base_rank']].values
-        new = true_edge_df[true_edge_df['Lag'] == 0][[run]].values
-        ax.plot(base, new, '.', c='0.5')
-        ax.set_title(run)
-        ax.set_ylim([-90, 90])
-        for lag in lag_set:
-            if lag !=0 and lag<=5:
-                base = true_edge_df[true_edge_df['Lag'] == lag][['base_rank']].values
-                new = true_edge_df[true_edge_df['Lag'] == lag][[run]].values
-                ax.plot(base, new, '.', label=lag)#, c=str(0.05*lag))
-                ax.set_title(run)
-        ax.set_ylim([-90, 90])
-        ax.legend(loc='best')
-    plt.tight_layout()
+    nl = summary['RF']['te_change'][(summary['RF']['te_change']["Lag"] == 0) & (summary['RF']['te_rank']["Base_RF"] < 90)]
+    l = summary['RF']['te_change'][(summary['RF']['te_change']["Lag"] > 0) & (summary['RF']['te_rank']["Base_RF"] < 90)]
+    print(np.median(l.iloc[:, 2:], axis=0))
+    print(np.median(l.iloc[:, 2:], axis=0) - np.median(nl.iloc[:, 2:], axis=0))
+    cond = 'RF-ml_4'
+    plt.plot([0.5, 2.5], [0, 0], c='k', lw=1)
+    vp = plt.violinplot([nl[cond].values, l[cond].values], showextrema=False, widths=0.75, points=200)
+    for pc in vp['bodies']:
+        pc.set_facecolor('c')
+        pc.set_edgecolor('w')
+    plt.plot([0.75, 1.25], [np.median(nl[cond].values), np.median(nl[cond].values)], c='k', lw=3)
+    plt.plot([1.75, 2.25], [np.median(l[cond].values), np.median(l[cond].values)], c='k', lw=3)
+    ax = plt.gca()
+    ax.set_axis_bgcolor('w')
     plt.show()
+    print(mannwhitneyu(nl[cond].values, l[cond].values))
 
-
-
-
-
-"""
-Old plotting code
-
-demoted = new_df[new_df['diff'] <= 0]
-promoted = new_df[new_df['diff'] > 0]
-p_edges = set(promoted['regulator-target'].values)
-d_edges = set(demoted['regulator-target'].values)
-print(len(p_edges.intersection(set(true_edges))), len(d_edges.intersection(set(true_edges))))
-# print(len(d_edges.intersection(set(true_edges))))
-# print(len(true_edges))
-for row in demoted.iterrows():
-    print(row[1])
-    sys.exit()
-    c = 'r'
-    plt.plot([0, 1], [row[1]['base_rank'], row[1][column]], color=c)
-for row in promoted.iterrows():
-    c = 'b'
-    plt.plot([0, 1], [row[1]['base_rank'], row[1][column]], color=c)
-plt.xticks([0, 1], ['base_rank', column.replace('rank_importance_', "")])
-plt.gca().invert_yaxis()
-plt.tight_layout()
-plt.show()
-"""
-
-
+    plt.figure(figsize=(5, 10))
+    ax = sns.swarmplot(data=[nl[cond].values, l[cond].values], size=5)
+    ax.plot([-0.10, 0.10], [np.median(nl[cond].values), np.median(nl[cond].values)], c='k', lw=3, zorder=10)
+    ax.plot([0.90, 1.10], [np.median(l[cond].values), np.median(l[cond].values)], c='k', lw=3, zorder=10)
+    ax.set_axis_bgcolor('w')
+    plt.show()
 
 
 
