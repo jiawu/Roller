@@ -15,7 +15,7 @@ import matplotlib.cm as cm
 from matplotlib import rcParams
 from matplotlib.patches import Polygon
 import brewer2mpl
-import seaborn as sns
+# import seaborn as sns
 from scipy.stats import fisher_exact, linregress, ttest_rel, mannwhitneyu, ttest_ind
 
 
@@ -294,14 +294,15 @@ def make_dictionary(methods, replace_dict, models, num_nets=20, directory_path="
 def stars(p):
     if p < 0.0001:
         return "****"
-    elif (p < 0.001):
+    elif p < 0.001:
         return "***"
-    elif (p < 0.01):
+    elif p < 0.01:
         return "**"
-    elif (p < 0.05):
+    elif p < 0.05:
         return "*"
     else:
         return "-"
+
 
 #NOTES FROM JIA
 """
@@ -322,13 +323,12 @@ elif X = 5; min_lag = 2, max_lag = 3
 
 if __name__ == "__main__":
     params = {
-        'axes.labelsize': 8,
-        'font.size': 8,
+        'axes.labelsize': 20,
+        'font.size': 20,
         'legend.fontsize': 10,
-        'xtick.labelsize': 10,
-        'ytick.labelsize': 10,
+        'xtick.labelsize': 16,
+        'ytick.labelsize': 16,
         'text.usetex': False,
-        'figure.figsize': [2.5, 4.5]
     }
     bmap = brewer2mpl.get_map('Set2', 'qualitative', 7)
     colors = bmap.mpl_colors
@@ -348,90 +348,99 @@ if __name__ == "__main__":
     bprops = dict(linewidth=3)
     mprops = dict(linewidth=3, color='r')
     wprops = dict(linewidth=3, linestyle='--')
-    # for method in m:
-    #     diffs = pd.DataFrame()
-    #     for model in mod:
-    #         for score in scores:
-    #             #             print('\n', method, model, score)
-    #             avg_diff = pd.DataFrame(np.mean(summary[method][model][(score + '_diff')], axis=0),
-    #                                     columns=[model + "_" + score])
-    #             avg_diff['_'.join([model, score, 'pval'])] = [ttest_rel(summary[method][model][score].iloc[:, 0],
-    #                                                                     summary[method][model][score].iloc[:, ii]).pvalue
-    #                                                           for ii in
-    #                                                           range(len(summary[method][model][score].columns))]
-    #             x_array = np.array([[0] * len(summary[method][model][score]), [1] * len(summary[method][model][score])])
-    #             f = plt.figure(figsize=(10, 10))
-    #             for ii, idx in enumerate(avg_diff.index):
-    #                 if ii == 0:
-    #                     continue
-    #                 y_array = np.array(
-    #                     [summary[method][model][score].iloc[:, 0], summary[method][model][score].iloc[:, ii]])
-    #                 ax = f.add_subplot(3, 3, ii)
-    #                 ax.plot(x_array, y_array, '.-', c='k', alpha=0.4, zorder=2)
-    #                 if score == 'aupr':
-    #                     ax.plot([-0.50, 1.5], [.17, .17], c='g', lw=3, zorder=1)
-    #                 else:
-    #                     ax.plot([-0.50, 1.5], [0.5, 0.5], c='g', lw=3, zorder=1)
-    #                 p_value = avg_diff.iloc[ii, 1]
-    #                 s = stars(p_value)
-    #                 bp = ax.boxplot(y_array.T, positions=[0, 1])
-    #                 y_max = np.max(np.concatenate((y_array[0], y_array[1])))
-    #                 y_min = np.min(np.concatenate((y_array[0], y_array[1])))
-    #                 ax.annotate("", xy=(0, y_max + .01), xycoords='data',
-    #                             xytext=(1, y_max + .01), textcoords='data',
-    #                             arrowprops=dict(arrowstyle="-", ec='#aaaaaa',
-    #                                             connectionstyle="bar,fraction=0.1"))
-    #                 ax.text(0.5, y_max + abs(y_max - y_min) * 0.1, stars(p_value),
-    #                         horizontalalignment='center',
-    #                         verticalalignment='center')
-    #                 #                 for i in range(0, len(bp['boxes'])):
-    #                 #                     bp['boxes'][i].set_color(colors[i])
-    #                 #                     # we have two whiskers!
-    #                 #                     bp['whiskers'][i*2].set_color(colors[i])
-    #                 #                     bp['whiskers'][i*2 + 1].set_color(colors[i])
-    #                 #                     bp['whiskers'][i*2].set_linewidth(2)
-    #                 #                     bp['whiskers'][i*2 + 1].set_linewidth(2)
-    #                 #                     # top and bottom fliers
-    #                 #                     # (set allows us to set many parameters at once)
-    #                 #                     bp['fliers'][i].set(markerfacecolor=colors[i],
-    #                 #                                    marker='o', alpha=0.75, markersize=6,
-    #                 #                                    markeredgecolor='none')
-    #                 #                     bp['fliers'][i].set(markerfacecolor=colors[i],
-    #                 #                                    marker='o', alpha=0.75, markersize=6,
-    #                 #                                    markeredgecolor='none')
-    #                 #                     bp['medians'][i].set_color('black')
-    #                 #                     bp['medians'][i].set_linewidth(3)
-    #                 #                     # and 4 caps to remove
-    #                 #                     for c in bp['caps']:
-    #                 #                         c.set_linewidth(0)
-    #                 #                 for i in range(len(bp['boxes'])):
-    #                 #                     box = bp['boxes'][i]
-    #                 #                     box.set_linewidth(0)
-    #                 #                     boxX = []
-    #                 #                     boxY = []
-    #                 #                     for j in range(5):
-    #                 #                         boxX.append(box.get_xdata()[j])
-    #                 #                         boxY.append(box.get_ydata()[j])
-    #                 #                         boxCoords = zip(boxX,boxY)
-    #                 #                         print(boxCoords)
-    #                 #                         boxPolygon = Polygon(boxCoords, facecolor = colors[i], linewidth=0)
-    #                 #                         ax.add_patch(boxPolygon)
-    #                 ax.spines['top'].set_visible(False)
-    #                 ax.spines['right'].set_visible(False)
-    #                 ax.spines['left'].set_visible(False)
-    #                 ax.get_xaxis().tick_bottom()
-    #                 ax.get_yaxis().tick_left()
-    #                 ax.tick_params(axis='x', direction='out')
-    #                 ax.tick_params(axis='y', length=0)
-    #                 ax.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
-    #                 ax.set_axisbelow(True)
-    #                 ax.set_xlim([-0.5, 1.5])
-    #                 #                 ax.set_title(' '.join([idx, model, score]))
-    #             plt.tight_layout()
-    #             plt.close()
-    #             # plt.show()
-    #
-    #             diffs = pd.concat([diffs, avg_diff], axis=1)
+    network_size = 10
+
+    # Parameter ml_4 includes the expected lag and has high enrichment. To keep things simpler I will use this
+    for score in scores:
+        f = plt.figure(figsize=(8, 8))
+        for ii, method in enumerate(m):
+            for jj, model in enumerate(mod):
+                axnum = ii * 2 + jj + 1
+
+                # Add subplot
+                ax = f.add_subplot(len(m), len(mod), axnum)
+                if axnum == 1:
+                    ax.set_title(model)
+                    ax.set_ylabel(method)
+                elif axnum == 2:
+                    ax.set_title(model)
+                elif axnum == 3:
+                    ax.set_ylabel(method)
+
+                # Retrieve/Calculate plotting data
+                num_te = len(summary[method][model]['te_change'])
+                control = summary[method][model][score].iloc[:, 0]
+                test = summary[method][model][score][(rd[method]+'-ml_4')]
+                p_value = ttest_rel(control, test).pvalue
+                x_array = np.array([[1] * len(control), [2] * len(control)])
+                y_array = [control, test]
+                y_max = np.max(y_array, axis=None)
+                y_min = np.min(y_array, axis=None)
+
+                # Plot the paired lines
+                ax.plot(x_array, y_array, '.-', c='k', alpha=0.4, zorder=1)
+
+                # Add null model comparison
+                if score == 'aupr':
+                    avg_expected_aupr = num_te/len(control)/(network_size*network_size-network_size)
+                    ax.plot([0.5, 2.5], [avg_expected_aupr, avg_expected_aupr], c='k', lw=1, ls='--', zorder=0)
+                    ax.set_ylim([min(y_min, 0.17) - 0.05, y_max + 0.05])
+                else:
+                    ax.plot([0.5, 2.5], [0.5, 0.5], c='k', lw=1, ls='--')
+                    ax.set_ylim([min(y_min, 0.5)-0.05, y_max+0.05])
+
+                # Add the boxplots
+                bp = ax.boxplot([control, test])
+                s = stars(p_value)
+                if p_value < 0.05:
+                    ax.annotate("", xy=(1, y_max + .005), xycoords='data', xytext=(2, y_max + .005), textcoords='data',
+                                arrowprops=dict(arrowstyle="-", ec='k', connectionstyle="bar,fraction=0.03"))
+                    ax.text(1.5, y_max+.02, s, horizontalalignment='center', verticalalignment='center')
+
+                for i in range(len(bp['boxes'])):
+                    bp['boxes'][i].set_color(colors[i])
+
+                    # we have two whiskers!
+                    bp['whiskers'][i * 2].set_color(colors[i])
+                    bp['whiskers'][i * 2 + 1].set_color(colors[i])
+                    bp['whiskers'][i * 2].set_linewidth(2)
+                    bp['whiskers'][i * 2 + 1].set_linewidth(2)
+
+                    # top and bottom fliers
+                    # (set allows us to set many parameters at once)
+                    bp['fliers'][i].set(marker='x', markersize=3,  markeredgecolor=colors[i])
+                    bp['medians'][i].set_color('black')
+                    bp['medians'][i].set_linewidth(2)
+
+                # and 4 caps to remove
+                for c in bp['caps']:
+                    c.set_linewidth(0)
+                for i in range(len(bp['boxes'])):
+                    box = bp['boxes'][i]
+                    box.set_linewidth(0)
+                    boxX = []
+                    boxY = []
+                    for j in range(5):
+                        boxX.append(box.get_xdata()[j])
+                        boxY.append(box.get_ydata()[j])
+                    boxCoords = np.array([boxX, boxY]).T
+                    boxPolygon = Polygon(boxCoords, facecolor=colors[i], linewidth=0)
+                    ax.add_patch(boxPolygon)
+                # ax.spines['top'].set_visible(False)
+                # ax.spines['right'].set_visible(False)
+                # ax.spines['left'].set_visible(False)
+                ax.get_xaxis().tick_bottom()
+                ax.get_yaxis().tick_left()
+                ax.tick_params(axis='x', direction='out')
+                ax.tick_params(axis='y', length=0)
+                ax.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
+                ax.set_axisbelow(True)
+                ax.set_xticklabels(['Control', 'SWING'])
+
+        plt.tight_layout()
+        filename = '../manuscript/Figures/gnw_improvement_%s.pdf' % score
+        plt.savefig(filename, fmt='pdf')
+
 
     nl = summary['RF']['te_change'][(summary['RF']['te_change']["Lag"] == 0)]
     l = summary['RF']['te_change'][(summary['RF']['te_change']["Lag"] > 0)]
