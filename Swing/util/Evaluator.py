@@ -7,7 +7,7 @@ import pdb
 
 class Evaluator:
 
-    def __init__(self, gold_standard_file, sep = '/t',interaction_label = 'regulator-target',node_list = None):
+    def __init__(self, gold_standard_file, sep='\t', interaction_label='regulator-target', node_list=None):
         self.gs_file = gold_standard_file
         self.gs_data = pd.read_csv(gold_standard_file, sep=sep, header=None)
         self.gs_data.columns = ['regulator','target','exists']

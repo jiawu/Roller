@@ -304,6 +304,156 @@ def stars(p):
         return "-"
 
 
+def plot_scores(axes, ctrl, swing, pval, net_size, num_te):
+    x_array = np.array([[1] * len(ctrl), [2] * len(ctrl)])
+    y_array = [ctrl, swing]
+    y_max = np.max(y_array, axis=None)
+    y_min = np.min(y_array, axis=None)
+     # Plot the paired lines
+    axes.plot(x_array, y_array, '.-', c='k', alpha=0.4, zorder=1)
+
+    # Add null model comparison
+    if score == 'aupr':
+        avg_expected_aupr = num_te/len(ctrl)/(net_size**2-net_size)
+        axes.plot([0.5, 2.5], [avg_expected_aupr, avg_expected_aupr], c='k', lw=1, ls='--', zorder=0)
+        axes.set_ylim([min(y_min, 0.17) - 0.05, y_max + 0.05])
+    else:
+        axes.plot([0.5, 2.5], [0.5, 0.5], c='k', lw=1, ls='--')
+        axes.set_ylim([min(y_min, 0.5)-0.05, y_max+0.05])
+
+    # Add the boxplots
+    bp = axes.boxplot([ctrl, swing])
+    s = stars(pval)
+    if p_value < 0.05:
+        axes.annotate("", xy=(1, y_max + .005), xycoords='data', xytext=(2, y_max + .005), textcoords='data',
+                    arrowprops=dict(arrowstyle="-", ec='k', connectionstyle="bar,fraction=0.03"))
+        axes.text(1.5, y_max+.02, s, horizontalalignment='center', verticalalignment='center')
+
+    for i in range(len(bp['boxes'])):
+        bp['boxes'][i].set_color(colors2[i])
+
+        # we have two whiskers!
+        bp['whiskers'][i * 2].set_color(colors2[i])
+        bp['whiskers'][i * 2 + 1].set_color(colors2[i])
+        bp['whiskers'][i * 2].set_linewidth(2)
+        bp['whiskers'][i * 2 + 1].set_linewidth(2)
+
+        # top and bottom fliers
+        # (set allows us to set many parameters at once)
+        bp['fliers'][i].set(marker='x', markersize=3,  markeredgecolor=colors2[i])
+        bp['medians'][i].set_color('black')
+        bp['medians'][i].set_linewidth(2)
+        bp['medians'][i].set_solid_capstyle('butt')
+
+    # and 4 caps to remove
+    for c in bp['caps']:
+        c.set_linewidth(0)
+    for i in range(len(bp['boxes'])):
+        box = bp['boxes'][i]
+        box.set_linewidth(0)
+        boxX = []
+        boxY = []
+        for j in range(5):
+            boxX.append(box.get_xdata()[j])
+            boxY.append(box.get_ydata()[j])
+        boxCoords = np.array([boxX, boxY]).T
+        boxPolygon = Polygon(boxCoords, facecolor=colors2[i], linewidth=0)
+        axes.add_patch(boxPolygon)
+
+    # axes.spines['top'].set_visible(False)
+    # axes.spines['right'].set_visible(False)
+    # axes.spines['left'].set_visible(False)
+    axes.get_xaxis().tick_bottom()
+    axes.get_yaxis().tick_left()
+    axes.tick_params(axis='x', direction='out')
+    axes.tick_params(axis='y', length=0)
+    axes.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
+    axes.set_axisbelow(True)
+    axes.set_xticklabels(['Control', 'SWING'])
+
+    return axes
+
+
+def plot_rank_change(axes, ranking, ctrl_str, swing_str):
+    nl = ranking[ranking["Lag"] == 0]
+    l = ranking[ranking["Lag"] != 0]
+    axes.plot(nl[ctrl_str], nl[swing_str], '.', c='0.5', alpha=0.5, label='Not Lagged')
+    axes.plot(l[ctrl_str], l[swing_str], '.', c=colors1[3], label='Lagged', zorder=1)
+    axes.plot([0, 90], [0, 90], color='k', lw=1, ls='-', label='No change', zorder=0)
+    axes.legend(loc='best')
+
+
+def plot_diff_distribution(axes, promotion, swing_str, width=0.75):
+    nl = promotion[swing_str][promotion["Lag"] == 0]
+    l = promotion[swing_str][promotion["Lag"] != 0]
+    pos_list = [nl, l]
+    bp = axes.boxplot(pos_list, positions=range(len(pos_list)), showfliers=False, widths=width)
+
+
+
+    # for pc in vp['bodies']:
+    #     pc.set_facecolor(colors1[3])
+    #     pc.set_edgecolor('w')
+    #     pc.set_alpha(1)
+
+    y_max = 0
+    y_min = 0
+    for whisker in bp['whiskers']:
+        coords = whisker._xy[:, 1]
+        y_max = max(np.max(coords), y_max)
+        y_min = min(np.min(coords), y_min)
+
+    pval = mannwhitneyu(nl, l).pvalue
+    # print(pval)
+    s = stars(pval)
+    if pval < 0.05:
+        axes.annotate("", xy=(0, y_max - .01), xycoords='data', xytext=(1, y_max + .01), textcoords='data',
+                      arrowprops=dict(arrowstyle="-", ec='k', connectionstyle="bar,fraction=0.04"))
+        axes.text(0.5, y_max + .05, s, horizontalalignment='center', verticalalignment='center')
+
+    for i in range(len(bp['boxes'])):
+        bp['boxes'][i].set_color(colors2[i + 2])
+
+        # we have two whiskers!
+        bp['whiskers'][i * 2].set_color(colors2[i + 2])
+        bp['whiskers'][i * 2 + 1].set_color(colors2[i + 2])
+        bp['whiskers'][i * 2].set_linewidth(2)
+        bp['whiskers'][i * 2 + 1].set_linewidth(2)
+
+        # top and bottom fliers
+        # (set allows us to set many parameters at once)
+        # bp['fliers'][i].set(marker='x', markersize=3, markeredgecolor=colors2[i+2])
+        bp['medians'][i].set_color('black')
+        bp['medians'][i].set_linewidth(2)
+        bp['medians'][i].set_solid_capstyle('butt')
+
+    # and 4 caps to remove
+    for c in bp['caps']:
+        c.set_linewidth(0)
+    for i in range(len(bp['boxes'])):
+        box = bp['boxes'][i]
+        box.set_linewidth(0)
+        boxX = []
+        boxY = []
+        for j in range(5):
+            boxX.append(box.get_xdata()[j])
+            boxY.append(box.get_ydata()[j])
+        boxCoords = np.array([boxX, boxY]).T
+        boxPolygon = Polygon(boxCoords, facecolor=colors2[i + 2], linewidth=0)
+        axes.add_patch(boxPolygon)
+
+    for p, val in enumerate(pos_list):
+        axes.plot([p - 0.5*width/2, p + 0.5*width/2], [np.median(val), np.median(val)], c='k')
+    axes.get_xaxis().tick_bottom()
+    axes.get_yaxis().tick_left()
+    axes.tick_params(axis='x', direction='out')
+    axes.tick_params(axis='y', length=0)
+    axes.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
+    axes.set_axisbelow(True)
+    axes.set_xticks(list(range(len(pos_list))))
+    axes.set_xticklabels(['Control', 'SWING'])
+    axes.set_ylim([y_min*1.2, y_max*1.2])
+
 #NOTES FROM JIA
 """
 Some columns are labeled as RF-td_2, RF-td10, RF-ml_1, etc.
@@ -330,8 +480,8 @@ if __name__ == "__main__":
         'ytick.labelsize': 16,
         'text.usetex': False,
     }
-    bmap = brewer2mpl.get_map('Set2', 'qualitative', 7)
-    colors = bmap.mpl_colors
+    colors1 = brewer2mpl.get_map('Set1', 'qualitative', 8).mpl_colors
+    colors2 = brewer2mpl.get_map('Set2', 'qualitative', 8).mpl_colors
     rcParams.update(params)
     m = ['Dionesus', 'RF']
     rd = {'Dionesus': 'D', 'RF': 'RF'}
@@ -351,139 +501,62 @@ if __name__ == "__main__":
     network_size = 10
 
     # Parameter ml_4 includes the expected lag and has high enrichment. To keep things simpler I will use this
-    for score in scores:
+    for kk, score in enumerate(scores):
         f = plt.figure(figsize=(8, 8))
+        g = plt.figure(figsize=(8, 8))
+        h = plt.figure(figsize=(6, 8))
         for ii, method in enumerate(m):
             for jj, model in enumerate(mod):
                 axnum = ii * 2 + jj + 1
 
                 # Add subplot
                 ax = f.add_subplot(len(m), len(mod), axnum)
+                gax = g.add_subplot(len(m), len(mod), axnum)
+                hax = h.add_subplot(len(m), len(mod), axnum)
                 if axnum == 1:
                     ax.set_title(model)
                     ax.set_ylabel(method)
+                    gax.set_title(model)
+                    gax.set_ylabel(method)
+                    hax.set_title(model)
+                    hax.set_ylabel(method)
                 elif axnum == 2:
                     ax.set_title(model)
+                    gax.set_title(model)
+                    hax.set_title(model)
                 elif axnum == 3:
                     ax.set_ylabel(method)
-
+                    gax.set_ylabel(method)
+                    hax.set_ylabel(method)
                 # Retrieve/Calculate plotting data
-                num_te = len(summary[method][model]['te_change'])
                 control = summary[method][model][score].iloc[:, 0]
                 test = summary[method][model][score][(rd[method]+'-ml_4')]
                 p_value = ttest_rel(control, test).pvalue
-                x_array = np.array([[1] * len(control), [2] * len(control)])
-                y_array = [control, test]
-                y_max = np.max(y_array, axis=None)
-                y_min = np.min(y_array, axis=None)
+                rank = summary[method][model]['te_rank']
+                change = summary[method][model]['te_change']
+                plot_rank_change(gax, rank, 'Base_'+rd[method], rd[method]+'-ml_4')
+                ax = plot_scores(ax, control, test, p_value, network_size, len(change))
+                plot_diff_distribution(hax, change, rd[method]+'-ml_4')
 
-                # Plot the paired lines
-                ax.plot(x_array, y_array, '.-', c='k', alpha=0.4, zorder=1)
+        f.tight_layout()
 
-                # Add null model comparison
-                if score == 'aupr':
-                    avg_expected_aupr = num_te/len(control)/(network_size*network_size-network_size)
-                    ax.plot([0.5, 2.5], [avg_expected_aupr, avg_expected_aupr], c='k', lw=1, ls='--', zorder=0)
-                    ax.set_ylim([min(y_min, 0.17) - 0.05, y_max + 0.05])
-                else:
-                    ax.plot([0.5, 2.5], [0.5, 0.5], c='k', lw=1, ls='--')
-                    ax.set_ylim([min(y_min, 0.5)-0.05, y_max+0.05])
-
-                # Add the boxplots
-                bp = ax.boxplot([control, test])
-                s = stars(p_value)
-                if p_value < 0.05:
-                    ax.annotate("", xy=(1, y_max + .005), xycoords='data', xytext=(2, y_max + .005), textcoords='data',
-                                arrowprops=dict(arrowstyle="-", ec='k', connectionstyle="bar,fraction=0.03"))
-                    ax.text(1.5, y_max+.02, s, horizontalalignment='center', verticalalignment='center')
-
-                for i in range(len(bp['boxes'])):
-                    bp['boxes'][i].set_color(colors[i])
-
-                    # we have two whiskers!
-                    bp['whiskers'][i * 2].set_color(colors[i])
-                    bp['whiskers'][i * 2 + 1].set_color(colors[i])
-                    bp['whiskers'][i * 2].set_linewidth(2)
-                    bp['whiskers'][i * 2 + 1].set_linewidth(2)
-
-                    # top and bottom fliers
-                    # (set allows us to set many parameters at once)
-                    bp['fliers'][i].set(marker='x', markersize=3,  markeredgecolor=colors[i])
-                    bp['medians'][i].set_color('black')
-                    bp['medians'][i].set_linewidth(2)
-
-                # and 4 caps to remove
-                for c in bp['caps']:
-                    c.set_linewidth(0)
-                for i in range(len(bp['boxes'])):
-                    box = bp['boxes'][i]
-                    box.set_linewidth(0)
-                    boxX = []
-                    boxY = []
-                    for j in range(5):
-                        boxX.append(box.get_xdata()[j])
-                        boxY.append(box.get_ydata()[j])
-                    boxCoords = np.array([boxX, boxY]).T
-                    boxPolygon = Polygon(boxCoords, facecolor=colors[i], linewidth=0)
-                    ax.add_patch(boxPolygon)
-                # ax.spines['top'].set_visible(False)
-                # ax.spines['right'].set_visible(False)
-                # ax.spines['left'].set_visible(False)
-                ax.get_xaxis().tick_bottom()
-                ax.get_yaxis().tick_left()
-                ax.tick_params(axis='x', direction='out')
-                ax.tick_params(axis='y', length=0)
-                ax.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
-                ax.set_axisbelow(True)
-                ax.set_xticklabels(['Control', 'SWING'])
-
-        plt.tight_layout()
+        plt.close(f)
+        plt.close(g)
+        if kk > 0:
+            plt.close(h)
+        plt.close(h)
+        # plt.show()
         filename = '../manuscript/Figures/gnw_improvement_%s.pdf' % score
-        plt.savefig(filename, fmt='pdf')
+        # plt.savefig(filename, fmt='pdf')
 
 
-    nl = summary['RF']['te_change'][(summary['RF']['te_change']["Lag"] == 0)]
-    l = summary['RF']['te_change'][(summary['RF']['te_change']["Lag"] > 0)]
-    for lag in set(summary['RF']['te_change']["Lag"]):
-        data = summary['RF']['te_change']['RF-ml_4'][summary['RF']['te_change']['Lag'] == lag]
-        if len(data) >= 3:
-            vp = plt.violinplot(data, positions=[lag], showmedians=False, showextrema=False)
-            for pc in vp['bodies']:
-                pc.set_facecolor('c')
-                pc.set_edgecolor('w')
-                pc.set_alpha(1)
-            plt.plot([lag-0.1, lag+0.1], [np.median(data), np.median(data)], c='k')
-    plt.xlim([-1, 6])
-    plt.ylim([-90, 90])
-    plt.show()
-    sys.exit()
-    distros = [np.mean(l['RF-ml_4'][l['Lag']==lag]) for lag in set(l["Lag"])]
-    plt.plot(np.arange(1, 9), distros)
-    # plt.boxplot(distros, positions=np.arange(8))
-    plt.show()
-    sys.exit()
-    print(np.median(l.iloc[:, 2:], axis=0))
-    print(np.median(l.iloc[:, 2:], axis=0) - np.median(nl.iloc[:, 2:], axis=0))
-    cond = 'RF-ml_4'
-    plt.plot([0.5, 2.5], [0, 0], c='k', lw=1)
-    vp = plt.violinplot([nl[cond].values, l[cond].values], showextrema=False, widths=0.75, points=200)
-    for pc in vp['bodies']:
-        pc.set_facecolor('c')
-        pc.set_edgecolor('w')
-    plt.plot([0.75, 1.25], [np.median(nl[cond].values), np.median(nl[cond].values)], c='k', lw=3)
-    plt.plot([1.75, 2.25], [np.median(l[cond].values), np.median(l[cond].values)], c='k', lw=3)
-    ax = plt.gca()
-    ax.set_axis_bgcolor('w')
-    plt.show()
-    print(mannwhitneyu(nl[cond].values, l[cond].values))
+    # Look at one specific network. Ecoli15 has the most increase in AUROC)
+    gs = '../data/gnw_insilico/network_data/Ecoli/Ecoli-1_goldstandard.tsv'
+    ee = Evaluator(gs, sep ='\t')
 
-    plt.figure(figsize=(5, 10))
-    ax = sns.swarmplot(data=[nl[cond].values, l[cond].values], size=5)
-    ax.plot([-0.10, 0.10], [np.median(nl[cond].values), np.median(nl[cond].values)], c='k', lw=3, zorder=10)
-    ax.plot([0.90, 1.10], [np.median(l[cond].values), np.median(l[cond].values)], c='k', lw=3, zorder=10)
-    ax.set_axis_bgcolor('w')
-    plt.show()
-
+    print(summary['RF']['Ecoli'][15].keys())
+    print(summary['RF']['Ecoli'][15]['conditions'])
+    print(summary['RF']['Ecoli'][15]['enrich_pvals'])
 
 
 
