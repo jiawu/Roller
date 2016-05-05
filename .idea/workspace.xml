@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="Plot score increase when using SWING">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/manuscript/Figures/gnw_improvement_aupr.pdf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/manuscript/Figures/gnw_improvement_auroc.pdf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/manuscript/Figures/true_lag_ecoli10_0.1_0.3.pdf" afterPath="$PROJECT_DIR$/manuscript/Figures/true_lag_ecoli10_0.1_0.3.pdf" />
+    <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/manuscript/Figures/gnw_improvement_aupr.pdf" afterPath="$PROJECT_DIR$/manuscript/Figures/gnw_improvement_aupr.pdf" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/swing.iml" afterPath="$PROJECT_DIR$/.idea/swing.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Swing/util/Evaluator.py" afterPath="$PROJECT_DIR$/Swing/util/Evaluator.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/edge_promotion.ipynb" afterPath="$PROJECT_DIR$/scripts/edge_promotion.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/edge_promotion.py" afterPath="$PROJECT_DIR$/scripts/edge_promotion.py" />
     </list>
     <ignored path="Roller.iws" />
@@ -32,28 +32,30 @@
       <file leaf-file-name="lag_identification.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Swing/util/lag_identification.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state relative-caret-position="2505">
               <caret line="175" column="0" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="edge_promotion.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="421">
+              <caret line="554" column="31" selection-start-line="554" selection-start-column="31" selection-end-line="554" selection-end-column="31" />
               <folding>
-                <marker date="1462309512000" expanded="true" signature="988:1357" placeholder="..." />
-                <marker date="1462309512000" expanded="true" signature="993:1192" placeholder="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-                <marker date="1462309512000" expanded="true" signature="1390:1907" placeholder="..." />
-                <marker date="1462309512000" expanded="true" signature="1395:1523" placeholder="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-                <marker date="1462309512000" expanded="true" signature="1980:3378" placeholder="..." />
-                <marker date="1462309512000" expanded="true" signature="1985:2118" placeholder="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-                <marker date="1462309512000" expanded="true" signature="3416:3606" placeholder="..." />
-                <marker date="1462309512000" expanded="true" signature="3651:4266" placeholder="..." />
-                <marker date="1462309512000" expanded="true" signature="3656:3911" placeholder="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+                <element signature="e#6736#13485#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="edge_promotion.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.py">
+      <file leaf-file-name="Evaluator.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Swing/util/Evaluator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.23149905">
-              <caret line="441" column="8" selection-start-line="441" selection-start-column="8" selection-end-line="441" selection-end-column="8" />
+            <state relative-caret-position="45">
+              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -62,7 +64,7 @@
       <file leaf-file-name="gnw_generate_data.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/gnw_insilico/gnw_generate_data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state relative-caret-position="945">
               <caret line="63" column="41" selection-start-line="63" selection-start-column="41" selection-end-line="63" selection-end-column="41" />
               <folding>
                 <element signature="e#71#81#0" expanded="true" />
@@ -120,13 +122,15 @@
         <option value="$PROJECT_DIR$/scripts/edge_promotion.ipynb" />
         <option value="$PROJECT_DIR$/Swing/util/lag_identification.py" />
         <option value="$PROJECT_DIR$/scripts/edge_promotion.py" />
+        <option value="$PROJECT_DIR$/Swing/util/Evaluator.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="-1280" />
     <option name="y" value="23" />
     <option name="width" value="1280" />
-    <option name="height" value="773" />
+    <option name="height" value="997" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -215,6 +219,38 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Figures" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="swing" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Roller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Swing" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="swing" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Roller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Swing" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="util" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -490,7 +526,9 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -499,303 +537,353 @@
       <changelist id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="" />
       <created>1413916753036</created>
       <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
       <updated>1413916753036</updated>
-    </task>
-    <task id="LOCAL-00121" summary="tdRoller testing moved to script. Roller __init__ updated">
-      <created>1436994457809</created>
-      <option name="number" value="00121" />
-      <option name="project" value="LOCAL" />
-      <updated>1436994457809</updated>
     </task>
     <task id="LOCAL-00122" summary="testing code fully removed from tdRoller">
       <created>1436994485405</created>
       <option name="number" value="00122" />
+      <option name="presentableId" value="LOCAL-00122" />
       <option name="project" value="LOCAL" />
       <updated>1436994485405</updated>
     </task>
     <task id="LOCAL-00123" summary="Added basic script for running tdRoller">
       <created>1437058285966</created>
       <option name="number" value="00123" />
+      <option name="presentableId" value="LOCAL-00123" />
       <option name="project" value="LOCAL" />
       <updated>1437058285966</updated>
     </task>
     <task id="LOCAL-00124" summary="Updated tdRFR method run_permutation()">
       <created>1437060019658</created>
       <option name="number" value="00124" />
+      <option name="presentableId" value="LOCAL-00124" />
       <option name="project" value="LOCAL" />
       <updated>1437060019658</updated>
     </task>
     <task id="LOCAL-00125" summary="Updated tdRFR to run permutation test properly">
       <created>1437061423354</created>
       <option name="number" value="00125" />
+      <option name="presentableId" value="LOCAL-00125" />
       <option name="project" value="LOCAL" />
       <updated>1437061423354</updated>
     </task>
     <task id="LOCAL-00126" summary="Minor adjustments to tdRFR window behavior">
       <created>1437083377673</created>
       <option name="number" value="00126" />
+      <option name="presentableId" value="LOCAL-00126" />
       <option name="project" value="LOCAL" />
       <updated>1437083377673</updated>
     </task>
     <task id="LOCAL-00127" summary="Modified tdRoller.augment_windows() so that lag length can be set">
       <created>1437150027753</created>
       <option name="number" value="00127" />
+      <option name="presentableId" value="LOCAL-00127" />
       <option name="project" value="LOCAL" />
       <updated>1437150027753</updated>
     </task>
     <task id="LOCAL-00128" summary="Minor adjustments and testing">
       <created>1437163109137</created>
       <option name="number" value="00128" />
+      <option name="presentableId" value="LOCAL-00128" />
       <option name="project" value="LOCAL" />
       <updated>1437163109137</updated>
     </task>
     <task id="LOCAL-00129" summary="added make_possible_edge_list() to Roller">
       <created>1437165932226</created>
       <option name="number" value="00129" />
+      <option name="presentableId" value="LOCAL-00129" />
       <option name="project" value="LOCAL" />
       <updated>1437165932226</updated>
     </task>
     <task id="LOCAL-00130" summary="tdRoller now accounts for edges that don't have meaningful importance scores">
       <created>1437169105785</created>
       <option name="number" value="00130" />
+      <option name="presentableId" value="LOCAL-00130" />
       <option name="project" value="LOCAL" />
       <updated>1437169105785</updated>
     </task>
     <task id="LOCAL-00131" summary="Basic plotting added to make a figure for Neda">
       <created>1437363214546</created>
       <option name="number" value="00131" />
+      <option name="presentableId" value="LOCAL-00131" />
       <option name="project" value="LOCAL" />
       <updated>1437363214547</updated>
     </task>
     <task id="LOCAL-00132" summary="Basic plotting added to make a figure for Neda. Mostly useless">
       <created>1437404670742</created>
       <option name="number" value="00132" />
+      <option name="presentableId" value="LOCAL-00132" />
       <option name="project" value="LOCAL" />
       <updated>1437404670742</updated>
     </task>
     <task id="LOCAL-00133" summary="Added edge ranking">
       <created>1442854190511</created>
       <option name="number" value="00133" />
+      <option name="presentableId" value="LOCAL-00133" />
       <option name="project" value="LOCAL" />
       <updated>1442854190511</updated>
     </task>
     <task id="LOCAL-00134" summary="Edges are now ranked based on adjusted importance score (adj_imp), which is weighted by p_value">
       <created>1442874245616</created>
       <option name="number" value="00134" />
+      <option name="presentableId" value="LOCAL-00134" />
       <option name="project" value="LOCAL" />
       <updated>1442874245616</updated>
     </task>
     <task id="LOCAL-00135" summary="Fix method for getting coefficients&#10;&#10;The get_coeffs method did not function correctly for minimum lags greater than zero.  Changes to the function _fitstack_coeffs were necessary as well">
       <created>1445978747468</created>
       <option name="number" value="00135" />
+      <option name="presentableId" value="LOCAL-00135" />
       <option name="project" value="LOCAL" />
       <updated>1445978747472</updated>
     </task>
     <task id="LOCAL-00136" summary="Add MSE calculations during model building in tdRFRWindow&#10;&#10;If the MSE of the full model is lower than the MSE of the model without the particular explanatory variable, then that edge should be in the model. If it is not higher than it should be eliminated.">
       <created>1446050137021</created>
       <option name="number" value="00136" />
+      <option name="presentableId" value="LOCAL-00136" />
       <option name="project" value="LOCAL" />
       <updated>1446050137021</updated>
     </task>
     <task id="LOCAL-00137" summary="Fix window labelling issue when making the edge table">
       <created>1446056755233</created>
       <option name="number" value="00137" />
+      <option name="presentableId" value="LOCAL-00137" />
       <option name="project" value="LOCAL" />
       <updated>1446056755233</updated>
     </task>
     <task id="LOCAL-00138" summary="Fix mse calculations when allowing min lag of 0">
       <created>1446070496948</created>
       <option name="number" value="00138" />
+      <option name="presentableId" value="LOCAL-00138" />
       <option name="project" value="LOCAL" />
       <updated>1446070496949</updated>
     </task>
     <task id="LOCAL-00139" summary="Fix function options to calculate mse when desired&#10;&#10;The argument calc_mse gets passed through many objects and functions, but the code should run faster when that is set to False. The MSE calculations will be skipped">
       <created>1446072578675</created>
       <option name="number" value="00139" />
+      <option name="presentableId" value="LOCAL-00139" />
       <option name="project" value="LOCAL" />
       <updated>1446072578675</updated>
     </task>
     <task id="LOCAL-00140" summary="Test window size selection in ipython notebook">
       <created>1452476885638</created>
       <option name="number" value="00140" />
+      <option name="presentableId" value="LOCAL-00140" />
       <option name="project" value="LOCAL" />
       <updated>1452476885640</updated>
     </task>
     <task id="LOCAL-00141" summary="JDF start exploring Dream8 data">
       <created>1452478602112</created>
       <option name="number" value="00141" />
+      <option name="presentableId" value="LOCAL-00141" />
       <option name="project" value="LOCAL" />
       <updated>1452478602112</updated>
     </task>
     <task id="LOCAL-00142" summary="Compare DREAM8 and DREAM4 data">
       <created>1452481027304</created>
       <option name="number" value="00142" />
+      <option name="presentableId" value="LOCAL-00142" />
       <option name="project" value="LOCAL" />
       <updated>1452481027304</updated>
     </task>
     <task id="LOCAL-00143" summary="Add uniform and nonuniform sampling for Dream4">
       <created>1452884791694</created>
       <option name="number" value="00143" />
+      <option name="presentableId" value="LOCAL-00143" />
       <option name="project" value="LOCAL" />
       <updated>1452884791694</updated>
     </task>
     <task id="LOCAL-00144" summary="Add autocorrelation and lag order selection ipynb">
       <created>1453403301650</created>
       <option name="number" value="00144" />
+      <option name="presentableId" value="LOCAL-00144" />
       <option name="project" value="LOCAL" />
       <updated>1453403301651</updated>
     </task>
     <task id="LOCAL-00145" summary="Test high sampling&#10;&#10;Need a more robust way to determine where the true lag is. This fails for high sampling, but visually there is a clear way to tell.">
       <created>1456367070508</created>
       <option name="number" value="00145" />
+      <option name="presentableId" value="LOCAL-00145" />
       <option name="project" value="LOCAL" />
       <updated>1456367070509</updated>
     </task>
     <task id="LOCAL-00146" summary="Try polyfit for lag identification&#10;&#10;Does not appear very effective. Noise doesn't lower the R2 enough to eliminate noisy lines.">
       <created>1456512881316</created>
       <option name="number" value="00146" />
+      <option name="presentableId" value="LOCAL-00146" />
       <option name="project" value="LOCAL" />
       <updated>1456512881317</updated>
     </task>
     <task id="LOCAL-00147" summary="Use sign changes for signal filtering&#10;&#10;In combination with signal max it seems to eliminate noisy signals.  There should be fewer sign changes for a good signal because it doesn't vary as widely. Need to try on high sampled data">
       <created>1457365939865</created>
       <option name="number" value="00147" />
+      <option name="presentableId" value="LOCAL-00147" />
       <option name="project" value="LOCAL" />
       <updated>1457365939866</updated>
     </task>
     <task id="LOCAL-00148" summary="Use sign changes for signal filtering&#10;&#10;In combination with signal max it seems to eliminate noisy signals.  There should be fewer sign changes for a good signal because it doesn't vary as widely. Need to try on high sampled data">
       <created>1457562697876</created>
       <option name="number" value="00148" />
+      <option name="presentableId" value="LOCAL-00148" />
       <option name="project" value="LOCAL" />
       <updated>1457562697876</updated>
     </task>
     <task id="LOCAL-00149" summary="Start lag identification module">
       <created>1457563010544</created>
       <option name="number" value="00149" />
+      <option name="presentableId" value="LOCAL-00149" />
       <option name="project" value="LOCAL" />
       <updated>1457563010544</updated>
     </task>
     <task id="LOCAL-00150" summary="Port code from ipython notebook into lag ident module">
       <created>1457563421706</created>
       <option name="number" value="00150" />
+      <option name="presentableId" value="LOCAL-00150" />
       <option name="project" value="LOCAL" />
       <updated>1457563421706</updated>
     </task>
     <task id="LOCAL-00151" summary="Start looking at edge promotion from SWING">
       <created>1457563892660</created>
       <option name="number" value="00151" />
+      <option name="presentableId" value="LOCAL-00151" />
       <option name="project" value="LOCAL" />
       <updated>1457563892660</updated>
     </task>
     <task id="LOCAL-00152" summary="Functionalize lag identification process">
       <created>1457637276065</created>
       <option name="number" value="00152" />
+      <option name="presentableId" value="LOCAL-00152" />
       <option name="project" value="LOCAL" />
       <updated>1457637276065</updated>
     </task>
     <task id="LOCAL-00153" summary="Set up plotting for lag identification">
       <created>1457639523312</created>
       <option name="number" value="00153" />
+      <option name="presentableId" value="LOCAL-00153" />
       <option name="project" value="LOCAL" />
       <updated>1457639523312</updated>
     </task>
     <task id="LOCAL-00154" summary="Start visualization of edge promotion">
       <created>1457979086098</created>
       <option name="number" value="00154" />
+      <option name="presentableId" value="LOCAL-00154" />
       <option name="project" value="LOCAL" />
       <updated>1457979086098</updated>
     </task>
     <task id="LOCAL-00155" summary="Functionalize edge promotion code">
       <created>1458242683657</created>
       <option name="number" value="00155" />
+      <option name="presentableId" value="LOCAL-00155" />
       <option name="project" value="LOCAL" />
       <updated>1458242683658</updated>
     </task>
     <task id="LOCAL-00156" summary="Generate 100 node networks for yeast and E coli.&#10;&#10;Code modified to work for Python 3">
       <created>1458759375771</created>
       <option name="number" value="00156" />
+      <option name="presentableId" value="LOCAL-00156" />
       <option name="project" value="LOCAL" />
       <updated>1458759375774</updated>
     </task>
     <task id="LOCAL-00157" summary="Start network creation where it was halted">
       <created>1458920615070</created>
       <option name="number" value="00157" />
+      <option name="presentableId" value="LOCAL-00157" />
       <option name="project" value="LOCAL" />
       <updated>1458920615070</updated>
     </task>
     <task id="LOCAL-00158" summary="Work on edge promotion and lag trends&#10;&#10;SWING enriches promotion of lagged edges in Yeast networks, but not Ecoli.">
       <created>1460564057944</created>
       <option name="number" value="00158" />
+      <option name="presentableId" value="LOCAL-00158" />
       <option name="project" value="LOCAL" />
       <updated>1460564057945</updated>
     </task>
     <task id="LOCAL-00159" summary="Try averaging/weighting across different parameters.&#10;&#10;Not terribly significant">
       <created>1460650864060</created>
       <option name="number" value="00159" />
+      <option name="presentableId" value="LOCAL-00159" />
       <option name="project" value="LOCAL" />
       <updated>1460650864060</updated>
     </task>
     <task id="LOCAL-00160" summary="Commit before transitioning to ipynb&#10;&#10;Need to make a meaningful edge promotion figure.">
       <created>1460746106432</created>
       <option name="number" value="00160" />
+      <option name="presentableId" value="LOCAL-00160" />
       <option name="project" value="LOCAL" />
       <updated>1460746106434</updated>
     </task>
     <task id="LOCAL-00161" summary="Start ipynb and move lag_identification to util">
       <created>1460748793205</created>
       <option name="number" value="00161" />
+      <option name="presentableId" value="LOCAL-00161" />
       <option name="project" value="LOCAL" />
       <updated>1460748793205</updated>
     </task>
     <task id="LOCAL-00162" summary="Revert promotion pickles to previous version&#10;&#10;They were replaced by dionesus pickles">
       <created>1460992629285</created>
       <option name="number" value="00162" />
+      <option name="presentableId" value="LOCAL-00162" />
       <option name="project" value="LOCAL" />
       <updated>1460992629285</updated>
     </task>
     <task id="LOCAL-00163" summary="Renamed promotion pickles to RF promotion&#10;&#10;To avoid future confusion">
       <created>1460994180456</created>
       <option name="number" value="00163" />
+      <option name="presentableId" value="LOCAL-00163" />
       <option name="project" value="LOCAL" />
       <updated>1460994180456</updated>
     </task>
     <task id="LOCAL-00164" summary="Edge promotion cleanup in ipynb">
       <created>1461009426422</created>
       <option name="number" value="00164" />
+      <option name="presentableId" value="LOCAL-00164" />
       <option name="project" value="LOCAL" />
       <updated>1461009426422</updated>
     </task>
     <task id="LOCAL-00165" summary="Make usable edge promotion data structures in ipynb">
       <created>1461162661679</created>
       <option name="number" value="00165" />
+      <option name="presentableId" value="LOCAL-00165" />
       <option name="project" value="LOCAL" />
       <updated>1461162661680</updated>
     </task>
     <task id="LOCAL-00166" summary="Summarize edge promotion at each level&#10;&#10;Method, model organism, network. See ipynb for details">
       <created>1461946914890</created>
       <option name="number" value="00166" />
+      <option name="presentableId" value="LOCAL-00166" />
       <option name="project" value="LOCAL" />
       <updated>1461946914890</updated>
     </task>
     <task id="LOCAL-00167" summary="Migrate edge promotion work to python script from ipynb">
       <created>1462303732489</created>
       <option name="number" value="00167" />
+      <option name="presentableId" value="LOCAL-00167" />
       <option name="project" value="LOCAL" />
       <updated>1462303732492</updated>
     </task>
     <task id="LOCAL-00168" summary="Make lag identification figures">
       <created>1462309543443</created>
       <option name="number" value="00168" />
+      <option name="presentableId" value="LOCAL-00168" />
       <option name="project" value="LOCAL" />
       <updated>1462309543443</updated>
     </task>
     <task id="LOCAL-00169" summary="Add lag identification figures">
       <created>1462309567043</created>
       <option name="number" value="00169" />
+      <option name="presentableId" value="LOCAL-00169" />
       <option name="project" value="LOCAL" />
       <updated>1462309567043</updated>
     </task>
-    <option name="localTasksCounter" value="170" />
+    <task id="LOCAL-00170" summary="Plot score increase when using SWING">
+      <created>1462380930450</created>
+      <option name="number" value="00170" />
+      <option name="presentableId" value="LOCAL-00170" />
+      <option name="project" value="LOCAL" />
+      <updated>1462380930452</updated>
+    </task>
+    <option name="localTasksCounter" value="171" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -824,16 +912,15 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="773" extended-state="6" />
-    <editor active="false" />
+    <frame x="-1280" y="23" width="1280" height="997" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1625" sideWeight="0.6923077" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.324861" sideWeight="0.6923077" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33015874" sideWeight="0.50080776" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32423207" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19616519" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18141593" sideWeight="0.49919224" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30533484" sideWeight="0.49919224" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23351866" sideWeight="0.30769232" order="2" side_tool="true" content_ui="tabs" />
@@ -846,6 +933,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32423207" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -883,7 +971,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Test high sampling&#10;&#10;Need a more robust way to determine where the true lag is. This fails for high sampling, but visually there is a clear way to tell." />
     <MESSAGE value="Try polyfit for lag identification&#10;&#10;Does not appear very effective. Noise doesn't lower the R2 enough to eliminate noisy lines." />
     <MESSAGE value="Use sign changes for signal filtering&#10;&#10;In combination with signal max it seems to eliminate noisy signals.  There should be fewer sign changes for a good signal because it doesn't vary as widely. Need to try on high sampled data" />
     <MESSAGE value="Start lag identification module" />
@@ -908,7 +995,8 @@
     <MESSAGE value="Migrate edge promotion work to python script from ipynb" />
     <MESSAGE value="Make lag identification figures" />
     <MESSAGE value="Add lag identification figures" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add lag identification figures" />
+    <MESSAGE value="Plot score increase when using SWING" />
+    <option name="LAST_COMMIT_MESSAGE" value="Plot score increase when using SWING" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.10526317" />
   </component>
   <component name="XDebuggerManager">
@@ -947,15 +1035,17 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#6736#13485#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data/gnw_insilico/gnw_generate_data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="63" column="41" selection-start-line="63" selection-start-column="41" selection-end-line="63" selection-end-column="41" />
           <folding>
             <element signature="e#71#81#0" expanded="true" />
@@ -965,7 +1055,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/data/gnw_insilico/gnw_generate_data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#71#81#0" expanded="true" />
@@ -975,266 +1065,266 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Swing/Swing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="675" column="38" selection-start-line="675" selection-start-column="31" selection-end-line="675" selection-end-column="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Swing/DionesusWindow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="61" column="70" selection-start-line="60" selection-start-column="8" selection-end-line="61" selection-end-column="70" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Swing/util/Evaluator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Swing/RFRWindow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Swing/Window.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="314" column="13" selection-start-line="314" selection-start-column="8" selection-end-line="314" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Swing/Swing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="675" column="38" selection-start-line="675" selection-start-column="31" selection-end-line="675" selection-end-column="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="34" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Swing/DionesusWindow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="61" column="70" selection-start-line="60" selection-start-column="8" selection-end-line="61" selection-end-column="70" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Swing/util/Evaluator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Swing/Window.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="34" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Swing/DionesusWindow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="61" column="70" selection-start-line="60" selection-start-column="8" selection-end-line="61" selection-end-column="70" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Swing/util/Evaluator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Swing/Window.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pipelines/run_pipeline_dionesus_window_scan_10.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="36" column="50" selection-start-line="36" selection-start-column="50" selection-end-line="36" selection-end-column="50" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/goldbetter_model/goldbetter_data.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="1" column="69" selection-start-line="0" selection-start-column="86" selection-end-line="1" selection-end-column="69" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/archive/run_test_pipeline.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="18" column="32" selection-start-line="18" selection-start-column="32" selection-end-line="18" selection-end-column="32" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/granger_testing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/goldbetter_model/goldbetter_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Swing/util/utility_module.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="144" column="44" selection-start-line="142" selection-start-column="4" selection-end-line="144" selection-end-column="44" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pipelines/run_pipeline_dionesus_window_scan_10.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Swing/Window.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="361" column="0" selection-start-line="362" selection-start-column="8" selection-end-line="362" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Swing/Swing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="684" column="38" selection-start-line="684" selection-start-column="31" selection-end-line="684" selection-end-column="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Swing/DionesusWindow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="52" column="22" selection-start-line="52" selection-start-column="22" selection-end-line="52" selection-end-column="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pipelines/Pipelines.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="8" column="28" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="34" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150719_tdRoller_basic figure.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150715_lag_testing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="5" column="18" selection-start-line="5" selection-start-column="18" selection-end-line="5" selection-end-column="18" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/archive/run_emt_roller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="0">
           <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="26" />
         </state>
       </provider>
@@ -1254,9 +1344,48 @@
       </provider>
     </entry>
     <entry file="file:///anaconda/lib/python2.7/site-packages/pandas/io/pickle.py" />
+    <entry file="file://$PROJECT_DIR$/Swing/RFRWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Swing/util/aupr.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Swing/util/lag_identification.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2505">
+          <caret line="175" column="0" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="421">
+          <caret line="554" column="31" selection-start-line="554" selection-start-column="31" selection-end-line="554" selection-end-column="31" />
+          <folding>
+            <element signature="e#6736#13485#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/data/gnw_insilico/gnw_generate_data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state relative-caret-position="945">
           <caret line="63" column="41" selection-start-line="63" selection-start-column="41" selection-end-line="63" selection-end-column="41" />
           <folding>
             <element signature="e#71#81#0" expanded="true" />
@@ -1264,56 +1393,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Swing/RFRWindow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Swing/util/Evaluator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Swing/util/aupr.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Swing/util/lag_identification.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="175" column="0" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
-          <folding>
-            <marker date="1462309512000" expanded="true" signature="988:1357" placeholder="..." />
-            <marker date="1462309512000" expanded="true" signature="993:1192" placeholder="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1462309512000" expanded="true" signature="1390:1907" placeholder="..." />
-            <marker date="1462309512000" expanded="true" signature="1395:1523" placeholder="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1462309512000" expanded="true" signature="1980:3378" placeholder="..." />
-            <marker date="1462309512000" expanded="true" signature="1985:2118" placeholder="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1462309512000" expanded="true" signature="3416:3606" placeholder="..." />
-            <marker date="1462309512000" expanded="true" signature="3651:4266" placeholder="..." />
-            <marker date="1462309512000" expanded="true" signature="3656:3911" placeholder="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23149905">
-          <caret line="441" column="8" selection-start-line="441" selection-start-column="8" selection-end-line="441" selection-end-column="8" />
+        <state relative-caret-position="45">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding />
         </state>
       </provider>
