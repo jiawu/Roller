@@ -55,6 +55,7 @@ class Swing(object):
 
         self.crag = False
         self.calc_mse = False
+        self.tf_list = None
 
         # Get overall width of the time-course
         self.time_vec = self.raw_data[self.time_label].unique()
@@ -234,6 +235,65 @@ class Swing(object):
             raw_window = self.get_window_raw(index, random_time)
             if explanatory_indices is not None:
                 explanatory_dict, response_dict = self.get_window_data(index, explanatory_indices)
+                window_info = {"time_label": self.time_label, "gene_start": self.gene_start, "gene_end": self.gene_end,
+                               "nth_window": index}
+                window_object = self.get_window_object(raw_window, window_info, td_window, explanatory_dict,
+                                                       response_dict)
+                window_list.append(window_object)
+
+        self.window_list = window_list
+
+    def create_custom_windows(self, tf_list,random_time=False):
+        """
+        Create window objects for the roller to use, with set explanatory variables (such as TFs)
+
+        Called by:
+            pipeline
+
+        :return:
+        """
+        #tf_list = ['CBF1','SWI5','ASH1', 'GAL4', 'GAL80']
+        #tf_list = ['G1','G2','G3','G4','G5','G6','G7','G8','G9','G10']
+        # Initialize empty lists
+        window_list = []
+        self.tf_list=tf_list
+
+        # Check to make sure lags are valid if parameters have been changed
+        self.check_lags()
+
+        # If min_lag is 0 and max_lag is 0 then you don't need a tdWindow
+        if self.min_lag == 0 and self.max_lag == 0:
+            td_window = False
+        else:
+            td_window = True
+
+        # Generate possible windows using specified SWING parameters
+        for index in range(0, self.get_n_windows()):
+
+            # Confirm that the window will not be out of bounds
+            if (index + self.window_width) > self.overall_width:
+                raise Exception('Window created that is out of bounds based on parameters')
+
+            explanatory_indices = utility.get_explanatory_indices(index, min_lag=self.min_lag, max_lag=self.max_lag)
+            raw_window = self.get_window_raw(index, random_time)
+            if explanatory_indices is not None:
+                explanatory_dict, response_dict = self.get_window_data(index, explanatory_indices)
+
+                #remove information from explanatory window
+                to_remove = list(set(explanatory_dict['explanatory_labels'])-set(tf_list))
+                for removed_tf in to_remove:
+                    #remove from explanatory_labels
+                    removed_index = np.where(explanatory_dict['explanatory_labels'] == removed_tf)[0][0]
+                    explanatory_dict['explanatory_labels'] = np.delete(explanatory_dict['explanatory_labels'], removed_index)
+
+                    #explanatory_window
+                    explanatory_dict['explanatory_window'] = np.delete(explanatory_dict['explanatory_window'], removed_index)
+
+                    #explanatory_data
+                    explanatory_dict['explanatory_data'] = np.delete(explanatory_dict['explanatory_data'],removed_index,axis=1)
+                    # not explanatory_times
+
+
                 window_info = {"time_label": self.time_label, "gene_start": self.gene_start, "gene_end": self.gene_end,
                                "nth_window": index}
                 window_object = self.get_window_object(raw_window, window_info, td_window, explanatory_dict,
@@ -647,8 +707,12 @@ class Swing(object):
             df = df[df.Parent != df.Child]
         edge_set = set(df.Edge)
 
-        # Calculate the full set of potential edges
-        full_edge_set = set(utility.make_possible_edge_list(self.gene_list, self.gene_list, self_edges=self_edges))
+        # Calculate the full set of potential edges with TF list if it is provided.
+
+        if self.tf_list is not None:
+            full_edge_set = set(utility.make_possible_edge_list(np.array(self.tf_list), self.gene_list, self_edges=self_edges))
+        else:
+            full_edge_set = set(utility.make_possible_edge_list(self.gene_list, self.gene_list, self_edges=self_edges))
 
         # Identify edges that could exist, but do not appear in the inferred list
         edge_diff = full_edge_set.difference(edge_set)
@@ -657,7 +721,9 @@ class Swing(object):
         lag_importance_score, lag_lump_method = lag_method.split('_')
         score_method = eval('np.'+lag_importance_score)
         lump_method = eval('np.'+lag_lump_method)
-        for edge in full_edge_set:
+        for idx,edge in enumerate(full_edge_set):
+            if idx%1000 ==0:
+                print(str(idx)+" out of "+ str(len(full_edge_set)))
             if edge in edge_diff:
                 self.edge_dict[edge] = {"dataframe": None, "mean_importance": 0, 'real_edge': (edge in true_edges),
                                         "max_importance": 0, 'max_edge': None, 'lag_importance': 0,
