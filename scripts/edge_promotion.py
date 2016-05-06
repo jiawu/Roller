@@ -13,10 +13,13 @@ from nxpd import nxpdParams
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib import rcParams
+from matplotlib.path import Path
+import matplotlib.patches as patches
 from matplotlib.patches import Polygon
 import brewer2mpl
 # import seaborn as sns
-from scipy.stats import fisher_exact, linregress, ttest_rel, mannwhitneyu, ttest_ind
+from scipy.stats import fisher_exact, linregress, ttest_rel, mannwhitneyu, ttest_ind, pearsonr
+from scipy.special import logit
 
 
 def is_square(n):
@@ -304,6 +307,156 @@ def stars(p):
         return "-"
 
 
+def plot_scores(axes, ctrl, swing, pval, net_size, num_te):
+    x_array = np.array([[1] * len(ctrl), [2] * len(ctrl)])
+    y_array = [ctrl, swing]
+    y_max = np.max(y_array, axis=None)
+    y_min = np.min(y_array, axis=None)
+     # Plot the paired lines
+    axes.plot(x_array, y_array, '.-', c='k', alpha=0.4, zorder=1)
+
+    # Add null model comparison
+    if score == 'aupr':
+        avg_expected_aupr = num_te/len(ctrl)/(net_size**2-net_size)
+        axes.plot([0.5, 2.5], [avg_expected_aupr, avg_expected_aupr], c='k', lw=1, ls='--', zorder=0)
+        axes.set_ylim([min(y_min, 0.17) - 0.05, y_max + 0.05])
+    else:
+        axes.plot([0.5, 2.5], [0.5, 0.5], c='k', lw=1, ls='--')
+        axes.set_ylim([min(y_min, 0.5)-0.05, y_max+0.05])
+
+    # Add the boxplots
+    bp = axes.boxplot([ctrl, swing])
+    s = stars(pval)
+    if p_value < 0.05:
+        axes.annotate("", xy=(1, y_max + .005), xycoords='data', xytext=(2, y_max + .005), textcoords='data',
+                    arrowprops=dict(arrowstyle="-", ec='k', connectionstyle="bar,fraction=0.03"))
+        axes.text(1.5, y_max+.02, s, horizontalalignment='center', verticalalignment='center')
+
+    for i in range(len(bp['boxes'])):
+        bp['boxes'][i].set_color(colors2[i])
+
+        # we have two whiskers!
+        bp['whiskers'][i * 2].set_color(colors2[i])
+        bp['whiskers'][i * 2 + 1].set_color(colors2[i])
+        bp['whiskers'][i * 2].set_linewidth(2)
+        bp['whiskers'][i * 2 + 1].set_linewidth(2)
+
+        # top and bottom fliers
+        # (set allows us to set many parameters at once)
+        bp['fliers'][i].set(marker='x', markersize=3,  markeredgecolor=colors2[i])
+        bp['medians'][i].set_color('black')
+        bp['medians'][i].set_linewidth(2)
+        bp['medians'][i].set_solid_capstyle('butt')
+
+    # and 4 caps to remove
+    for c in bp['caps']:
+        c.set_linewidth(0)
+    for i in range(len(bp['boxes'])):
+        box = bp['boxes'][i]
+        box.set_linewidth(0)
+        boxX = []
+        boxY = []
+        for j in range(5):
+            boxX.append(box.get_xdata()[j])
+            boxY.append(box.get_ydata()[j])
+        boxCoords = np.array([boxX, boxY]).T
+        boxPolygon = Polygon(boxCoords, facecolor=colors2[i], linewidth=0)
+        axes.add_patch(boxPolygon)
+
+    # axes.spines['top'].set_visible(False)
+    # axes.spines['right'].set_visible(False)
+    # axes.spines['left'].set_visible(False)
+    axes.get_xaxis().tick_bottom()
+    axes.get_yaxis().tick_left()
+    axes.tick_params(axis='x', direction='out')
+    axes.tick_params(axis='y', length=0)
+    axes.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
+    axes.set_axisbelow(True)
+    axes.set_xticklabels(['Control', 'SWING'])
+
+    return axes
+
+
+def plot_rank_change(axes, ranking, ctrl_str, swing_str):
+    nl = ranking[ranking["Lag"] == 0]
+    l = ranking[ranking["Lag"] != 0]
+    axes.plot(nl[ctrl_str], nl[swing_str], '.', c='0.5', alpha=0.5, label='Not Lagged')
+    axes.plot(l[ctrl_str], l[swing_str], '.', c=colors1[3], label='Lagged', zorder=1)
+    axes.plot([0, 90], [0, 90], color='k', lw=1, ls='-', label='No change', zorder=0)
+    axes.legend(loc='best')
+
+
+def plot_diff_distribution(axes, promotion, swing_str, width=0.75):
+    nl = promotion[swing_str][promotion["Lag"] == 0]
+    l = promotion[swing_str][promotion["Lag"] != 0]
+    pos_list = [nl, l]
+    bp = axes.boxplot(pos_list, positions=range(len(pos_list)), showfliers=False, widths=width)
+
+
+
+    # for pc in vp['bodies']:
+    #     pc.set_facecolor(colors1[3])
+    #     pc.set_edgecolor('w')
+    #     pc.set_alpha(1)
+
+    y_max = 0
+    y_min = 0
+    for whisker in bp['whiskers']:
+        coords = whisker._xy[:, 1]
+        y_max = max(np.max(coords), y_max)
+        y_min = min(np.min(coords), y_min)
+
+    pval = mannwhitneyu(nl, l).pvalue
+    # print(pval)
+    s = stars(pval)
+    if pval < 0.05:
+        axes.annotate("", xy=(0, y_max - .01), xycoords='data', xytext=(1, y_max + .01), textcoords='data',
+                      arrowprops=dict(arrowstyle="-", ec='k', connectionstyle="bar,fraction=0.04"))
+        axes.text(0.5, y_max + .05, s, horizontalalignment='center', verticalalignment='center')
+
+    for i in range(len(bp['boxes'])):
+        bp['boxes'][i].set_color(colors2[i + 2])
+
+        # we have two whiskers!
+        bp['whiskers'][i * 2].set_color(colors2[i + 2])
+        bp['whiskers'][i * 2 + 1].set_color(colors2[i + 2])
+        bp['whiskers'][i * 2].set_linewidth(2)
+        bp['whiskers'][i * 2 + 1].set_linewidth(2)
+
+        # top and bottom fliers
+        # (set allows us to set many parameters at once)
+        # bp['fliers'][i].set(marker='x', markersize=3, markeredgecolor=colors2[i+2])
+        bp['medians'][i].set_color('black')
+        bp['medians'][i].set_linewidth(2)
+        bp['medians'][i].set_solid_capstyle('butt')
+
+    # and 4 caps to remove
+    for c in bp['caps']:
+        c.set_linewidth(0)
+    for i in range(len(bp['boxes'])):
+        box = bp['boxes'][i]
+        box.set_linewidth(0)
+        boxX = []
+        boxY = []
+        for j in range(5):
+            boxX.append(box.get_xdata()[j])
+            boxY.append(box.get_ydata()[j])
+        boxCoords = np.array([boxX, boxY]).T
+        boxPolygon = Polygon(boxCoords, facecolor=colors2[i + 2], linewidth=0)
+        axes.add_patch(boxPolygon)
+
+    for p, val in enumerate(pos_list):
+        axes.plot([p - 0.5*width/2, p + 0.5*width/2], [np.median(val), np.median(val)], c='k')
+    axes.get_xaxis().tick_bottom()
+    axes.get_yaxis().tick_left()
+    axes.tick_params(axis='x', direction='out')
+    axes.tick_params(axis='y', length=0)
+    axes.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
+    axes.set_axisbelow(True)
+    axes.set_xticks(list(range(len(pos_list))))
+    axes.set_xticklabels(['Control', 'SWING'])
+    axes.set_ylim([y_min*1.2, y_max*1.2])
+
 #NOTES FROM JIA
 """
 Some columns are labeled as RF-td_2, RF-td10, RF-ml_1, etc.
@@ -322,6 +475,8 @@ elif X = 5; min_lag = 2, max_lag = 3
 
 
 if __name__ == "__main__":
+    savefigs_group1 = True
+    savefigs_group2 = True
     params = {
         'axes.labelsize': 20,
         'font.size': 20,
@@ -330,12 +485,14 @@ if __name__ == "__main__":
         'ytick.labelsize': 16,
         'text.usetex': False,
     }
-    bmap = brewer2mpl.get_map('Set2', 'qualitative', 7)
-    colors = bmap.mpl_colors
+    colors1 = brewer2mpl.get_map('Set1', 'qualitative', 8).mpl_colors
+    colors2 = brewer2mpl.get_map('Set2', 'qualitative', 8).mpl_colors
+    colors3 = brewer2mpl.get_map('Paired', 'qualitative', 8).mpl_colors
     rcParams.update(params)
     m = ['Dionesus', 'RF']
     rd = {'Dionesus': 'D', 'RF': 'RF'}
     mod = ['Ecoli', 'Yeast']
+
     try:
         print("Loading_pickle")
         summary = pd.read_pickle('./param_sweep_summary.pickle')
@@ -351,138 +508,198 @@ if __name__ == "__main__":
     network_size = 10
 
     # Parameter ml_4 includes the expected lag and has high enrichment. To keep things simpler I will use this
-    for score in scores:
+    for kk, score in enumerate(scores):
         f = plt.figure(figsize=(8, 8))
+        g = plt.figure(figsize=(8, 8))
+        h = plt.figure(figsize=(6, 8))
         for ii, method in enumerate(m):
             for jj, model in enumerate(mod):
                 axnum = ii * 2 + jj + 1
 
                 # Add subplot
                 ax = f.add_subplot(len(m), len(mod), axnum)
+                gax = g.add_subplot(len(m), len(mod), axnum)
+                hax = h.add_subplot(len(m), len(mod), axnum)
                 if axnum == 1:
                     ax.set_title(model)
                     ax.set_ylabel(method)
+                    gax.set_title(model)
+                    gax.set_ylabel(method)
+                    hax.set_title(model)
+                    hax.set_ylabel(method)
                 elif axnum == 2:
                     ax.set_title(model)
+                    gax.set_title(model)
+                    hax.set_title(model)
                 elif axnum == 3:
                     ax.set_ylabel(method)
-
+                    gax.set_ylabel(method)
+                    hax.set_ylabel(method)
                 # Retrieve/Calculate plotting data
-                num_te = len(summary[method][model]['te_change'])
                 control = summary[method][model][score].iloc[:, 0]
                 test = summary[method][model][score][(rd[method]+'-ml_4')]
                 p_value = ttest_rel(control, test).pvalue
-                x_array = np.array([[1] * len(control), [2] * len(control)])
-                y_array = [control, test]
-                y_max = np.max(y_array, axis=None)
-                y_min = np.min(y_array, axis=None)
+                rank = summary[method][model]['te_rank']
+                change = summary[method][model]['te_change']
+                plot_rank_change(gax, rank, 'Base_'+rd[method], rd[method]+'-ml_4')
+                ax = plot_scores(ax, control, test, p_value, network_size, len(change))
+                plot_diff_distribution(hax, change, rd[method]+'-ml_4')
 
-                # Plot the paired lines
-                ax.plot(x_array, y_array, '.-', c='k', alpha=0.4, zorder=1)
+        f.tight_layout()
+        g.tight_layout()
+        h.tight_layout()
 
-                # Add null model comparison
-                if score == 'aupr':
-                    avg_expected_aupr = num_te/len(control)/(network_size*network_size-network_size)
-                    ax.plot([0.5, 2.5], [avg_expected_aupr, avg_expected_aupr], c='k', lw=1, ls='--', zorder=0)
-                    ax.set_ylim([min(y_min, 0.17) - 0.05, y_max + 0.05])
-                else:
-                    ax.plot([0.5, 2.5], [0.5, 0.5], c='k', lw=1, ls='--')
-                    ax.set_ylim([min(y_min, 0.5)-0.05, y_max+0.05])
+        f_filename = '../manuscript/Figures/gnw_improvement_%s.pdf' % score
+        g_filename = '../manuscript/Figures/lag_promotion.pdf'
+        h_filename = '../manuscript/Figures/lag_enrichment.pdf'
+        if savefigs_group1 is True:
+            f.savefig(f_filename, fmt='pdf')
+            if kk == 0:
+                g.savefig(g_filename, fmt='pdf')
+                h.savefig(h_filename, fmt='pdf')
+        elif savefigs_group1 == 'show':
+            if kk > 0:
+                plt.close(g)
+                plt.close(h)
+            plt.show()
+        else:
+            plt.close(f)
+            plt.close(g)
+            plt.close(h)
 
-                # Add the boxplots
-                bp = ax.boxplot([control, test])
-                s = stars(p_value)
-                if p_value < 0.05:
-                    ax.annotate("", xy=(1, y_max + .005), xycoords='data', xytext=(2, y_max + .005), textcoords='data',
-                                arrowprops=dict(arrowstyle="-", ec='k', connectionstyle="bar,fraction=0.03"))
-                    ax.text(1.5, y_max+.02, s, horizontalalignment='center', verticalalignment='center')
+    # Look at one specific network. Yeast12 has the most increase in AUROC)
+    gs = '../data/gnw_insilico/network_data/Yeast/Yeast-12_goldstandard.tsv'
+    true_edges, edge_df, _, dg, ee = get_network_data(gs, gs.replace('goldstandard', 'timeseries'))
+    data = get_experiment_list(gs.replace('goldstandard', 'timeseries'), 21, 10)
 
-                for i in range(len(bp['boxes'])):
-                    bp['boxes'][i].set_color(colors[i])
+    # draw(dg)
+    ranks = summary['RF']['Yeast'][12]['rank'].iloc[:, [0, 1, 6]]
+    te_ranks = ranks[ranks.index.isin(true_edges)]
+    te_p = te_ranks[te_ranks['Base_RF'] > te_ranks['RF-ml_4']]
+    te_d = te_ranks[~(te_ranks['Base_RF'] > te_ranks['RF-ml_4'])]
+    fe_ranks = ranks[~ranks.index.isin(true_edges)]
 
-                    # we have two whiskers!
-                    bp['whiskers'][i * 2].set_color(colors[i])
-                    bp['whiskers'][i * 2 + 1].set_color(colors[i])
-                    bp['whiskers'][i * 2].set_linewidth(2)
-                    bp['whiskers'][i * 2 + 1].set_linewidth(2)
+    fig = plt.figure(figsize=(7, 9))
+    ax = fig.add_subplot(111)
+    lw = 3
 
-                    # top and bottom fliers
-                    # (set allows us to set many parameters at once)
-                    bp['fliers'][i].set(marker='x', markersize=3,  markeredgecolor=colors[i])
-                    bp['medians'][i].set_color('black')
-                    bp['medians'][i].set_linewidth(2)
+    for row in fe_ranks.iterrows():
+        edge = row[0]
+        lag = row[1]["Lag"]
+        start = row[1].values[1]
+        end = row[1].values[2]
+        verts = [(0, start),
+                 (0.5, start),
+                 (0.5, end),
+                 (1, end)]
+        codes = [Path.MOVETO, Path.CURVE4, Path.CURVE4, Path.CURVE4]
 
-                # and 4 caps to remove
-                for c in bp['caps']:
-                    c.set_linewidth(0)
-                for i in range(len(bp['boxes'])):
-                    box = bp['boxes'][i]
-                    box.set_linewidth(0)
-                    boxX = []
-                    boxY = []
-                    for j in range(5):
-                        boxX.append(box.get_xdata()[j])
-                        boxY.append(box.get_ydata()[j])
-                    boxCoords = np.array([boxX, boxY]).T
-                    boxPolygon = Polygon(boxCoords, facecolor=colors[i], linewidth=0)
-                    ax.add_patch(boxPolygon)
-                # ax.spines['top'].set_visible(False)
-                # ax.spines['right'].set_visible(False)
-                # ax.spines['left'].set_visible(False)
-                ax.get_xaxis().tick_bottom()
-                ax.get_yaxis().tick_left()
-                ax.tick_params(axis='x', direction='out')
-                ax.tick_params(axis='y', length=0)
-                ax.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
-                ax.set_axisbelow(True)
-                ax.set_xticklabels(['Control', 'SWING'])
+        path = Path(verts, codes)
+        patch = patches.PathPatch(path, facecolor='none', lw=lw, ec='0.75')
+        ax.add_patch(patch)
 
-        plt.tight_layout()
-        filename = '../manuscript/Figures/gnw_improvement_%s.pdf' % score
-        plt.savefig(filename, fmt='pdf')
+    for row in te_d.iterrows():
+        edge = row[0]
+        lag = row[1]["Lag"]
+        start = row[1].values[1]
+        end = row[1].values[2]
+        verts = [(0, start),
+                 (0.5, start),
+                 (0.5, end),
+                 (1, end)]
+        codes = [Path.MOVETO, Path.CURVE4, Path.CURVE4, Path.CURVE4]
+
+        path = Path(verts, codes)
+        ec = colors3[5]
+        patch = patches.PathPatch(path, facecolor='none', lw=lw, ec=ec)
+        ax.add_patch(patch)
+        edge_str = edge[0] + u"\u2192" + edge[1] + " Lag = " + str(int(lag))
+        ax.text(-0.02, start, edge_str, horizontalalignment='right', verticalalignment='center', fontsize=14)
+
+    for row in te_p.iterrows():
+        edge = row[0]
+        lag = row[1]["Lag"]
+        start = row[1].values[1]
+        end = row[1].values[2]
+        verts = [(0, start),
+                 (0.5, start),
+                 (0.5, end),
+                 (1, end)]
+        codes = [Path.MOVETO, Path.CURVE4, Path.CURVE4, Path.CURVE4]
+
+        path = Path(verts, codes)
+        ec = colors3[1]
+        if edge == ('G2', 'G1'):
+            ec = colors3[3]
+        patch = patches.PathPatch(path, facecolor='none', lw=lw, ec=ec)
+        ax.add_patch(patch)
+        edge_str = edge[0] + u"\u2192" + edge[1] + " Lag = " + str(int(lag))
+        ax.text(-0.02, start, edge_str, horizontalalignment='right', verticalalignment='center', fontsize=14)
+
+    plt.ylim([91, -1])
+    plt.plot([0, 0], [-1, 91], '-', c='k', lw=1)
+    ax.yaxis.tick_right()
+    ax.spines['left'].set_visible = False
+    plt.xlim([-0.5, 1])
+    plt.ylabel('Rank', rotation=-90, va='top')
+    ax.yaxis.set_label_position("right")
+    plt.tick_params(axis='x', which='both', bottom='off', top='off')
+    plt.xticks([0, 1])
+    ax.set_xticklabels(['RF', 'SWING'])
+    plt.tight_layout()
+    if savefigs_group2 is True:
+        plt.savefig('../manuscript/Figures/RF_yeast12_promotion.pdf', fmt='pdf')
+    elif savefigs_group2 == 'show':
+        plt.show()
+    else:
+        plt.close()
 
 
-    nl = summary['RF']['te_change'][(summary['RF']['te_change']["Lag"] == 0)]
-    l = summary['RF']['te_change'][(summary['RF']['te_change']["Lag"] > 0)]
-    for lag in set(summary['RF']['te_change']["Lag"]):
-        data = summary['RF']['te_change']['RF-ml_4'][summary['RF']['te_change']['Lag'] == lag]
-        if len(data) >= 3:
-            vp = plt.violinplot(data, positions=[lag], showmedians=False, showextrema=False)
-            for pc in vp['bodies']:
-                pc.set_facecolor('c')
-                pc.set_edgecolor('w')
-                pc.set_alpha(1)
-            plt.plot([lag-0.1, lag+0.1], [np.median(data), np.median(data)], c='k')
-    plt.xlim([-1, 6])
-    plt.ylim([-90, 90])
-    plt.show()
-    sys.exit()
-    distros = [np.mean(l['RF-ml_4'][l['Lag']==lag]) for lag in set(l["Lag"])]
-    plt.plot(np.arange(1, 9), distros)
-    # plt.boxplot(distros, positions=np.arange(8))
-    plt.show()
-    sys.exit()
-    print(np.median(l.iloc[:, 2:], axis=0))
-    print(np.median(l.iloc[:, 2:], axis=0) - np.median(nl.iloc[:, 2:], axis=0))
-    cond = 'RF-ml_4'
-    plt.plot([0.5, 2.5], [0, 0], c='k', lw=1)
-    vp = plt.violinplot([nl[cond].values, l[cond].values], showextrema=False, widths=0.75, points=200)
-    for pc in vp['bodies']:
-        pc.set_facecolor('c')
-        pc.set_edgecolor('w')
-    plt.plot([0.75, 1.25], [np.median(nl[cond].values), np.median(nl[cond].values)], c='k', lw=3)
-    plt.plot([1.75, 2.25], [np.median(l[cond].values), np.median(l[cond].values)], c='k', lw=3)
-    ax = plt.gca()
-    ax.set_axis_bgcolor('w')
-    plt.show()
-    print(mannwhitneyu(nl[cond].values, l[cond].values))
+    # In experiment 4, G2 and nothing else upstream is perturbed, so the relation between G2, G1 is clearer
+    # The apparent lag is 2, so shift it that much
+    f = plt.figure(figsize=(7, 9))
+    # Plot unlagged time series and correlation
+    ax = f.add_subplot(2, 2, 1)
+    ax.plot(data[4].index.values, data[4]['G2'].values, '.-', label='G2', c='c', lw=2, ms=10)
+    ax.plot(data[4].index.values, data[4]['G1'].values, '.-', label='G1', c='m', lw=2, ms=10)
+    ax.set_yticks(np.arange(0.0, 0.4, 0.1))
+    ax.set_ylabel('Normalized expression')
+    ax.set_xlabel('Time')
+    ax.legend(loc='best')
+    ax.set_xticks(range(0, 1000, 200))
 
-    plt.figure(figsize=(5, 10))
-    ax = sns.swarmplot(data=[nl[cond].values, l[cond].values], size=5)
-    ax.plot([-0.10, 0.10], [np.median(nl[cond].values), np.median(nl[cond].values)], c='k', lw=3, zorder=10)
-    ax.plot([0.90, 1.10], [np.median(l[cond].values), np.median(l[cond].values)], c='k', lw=3, zorder=10)
-    ax.set_axis_bgcolor('w')
-    plt.show()
+    ax = f.add_subplot(2, 2, 3)
+    r2 = pearsonr(data[4]['G2'], data[4]['G1'])[0]
+    ax.plot(data[4]['G2'].values, data[4]['G1'].values, '.', c='k', ms=15)
+    ax.set_xticks(np.arange(0.0, 0.5, 0.1))
+    ax.set_yticks(np.arange(0.0, 0.4, 0.1))
+    ax.set_xlabel('G2 normalized expression')
+    ax.set_ylabel('G1 normalized expression')
+    r2string = r'$R^2$ = %0.3f' % r2
+    ax.text(0.35, 0.05, r2string, horizontalalignment='center', verticalalignment='center', fontsize=14)
+
+    ax = f.add_subplot(2, 2, 2)
+    ax.plot(data[4].index.values[:-2], data[4]['G2'].values[:-2], '.-', label='G2-shifted', c='c', lw=2, ms=10)
+    ax.plot(data[4].index.values[:-2], data[4]['G1'].values[2:], '.-', label='G1-shifted', c='m', lw=2, ms=10)
+    ax.set_yticks(np.arange(0.0, 0.4, 0.1))
+    ax.legend(loc='best')
+    ax.set_xticks(range(0, 1000, 200))
+
+    ax = f.add_subplot(2, 2, 4)
+    r2 = pearsonr(data[4]['G2'].values[:-2], data[4]['G1'].values[2:])[0]
+    ax.plot(data[4]['G2'].values[:-2], data[4]['G1'].values[2:], '.', c='k', ms=15)
+    ax.set_xticks(np.arange(0.0, 0.5, 0.1))
+    ax.set_yticks(np.arange(0.0, 0.4, 0.1))
+    r2string = r'$R^2$ = %0.3f' % r2
+    ax.text(0.35, 0.05, r2string, horizontalalignment='center', verticalalignment='center', fontsize=14)
+    plt.tight_layout()
+
+    if savefigs_group2 is True:
+        plt.savefig('../manuscript/Figures/RF_yeast12_exp6_edgeG2G1_shift.pdf', fmt='pdf')
+    elif savefigs_group2 == 'show':
+        plt.show()
+    else:
+        plt.close()
 
 
 
