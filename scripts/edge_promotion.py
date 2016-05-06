@@ -13,10 +13,13 @@ from nxpd import nxpdParams
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib import rcParams
+from matplotlib.path import Path
+import matplotlib.patches as patches
 from matplotlib.patches import Polygon
 import brewer2mpl
 # import seaborn as sns
-from scipy.stats import fisher_exact, linregress, ttest_rel, mannwhitneyu, ttest_ind
+from scipy.stats import fisher_exact, linregress, ttest_rel, mannwhitneyu, ttest_ind, pearsonr
+from scipy.special import logit
 
 
 def is_square(n):
@@ -472,6 +475,8 @@ elif X = 5; min_lag = 2, max_lag = 3
 
 
 if __name__ == "__main__":
+    savefigs_group1 = True
+    savefigs_group2 = True
     params = {
         'axes.labelsize': 20,
         'font.size': 20,
@@ -482,10 +487,12 @@ if __name__ == "__main__":
     }
     colors1 = brewer2mpl.get_map('Set1', 'qualitative', 8).mpl_colors
     colors2 = brewer2mpl.get_map('Set2', 'qualitative', 8).mpl_colors
+    colors3 = brewer2mpl.get_map('Paired', 'qualitative', 8).mpl_colors
     rcParams.update(params)
     m = ['Dionesus', 'RF']
     rd = {'Dionesus': 'D', 'RF': 'RF'}
     mod = ['Ecoli', 'Yeast']
+
     try:
         print("Loading_pickle")
         summary = pd.read_pickle('./param_sweep_summary.pickle')
@@ -539,24 +546,161 @@ if __name__ == "__main__":
                 plot_diff_distribution(hax, change, rd[method]+'-ml_4')
 
         f.tight_layout()
+        g.tight_layout()
+        h.tight_layout()
 
-        plt.close(f)
-        plt.close(g)
-        if kk > 0:
+        f_filename = '../manuscript/Figures/gnw_improvement_%s.pdf' % score
+        g_filename = '../manuscript/Figures/lag_promotion.pdf'
+        h_filename = '../manuscript/Figures/lag_enrichment.pdf'
+        if savefigs_group1 is True:
+            f.savefig(f_filename, fmt='pdf')
+            if kk == 0:
+                g.savefig(g_filename, fmt='pdf')
+                h.savefig(h_filename, fmt='pdf')
+        elif savefigs_group1 == 'show':
+            if kk > 0:
+                plt.close(g)
+                plt.close(h)
+            plt.show()
+        else:
+            plt.close(f)
+            plt.close(g)
             plt.close(h)
-        plt.close(h)
-        # plt.show()
-        filename = '../manuscript/Figures/gnw_improvement_%s.pdf' % score
-        # plt.savefig(filename, fmt='pdf')
+
+    # Look at one specific network. Yeast12 has the most increase in AUROC)
+    gs = '../data/gnw_insilico/network_data/Yeast/Yeast-12_goldstandard.tsv'
+    true_edges, edge_df, _, dg, ee = get_network_data(gs, gs.replace('goldstandard', 'timeseries'))
+    data = get_experiment_list(gs.replace('goldstandard', 'timeseries'), 21, 10)
+
+    # draw(dg)
+    ranks = summary['RF']['Yeast'][12]['rank'].iloc[:, [0, 1, 6]]
+    te_ranks = ranks[ranks.index.isin(true_edges)]
+    te_p = te_ranks[te_ranks['Base_RF'] > te_ranks['RF-ml_4']]
+    te_d = te_ranks[~(te_ranks['Base_RF'] > te_ranks['RF-ml_4'])]
+    fe_ranks = ranks[~ranks.index.isin(true_edges)]
+
+    fig = plt.figure(figsize=(7, 9))
+    ax = fig.add_subplot(111)
+    lw = 3
+
+    for row in fe_ranks.iterrows():
+        edge = row[0]
+        lag = row[1]["Lag"]
+        start = row[1].values[1]
+        end = row[1].values[2]
+        verts = [(0, start),
+                 (0.5, start),
+                 (0.5, end),
+                 (1, end)]
+        codes = [Path.MOVETO, Path.CURVE4, Path.CURVE4, Path.CURVE4]
+
+        path = Path(verts, codes)
+        patch = patches.PathPatch(path, facecolor='none', lw=lw, ec='0.75')
+        ax.add_patch(patch)
+
+    for row in te_d.iterrows():
+        edge = row[0]
+        lag = row[1]["Lag"]
+        start = row[1].values[1]
+        end = row[1].values[2]
+        verts = [(0, start),
+                 (0.5, start),
+                 (0.5, end),
+                 (1, end)]
+        codes = [Path.MOVETO, Path.CURVE4, Path.CURVE4, Path.CURVE4]
+
+        path = Path(verts, codes)
+        ec = colors3[5]
+        patch = patches.PathPatch(path, facecolor='none', lw=lw, ec=ec)
+        ax.add_patch(patch)
+        edge_str = edge[0] + u"\u2192" + edge[1] + " Lag = " + str(int(lag))
+        ax.text(-0.02, start, edge_str, horizontalalignment='right', verticalalignment='center', fontsize=14)
+
+    for row in te_p.iterrows():
+        edge = row[0]
+        lag = row[1]["Lag"]
+        start = row[1].values[1]
+        end = row[1].values[2]
+        verts = [(0, start),
+                 (0.5, start),
+                 (0.5, end),
+                 (1, end)]
+        codes = [Path.MOVETO, Path.CURVE4, Path.CURVE4, Path.CURVE4]
+
+        path = Path(verts, codes)
+        ec = colors3[1]
+        if edge == ('G2', 'G1'):
+            ec = colors3[3]
+        patch = patches.PathPatch(path, facecolor='none', lw=lw, ec=ec)
+        ax.add_patch(patch)
+        edge_str = edge[0] + u"\u2192" + edge[1] + " Lag = " + str(int(lag))
+        ax.text(-0.02, start, edge_str, horizontalalignment='right', verticalalignment='center', fontsize=14)
+
+    plt.ylim([91, -1])
+    plt.plot([0, 0], [-1, 91], '-', c='k', lw=1)
+    ax.yaxis.tick_right()
+    ax.spines['left'].set_visible = False
+    plt.xlim([-0.5, 1])
+    plt.ylabel('Rank', rotation=-90, va='top')
+    ax.yaxis.set_label_position("right")
+    plt.tick_params(axis='x', which='both', bottom='off', top='off')
+    plt.xticks([0, 1])
+    ax.set_xticklabels(['RF', 'SWING'])
+    plt.tight_layout()
+    if savefigs_group2 is True:
+        plt.savefig('../manuscript/Figures/RF_yeast12_promotion.pdf', fmt='pdf')
+    elif savefigs_group2 == 'show':
+        plt.show()
+    else:
+        plt.close()
 
 
-    # Look at one specific network. Ecoli15 has the most increase in AUROC)
-    gs = '../data/gnw_insilico/network_data/Ecoli/Ecoli-1_goldstandard.tsv'
-    ee = Evaluator(gs, sep ='\t')
+    # In experiment 4, G2 and nothing else upstream is perturbed, so the relation between G2, G1 is clearer
+    # The apparent lag is 2, so shift it that much
+    f = plt.figure(figsize=(7, 9))
+    # Plot unlagged time series and correlation
+    ax = f.add_subplot(2, 2, 1)
+    ax.plot(data[4].index.values, data[4]['G2'].values, '.-', label='G2', c='c', lw=2, ms=10)
+    ax.plot(data[4].index.values, data[4]['G1'].values, '.-', label='G1', c='m', lw=2, ms=10)
+    ax.set_yticks(np.arange(0.0, 0.4, 0.1))
+    ax.set_ylabel('Normalized expression')
+    ax.set_xlabel('Time')
+    ax.legend(loc='best')
+    ax.set_xticks(range(0, 1000, 200))
 
-    print(summary['RF']['Ecoli'][15].keys())
-    print(summary['RF']['Ecoli'][15]['conditions'])
-    print(summary['RF']['Ecoli'][15]['enrich_pvals'])
+    ax = f.add_subplot(2, 2, 3)
+    r2 = pearsonr(data[4]['G2'], data[4]['G1'])[0]
+    ax.plot(data[4]['G2'].values, data[4]['G1'].values, '.', c='k', ms=15)
+    ax.set_xticks(np.arange(0.0, 0.5, 0.1))
+    ax.set_yticks(np.arange(0.0, 0.4, 0.1))
+    ax.set_xlabel('G2 normalized expression')
+    ax.set_ylabel('G1 normalized expression')
+    r2string = r'$R^2$ = %0.3f' % r2
+    ax.text(0.35, 0.05, r2string, horizontalalignment='center', verticalalignment='center', fontsize=14)
+
+    ax = f.add_subplot(2, 2, 2)
+    ax.plot(data[4].index.values[:-2], data[4]['G2'].values[:-2], '.-', label='G2-shifted', c='c', lw=2, ms=10)
+    ax.plot(data[4].index.values[:-2], data[4]['G1'].values[2:], '.-', label='G1-shifted', c='m', lw=2, ms=10)
+    ax.set_yticks(np.arange(0.0, 0.4, 0.1))
+    ax.legend(loc='best')
+    ax.set_xticks(range(0, 1000, 200))
+
+    ax = f.add_subplot(2, 2, 4)
+    r2 = pearsonr(data[4]['G2'].values[:-2], data[4]['G1'].values[2:])[0]
+    ax.plot(data[4]['G2'].values[:-2], data[4]['G1'].values[2:], '.', c='k', ms=15)
+    ax.set_xticks(np.arange(0.0, 0.5, 0.1))
+    ax.set_yticks(np.arange(0.0, 0.4, 0.1))
+    r2string = r'$R^2$ = %0.3f' % r2
+    ax.text(0.35, 0.05, r2string, horizontalalignment='center', verticalalignment='center', fontsize=14)
+    plt.tight_layout()
+
+    if savefigs_group2 is True:
+        plt.savefig('../manuscript/Figures/RF_yeast12_exp6_edgeG2G1_shift.pdf', fmt='pdf')
+    elif savefigs_group2 == 'show':
+        plt.show()
+    else:
+        plt.close()
+
 
 
 
