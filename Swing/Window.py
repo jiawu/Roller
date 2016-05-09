@@ -52,7 +52,7 @@ class Window(object):
         self.genes = self.df.columns.values
         self.n_genes = len(self.genes)
         self.results_table = pd.DataFrame()
-        self.edge_list = utility.make_possible_edge_list(self.genes, self.genes)
+        self.edge_list = utility.make_possible_edge_list(self.explanatory_labels, self.response_labels)
 
         # Add edge list to edge table
         self.results_table['regulator-target'] = self.edge_list
@@ -76,7 +76,7 @@ class Window(object):
 
         self.remove_stationary_ts = False
         self.var_threshold = 0.10
-        
+
     def create_linked_list(self, numpy_array_2D, value_label):
         """labels and array should be in row-major order"""
         linked_list = pd.DataFrame({'regulator-target': self.edge_list, value_label: numpy_array_2D.flatten()})
@@ -212,11 +212,11 @@ class Window(object):
             var_list.append(var)
 
         remove_exp_idx = [i for i,v in enumerate(var_list) if v < self.var_threshold]
-        
+
         return((remove_exp_idx,ts_list))
 
 
-    
+
     def _initialize_coeffs(self, data, y_data, x_labels, y_labels, x_window, nth_window, s_edges = False):
         """ Returns a copy of the vector, an empty array with a defined shape, an empty list, and the maximum number of
         nodes
@@ -231,7 +231,7 @@ class Window(object):
         # Construct a list of tuples:
         # Tuple = (Response, Explanatory, Index)
 
-        
+
         for col_index, target_y in enumerate(y_data.T):
             if self.remove_stationary_ts is True:
                 exclude_list,ts_list = self.identify_stationary_experiments(target_y)
@@ -249,15 +249,14 @@ class Window(object):
             else:
                 x_matrix = data.copy()
 
-
-                
             # Identify experiments that are stationary
 
             insert_index = col_index
 
             if nth_window in x_window:
                 keep_columns = ~((x_window == self.nth_window) & (x_labels == y_labels[col_index]))
-                insert_index = list(keep_columns).index(False)
+                if False in keep_columns:
+                    insert_index = list(keep_columns).index(False)
                 x_matrix = x_matrix[:, keep_columns].copy()
 
             input_tuple = (target_y, x_matrix, insert_index)
