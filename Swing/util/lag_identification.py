@@ -9,13 +9,13 @@ import pandas as pd
 from statsmodels.tsa.stattools import ccf
 import matplotlib.pyplot as plt
 import numpy as np
-from Swing.util.Evaluator import Evaluator
 from collections import Counter
 import matplotlib as mpl
-
 mpl.rcParams['pdf.fonttype'] = 42
 mpl.rcParams['font.sans-serif'] = 'Arial'
+import pdb
 
+from Swing.util.Evaluator import Evaluator
 
 def get_experiment_list(filename, timepoints=21, perturbs=5):
     # load files
@@ -62,18 +62,41 @@ def cc_experiment(experiment):
     return ccf_array
 
 
-def calc_edge_lag(xcorr, genes, sc_frac=0.1, min_ccf=0.5, timestep=1):
+def calc_edge_lag(xcorr, genes, sc_frac=0.1, min_ccf=0.5, timestep=1, signed_edge_list=None, flat = True):
     """
 
     :param xcorr: 4d array
         4 axes in order: experiments, parent, child, time
     :param genes: list
+    :param sc_frac: float
+        related filtering. see filter_ccfs
+    :param min_ccf: float
+        minimum cross correlation needed to call a lag
+    :param timestep: int
+    :param signed: dataframe
+        can be a list of signed edges or none (default)
+        maximize either negative or positive correlation depending on prior information
+    :param flat: boolean
+        true: return the mean lag for each edge
+        false: return the list of all lags (for each exp) for each edge
     :return:
     """
     e, p, c, t = xcorr.shape
-    edges = itertools.product(genes, genes)
+    if signed_edge_list is not None:
+        edges = signed_edge_list['regulator-target']
+    else:
+        edges = itertools.product(genes, genes)
     lag_estimate = np.zeros((p,c))
     sc_thresh = sc_frac * t
+
+    #initialize dataframe to return
+    col, row = np.meshgrid(range(len(genes)), range(len(genes)))
+    edge_lag = pd.DataFrame()
+    edge_lag['Parent'] = np.array(genes)[row.flatten()]
+    edge_lag['Child'] = np.array(genes)[col.flatten()]
+    edge_lag['Edge'] = list(zip(edge_lag['Parent'], edge_lag['Child']))
+
+    lag_results = []
 
     for edge in edges:
         # Ignore self edges
@@ -81,6 +104,8 @@ def calc_edge_lag(xcorr, genes, sc_frac=0.1, min_ccf=0.5, timestep=1):
             continue
         p_idx = genes.index(edge[0])
         c_idx = genes.index(edge[1])
+        if signed_edge_list is not None:
+            sign = signed_edge_list[signed_edge_list['regulator-target'] == edge]['signs'].tolist()[0]
 
         # The ccf keeps the parent static and moves the child. Therefore the reversed xcorr would show the true lag
         reverse = xcorr[:, c_idx, p_idx]
@@ -90,14 +115,33 @@ def calc_edge_lag(xcorr, genes, sc_frac=0.1, min_ccf=0.5, timestep=1):
             # axarr[0].plot(reverse.T)
             # axarr[1].plot(filtered.T)
             # plt.show()
-            lag_estimate[p_idx, c_idx] = np.ceil(float(np.mean(np.argmax(np.abs(filtered), axis=1))))*timestep
+
+            # default setting
+            if flat:
+                if signed_edge_list is None:
+                    lag_estimate[p_idx, c_idx] = np.ceil(float(np.mean(np.argmax(np.abs(filtered), axis=1))))*timestep
+                elif sign == '+':
+                    lag_estimate[p_idx, c_idx] = float(np.mean(np.argmax(filtered, axis=1)))*timestep
+                elif sign == '-':
+                    lag_estimate[p_idx, c_idx] = float(np.mean(np.argmin(filtered, axis=1)))*timestep
+                elif sign == '+-':
+                    lag_estimate[p_idx, c_idx] = float(np.mean(np.argmax(np.abs(filtered), axis=1)))*timestep
+                edge_lag['Lag'] = lag_estimate.flatten()
+
+            elif not flat:
+                if sign == '+':
+                    lag = [float(x) for x in np.argmax(filtered, axis=1)]*timestep
+                elif sign == '-':
+                    lag = [float(x) for x in np.argmin(filtered, axis=1)]*timestep
+                elif sign == '+-':
+                    lag = [float(x) for x in np.argmax(np.abs(filtered), axis=1)]*timestep
+
+                lag_results.append({'Edge':edge, 'Lag':lag})
+
+    if not flat:
+        lag_results = pd.DataFrame(lag_results)
+        edge_lag = pd.merge(edge_lag, lag_results, how='outer', on='Edge')
             # print(edge, np.argmax(filtered, axis=0), np.mean(np.argmax(filtered, axis=0)))
-    col, row = np.meshgrid(range(len(genes)), range(len(genes)))
-    edge_lag = pd.DataFrame()
-    edge_lag['Parent'] = np.array(genes)[row.flatten()]
-    edge_lag['Child'] = np.array(genes)[col.flatten()]
-    edge_lag['Lag'] = lag_estimate.flatten()
-    edge_lag['Edge'] = list(zip(edge_lag['Parent'], edge_lag['Child']))
     return edge_lag
 
 
@@ -132,15 +176,15 @@ def filter_ccfs(ccfs, sc_thresh, min_ccf):
     return filtered_ccf
 
 if __name__ == '__main__':
-    data_folder = "../data/dream4/high_sampling/"
-    nets = 5
+    data_folder = "../data/gnw_insilico/network_data/Ecoli/"
+    nets = 20
     thresh = 0.3
     insilico_dict = {ii: {} for ii in range(1, nets + 1)}
     lags = []
     for net in insilico_dict:
-        data_file = data_folder + "insilico_size10_%i_dream4_timeseries.tsv" % (net)
-        gold_file = data_folder + "insilico_size10_%i_goldstandard.tsv" % (net)
-        perturb_file = data_folder + "insilico_size10_%i_timeseries_perturbations.tsv" % (net)
+        data_file = data_folder + "Ecoli-%i_timeseries.tsv" % (net)
+        gold_file = data_folder + "Ecoli-%i_goldstandard.tsv" % (net)
+        perturb_file = data_folder + "Ecoli-%i_timeseries_perturbations.tsv" % (net)
 
         # Get the true edges
         evaluator = Evaluator(gold_file, '\t')
@@ -149,9 +193,10 @@ if __name__ == '__main__':
         # Calculate the xcorr for each gene pair
         df = pd.read_csv(data_file, sep="\t")
         gene_list = df.columns.values[1:].tolist()
-        experiment_list = get_experiment_list(data_file, 501, 10)
+        experiment_list = get_experiment_list(data_file, 21, 10)
         xcorr_array = xcorr_experiments(experiment_list)
-        edge_lags = calc_edge_lag(xcorr_array, gene_list, 0.1, 0.3, timestep=2)
+        edge_lags = calc_edge_lag(xcorr_array, gene_list, 0.1, 0.3, timestep=50)
+
         true_lags = edge_lags[edge_lags['Edge'].isin(true_edges)]
         lags += true_lags['Lag'].values.tolist()
 
@@ -159,10 +204,16 @@ if __name__ == '__main__':
     z = np.nan_to_num(np.array(lags))
     data = pd.DataFrame(np.asarray(list(Counter(z).items())))
     data.sort_values(0, inplace=True)
-    plt.plot(data[0].values, data[1]/len(lags), 'o-', lw=5, ms=10, markerfacecolor='w', mew=3, mec='b')
+    # plt.plot(data[0].values, data[1]/len(lags), 'o-', lw=5, ms=10, markerfacecolor='w', mew=3, mec='b')
+    plt.figure(figsize=(6, 5))
+    bar_width = 0.95
+    plt.bar(range(len(data[0].values)), data[1]/len(lags), width=bar_width, color='k')
     # plt.hist(lags, bins=71, cumulative=True, normed=1)
-    plt.xlabel('Peak Lag', fontsize=20)
-    plt.ylabel('% of True Edges', fontsize=20)
-    plt.tick_params(axis='both', which='major', labelsize=18)
-    plt.show()
-    # plt.savefig('../manuscript/Figures/true_lag_DREAM4.pdf', fmt='pdf')
+    plt.xlabel('Apparent Lag (min)', fontsize=20)
+    plt.ylabel('% of Edges', fontsize=20)
+    # labels = [ii if ii==0 else str(data[0].values.astype(int)[ii-1])+"-"+str(val) for ii, val in enumerate(data[0].values.astype(int))]
+    labels = [val for val in data[0].values.astype(int)]
+    plt.xticks(np.arange(len(data[0]))+bar_width/2, labels)
+    plt.tick_params(axis='both', which='major', labelsize=14)
+    plt.tight_layout()
+    plt.savefig('../manuscript/Figures/true_lag_ecoli10_0.1_0.3.pdf', fmt='pdf')
