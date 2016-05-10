@@ -178,7 +178,7 @@ class LassoWindow(Window):
         auc = self.edge_stability_auc[:, :, nth]
         return auc
 
-    def initialize_params(self, alpha = None):
+    def initialize_params(self, alpha=None):
         """
         Choose the value of alpha to use for fitting
         :param alpha: float, optional
@@ -243,7 +243,7 @@ class LassoWindow(Window):
         # Raise exception if Lasso doesn't converge with alpha == 0
         zero_alpha_coeffs, _ = self.get_coeffs(0)
 
-        if np.count_nonzero(zero_alpha_coeffs) != max_edges:
+        if np.count_nonzero(zero_alpha_coeffs) < max_edges:
             raise ValueError('Lasso does not converge with alpha = 0')
 
         # Raise exception if max_expected_alpha does not return all zero betas
@@ -282,7 +282,7 @@ class LassoWindow(Window):
                     break
         return alpha_max
 
-    def cv_select_alpha(self, alpha_range=None, method='max_posQ2', n_folds=5):
+    def cv_select_alpha(self, alpha_range=None, method='modelQ2', n_folds=10):
         """
         Calculate the cross-validation metrics for a range of alpha values and select the best one based on the chosen
         method
@@ -303,7 +303,7 @@ class LassoWindow(Window):
             self.null_alpha = self.get_null_alpha()
 
         if alpha_range is None:
-            alpha_range = np.linspace(0, self.null_alpha, num=25)
+            alpha_range = np.linspace(0, self.null_alpha, num=50)
 
         # Calculate the cv_table values
         cv_results = np.array([self.cross_validate_alpha(alpha, n_folds, True) for alpha in alpha_range])
@@ -414,17 +414,17 @@ class LassoWindow(Window):
 
         """
         target_label = self.explanatory_labels[insert_index]
-        
+
         #find all instances of this label
         target_indices = [x for x, label in enumerate(self.explanatory_labels) if label == target_label]
-        # if the min lag is 0, then _initialize_coeffs will automatically remove one of the columns (the response column) from the data_array. the if statement below will detect if the column has already been removed and will avoid removing more column. 
-        
+        # if the min lag is 0, then _initialize_coeffs will automatically remove one of the columns (the response column) from the data_array. the if statement below will detect if the column has already been removed and will avoid removing more column.
+
         if data_array.shape[1] < len(self.explanatory_labels):
             target_indices.remove(insert_index)
-        
+
         parsed_array = np.delete(data_array, target_indices, 1)
         target_indices.append(insert_index)
-        target_indices = list(set(target_indices))        
+        target_indices = list(set(target_indices))
 
         return(parsed_array, target_indices)
 

@@ -183,7 +183,7 @@ class DionesusWindow(Window):
         # calculate the Q2 score using PC=1,2,3,4,5
 
         # pick the PCs that maximizes the Q2 score-PCs tradeoff, using the elbow rule, maximizing the second derivative or maximum curvature.
-        temp = self.remove_stationary_ts    
+        temp = self.remove_stationary_ts
         self.remove_stationary_ts = False
         result_tuple = self.get_coeffs(crag=False, calc_mse=False)
         self.remove_stationary_ts = temp
@@ -198,7 +198,17 @@ class DionesusWindow(Window):
             if explained_variances is None:
                 explained_variances = pca.explained_variance_ratio_
             else:
-                explained_variances = np.vstack((explained_variances, pca.explained_variance_ratio_))
+                try:
+                    explained_variances = np.vstack((explained_variances, pca.explained_variance_ratio_))
+                except ValueError:
+                    pdb.set_trace()
+                    try:
+                        truncated_index = explained_variances.shape[1]
+                        explained_variances = np.vstack((explained_variances, pca.explained_variance_ratio_[:truncated_index]))
+                    except IndexError:
+                        truncated_index = pca.explained_variance_ratio_.shape[0]
+                        explained_variances = np.vstack((explained_variances[:truncated_index], pca.explained_variance_ratio_[:truncated_index]))
+
 
         explained_variances_mean = np.mean(explained_variances, axis = 0)
         test_pcs = [x for x in range(1, len(explained_variances_mean)+1)]
@@ -219,7 +229,6 @@ class DionesusWindow(Window):
         self.vip = result_tuple[1]
         self.edge_mse_diff = result_tuple[2]
         self.model_list = result_tuple[3]
-
 
     def _fitstack_coeffs(self, n_pcs, coeff_matrix, vip_matrix, model_list, x_matrix, target_y, col_index, crag=False):
         """
