@@ -178,7 +178,7 @@ class LassoWindow(Window):
         auc = self.edge_stability_auc[:, :, nth]
         return auc
 
-    def initialize_params(self, alpha=0.15):
+    def initialize_params(self, alpha = None):
         """
         Choose the value of alpha to use for fitting
         :param alpha: float, optional
