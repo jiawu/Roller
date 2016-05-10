@@ -55,6 +55,7 @@ class Swing(object):
 
         self.crag = False
         self.calc_mse = False
+        self.alpha = None
 
         # Get overall width of the time-course
         self.time_vec = self.raw_data[self.time_label].unique()
@@ -384,12 +385,16 @@ class Swing(object):
 
         :return:
         """
-
-        for window in self.window_list:
-            window.initialize_params()
+        if self.window_type is "Lasso":
+            for window in self.window_list:
+                window.initialize_params(alpha=self.alpha)
+        else:
+            for window in self.window_list:
+                window.initialize_params()
 
 
         return self.window_list
+
 
     def fit_windows(self, alpha=None, n_trees=None, n_jobs=None, show_progress=True):
         #todo: need a better way to pass parameters to fit functions
