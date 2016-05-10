@@ -7,7 +7,7 @@ import pdb
 
 class Evaluator:
 
-    def __init__(self, gold_standard_file, sep = '/t',interaction_label = 'regulator-target',node_list = None):
+    def __init__(self, gold_standard_file, sep='\t', interaction_label='regulator-target', node_list=None):
         self.gs_file = gold_standard_file
         self.gs_data = pd.read_csv(gold_standard_file, sep=sep, header=None)
         self.gs_data.columns = ['regulator','target','exists']
@@ -22,6 +22,17 @@ class Evaluator:
             self.full_list = tuple(map(tuple,self.possible_edges(np.array(self.regulators),np.array(self.targets))))
             self.full_list = [ x for x in self.full_list if x[0] != x[1] ]
             self.full_list = pd.Series(self.full_list)
+
+        elif 'omranian' in self.gs_file:
+            with open('../data/invitro/omranian_parsed_tf_list.tsv', 'r') as f:
+                self.regulators = f.read().splitlines()
+            with open('../data/invitro/omranian_all_genes_list.tsv', 'r') as f:
+                self.targets = f.read().splitlines()
+            self.full_list = tuple(map(tuple, self.possible_edges(np.array(self.regulators), np.array(self.targets))))
+            self.full_list = [ x for x in self.full_list if x[0] != x[1]]
+            self.full_list = pd.Series(self.full_list)
+            pdb.set_trace()
+
         elif node_list:
             all_regulators = np.array(list(set(node_list)))
             self.full_list = tuple(map(tuple,self.possible_edges(all_regulators,all_regulators)))
