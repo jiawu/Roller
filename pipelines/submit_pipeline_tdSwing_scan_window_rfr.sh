@@ -1,13 +1,13 @@
 #!/bin/bash
 #MSUB -A p20519
-#MSUB -l walltime=24:00:00
-#MSUB -l nodes=1:ppn=1
+#MSUB -l walltime=144:00:00
+#MSUB -l nodes=1:ppn=2
 #MSUB -M jiawu@u.northwestern.edu
 #MSUB -j oe
-#MSUB -o /projects/p20519/jia_output/td_scan.txt
+#MSUB -o /projects/p20519/jia_output/td_scan_RF.txt
 #MSUB -m bae
-#MSUB -q normal
-#MSUB -N td_window_scans_for_dream4
+#MSUB -q long
+#MSUB -N RandomForest
 #MSUB -V
 
 param_set=${MOAB_JOBARRAYINDEX}
@@ -46,17 +46,17 @@ then
     #param_set 4 = dataset 1, param_set 5 = dataset 2, etc etc
     insilico_dataset_index=$((${param_set}-3))
 
-    data_folder="/projects/p20519/roller_output/stability_analysis/RandomForest/insilico_size10_${insilico_dataset_index}"
-    output_folder="/projects/p20519/roller_output/stability_analysis/RandomForest/insilico_size10_${insilico_dataset_index}_ntrees_"
+    data_folder="/projects/p20519/roller_output/dream4/sampling/RandomForest/insilico_size10_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/dream4/sampling/RandomForest/insilico_size10_${insilico_dataset_index}_"
     file_path="/home/jjw036/Roller/data/dream4/insilico_size10_${insilico_dataset_index}_timeseries.tsv"
     
 elif [[ "${param_set}" -ge 9 && "${param_set}" -lt 14 ]]
 then
     insilico_dataset_index=$((${param_set}-8))
 
-    data_folder="/projects/p20519/roller_output/sampling/RandomForest/uniform_samplinginsilico_size10_${insilico_dataset_index}"
-    output_folder="/projects/p20519/roller_output/sampling/RandomForest/uniform_samplinginsilico_size10_${insilico_dataset_index}_ntrees_"
-    file_path="/home/jjw036/Roller/data/dream4/uniform_sampling/uniform_samplinginsilico_size10_${insilico_dataset_index}_timeseries.tsv"
+    data_folder="/projects/p20519/roller_output/high_sampling/RandomForest/insilico_size10_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/high_sampling/RandomForest/insilico_size10_${insilico_dataset_index}_"
+    file_path="/home/jjw036/Roller/data/dream4/high_sampling/insilico_size10_${insilico_dataset_index}_timeseries.tsv"
 
 elif [[ ${param_set} -ge 14 && ${param_set} -lt 19 ]]
 then
@@ -181,7 +181,7 @@ then
 
     data_folder="/projects/p20519/roller_output/large_networks/RandomForest/yeast-insilico_size100_${insilico_dataset_index}"
     output_folder="/projects/p20519/roller_output/large_networks/RandomForest/yeast-insilico_size100_${insilico_dataset_index}_"
-    file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Yeast100/Yeast-${insilico_dataset_index}_timeseries.tsv"
+    file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Yeast100/Yeast100-${insilico_dataset_index}_timeseries.tsv"
 
 elif [[ "${param_set}" -ge 157 && "${param_set}" -lt 177 ]]
 then
@@ -191,7 +191,7 @@ then
 
     data_folder="/projects/p20519/roller_output/large_networks/RandomForest/ecoli-insilico_size100_${insilico_dataset_index}"
     output_folder="/projects/p20519/roller_output/large_networks/RandomForest/ecoli-insilico_size100_${insilico_dataset_index}_"
-    file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Ecoli100/Ecoli-${insilico_dataset_index}_timeseries.tsv"
+    file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Ecoli100/Ecoli100-${insilico_dataset_index}_timeseries.tsv"
 
   elif [[ "${param_set}" -ge 177 && "${param_set}" -lt 182 ]]
 then
@@ -201,7 +201,7 @@ then
 
     data_folder="/projects/p20519/roller_output/large_networks/RandomForest/yeast-insilico_size1000_${insilico_dataset_index}"
     output_folder="/projects/p20519/roller_output/large_networks/RandomForest/yeast-insilico_size1000_${insilico_dataset_index}_"
-    file_path="/projects/p20519/Roller_large_dataset/Yeast1000/Yeast-${insilico_dataset_index}_timeseries.tsv"
+    file_path="/projects/p20519/Roller_large_dataset/Yeast1000/Yeast1000-${insilico_dataset_index}_timeseries.tsv"
   
   elif [[ "${param_set}" -ge 182 && "${param_set}" -lt 187 ]]
 then
@@ -211,7 +211,7 @@ then
 
     data_folder="/projects/p20519/roller_output/large_networks/RandomForest/ecoli-insilico_size1000_${insilico_dataset_index}"
     output_folder="/projects/p20519/roller_output/large_networks/RandomForest/ecoli-insilico_size1000_${insilico_dataset_index}_"
-    file_path="/projects/p20519/Roller_large_dataset/Ecoli1000/Ecoli-${insilico_dataset_index}_timeseries.tsv"
+    file_path="/projects/p20519/Roller_large_dataset/Ecoli1000/Ecoli1000-${insilico_dataset_index}_timeseries.tsv"
 
   
 else

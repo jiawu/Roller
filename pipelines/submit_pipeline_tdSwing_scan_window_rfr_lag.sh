@@ -170,7 +170,7 @@ then
 
     data_folder="/projects/p20519/roller_output/large_networks/RandomForest/yeast-insilico_size100_${insilico_dataset_index}"
     output_folder="/projects/p20519/roller_output/large_networks/RandomForest/yeast-insilico_size100_${insilico_dataset_index}_"
-    file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Yeast100/Yeast-${insilico_dataset_index}_timeseries.tsv"
+    file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Yeast100/Yeast100-${insilico_dataset_index}_timeseries.tsv"
 
 elif [[ "${param_set}" -ge 157 && "${param_set}" -lt 177 ]]
 then
@@ -180,7 +180,7 @@ then
 
     data_folder="/projects/p20519/roller_output/large_networks/RandomForest/ecoli-insilico_size100_${insilico_dataset_index}"
     output_folder="/projects/p20519/roller_output/large_networks/RandomForest/ecoli-insilico_size100_${insilico_dataset_index}_"
-    file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Ecoli100/Ecoli-${insilico_dataset_index}_timeseries.tsv"
+    file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Ecoli100/Ecoli100-${insilico_dataset_index}_timeseries.tsv"
 
   elif [[ "${param_set}" -ge 177 && "${param_set}" -lt 182 ]]
 then
@@ -190,7 +190,7 @@ then
 
     data_folder="/projects/p20519/roller_output/large_networks/RandomForest/yeast-insilico_size1000_${insilico_dataset_index}"
     output_folder="/projects/p20519/roller_output/large_networks/RandomForest/yeast-insilico_size1000_${insilico_dataset_index}_"
-    file_path="/projects/p20519/Roller_large_dataset/Yeast1000/Yeast-${insilico_dataset_index}_timeseries.tsv"
+    file_path="/projects/p20519/Roller_large_dataset/Yeast1000/Yeast1000-${insilico_dataset_index}_timeseries.tsv"
   
   elif [[ "${param_set}" -ge 182 && "${param_set}" -lt 187 ]]
 then
@@ -200,7 +200,7 @@ then
 
     data_folder="/projects/p20519/roller_output/large_networks/RandomForest/ecoli-insilico_size1000_${insilico_dataset_index}"
     output_folder="/projects/p20519/roller_output/large_networks/RandomForest/ecoli-insilico_size1000_${insilico_dataset_index}_"
-    file_path="/projects/p20519/Roller_large_dataset/Ecoli1000/Ecoli-${insilico_dataset_index}_timeseries.tsv"
+    file_path="/projects/p20519/Roller_large_dataset/Ecoli1000/Ecoli1000-${insilico_dataset_index}_timeseries.tsv"
 
 
   
