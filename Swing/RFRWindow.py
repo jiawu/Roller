@@ -127,7 +127,7 @@ class RandomForestRegressionWindow(Window):
             raise ValueError("Number of trees must be int (>=0) or None")
         return
 
-    def fit_window(self, crag=False, n_jobs=-1, calc_mse=False):
+    def fit_window(self, crag=False, n_jobs=1, calc_mse=False):
         """
         Set the attributes of the window using expected pipeline procedure and calculate beta values
         :return:
@@ -166,7 +166,7 @@ class RandomForestRegressionWindow(Window):
 
         return coeff_matrix, model_list
 
-    def get_coeffs(self, n_trees, crag=False, x_data=None, n_jobs=-1, calc_mse=False):
+    def get_coeffs(self, n_trees, crag=False, x_data=None, n_jobs=1, calc_mse=False):
         """
         :param x_data:
         :param n_trees:
