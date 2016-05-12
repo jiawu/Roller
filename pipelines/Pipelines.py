@@ -17,6 +17,7 @@ def get_td_stats2(**kwargs):
     kwargs.setdefault('bootstrap_n',10)
     kwargs.setdefault('sort_by', 'rank')
     kwargs.setdefault('filter_noisy',False)
+    kwargs.setdefault('alpha',None)
 
     gene_start_column = 1
     time_label = "Time"
@@ -47,6 +48,8 @@ def get_td_stats2(**kwargs):
     tdr.create_windows()
     if kwargs['filter_noisy']:
         tdr.filter_noisy()
+    if kwargs['alpha'] is not none:
+        tdr.alpha = kwargs['alpha']
     tdr.optimize_params()
     tdr.crag = False
     tdr.calc_mse = kwargs['calc_mse']
@@ -80,6 +83,8 @@ def get_td_community(**kwargs):
     kwargs.setdefault('calc_mse',False)
     kwargs.setdefault('bootstrap_n',10)
     kwargs.setdefault('sort_by', 'rank')
+    kwargs.setdefault('filter_noisy',False)
+    kwargs.setdefault('alpha',None)
 
 
     gene_start_column = 1
@@ -122,6 +127,8 @@ def get_td_community(**kwargs):
 
         if kwargs['filter_noisy']:
             tdr.filter_noisy()
+        if kwargs['alpha'] is not None:
+            tdr.alpha = kwargs['alpha']
         tdr.optimize_params()
         tdr.crag = False
         tdr.calc_mse = kwargs['calc_mse']
@@ -234,7 +241,8 @@ def get_td_stats(**kwargs):
     kwargs.setdefault('calc_mse',False)
     kwargs.setdefault('bootstrap_n',10)
     kwargs.setdefault('sort_by', 'rank')
-
+    kwargs.setdefault('filter_noisy',False)
+    kwargs.setdefault('alpha',None)
 
     gene_start_column = 1
     time_label = "Time"
@@ -260,13 +268,13 @@ def get_td_stats(**kwargs):
     else:
         tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_lag = kwargs['min_lag'], max_lag = kwargs['max_lag'], window_type ='RandomForest')
 
-
-
     tdr.zscore_all_data()
     tdr.set_window(kwargs['td_window'])
     tdr.create_windows()
     if kwargs['filter_noisy']:
         tdr.filter_noisy()
+    if kwargs['alpha'] is not None:
+        tdr.alpha = kwargs['alpha']
     tdr.optimize_params()
     tdr.crag = False
     tdr.calc_mse = kwargs['calc_mse']
