@@ -16,4 +16,4 @@ workon seqgen
 module load python/anaconda3
 cd /home/jjw036/Roller/scripts
 
-python analyze_promotion_plot.py
+python analyze_promotion_plot_sampling.py
