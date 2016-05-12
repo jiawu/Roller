@@ -6,6 +6,7 @@ import os
 import pandas as pd
 import numpy as np
 import networkx as nx
+from collections import deque
 from Swing.util.Evaluator import Evaluator
 from Swing.util.lag_identification import get_experiment_list, xcorr_experiments, calc_edge_lag
 from nxpd import draw
@@ -17,9 +18,7 @@ from matplotlib.path import Path
 import matplotlib.patches as patches
 from matplotlib.patches import Polygon
 import brewer2mpl
-# import seaborn as sns
 from scipy.stats import fisher_exact, linregress, ttest_rel, mannwhitneyu, ttest_ind, pearsonr
-from scipy.special import logit
 
 
 def is_square(n):
@@ -307,13 +306,45 @@ def stars(p):
         return "-"
 
 
-def plot_scores(axes, ctrl, swing, pval, net_size, num_te):
+def draw_boxes(axes, box_obj, color_list):
+    fliers_exist = True if len(box_obj['fliers']) > 0 else False
+
+    # Replace the boxes on the boxplots with nice patches
+    for ii, box in enumerate(box_obj['boxes']):
+        # Clear the existing box
+        box.set_linewidth(0)
+
+        # Add the new box at the coordinates for the existing box
+        box_poly = Polygon(box.get_xydata(), facecolor=color_list[ii], linewidth=0)
+        axes.add_patch(box_poly)
+
+        # Remove the whiskers, there are 2 of them
+        for jj in range(2):
+            box_obj['whiskers'][ii * 2 + jj].set_color(color_list[ii])
+            box_obj['whiskers'][ii * 2 + jj].set_linewidth(1.5)
+
+        # top and bottom fliers
+        # (set allows us to set many parameters at once)
+        if fliers_exist:
+            box_obj['fliers'][ii].set(marker='x', ms=5, mew=1, mec=color_list[ii])
+
+        box_obj['medians'][ii].set_color('black')
+        box_obj['medians'][ii].set_linewidth(2)
+        box_obj['medians'][ii].set_solid_capstyle('butt')
+
+    # and 4 caps to remove
+    for c in box_obj['caps']:
+        c.set_linewidth(0)
+
+
+def plot_scores(axes, ctrl, swing, pval, net_size, num_te, palette):
     x_array = np.array([[1] * len(ctrl), [2] * len(ctrl)])
     y_array = [ctrl, swing]
     y_max = np.max(y_array, axis=None)
     y_min = np.min(y_array, axis=None)
-     # Plot the paired lines
-    axes.plot(x_array, y_array, '.-', c='k', alpha=0.4, zorder=1)
+
+    # Plot the paired lines
+    axes.plot(x_array, y_array, '.-', c='k', alpha=0.4, zorder=10)
 
     # Add null model comparison
     if score == 'aupr':
@@ -332,40 +363,7 @@ def plot_scores(axes, ctrl, swing, pval, net_size, num_te):
                     arrowprops=dict(arrowstyle="-", ec='k', connectionstyle="bar,fraction=0.03"))
         axes.text(1.5, y_max+.02, s, horizontalalignment='center', verticalalignment='center')
 
-    for i in range(len(bp['boxes'])):
-        bp['boxes'][i].set_color(colors2[i])
-
-        # we have two whiskers!
-        bp['whiskers'][i * 2].set_color(colors2[i])
-        bp['whiskers'][i * 2 + 1].set_color(colors2[i])
-        bp['whiskers'][i * 2].set_linewidth(2)
-        bp['whiskers'][i * 2 + 1].set_linewidth(2)
-
-        # top and bottom fliers
-        # (set allows us to set many parameters at once)
-        bp['fliers'][i].set(marker='x', markersize=3,  markeredgecolor=colors2[i])
-        bp['medians'][i].set_color('black')
-        bp['medians'][i].set_linewidth(2)
-        bp['medians'][i].set_solid_capstyle('butt')
-
-    # and 4 caps to remove
-    for c in bp['caps']:
-        c.set_linewidth(0)
-    for i in range(len(bp['boxes'])):
-        box = bp['boxes'][i]
-        box.set_linewidth(0)
-        boxX = []
-        boxY = []
-        for j in range(5):
-            boxX.append(box.get_xdata()[j])
-            boxY.append(box.get_ydata()[j])
-        boxCoords = np.array([boxX, boxY]).T
-        boxPolygon = Polygon(boxCoords, facecolor=colors2[i], linewidth=0)
-        axes.add_patch(boxPolygon)
-
-    # axes.spines['top'].set_visible(False)
-    # axes.spines['right'].set_visible(False)
-    # axes.spines['left'].set_visible(False)
+    draw_boxes(axes, bp, palette)
     axes.get_xaxis().tick_bottom()
     axes.get_yaxis().tick_left()
     axes.tick_params(axis='x', direction='out')
@@ -374,30 +372,21 @@ def plot_scores(axes, ctrl, swing, pval, net_size, num_te):
     axes.set_axisbelow(True)
     axes.set_xticklabels(['Control', 'SWING'])
 
-    return axes
 
-
-def plot_rank_change(axes, ranking, ctrl_str, swing_str):
+def plot_rank_change(axes, ranking, ctrl_str, swing_str, color):
     nl = ranking[ranking["Lag"] == 0]
     l = ranking[ranking["Lag"] != 0]
     axes.plot(nl[ctrl_str], nl[swing_str], '.', c='0.5', alpha=0.5, label='Not Lagged')
-    axes.plot(l[ctrl_str], l[swing_str], '.', c=colors1[3], label='Lagged', zorder=1)
+    axes.plot(l[ctrl_str], l[swing_str], '.', c=color, label='Lagged', zorder=1)
     axes.plot([0, 90], [0, 90], color='k', lw=1, ls='-', label='No change', zorder=0)
-    axes.legend(loc='best')
+    axes.legend(loc='best', numpoints=1)
 
 
-def plot_diff_distribution(axes, promotion, swing_str, width=0.75):
+def plot_diff_distribution(axes, promotion, swing_str, palette):
     nl = promotion[swing_str][promotion["Lag"] == 0]
     l = promotion[swing_str][promotion["Lag"] != 0]
     pos_list = [nl, l]
-    bp = axes.boxplot(pos_list, positions=range(len(pos_list)), showfliers=False, widths=width)
-
-
-
-    # for pc in vp['bodies']:
-    #     pc.set_facecolor(colors1[3])
-    #     pc.set_edgecolor('w')
-    #     pc.set_alpha(1)
+    bp = axes.boxplot(pos_list, positions=range(len(pos_list)), showfliers=False)
 
     y_max = 0
     y_min = 0
@@ -407,46 +396,13 @@ def plot_diff_distribution(axes, promotion, swing_str, width=0.75):
         y_min = min(np.min(coords), y_min)
 
     pval = mannwhitneyu(nl, l).pvalue
-    # print(pval)
     s = stars(pval)
     if pval < 0.05:
         axes.annotate("", xy=(0, y_max - .01), xycoords='data', xytext=(1, y_max + .01), textcoords='data',
                       arrowprops=dict(arrowstyle="-", ec='k', connectionstyle="bar,fraction=0.04"))
         axes.text(0.5, y_max + .05, s, horizontalalignment='center', verticalalignment='center')
 
-    for i in range(len(bp['boxes'])):
-        bp['boxes'][i].set_color(colors2[i + 2])
-
-        # we have two whiskers!
-        bp['whiskers'][i * 2].set_color(colors2[i + 2])
-        bp['whiskers'][i * 2 + 1].set_color(colors2[i + 2])
-        bp['whiskers'][i * 2].set_linewidth(2)
-        bp['whiskers'][i * 2 + 1].set_linewidth(2)
-
-        # top and bottom fliers
-        # (set allows us to set many parameters at once)
-        # bp['fliers'][i].set(marker='x', markersize=3, markeredgecolor=colors2[i+2])
-        bp['medians'][i].set_color('black')
-        bp['medians'][i].set_linewidth(2)
-        bp['medians'][i].set_solid_capstyle('butt')
-
-    # and 4 caps to remove
-    for c in bp['caps']:
-        c.set_linewidth(0)
-    for i in range(len(bp['boxes'])):
-        box = bp['boxes'][i]
-        box.set_linewidth(0)
-        boxX = []
-        boxY = []
-        for j in range(5):
-            boxX.append(box.get_xdata()[j])
-            boxY.append(box.get_ydata()[j])
-        boxCoords = np.array([boxX, boxY]).T
-        boxPolygon = Polygon(boxCoords, facecolor=colors2[i + 2], linewidth=0)
-        axes.add_patch(boxPolygon)
-
-    for p, val in enumerate(pos_list):
-        axes.plot([p - 0.5*width/2, p + 0.5*width/2], [np.median(val), np.median(val)], c='k')
+    draw_boxes(axes, bp, palette)
     axes.get_xaxis().tick_bottom()
     axes.get_yaxis().tick_left()
     axes.tick_params(axis='x', direction='out')
@@ -454,8 +410,11 @@ def plot_diff_distribution(axes, promotion, swing_str, width=0.75):
     axes.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
     axes.set_axisbelow(True)
     axes.set_xticks(list(range(len(pos_list))))
-    axes.set_xticklabels(['Control', 'SWING'])
+    axes.set_xticklabels(['Not Lagged', 'Lagged'])
     axes.set_ylim([y_min*1.2, y_max*1.2])
+
+
+# def draw_bezier(axes, )
 
 #NOTES FROM JIA
 """
@@ -475,8 +434,8 @@ elif X = 5; min_lag = 2, max_lag = 3
 
 
 if __name__ == "__main__":
-    savefigs_group1 = True
-    savefigs_group2 = True
+    savefigs_group1 = 'show'
+    savefigs_group2 = 'show'
     params = {
         'axes.labelsize': 20,
         'font.size': 20,
@@ -485,9 +444,9 @@ if __name__ == "__main__":
         'ytick.labelsize': 16,
         'text.usetex': False,
     }
-    colors1 = brewer2mpl.get_map('Set1', 'qualitative', 8).mpl_colors
-    colors2 = brewer2mpl.get_map('Set2', 'qualitative', 8).mpl_colors
-    colors3 = brewer2mpl.get_map('Paired', 'qualitative', 8).mpl_colors
+    colors1 = deque(brewer2mpl.get_map('Set1', 'qualitative', 8).mpl_colors)
+    colors2 = deque(brewer2mpl.get_map('Set2', 'qualitative', 8).mpl_colors)
+    colors3 = deque(brewer2mpl.get_map('Paired', 'qualitative', 8).mpl_colors)
     rcParams.update(params)
     m = ['Dionesus', 'RF']
     rd = {'Dionesus': 'D', 'RF': 'RF'}
@@ -511,7 +470,7 @@ if __name__ == "__main__":
     for kk, score in enumerate(scores):
         f = plt.figure(figsize=(8, 8))
         g = plt.figure(figsize=(8, 8))
-        h = plt.figure(figsize=(6, 8))
+        h = plt.figure(figsize=(8, 8))
         for ii, method in enumerate(m):
             for jj, model in enumerate(mod):
                 axnum = ii * 2 + jj + 1
@@ -541,9 +500,11 @@ if __name__ == "__main__":
                 p_value = ttest_rel(control, test).pvalue
                 rank = summary[method][model]['te_rank']
                 change = summary[method][model]['te_change']
-                plot_rank_change(gax, rank, 'Base_'+rd[method], rd[method]+'-ml_4')
-                ax = plot_scores(ax, control, test, p_value, network_size, len(change))
-                plot_diff_distribution(hax, change, rd[method]+'-ml_4')
+                plot_rank_change(gax, rank, 'Base_'+rd[method], rd[method]+'-ml_4', colors1[3])
+                plot_scores(ax, control, test, p_value, network_size, len(change), colors2)
+                c2_shift = colors2.copy()
+                c2_shift.rotate(-2)
+                plot_diff_distribution(hax, change, rd[method]+'-ml_4', c2_shift)
 
         f.tight_layout()
         g.tight_layout()
@@ -581,7 +542,7 @@ if __name__ == "__main__":
 
     fig = plt.figure(figsize=(7, 9))
     ax = fig.add_subplot(111)
-    lw = 3
+    lw = 2
 
     for row in fe_ranks.iterrows():
         edge = row[0]
@@ -650,7 +611,8 @@ if __name__ == "__main__":
     if savefigs_group2 is True:
         plt.savefig('../manuscript/Figures/RF_yeast12_promotion.pdf', fmt='pdf')
     elif savefigs_group2 == 'show':
-        plt.show()
+        # plt.show()
+        plt.close()
     else:
         plt.close()
 
@@ -659,28 +621,47 @@ if __name__ == "__main__":
     # The apparent lag is 2, so shift it that much
     f = plt.figure(figsize=(7, 9))
     # Plot unlagged time series and correlation
-    ax = f.add_subplot(2, 2, 1)
-    ax.plot(data[4].index.values, data[4]['G2'].values, '.-', label='G2', c='c', lw=2, ms=10)
-    ax.plot(data[4].index.values, data[4]['G1'].values, '.-', label='G1', c='m', lw=2, ms=10)
-    ax.set_yticks(np.arange(0.0, 0.4, 0.1))
+    ax = f.add_subplot(2, 1, 1)
+    ax.plot(data[4].index.values, data[4]['G2'].values, '.-', label='G2', c=colors3[3], lw=2, ms=10)
+    ax.plot(data[4].index.values, data[4]['G1'].values, '.--', label='G1', c=colors3[0], lw=2, ms=10)
+    ax.plot(data[4].index.values[:-2], data[4]['G1'].values[2:], '.-', label='G1-shifted', c=colors3[1], lw=2, ms=10)
+    arrow_nums = [2, 4, 7, 16, 18]
+    pad = 15
+    for idx, point in enumerate(data[4].index.values):
+        if idx > 1 and idx in arrow_nums:
+            ax.annotate("", xy=(data[4].index.values[idx-2]+pad, data[4]['G1'].values[idx]),
+                        xytext=(point-pad, data[4]['G1'].values[idx]),
+                        arrowprops=dict(facecolor='black', headlength=8, headwidth=8, width=1.5))
+    ax.set_yticks(np.arange(0.0, 0.6, 0.1))
+    ax.set_xticks(np.arange(0.0, 1200, 200))
     ax.set_ylabel('Normalized expression')
     ax.set_xlabel('Time')
     ax.legend(loc='best')
-    ax.set_xticks(range(0, 1000, 200))
 
-    ax = f.add_subplot(2, 2, 3)
-    r2 = pearsonr(data[4]['G2'], data[4]['G1'])[0]
-    ax.plot(data[4]['G2'].values, data[4]['G1'].values, '.', c='k', ms=15)
-    ax.set_xticks(np.arange(0.0, 0.5, 0.1))
+    ax = f.add_subplot(2, 1, 2)
+    reg_fit = linregress(data[4]['G2'], data[4]['G1'])
+    shift_fit = linregress(data[4]['G2'].values[:-2], data[4]['G1'].values[2:])
+
+    ax.plot(data[4]['G2'].values, data[4]['G1'].values, '.', c='k', mfc='w', ms=15, label='$\mathregular{G_1}$')
+    ax.plot(data[4]['G2'].values[:-2], data[4]['G1'].values[2:], '.', c='k', ms=15,
+            label='$\mathregular{G_{1} shifted}$')
+    xvals = np.array([np.min(data[4]['G2'].values), np.max(data[4]['G2'].values)])
+    ax.plot(xvals, xvals * reg_fit.slope + reg_fit.intercept,
+            c='k', ls='--', dashes=(10, 5), lw=1, zorder=0, label=('$\mathregular{R^2 = %0.3f}$' % reg_fit.rvalue))
+    xvals = np.array([np.min(data[4]['G2'].values[:-2]), np.max(data[4]['G2'].values[:-2])])
+    ax.plot(xvals, xvals * shift_fit.slope + shift_fit.intercept,
+            c='k', zorder=1, label=('$\mathregular{R^2 = %0.3f}$' % shift_fit.rvalue))
     ax.set_yticks(np.arange(0.0, 0.4, 0.1))
+    ax.set_xticks(np.arange(0.05, 0.5, 0.1))
     ax.set_xlabel('G2 normalized expression')
     ax.set_ylabel('G1 normalized expression')
-    r2string = r'$R^2$ = %0.3f' % r2
-    ax.text(0.35, 0.05, r2string, horizontalalignment='center', verticalalignment='center', fontsize=14)
-
+    # ax.text(0.35, 0.05, r2string, horizontalalignment='center', verticalalignment='center', fontsize=14)
+    ax.legend(loc='best', numpoints=1, ncol=2, handletextpad=0.05)
+    plt.show()
+    sys.exit()
     ax = f.add_subplot(2, 2, 2)
-    ax.plot(data[4].index.values[:-2], data[4]['G2'].values[:-2], '.-', label='G2-shifted', c='c', lw=2, ms=10)
-    ax.plot(data[4].index.values[:-2], data[4]['G1'].values[2:], '.-', label='G1-shifted', c='m', lw=2, ms=10)
+    ax.plot(data[4].index.values[:-2], data[4]['G2'].values[:-2], '.-', label='G2-shifted', c=colors1[0], lw=2, ms=10)
+    ax.plot(data[4].index.values[:-2], data[4]['G1'].values[2:], '.-', label='G1-shifted', c=colors1[1], lw=2, ms=10)
     ax.set_yticks(np.arange(0.0, 0.4, 0.1))
     ax.legend(loc='best')
     ax.set_xticks(range(0, 1000, 200))
