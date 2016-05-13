@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/swing.iml" afterPath="$PROJECT_DIR$/.idea/swing.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/manuscript/Figures/RF_yeast12_exp6_edgeG2G1_shift.pdf" afterPath="$PROJECT_DIR$/manuscript/Figures/RF_yeast12_exp6_edgeG2G1_shift.pdf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/manuscript/Figures/RF_yeast12_promotion.pdf" afterPath="$PROJECT_DIR$/manuscript/Figures/RF_yeast12_promotion.pdf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/manuscript/Figures/gnw_improvement_aupr.pdf" afterPath="$PROJECT_DIR$/manuscript/Figures/gnw_improvement_aupr.pdf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/manuscript/Figures/gnw_improvement_auroc.pdf" afterPath="$PROJECT_DIR$/manuscript/Figures/gnw_improvement_auroc.pdf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/manuscript/Figures/lag_enrichment.pdf" afterPath="$PROJECT_DIR$/manuscript/Figures/lag_enrichment.pdf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/manuscript/Figures/lag_promotion.pdf" afterPath="$PROJECT_DIR$/manuscript/Figures/lag_promotion.pdf" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/edge_promotion.ipynb" afterPath="$PROJECT_DIR$/scripts/edge_promotion.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/edge_promotion.py" afterPath="$PROJECT_DIR$/scripts/edge_promotion.py" />
@@ -30,8 +34,8 @@
       <file leaf-file-name="lag_identification.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Swing/util/lag_identification.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2505">
-              <caret line="175" column="0" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
+            <state relative-caret-position="517">
+              <caret line="219" column="0" selection-start-line="219" selection-start-column="0" selection-end-line="219" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -40,8 +44,8 @@
       <file leaf-file-name="edge_promotion.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="647">
-              <caret line="350" column="67" selection-start-line="350" selection-start-column="67" selection-end-line="350" selection-end-column="67" />
+            <state relative-caret-position="399">
+              <caret line="519" column="23" selection-start-line="519" selection-start-column="23" selection-end-line="519" selection-end-column="23" />
               <folding>
                 <element signature="e#71#81#0" expanded="true" />
                 <element signature="e#709#931#0" expanded="false" />
@@ -82,43 +86,18 @@
                 <element signature="e#10594#10730#0" expanded="false" />
                 <element signature="e#12502#12620#0" expanded="false" />
                 <element signature="e#13592#13775#0" expanded="false" />
-                <element signature="e#13825#14893#0" expanded="false" />
-                <element signature="e#14001#14808#0" expanded="false" />
-                <element signature="e#14331#14453#0" expanded="false" />
-                <element signature="e#14463#14486#0" expanded="false" />
-                <element signature="e#15760#16054#0" expanded="false" />
-                <element signature="e#16897#18098#0" expanded="false" />
-                <element signature="e#17175#17287#0" expanded="false" />
-                <element signature="e#17375#17671#0" expanded="false" />
-                <element signature="e#18144#18669#1" expanded="false" />
-                <element signature="e#18770#18955#0" expanded="false" />
-                <element signature="e#19330#19418#0" expanded="false" />
-                <element signature="e#19457#19616#0" expanded="false" />
-                <element signature="e#20449#20678#0" expanded="false" />
-                <element signature="e#20732#20833#0" expanded="false" />
-                <element signature="e#20887#20994#0" expanded="false" />
-                <element signature="e#22040#22194#0" expanded="false" />
-                <element signature="e#22113#22194#0" expanded="false" />
-                <element signature="e#22247#22338#0" expanded="false" />
-                <element signature="e#22274#22315#0" expanded="false" />
-                <element signature="e#22365#22427#0" expanded="false" />
-                <element signature="e#23201#23630#0" expanded="false" />
-                <element signature="e#23672#24308#0" expanded="false" />
-                <element signature="e#23794#23893#0" expanded="false" />
-                <element signature="e#24350#25047#0" expanded="false" />
-                <element signature="e#24472#24571#0" expanded="false" />
-                <element signature="e#25682#25785#0" expanded="false" />
-                <marker date="1463082130000" expanded="false" signature="16454:16825" placeholder="..." />
+                <element signature="e#17550#18075#1" expanded="false" />
+                <element signature="e#18172#18357#0" expanded="false" />
+                <element signature="e#18915#19074#0" expanded="false" />
+                <element signature="e#23819#23900#0" expanded="false" />
+                <element signature="e#24163#24225#0" expanded="false" />
+                <element signature="e#24999#25428#0" expanded="false" />
+                <element signature="e#25470#26106#0" expanded="false" />
+                <element signature="e#25592#25691#0" expanded="false" />
+                <element signature="e#26148#26845#0" expanded="false" />
+                <element signature="e#26270#26369#0" expanded="false" />
+                <element signature="e#27480#27583#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="edge_promotion.ipynb" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.ipynb">
-          <provider selected="true" editor-type-id="ipnb-editor">
-            <state>
-              <selected id="6" />
             </state>
           </provider>
         </entry>
@@ -126,7 +105,7 @@
       <file leaf-file-name="gnw_generate_data.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/gnw_insilico/gnw_generate_data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="795">
+            <state relative-caret-position="945">
               <caret line="63" column="41" selection-start-line="63" selection-start-column="41" selection-end-line="63" selection-end-column="41" />
               <folding>
                 <element signature="e#71#81#0" expanded="true" />
@@ -219,7 +198,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -235,6 +213,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Roller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="swing" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Roller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -272,6 +264,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -943,7 +936,7 @@
     <frame x="-1280" y="23" width="1280" height="997" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15329626" sideWeight="0.6923077" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22954726" sideWeight="0.6923077" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33015874" sideWeight="0.50080776" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
@@ -952,7 +945,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23351866" sideWeight="0.30769232" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24404086" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24345848" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -1056,21 +1049,11 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="93" />
+      <option name="time" value="95" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/data/gnw_insilico/gnw_generate_data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#71#81#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Swing/Swing.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1366,14 +1349,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Swing/util/lag_identification.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2505">
-          <caret line="175" column="0" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Swing/util/Evaluator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1381,16 +1356,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.ipynb">
-      <provider selected="true" editor-type-id="ipnb-editor">
-        <state>
-          <selected id="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data/gnw_insilico/gnw_generate_data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="795">
+        <state relative-caret-position="945">
           <caret line="63" column="41" selection-start-line="63" selection-start-column="41" selection-end-line="63" selection-end-column="41" />
           <folding>
             <element signature="e#71#81#0" expanded="true" />
@@ -1402,7 +1370,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="812">
           <caret line="976" column="0" selection-start-line="976" selection-start-column="0" selection-end-line="976" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1414,10 +1381,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///anaconda/lib/python3.5/site-packages/matplotlib/tight_layout.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="186">
+          <caret line="221" column="0" selection-start-line="221" selection-start-column="0" selection-end-line="221" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.ipynb">
+      <provider selected="true" editor-type-id="ipnb-editor">
+        <state>
+          <selected id="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Swing/util/lag_identification.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="517">
+          <caret line="219" column="0" selection-start-line="219" selection-start-column="0" selection-end-line="219" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="647">
-          <caret line="350" column="67" selection-start-line="350" selection-start-column="67" selection-end-line="350" selection-end-column="67" />
+        <state relative-caret-position="399">
+          <caret line="519" column="23" selection-start-line="519" selection-start-column="23" selection-end-line="519" selection-end-column="23" />
           <folding>
             <element signature="e#71#81#0" expanded="true" />
             <element signature="e#709#931#0" expanded="false" />
@@ -1458,33 +1448,17 @@
             <element signature="e#10594#10730#0" expanded="false" />
             <element signature="e#12502#12620#0" expanded="false" />
             <element signature="e#13592#13775#0" expanded="false" />
-            <element signature="e#13825#14893#0" expanded="false" />
-            <element signature="e#14001#14808#0" expanded="false" />
-            <element signature="e#14331#14453#0" expanded="false" />
-            <element signature="e#14463#14486#0" expanded="false" />
-            <element signature="e#15760#16054#0" expanded="false" />
-            <element signature="e#16897#18098#0" expanded="false" />
-            <element signature="e#17175#17287#0" expanded="false" />
-            <element signature="e#17375#17671#0" expanded="false" />
-            <element signature="e#18144#18669#1" expanded="false" />
-            <element signature="e#18770#18955#0" expanded="false" />
-            <element signature="e#19330#19418#0" expanded="false" />
-            <element signature="e#19457#19616#0" expanded="false" />
-            <element signature="e#20449#20678#0" expanded="false" />
-            <element signature="e#20732#20833#0" expanded="false" />
-            <element signature="e#20887#20994#0" expanded="false" />
-            <element signature="e#22040#22194#0" expanded="false" />
-            <element signature="e#22113#22194#0" expanded="false" />
-            <element signature="e#22247#22338#0" expanded="false" />
-            <element signature="e#22274#22315#0" expanded="false" />
-            <element signature="e#22365#22427#0" expanded="false" />
-            <element signature="e#23201#23630#0" expanded="false" />
-            <element signature="e#23672#24308#0" expanded="false" />
-            <element signature="e#23794#23893#0" expanded="false" />
-            <element signature="e#24350#25047#0" expanded="false" />
-            <element signature="e#24472#24571#0" expanded="false" />
-            <element signature="e#25682#25785#0" expanded="false" />
-            <marker date="1463082130000" expanded="false" signature="16454:16825" placeholder="..." />
+            <element signature="e#17550#18075#1" expanded="false" />
+            <element signature="e#18172#18357#0" expanded="false" />
+            <element signature="e#18915#19074#0" expanded="false" />
+            <element signature="e#23819#23900#0" expanded="false" />
+            <element signature="e#24163#24225#0" expanded="false" />
+            <element signature="e#24999#25428#0" expanded="false" />
+            <element signature="e#25470#26106#0" expanded="false" />
+            <element signature="e#25592#25691#0" expanded="false" />
+            <element signature="e#26148#26845#0" expanded="false" />
+            <element signature="e#26270#26369#0" expanded="false" />
+            <element signature="e#27480#27583#0" expanded="false" />
           </folding>
         </state>
       </provider>
