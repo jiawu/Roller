@@ -421,7 +421,7 @@ if __name__ == "__main__":
     # Values for displaying or saving figures are True, 'show' or False
     savefig1 = False
     savefig2 = False
-    savefigs_group2 = True
+    savefigs_group2 = False
     params = {'axes.labelsize': 16, 'axes.labelweight': 'bold', 'font.size': 14, 'legend.fontsize': 14,
               'xtick.labelsize': 14, 'ytick.labelsize': 14,'text.usetex': False}
 
