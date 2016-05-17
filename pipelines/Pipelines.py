@@ -294,7 +294,7 @@ def get_td_stats(**kwargs):
     print(roc_dict['auroc'][-1])
     print(pr_dict['aupr'][-1])#+(1-pr_dict['recall'][-1])
     #tdr.plot_scoring(roc_dict, pr_dict)
-    return(roc_dict['auroc'][-1],pr_dict['aupr'][-1], tdr)
+    return(roc_dict['auroc'][-1],pr_dict['aupr'][-1], tdr, df2)
     #lp.plot_horizontal_line(cragged_window[my_statistic].values, 3, 'best crag')
 
 def main(data_folder, output_path, target_dataset, my_statistic, td_score):
