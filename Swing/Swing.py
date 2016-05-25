@@ -23,7 +23,7 @@ class Swing(object):
     """
 
     def __init__(self, file_path, gene_start=None, gene_end=None, time_label="Time", separator="\t",
-                 window_type="RandomForest", step_size=1, min_lag=0, max_lag=0, window_width=3):
+                 window_type="RandomForest", step_size=1, min_lag=0, max_lag=0, window_width=3, sub_dict = None):
         """
         Initialize the roller object. Read the file and put it into a pandas dataframe
         :param file_path: string
@@ -43,6 +43,10 @@ class Swing(object):
         # Read the raw data into a pandas dataframe object
         self.raw_data = pd.read_csv(file_path, sep=separator)
         self.raw_data = self.raw_data.dropna(axis=0, how='all')
+        if sub_dict is not None:
+            valid_genes = sub_dict['genes']
+            new_cols = [time_label] + list(valid_genes)
+            self.raw_data = self.raw_data[new_cols]
 
         self.file_path = file_path
         self.window_type = window_type
@@ -500,7 +504,7 @@ class Swing(object):
         """
         if self.window_type == "Dionesus":
             for window in self.window_list:
-                window.run_permutation_test(n_permutations=permutation_n, crag=False)
+                #window.run_permutation_test(n_permutations=permutation_n, crag=False)
                 window.make_edge_table()
 
         if self.window_type == "Lasso":
@@ -511,8 +515,8 @@ class Swing(object):
                 window.make_edge_table()
         if self.window_type == "RandomForest":
             for window in self.window_list:
-                print("Running permutation on window {}...".format(window.nth_window))
-                window.run_permutation_test(n_permutations=permutation_n, crag=False)
+                #print("Running permutation on window {}...".format(window.nth_window))
+                #window.run_permutation_test(n_permutations=permutation_n, crag=False)
                 window.make_edge_table(calc_mse=self.calc_mse)
         return self.window_list
 
@@ -629,8 +633,9 @@ class Swing(object):
             if self.calc_mse:
                 current_df = current_df[current_df['MSE_diff'] < 0]
 
+            current_df['adj_imp'] = np.abs(current_df['Importance'])
 
-            current_df['adj_imp'] = np.abs(current_df['Importance'])*(1-current_df['p_value'])
+            #current_df['adj_imp'] = np.abs(current_df['Importance'])*(1-current_df['p_value'])
             if self.window_type is "Dionesus":
                 current_df['adj_imp'] = np.abs(current_df['Importance'])
             elif self.window_type is "Lasso":

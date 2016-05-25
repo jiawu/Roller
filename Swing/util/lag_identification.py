@@ -129,6 +129,7 @@ def calc_edge_lag(xcorr, genes, sc_frac=0.1, min_ccf=0.5, timestep=1, signed_edg
                 edge_lag['Lag'] = lag_estimate.flatten()
 
             elif not flat:
+                
                 if sign == '+':
                     lag = [float(x) for x in np.argmax(filtered, axis=1)]*timestep
                 elif sign == '-':
@@ -172,7 +173,16 @@ def filter_ccfs(ccfs, sc_thresh, min_ccf):
     signchange = ((np.roll(asign, 1) - asign) != 0).astype(int)
     signchange[:, 0] = 0
     # (np.sum(signchange, axis=1) <= sc_thresh) &
-    filtered_ccf = ccfs[(np.sum(signchange, axis=1) <= sc_thresh) & (np.max(np.abs(ccfs), axis=1) > min_ccf), :]
+    
+    ### Do not cross correlate with a lag greater than 1/2 of the dataset when the timeseries is short
+    ### throw out these cross correlations in filtered time-series
+    max_lag = ccfs.shape[1]
+
+    if max_lag < 10:
+        max_lag = np.ceil(ccfs.shape[1]/2.0)
+    
+    filtered_ccf = ccfs[(np.sum(signchange, axis=1) <= sc_thresh) & (np.max(np.abs(ccfs), axis=1) > min_ccf), :max_lag + 1]
+    
     return filtered_ccf
 
 if __name__ == '__main__':

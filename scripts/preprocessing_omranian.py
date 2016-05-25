@@ -7,11 +7,6 @@ import sys
 from datetime import datetime
 import numpy as np
 
-import networkx as nx
-from nxpd import draw
-from nxpd import nxpdParams
-nxpdParams['show'] = 'ipynb'
-
 sys.path.append("../pipelines")
 import Pipelines as tdw
 import Swing.util.lag_identification as lag_id
@@ -21,7 +16,7 @@ import pdb
 
 def create_df(raw_data_path):
     raw_data = pd.read_csv(raw_data_path, sep = '\t')
-    time = [10,20,30,40,50,90]
+    time = [10,20,30,40,50]
 
     raw_data = raw_data.transpose()
     probe_names=raw_data.iloc[0]
@@ -32,7 +27,7 @@ def create_df(raw_data_path):
     final_frame = pd.DataFrame()
 
     for i in range(3):
-        rep_frame = raw_data[i::3][:]
+        rep_frame = raw_data[i::3][:].iloc[:5]
         final_frame = final_frame.append(rep_frame)
 
 #make time series
@@ -60,13 +55,16 @@ def create_df(raw_data_path):
 #check if gene name exists in map
 
 #raw_data_list = ['../data/invitro/omranian_coldstress.txt','../data/invitro/omranian_heatstress.txt','../data/invitro/omranian_control.txt','../data/invitro/omranian_oxidativestress.txt']
-raw_data_list = ['../data/invitro/omranian_control.txt','../data/invitro/omranian_coldstress.txt','../data/invitro/omranian_heatstress.txt']
+raw_data_list = ['../data/invitro/omranian_control.txt','../data/invitro/omranian_coldstress.txt','../data/invitro/omranian_heatstress.txt', '../data/invitro/omranian_oxidativestress.txt']
+#raw_data_list = ['../data/invitro/omranian_oxidativestress.txt']
 
 overall_df = pd.DataFrame()
 
 for raw_data in raw_data_list:
     df = create_df(raw_data)
     overall_df = overall_df.append(df)
+
+#overall_df = pd.read_csv('../data/invitro/omranian_parsed_timeseries.tsv',sep='\t')
 
 genes = overall_df.columns[1:].tolist()
 

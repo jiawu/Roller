@@ -54,7 +54,7 @@ def get_td_stats2(**kwargs):
     tdr.crag = False
     tdr.calc_mse = kwargs['calc_mse']
 
-    tdr.fit_windows(n_trees=kwargs['n_trees'], show_progress=False, n_jobs=-1)
+    tdr.fit_windows(n_trees=kwargs['n_trees'], show_progress=False, n_jobs=1)
     tdr.rank_edges(permutation_n=kwargs['permutation_n'], n_bootstraps=kwargs['bootstrap_n'])
 
 
@@ -107,14 +107,28 @@ def get_td_community(**kwargs):
     final_edge_list = []
     individual_scores = []
 
-    window_types = ['Dionesus', 'RandomForest']
+    window_types = ['Dionesus', 'RandomForest', 'Lasso']
 
     for window_type in window_types:
     #np.random.seed(8)
         tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator,min_lag=kwargs['min_lag'], max_lag=kwargs['max_lag'],  window_type=window_type)
         tdr.zscore_all_data()
         tdr.set_window(kwargs['td_window'])
-        tdr.create_windows()
+        if 'cantone' in kwargs['file_path']:
+            tf_list = ['CBF1','SWI5','ASH1', 'GAL4', 'GAL80']
+        elif 'omranian' in kwargs['file_path']:
+            with open('../data/invitro/omranian_parsed_tf_list.tsv','r') as f:
+                tf_list = f.read().splitlines()
+        elif 'dream5' in kwargs['file_path']:
+            with open('../data/dream5/insilico_transcription_factors.tsv','r') as f:
+                tf_list = f.read().splitlines()
+        elif '100-' in kwargs['file_path']:
+            tf_list = ['G%s'%x for x in range(1,101)]
+
+        else:
+            tf_list = ['G%s'%x for x in range(1,11)]
+
+        tdr.create_custom_windows(tf_list)
         if kwargs['filter_noisy']:
             tdr.filter_noisy()
         if kwargs['alpha'] is not None:
@@ -123,7 +137,7 @@ def get_td_community(**kwargs):
         tdr.crag = False
         tdr.calc_mse = kwargs['calc_mse']
 
-        tdr.fit_windows(n_trees=kwargs['n_trees'], show_progress=False, n_jobs=-1)
+        tdr.fit_windows(n_trees=kwargs['n_trees'], show_progress=False, n_jobs=1)
         tdr.rank_edges(permutation_n=kwargs['permutation_n'], n_bootstraps=kwargs['bootstrap_n'])
 
         tdr.compile_roller_edges(self_edges=False)
@@ -136,8 +150,11 @@ def get_td_community(**kwargs):
         final_edge_list.append(df2)
         individual_scores.append(tdr.score(df2))
 
-
     averaged_rank_data = Rutil.average_rank(final_edge_list, 'Rank')
+    col_names = averaged_rank_data.columns.tolist()
+    for i in range(len(window_types)):
+        col_names[i] = window_types[i]+'-rank'
+    averaged_rank_data.columns = col_names
     averaged_rank_data.sort('mean-rank', inplace=True)
 
     roc_dict, pr_dict = tdr.score(averaged_rank_data)
@@ -145,7 +162,7 @@ def get_td_community(**kwargs):
     print(roc_dict['auroc'][-1])
     print(pr_dict['aupr'][-1])#+(1-pr_dict['recall'][-1])
     #tdr.plot_scoring(roc_dict, pr_dict)
-    return(roc_dict['auroc'][-1],pr_dict['aupr'][-1], tdr_list)
+    return(roc_dict['auroc'][-1],pr_dict['aupr'][-1], tdr_list, averaged_rank_data)
 
 
 def get_td_stats_custom(**kwargs):
@@ -158,6 +175,7 @@ def get_td_stats_custom(**kwargs):
     kwargs.setdefault('calc_mse',False)
     kwargs.setdefault('bootstrap_n',10)
     kwargs.setdefault('sort_by', 'rank')
+    kwargs.setdefault('alpha',None)
 
 
     gene_start_column = 1
@@ -185,27 +203,33 @@ def get_td_stats_custom(**kwargs):
         tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_lag = kwargs['min_lag'], max_lag = kwargs['max_lag'], window_type ='RandomForest')
 
 
-
-    tdr.zscore_all_data()
+    # turning off zscoring for omranian
+    if 'omranian' not in file_path:
+        tdr.zscore_all_data()
     tdr.set_window(kwargs['td_window'])
     if 'cantone' in kwargs['file_path']:
         tf_list = ['CBF1','SWI5','ASH1', 'GAL4', 'GAL80']
     elif 'omranian' in kwargs['file_path']:
         with open('../data/invitro/omranian_parsed_tf_list.tsv','r') as f:
             tf_list = f.read().splitlines()
-            pdb.set_trace()
+    elif 'dream5' in kwargs['file_path']:
+        with open('../data/dream5/insilico_transcription_factors.tsv','r') as f:
+            tf_list = f.read().splitlines()
+    elif '100-' in kwargs['file_path']:
+        tf_list = ['G%s'%x for x in range(1,101)]
     else:
         tf_list = ['G%s'%x for x in range(1,11)]
 
-    pdb.set_trace()
     tdr.create_custom_windows(tf_list)
     if kwargs['filter_noisy']:
         tdr.filter_noisy()
+    if kwargs['alpha'] is not None:
+        tdr.alpha = kwargs['alpha']
     tdr.optimize_params()
     tdr.crag = False
     tdr.calc_mse = kwargs['calc_mse']
 
-    tdr.fit_windows(n_trees=kwargs['n_trees'], show_progress=False, n_jobs=-1)
+    tdr.fit_windows(n_trees=kwargs['n_trees'], show_progress=False, n_jobs=1)
     tdr.rank_edges(permutation_n=kwargs['permutation_n'], n_bootstraps=kwargs['bootstrap_n'])
 
     tdr.compile_roller_edges(self_edges=False)
@@ -271,7 +295,7 @@ def get_td_stats(**kwargs):
     tdr.crag = False
     tdr.calc_mse = kwargs['calc_mse']
 
-    tdr.fit_windows(n_trees=kwargs['n_trees'], show_progress=False, n_jobs=-1)
+    tdr.fit_windows(n_trees=kwargs['n_trees'], show_progress=False, n_jobs=1)
     tdr.rank_edges(permutation_n=kwargs['permutation_n'], n_bootstraps=kwargs['bootstrap_n'])
 
     tdr.compile_roller_edges(self_edges=False)
