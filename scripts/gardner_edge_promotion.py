@@ -25,6 +25,7 @@ def get_true_edges(gold_filename):
 
 params = {'axes.labelsize': 16, 'axes.labelweight': 'bold', 'font.size': 14, 'legend.fontsize': 14,
           'xtick.labelsize': 14, 'ytick.labelsize': 14, 'text.usetex': False}
+rcParams.update(params)
 
 colors1 = list(brewer2mpl.get_map('Set1', 'qualitative', 8).mpl_colors)
 colors2 = list(brewer2mpl.get_map('Set2', 'qualitative', 8).mpl_colors)
@@ -78,12 +79,15 @@ fe_ranks = avg_rank[~avg_rank.index.isin(true_edges)]
 
 fig = plt.figure(figsize=(10, 9))
 left_int = 2
-right_int = 3
+right_int = 2
 cols = left_int + right_int
 ax1 = plt.subplot2grid((2, cols), (0, 0), rowspan=2, colspan=left_int)
 ax2 = plt.subplot2grid((2, cols), (0, left_int), colspan=right_int)
 ax3 = plt.subplot2grid((2, cols), (1, left_int), colspan=right_int)
 lw = 3
+shift_down = ['umuDC', 'uvrD', 'recA']
+shift_up = ['uvrA', 'lexA', 'polB']
+shift_pad = 0.2
 
 for row in fe_ranks.iterrows():
     edge = row[0]
@@ -115,8 +119,18 @@ for row in te_d.iterrows():
     ec = paired[5]
     patch = patches.PathPatch(path, facecolor='none', lw=lw, ec=ec)
     ax1.add_patch(patch)
-    edge_str = edge[0] + u"\u2192" + edge[1] + " Lag = " + str(int(lag))
-    ax1.text(1.02, end, edge_str, ha='left', va='center')
+    va = 'center'
+    if edge[1] in shift_down:
+        va = 'top'
+        start -= shift_pad
+    elif edge[1] in shift_up:
+        va = 'bottom'
+        start += shift_pad
+    if lag > 0:
+        edge_str = edge[0] + u"\u2192" + edge[1] + "\nLag = " + str(int(lag))
+    else:
+        edge_str = edge[0] + u"\u2192" + edge[1]
+    ax1.text(-0.02, start, edge_str, ha='right', va=va)
 
 for row in te_p.iterrows():
     edge = row[0]
@@ -135,18 +149,29 @@ for row in te_p.iterrows():
         ec = paired[3]
     patch = patches.PathPatch(path, facecolor='none', lw=lw, ec=ec)
     ax1.add_patch(patch)
-    edge_str = edge[0] + u"\u2192" + edge[1] + " Lag = " + str(int(lag))
-    ax1.text(1.02, end, edge_str, ha='left', va='center')
+    if lag > 0:
+        edge_str = edge[0] + u"\u2192" + edge[1] + "\nLag = " + str(int(lag))
+    else:
+        edge_str = edge[0] + u"\u2192" + edge[1]
+    va = 'center'
+    if edge[1] in shift_down:
+        va = 'top'
+        start -= shift_pad
+    elif edge[1] in shift_up:
+        va = 'bottom'
+        start += shift_pad
+    ax1.text(-0.02, start, edge_str, ha='right', va=va)
 
 ax1.set_ylim([57, -1])
 ax1.plot([0, 0], [-1, 57], '-', c='k', lw=1)
 # ax1.spines['right'].set_visible = False
-ax1.spines['right'].set_position(('data', 1))
-ax1.set_xlim([0, 1.55])
 ax1.spines['top'].set_bounds(0, 1)
 ax1.spines['bottom'].set_bounds(0, 1)
-ax1.set_ylabel('Rank')
-# ax1.yaxis.set_label_coords(1.005, 1.005)
+ax1.spines['left'].set_position(('data', 0))
+ax1.set_xlim([-0.6, 1])
+ax1.yaxis.tick_right()
+ax1.set_ylabel('Rank', rotation=0, ha='center')
+ax1.yaxis.set_label_coords(1.005, 1.005)
 ax1.tick_params(axis='x', which='both', bottom='off', top='off')
 ax1.set_xticks([0, 1])
 ax1.set_xticklabels(['RF', 'SWING\nRF'])
@@ -178,14 +203,13 @@ reg_fit = linregress(lexa, umudc)
 shift_fit = linregress(lexa[:-1], umudc[1:])
 
 ax3.plot(lexa, umudc, '.', c='k', mfc='w', mew=2, ms=15, label='umuDC')
-ax3.plot(lexa[:-1], umudc[1:], '.', c='k', ms=15,
-        label='umuDC-shifted')
+ax3.plot(lexa[:-1], umudc[1:], '.', c='k', ms=15, label='umuDC-shifted')
 xvals = np.array([np.min(lexa), np.max(lexa)])
 ax3.plot(xvals, xvals * reg_fit.slope + reg_fit.intercept,
-        c='k', ls='--', dashes=(5, 5), lw=1, zorder=0, label=('$\mathregular{R^2 = %0.3f}$' % reg_fit.rvalue))
+         c='k', ls='--', dashes=(5, 5), lw=1, zorder=0, label=('$\mathregular{R^2 = %0.3f}$' % reg_fit.rvalue))
 xvals = np.array([np.min(lexa[:-1]), np.max(lexa[:-1])])
 ax3.plot(xvals, xvals * shift_fit.slope + shift_fit.intercept,
-        c='k', zorder=1, label=('$\mathregular{R^2 = %0.3f}$' % shift_fit.rvalue))
+         c='k', zorder=1, label=('$\mathregular{R^2 = %0.3f}$' % shift_fit.rvalue))
 # ax3.set_yticks(np.arange(0.0, 0.4, 0.1))
 # ax3.set_xticks(np.arange(0.05, 0.5, 0.1))
 ax3.set_xlabel('lexA normalized expression')
