@@ -387,6 +387,7 @@ def plot_diff_distribution(axes, promotion, swing_str, pos, palette, width=0.25,
 
     draw_boxes(axes, bp, palette, ww=ww)
     pval = mannwhitneyu(nl, l).pvalue
+    print(np.mean(l) - np.mean(nl), pval)
     s = stars(pval)
     if pval < 0.05:
         axes.annotate("", xy=(pos[0], y_max + 1), xycoords='data', xytext=(pos[1], y_max + 1), textcoords='data',
@@ -420,7 +421,7 @@ elif X = 5; min_lag = 2, max_lag = 3
 if __name__ == "__main__":
     # Values for displaying or saving figures are True, 'show' or False
     savefig1 = False
-    savefig2 = False
+    savefig2 = 'show'
     savefigs_group2 = False
     params = {'axes.labelsize': 16, 'axes.labelweight': 'bold', 'font.size': 14, 'legend.fontsize': 14,
               'xtick.labelsize': 14, 'ytick.labelsize': 14,'text.usetex': False}
@@ -442,6 +443,37 @@ if __name__ == "__main__":
         summary = make_dictionary(m, rd, mod)
         pd.to_pickle(summary, './param_sweep_summary.pickle')
 
+    # Overall difference
+    swing_rf, base_rf = summary['RF']['auroc']['RF-ml_4'], summary['RF']['auroc']['Base_RF']
+    swing_d, base_d = summary['Dionesus']['auroc']['D-ml_4'], summary['Dionesus']['auroc']['Base_D']
+    print('AUROC increase, and pvalue')
+    print('RF', np.mean(swing_rf)-np.mean(base_rf), (np.mean(swing_rf)-np.mean(base_rf))/np.mean(base_rf),
+          ttest_rel(swing_rf, base_rf).pvalue)
+    print('Dionesus', np.mean(swing_d) - np.mean(base_d), (np.mean(swing_d) - np.mean(base_d))/np.mean(base_d),
+          ttest_rel(swing_d, base_d).pvalue)
+
+    print('\nYeast, AUROC increase, and pvalue')
+    swing_d, base_d = summary['Dionesus']['Yeast']['auroc']['D-ml_4'], summary['Dionesus']['Yeast']['auroc']['Base_D']
+    print('Dionesus', np.mean(swing_d) - np.mean(base_d), (np.mean(swing_d) - np.mean(base_d)) / np.mean(base_d),
+          ttest_rel(swing_d, base_d).pvalue)
+
+
+    swing_rf, base_rf = summary['RF']['aupr']['RF-ml_4'], summary['RF']['aupr']['Base_RF']
+    swing_d, base_d = summary['Dionesus']['aupr']['D-ml_4'], summary['Dionesus']['aupr']['Base_D']
+    print('\nAUPR increase and pvalue')
+    print('RF', np.mean(swing_rf) - np.mean(base_rf), (np.mean(swing_rf) - np.mean(base_rf)) / np.mean(base_rf),
+          ttest_rel(swing_rf, base_rf).pvalue)
+    print('Dionesus', np.mean(swing_d) - np.mean(base_d), (np.mean(swing_d) - np.mean(base_d)) / np.mean(base_d),
+      ttest_rel(swing_d, base_d).pvalue)
+
+    print('Promotion')
+    c_index = 5
+    rf_c = summary['RF']['contingency'][c_index]
+    d_c = summary['Dionesus']['contingency'][c_index]
+    print(rf_c[1, 0]/(rf_c[1,0]+rf_c[1, 1]), rf_c[0, 0]/(rf_c[0,0]+rf_c[0, 1]), summary['RF']['enrich_pvals'].iloc[c_index])
+    print(d_c[1, 0] / (d_c[1, 0] + d_c[1, 1]), d_c[0, 0] / (d_c[0, 0] + d_c[0, 1]),
+          summary['Dionesus']['enrich_pvals'].iloc[c_index])
+
     scores = ['auroc', 'aupr']
     bprops = dict(linewidth=3)
     mprops = dict(linewidth=3, color='r')
@@ -455,7 +487,7 @@ if __name__ == "__main__":
     ####################################################################################################################
     """
     # Parameter ml_4 includes the expected lag and has high enrichment. To keep things simpler I will use this
-    f = plt.figure(figsize=(8, 8))
+    f = plt.figure(figsize=(10, 9))
     positions = np.reshape(np.arange(2*(len(m)+len(mod))), (len(m)+len(mod), 2))
     network_size = 10
     box_pairs = [[paired[ii * 2 + 6], paired[ii * 2 + 1 + 6]] for ii in range(len(mod))]
@@ -520,8 +552,15 @@ if __name__ == "__main__":
     ####################################################################################################################
     ####################################################################################################################
     """
-    g = plt.figure(figsize=(15, 10))
-    gs = gridspec.GridSpec(len(m), len(mod)+1, width_ratios=[1.25, 1.25, 1])
+    top = 0.98
+    bottom = 0.07
+    hspace = 0.1
+    g = plt.figure(figsize=(11, 7))
+    gs1 = gridspec.GridSpec(len(mod), len(m))
+    gs1.update(left=0.06, right=0.6, wspace=0.1, hspace=hspace, top=top, bottom=bottom)
+    gs2 = gridspec.GridSpec(len(mod), 1)
+    gs2.update(left=gs1.right+0.09, right=0.99, hspace=hspace, top=top, bottom=bottom)
+
     rank_change_lim = 90
     for ii, model in enumerate(mod):
         if not savefig2:
@@ -534,22 +573,18 @@ if __name__ == "__main__":
             rank = summary[method][model]['te_rank']
             change = summary[method][model]['te_change']
 
-            axnum = ii * 2 + jj + 1
-            if axnum == 3:
-                axnum = 4
-            elif axnum == 4:
-                axnum = 5
+            axnum = ii * 2 + jj
             if ii == 0:
                 axnum2 = 3
             else:
                 axnum2 = 6
 
             # Add subplot
-            gax = plt.subplot(gs[axnum-1])
+            gax = plt.subplot(gs1[axnum])
             hax_label.append(method)
             hax_label.append('SWING\n' + method)
             if axnum2:
-                hax = plt.subplot(gs[axnum2-1])
+                hax = plt.subplot(gs2[ii])
                 hax.set_ylabel('True Edge Rank Change')
                 # Plot results for rank change distributions
                 h_pos = positions[:2].flatten()
@@ -567,24 +602,27 @@ if __name__ == "__main__":
                     l_patch = patches.Patch(color=split_c2[1], label='Lagged')
                     hax.legend(handles=[nl_patch, l_patch], loc='best')
 
-            if axnum == 1:
+            if axnum == 0:
                 gax.set_ylabel('SWING Rank')
-            elif axnum == 4:
+            elif axnum == 2:
                 gax.set_ylabel('SWING Rank')
                 gax.set_xlabel(method + ' Rank')
-            elif axnum == 5:
+            elif axnum == 3:
                 gax.set_xlabel(method + ' Rank')
 
             # Plot results for rank changes
             plot_rank_change(gax, rank, 'Base_'+rd[method], rd[method]+'-ml_4', box_pairs[ii][0], rank_change_lim)
             gax.set_yticks(np.arange(0, 100, 30))
             gax.set_xticks(np.arange(0, rank_change_lim+10, 30))
-            if axnum == 1 or axnum == 4:
+            if axnum == 0 or axnum == 2:
                 gax.legend(loc='best', numpoints=1, handletextpad=-0.25)
+            if ii == 0:
+                gax.set_xticklabels([])
+                hax.set_xticklabels([])
+            if jj == 1:
+                gax.set_yticklabels([])
 
-        g.tight_layout()
         g_filename = '../manuscript/Figures/lagged_edge_analysis.pdf'
-
         if savefig2 is True and ii > 0:
             g.savefig(g_filename, fmt='pdf')
         elif savefig2 == 'show' and ii > 0:
@@ -674,7 +712,9 @@ if __name__ == "__main__":
     ax1.set_ylim([91, -1])
     ax1.plot([0, 0], [-1, 91], '-', c='k', lw=1)
     ax1.yaxis.tick_right()
-    ax1.spines['left'].set_visible = False
+    ax1.spines['top'].set_bounds(0, 1)
+    ax1.spines['bottom'].set_bounds(0, 1)
+    ax1.spines['left'].set_position(('data', 0))
     ax1.set_xlim([-0.5, 1])
     ax1.set_ylabel('Rank', rotation=0, ha='center')
     ax1.yaxis.set_label_coords(1.005, 1.005)

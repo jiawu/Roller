@@ -119,7 +119,7 @@ def calc_edge_lag(xcorr, genes, sc_frac=0.1, min_ccf=0.5, timestep=1, signed_edg
             # default setting
             if flat:
                 if signed_edge_list is None:
-                    lag_estimate[p_idx, c_idx] = np.ceil(float(np.mean(np.argmax(np.abs(filtered), axis=1))))*timestep
+                    lag_estimate[p_idx, c_idx] = float(np.mean(np.argmax(np.abs(filtered), axis=1)))*timestep
                 elif sign == '+':
                     lag_estimate[p_idx, c_idx] = float(np.mean(np.argmax(filtered, axis=1)))*timestep
                 elif sign == '-':
