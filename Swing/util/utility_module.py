@@ -61,7 +61,7 @@ def average_rank(ranked_result_list, col_string):
     aggregate_ranks = []
     for nth_window in ranked_result_list:
         aggregate_ranks.append(nth_window[[col_string, 'regulator-target']])
-    #now merge the panels in an interesting loop. The merge function insures the keys are always matched up correctly. Zip would've worked too.
+    #now merge the panels in an interesting loop. The merge function insures the keys are always matched up correctly.
     left_df = aggregate_ranks[0] #initialize the left_df.
     left_df.columns= [col_string+"_0", 'regulator-target']
     for window_index in range(1,len(aggregate_ranks)):

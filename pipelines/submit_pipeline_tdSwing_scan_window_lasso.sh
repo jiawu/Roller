@@ -1,24 +1,24 @@
 #!/bin/bash
 #MSUB -A p20519
-#MSUB -l walltime=48:00:00
-#MSUB -l nodes=1:ppn=8
+#MSUB -l walltime=24:00:00
+#MSUB -l nodes=1:ppn=4
 #MSUB -M jiawu@u.northwestern.edu
 #MSUB -j oe
-#MSUB -o /projects/p20519/jia_output/td_scan.txt
+#MSUB -o /projects/p20519/jia_output/large_lasso.txt
 #MSUB -m bae
-#MSUB -q long
-#MSUB -N td_window_scans_for_dream4
+#MSUB -q normal
+#MSUB -N Lasso_Large_networks
 #MSUB -V
 
 param_set=${MOAB_JOBARRAYINDEX}
 #param_set=$1
 workon seqgen
-module load python/anaconda
+module load python/anaconda3
 cd /home/jjw036/Roller/pipelines
 
 
 iterating_param="td_window"
-iterating_style="num 15 21"
+iterating_style="num 15"
 
 iterating_param2="td_window"
 iterating_style2="num 20"
@@ -203,14 +203,23 @@ then
     data_folder="/projects/p20519/roller_output/large_networks/Lasso/ecoli-insilico_size1000_${insilico_dataset_index}"
     output_folder="/projects/p20519/roller_output/large_networks/Lasso/ecoli-insilico_size1000_${insilico_dataset_index}_"
     file_path="/projects/p20519/Roller_large_dataset/Ecoli1000/Ecoli1000-${insilico_dataset_index}_timeseries.tsv"
+  
+  elif [[ "${param_set}" -ge 187 && "${param_set}" -lt 188 ]]
+then
+    #process the in silico datasets a little bit more smoothly
+    #param_set 4 = dataset 1, param_set 5 = dataset 2, etc etc
+
+    data_folder="/projects/p20519/roller_output/large_networks/Lasso/omranian"
+    output_folder="/projects/p20519/roller_output/large_networks/Lasso/omranian_"
+    file_path="/home/jjw036/Roller/data/invitro/omranian_parsed_timeseries.tsv"
 
   
 else
     echo "out of bounds"
 fi
 
-echo "python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}"
-python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
+echo "python run_tdSwing_scan_custom.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}"
+python run_tdSwing_scan_custom.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
 #python run_tdSwing_scan_vgranger.py ${data_folder} ${output_folder} ${file_path} ${iterating_param2} ${iterating_style2}
 
 #data_folder=${data_folder/Lasso/Lasso}

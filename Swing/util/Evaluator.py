@@ -7,47 +7,56 @@ import pdb
 
 class Evaluator:
 
-    def __init__(self, gold_standard_file, sep='\t', interaction_label='regulator-target', node_list=None):
-        self.gs_file = gold_standard_file
-        self.gs_data = pd.read_csv(gold_standard_file, sep=sep, header=None)
-        self.gs_data.columns = ['regulator','target','exists']
-        self.gs_data['regulator-target'] = list(zip(self.gs_data.regulator, self.gs_data.target))
-        self.interaction_label = interaction_label
-        self.gs_flat = self.gs_data[self.gs_data['exists'] > 0]['regulator-target']
-        self.gs_neg = self.gs_data[self.gs_data['exists'] == 0]['regulator-target']
-        #ecoli has a unique gold standard file
-        if 'ecoli' in self.gs_file:
-            self.regulators = ["G"+str(x) for x in range(1,335)]
-            self.targets = ["G"+str(x) for x in range(1,4512)]
-            self.full_list = tuple(map(tuple,self.possible_edges(np.array(self.regulators),np.array(self.targets))))
-            self.full_list = [ x for x in self.full_list if x[0] != x[1] ]
-            self.full_list = pd.Series(self.full_list)
+    def __init__(self, gold_standard_file = None, sep='\t', interaction_label='regulator-target', node_list=None, subnet_dict=None):
+        
+        if (gold_standard_file is None) and (subnet_dict is not None):
+            self.gs_flat = pd.Series(subnet_dict['true_edges'])
+            self.full_list = pd.Series(subnet_dict['edges'])
+        
+        elif gold_standard_file is not None:
+            self.gs_file = gold_standard_file
+            self.gs_data = pd.read_csv(gold_standard_file, sep=sep, header=None)
+            self.gs_data.columns = ['regulator','target','exists']
+            self.gs_data['regulator-target'] = list(zip(self.gs_data.regulator, self.gs_data.target))
+            self.interaction_label = interaction_label
+            self.gs_flat = self.gs_data[self.gs_data['exists'] > 0]['regulator-target']
+            self.gs_neg = self.gs_data[self.gs_data['exists'] == 0]['regulator-target']
+            #ecoli has a unique gold standard file
+            if 'ecoli' in self.gs_file:
+                self.regulators = ["G"+str(x) for x in range(1,335)]
+                self.targets = ["G"+str(x) for x in range(1,4512)]
+                self.full_list = tuple(map(tuple,self.possible_edges(np.array(self.regulators),np.array(self.targets))))
 
-        elif 'omranian' in self.gs_file:
-            with open('../data/invitro/omranian_parsed_tf_list.tsv', 'r') as f:
-                self.regulators = f.read().splitlines()
-            with open('../data/invitro/omranian_all_genes_list.tsv', 'r') as f:
-                self.targets = f.read().splitlines()
-            self.full_list = tuple(map(tuple, self.possible_edges(np.array(self.regulators), np.array(self.targets))))
-            self.full_list = [ x for x in self.full_list if x[0] != x[1]]
-            self.full_list = pd.Series(self.full_list)
-            pdb.set_trace()
+            elif 'omranian' in self.gs_file:
+                with open('../data/invitro/omranian_parsed_tf_list.tsv', 'r') as f:
+                    self.regulators = f.read().splitlines()
+                with open('../data/invitro/omranian_all_genes_list.tsv', 'r') as f:
+                    self.targets = f.read().splitlines()
+                self.full_list = tuple(map(tuple, self.possible_edges(np.array(self.regulators), np.array(self.targets))))
 
-        elif node_list:
-            all_regulators = np.array(list(set(node_list)))
-            self.full_list = tuple(map(tuple,self.possible_edges(all_regulators,all_regulators)))
-            self.full_list=[ x for x in self.full_list if x[0] != x[1]]
-            self.full_list = pd.Series(self.full_list)
-        else:
-            #more robust version of defining the full list
-            all_regulators = self.gs_data['regulator'].unique().tolist()
-            all_targets = self.gs_data['target'].unique().tolist()
-            all_regulators.extend(all_targets)
-            all_regulators = np.array(list(set(all_regulators)))
+            elif 'dream5' in self.gs_file:
+                with open('../data/dream5/insilico_transcription_factors.tsv', 'r') as f:
+                    self.regulators = f.read().splitlines()
+                fp = '../data/dream5/insilico_timeseries.tsv'
+                df = pd.read_csv(fp, sep='\t')
+                geneids = df.columns.tolist()
+                geneids.pop(0)
+                self.targets = geneids
+                self.full_list = tuple(map(tuple, self.possible_edges(np.array(self.regulators), np.array(self.targets))))
+                
+            elif node_list:
+                all_regulators = np.array(list(set(node_list)))
+                self.full_list = tuple(map(tuple,self.possible_edges(all_regulators,all_regulators)))
+            else:
+                #more robust version of defining the full list
+                all_regulators = self.gs_data['regulator'].unique().tolist()
+                all_targets = self.gs_data['target'].unique().tolist()
+                all_regulators.extend(all_targets)
+                all_regulators = np.array(list(set(all_regulators)))
 
-            self.full_list = tuple(map(tuple,self.possible_edges(all_regulators,
-              all_regulators)))
-            #remove self edges
+                self.full_list = tuple(map(tuple,self.possible_edges(all_regulators,
+                  all_regulators)))
+                #remove self edges
             self.full_list = [ x for x in self.full_list if x[0] != x[1] ]
             self.full_list = pd.Series(self.full_list)
 

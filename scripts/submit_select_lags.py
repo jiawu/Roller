@@ -16,4 +16,4 @@ workon seqgen
 module load python/anaconda3
 cd /home/jjw036/Roller/scripts
 
-python lasso_alpha_selection_10.py
+python find_lagged_modules.py

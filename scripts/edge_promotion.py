@@ -9,8 +9,6 @@ import networkx as nx
 from collections import deque
 from Swing.util.Evaluator import Evaluator
 from Swing.util.lag_identification import get_experiment_list, xcorr_experiments, calc_edge_lag
-from nxpd import draw
-from nxpd import nxpdParams
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib import rcParams

@@ -13,8 +13,8 @@ import pickle
 
 def parse(method_string):
     
-    min_lag = 1
-    max_lag = 3
+    min_lag = 25
+    max_lag = 50
     td_window = 10
     preinf_method = method_string.split('-')[0]
     inf_method = inf_method_key[preinf_method]
@@ -31,25 +31,40 @@ def parse(method_string):
         case = int(misc.split('_')[1])
         if case == 0:
             min_lag = 0
-            max_lag = 1
+            max_lag = 25
         elif case == 1:
-            min_lag = 0
-            max_lag = 2
+            min_lag = 15
+            max_lag = 25
         elif case == 2:
-            min_lag = 0
-            max_lag = 3
+            min_lag = 25
+            max_lag = 35
 
         elif case == 3:
-            min_lag = 1
-            max_lag = 2
+            min_lag = 35
+            max_lag = 45
 
         elif case == 4:
-            min_lag = 1
-            max_lag = 4
+            min_lag = 45
+            max_lag = 55
 
         elif case == 5:
-            min_lag = 2
-            max_lag = 3    
+            min_lag = 55
+            max_lag = 65    
+        elif case == 6:
+            min_lag = 65
+            max_lag = 75    
+        elif case == 7:
+            min_lag = 75
+            max_lag = 85    
+        elif case == 8:
+            min_lag = 25
+            max_lag = 45    
+        elif case == 9:
+            min_lag = 25
+            max_lag = 70    
+        elif case == 10:
+            min_lag = 10
+            max_lag = 50    
 
     return(inf_method, td_window, min_lag, max_lag)
 
@@ -59,11 +74,12 @@ run_params = {}
 inf_list = ["Dionesus", "RandomForest", "Lasso"]
 inf_list2 = ["Dionesus-td10", "RandomForest-td10", "Lasso-td10", "Dionesus-td15", "RandomForest-td15", "Lasso-td15"]
 
-methods_of_interest = ['Dionesus-td_2', 'Dionesus-td_10', 'Dionesus-td_15','Dionesus-td_21', 'Dionesus-ml_0', 'Dionesus-ml_1', 'Dionesus-ml_2','Dionesus-ml_3','Dionesus-ml_4', 'Dionesus-ml_5']
+methods_of_interest = ['Dionesus-td_2', 'Dionesus-td_10', 'Dionesus-td_15','Dionesus-td_21', 'Dionesus-ml_0', 'Dionesus-ml_1', 'Dionesus-ml_2','Dionesus-ml_3','Dionesus-ml_4', 'Dionesus-ml_5','Dionesus-ml_6','Dionesus-ml_7','Dionesus-ml_8','Dionesus-ml_9','Dionesus-ml_10','RF-td_2', 'RF-td_10', 'RF-td_15','RF-td_21', 'RF-ml_0', 'RF-ml_1', 'RF-ml_2','RF-ml_3','RF-ml_4', 'RF-ml_5','RF-ml_6','RF-ml_7','RF-ml_8','RF-ml_9','RF-ml_10' ]
+ 
 
 inf_method_key = {'RF':'RandomForest', 'Dionesus': 'Dionesus', 'Lasso':'Lasso'}
 
-organisms = ['high_sampling', 'sampling']
+organisms = ['high_sampling']
 
 organism_results = []
 for organism in organisms:    
@@ -106,7 +122,7 @@ for organism in organisms:
         for method in methods_of_interest:
             diff_name = 'Dionesus-td_21-' + method
             true_only[diff_name] = true_only['rank_importance_Dionesus-td_21']-true_only['rank_importance_'+method]
-        pickle_name = organism + '_net' + str(network_index) + '_promotion.pkl'
+        pickle_name = '/projects/p20519/roller_output/pickles/' + organism + '_net' + str(network_index) + '_promotion.pkl'
         pickle.dump(current_results, open(pickle_name, 'wb'))
 
         #network_results.append(current_results)

@@ -243,8 +243,8 @@ class LassoWindow(Window):
         # Raise exception if Lasso doesn't converge with alpha == 0
         zero_alpha_coeffs, _ = self.get_coeffs(0)
 
-        if np.count_nonzero(zero_alpha_coeffs) < max_edges:
-            raise ValueError('Lasso does not converge with alpha = 0')
+        #if np.count_nonzero(zero_alpha_coeffs) < max_edges:
+        #    raise ValueError('Lasso does not converge with alpha = 0')
 
         # Raise exception if max_expected_alpha does not return all zero betas
         high_alpha_coeffs, _ = self.get_coeffs(max_expected_alpha)
