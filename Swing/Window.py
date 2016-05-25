@@ -203,6 +203,7 @@ class Window(object):
         time_n = len(set(self.response_times))
         split_n = len(self.response_times)/time_n
         # generate a list of separate experiments
+        print("%s %s"%(split_n,timeseries.shape ))
         ts_list = np.split(timeseries, split_n)
 
         var_list = []
@@ -222,7 +223,7 @@ class Window(object):
         nodes
         """
 
-        coeff_matrix = np.array([], dtype=np.float_).reshape(0, data.shape[1])
+        coeff_matrix = np.array([], dtype=np.float64).reshape(0, data.shape[1])
 
         model_list = []
 
@@ -236,18 +237,25 @@ class Window(object):
             if self.remove_stationary_ts is True:
                 exclude_list,ts_list = self.identify_stationary_experiments(target_y)
                 if exclude_list:
+                    
+                    # find time-series that was not excluded and use in target matrix
                     ts_list2 = [idx for i, idx in enumerate(ts_list) if i not in exclude_list]
+                    # if there are no useable time-series, use all of the timeseries available
+                    if len(ts_list2) is 0:
+                        ts_list2 = ts_list
                     target_y = np.hstack(ts_list2)
                     time_n = len(set(self.response_times))
                     split_n = len(self.response_times)/time_n
-                    x_matrix = data.copy()
+                    x_matrix = data.astype(np.float64, copy=True)
                     x_series = np.split(x_matrix, split_n)
                     x_series2 = [idx for i, idx in enumerate(x_series) if i not in exclude_list]
+                    if len(x_series2) is 0:
+                        x_series2 = x_series
                     x_matrix = np.vstack(x_series2)
                 else:
-                    x_matrix = data.copy()
+                    x_matrix = data.astype(np.float64, copy=True)
             else:
-                x_matrix = data.copy()
+                x_matrix = data.astype(np.float64,copy=True)
 
             # Identify experiments that are stationary
 
@@ -257,7 +265,7 @@ class Window(object):
                 keep_columns = ~((x_window == self.nth_window) & (x_labels == y_labels[col_index]))
                 if False in keep_columns:
                     insert_index = list(keep_columns).index(False)
-                x_matrix = x_matrix[:, keep_columns].copy()
+                x_matrix = x_matrix[:, keep_columns].astype(np.float64, copy=True)
 
             input_tuple = (target_y, x_matrix, insert_index)
             model_inputs.append(input_tuple)

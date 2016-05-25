@@ -192,6 +192,12 @@ class DionesusWindow(Window):
         model_inputs = result_tuple[4]
 
         explained_variances = None
+        size_test = []
+        for response, explanatory, index in model_inputs:
+            size_test.append(explanatory.shape)
+
+        min_dim=sorted(size_test,key=lambda x: x[1], reverse=False)[0][1]
+            
         for response, explanatory, index in model_inputs:
             pca = PCA()
             pca.fit(explanatory)
@@ -199,14 +205,12 @@ class DionesusWindow(Window):
                 explained_variances = pca.explained_variance_ratio_
             else:
                 try:
-                    explained_variances = np.vstack((explained_variances, pca.explained_variance_ratio_))
+                  explained_variances = np.vstack((explained_variances, pca.explained_variance_ratio_))
                 except ValueError:
-                    pdb.set_trace()
                     try:
-                        truncated_index = explained_variances.shape[1]
-                        explained_variances = np.vstack((explained_variances, pca.explained_variance_ratio_[:truncated_index]))
+                        explained_variances = np.vstack((explained_variances[:,:min_dim], pca.explained_variance_ratio_[:min_dim]))
                     except IndexError:
-                        truncated_index = pca.explained_variance_ratio_.shape[0]
+                        truncated_index = min_dim
                         explained_variances = np.vstack((explained_variances[:truncated_index], pca.explained_variance_ratio_[:truncated_index]))
 
 
@@ -273,7 +277,7 @@ class DionesusWindow(Window):
             self.test_scores.append(test_scores)
         return coeff_matrix, vip_matrix, model_list
 
-    def get_coeffs(self, num_pcs=3, x_data=None, y_data=None, crag=False, calc_mse=False):
+    def get_coeffs(self, num_pcs=2, x_data=None, y_data=None, crag=False, calc_mse=False):
         """
         :param x_data:
         :param n_trees:
