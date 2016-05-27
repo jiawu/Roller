@@ -1,3 +1,6 @@
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 from datetime import datetime
 import sys
 import pandas as pd
@@ -64,7 +67,7 @@ def get_tf_list():
         tf_list = tf_file.read().splitlines()
     return(tf_list)
 
-def main(window_type='RandomForest', lag_thresh=4, fill_na=False, median_thresh=2):
+def main(window_type='RandomForest', lag_thresh=4, fill_na=False, median_thresh=2, CLUSTER=14, img_append = ""):
     """
     df = pd.read_csv('../data/invitro/ecocyc_database_export_ver1_02.txt',sep='\t')
 
@@ -84,21 +87,21 @@ def main(window_type='RandomForest', lag_thresh=4, fill_na=False, median_thresh=
     df['parsed_genes_list'] = pathway_gene_list
     df['parsed_genes_str'] = pathway_gene_string
     """
-    if os.path.isfile('lag_df2_parse_biocyc_2.pkl'):
-        lag_df = pd.read_pickle('lag_df2_parse_biocyc_2.pkl')
-        edge_df = pd.read_pickle('edge_df2_parse_biocyc_2.pkl')
+    if os.path.isfile('lag_df2_parse_biocyc_3.pkl'):
+        lag_df = pd.read_pickle('lag_df2_parse_biocyc_3.pkl')
+        edge_df = pd.read_pickle('edge_df2_parse_biocyc_3.pkl')
     else:
         ## Get the lags to associate with the network
-        (lag_df, edge_df) = flm.get_true_lags('../data/invitro/omranian_parsed_timeseries.tsv',6,17)
+        (lag_df, edge_df) = flm.get_true_lags('../data/invitro/omranian_parsed_timeseries.tsv',5,30)
         lag_df['lag_median'] = [np.median(x) for x in lag_df['Lag'].tolist()]
         edge_df['lag_median'] = [np.median(x) for x in edge_df['Lag'].tolist()]
-        lag_df.to_pickle('lag_df2_parse_biocyc_2.pkl')
-        edge_df.to_pickle('edge_df2_parse_biocyc_2.pkl')
+        lag_df.to_pickle('lag_df2_parse_biocyc_3.pkl')
+        edge_df.to_pickle('edge_df2_parse_biocyc_3.pkl')
     
     lag_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in lag_df['Lag'].tolist()]
     edge_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in edge_df['Lag'].tolist()]
 
-    clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments7.csv',sep=',')
+    clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments'+str(CLUSTER)+'.csv',sep=',')
 
     new_lag= lag_df.reset_index()
 
@@ -115,24 +118,63 @@ def main(window_type='RandomForest', lag_thresh=4, fill_na=False, median_thresh=
     target_clusters = within_clusters
     target_clusters.loc[target_clusters['lag_counts']<lag_thresh, ['lag_median']] = np.nan
     target_clusters.loc[target_clusters['lag_counts']<lag_thresh, ['lag_mean']] = np.nan
+    fig = plt.figure()
+    
+
+    ## mean lag for each cluster
+
+    
     if fill_na:
         target_clusters = target_clusters.fillna(0)
     grouped_by_cluster = target_clusters.groupby('parent_cluster')
     clusters = target_clusters['parent_cluster'].unique().tolist()
 
+    
+    valid_clusters = 0
+    
+    for clusterid in clusters:
+        current_group = grouped_by_cluster.get_group(clusterid)
+        sub_dict = get_subnetwork_info(current_group)
+        if (len(current_group)>9) or (len(sub_dict['tfs']) > 2):
+            valid_clusters +=1
+    
+    plot_length=round((valid_clusters+2)/5)
+    fig = plt.figure(figsize=(20,20))
+    ax1 = fig.add_subplot(plot_length, 5, 1)
+    ## overall lags for each edge
+    ax1.hist(target_clusters['lag_mean'].fillna(0).values.tolist(), bins = 20)
+    
+    
     cluster_summary = pd.DataFrame()
     clusters = sorted(clusters)
+    counter = 2
     for clusterid in clusters:
         current_group = grouped_by_cluster.get_group(clusterid)
         sub_dict = get_subnetwork_info(current_group)
         if (len(current_group) < 10) or (len(sub_dict['tfs']) < 3):
             continue
         else:
+            
             non_na = current_group[current_group['lag_median'] > median_thresh]
             plag = len(non_na)/len(current_group)
+            ax_clust = fig.add_subplot(plot_length, 5, counter)
+            ax_clust.hist(current_group['lag_mean'].fillna(0).values.tolist(), bins = 20)
+            if fill_na:
+                result = {'cluster_id': clusterid, 'lag_median':current_group['lag_median'].fillna(0).mean(), 'lag_mean':current_group['lag_mean'].fillna(0).mean(), 'percent_lagged': plag, 'total_edges':len(current_group)}
+
             result = {'cluster_id': clusterid, 'lag_median':current_group['lag_median'].mean(), 'lag_mean':current_group['lag_mean'].mean(), 'percent_lagged': plag, 'total_edges':len(current_group)}
             cluster_summary = cluster_summary.append(result,ignore_index=True)
-    cluster_summary.to_csv('lag_info_merged_c7_4.csv', sep='\t', index=False)
+            counter += 1
+    
+    lag_me = cluster_summary['lag_mean'].values.tolist()
+    ax_last = fig.add_subplot(plot_length, 5, plot_length*5-1)
+    ax_last.hist(lag_me, bins = 20)
+    plag = cluster_summary['percent_lagged'].values.tolist()
+    ax_last2 = fig.add_subplot(plot_length, 5, plot_length*5)
+    ax_last2.hist(plag, bins = 20)
+    plt.savefig('CLUSTER_'+str(CLUSTER)+str(img_append)+'_hist.png')
+    
+    #cluster_summary.to_csv('lag_info_merged_c7_4.csv', sep='\t', index=False)
     return(cluster_summary)
 
 

@@ -21,7 +21,7 @@ def get_true_edges(gold_filename):
     return edges, evaluator
 
 
-def get_true_lags(exp_path, timepoints, perturbs):
+def get_true_lags(exp_path, timepoints, perturbs, dset = 'omranian'):
     exp_inter = lag_id.get_experiment_list(exp_path, timepoints = timepoints, perturbs=perturbs)
     
     start = timer()
@@ -32,16 +32,22 @@ def get_true_lags(exp_path, timepoints, perturbs):
     print("Calculated x correlation matrices")
     gene_list = list(exp_inter[0].columns.values)
     print("Calculated edge lag from x correlation matrices")
-    signed_edge_list = pd.read_csv('../data/invitro/omranian_signed_parsed_goldstandard.tsv',sep='\t',header=None)
+    if 'omranian' in dset:
+        signed_edge_list = pd.read_csv('../data/invitro/omranian_signed_parsed_goldstandard.tsv',sep='\t',header=None)
+        goldstandard = '../data/invitro/omranian_parsed_goldstandard.tsv'
+
+    elif 'marbach' in dset:
+        signed_edge_list = pd.read_csv('../data/invitro/marbach_signed_parsed_goldstandard.tsv',sep='\t',header=None)
+        goldstandard = '../data/invitro/marbach_parsed_goldstandard.tsv'
+                
     signed_edge_list.columns=['regulator', 'target', 'signs']
     signed_edge_list['regulator-target'] = tuple(zip(signed_edge_list['regulator'], signed_edge_list['target']))
 
-    lags=lag_id.calc_edge_lag(exp_xcor, gene_list, 0.3, 0.7, timestep=1, signed_edge_list = signed_edge_list, flat = False)
+    lags=lag_id.calc_edge_lag(exp_xcor, gene_list, 0.5, 0.6, timestep=1, signed_edge_list = signed_edge_list, flat = False)
 
     lags = lags[lags['Parent'] != lags['Child']]
     edge_df = pd.DataFrame(lags['Lag'].values, index=lags['Edge'].values, columns=['Lag'])
     
-    goldstandard = '../data/invitro/omranian_parsed_goldstandard.tsv'
     true_edges, evaluator = get_true_edges(goldstandard)
 
     all_lag_list = edge_df['Lag'].tolist()

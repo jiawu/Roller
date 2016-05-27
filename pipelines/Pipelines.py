@@ -114,6 +114,7 @@ def get_td_community(**kwargs):
         tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator,min_lag=kwargs['min_lag'], max_lag=kwargs['max_lag'],  window_type=window_type)
         tdr.zscore_all_data()
         tdr.set_window(kwargs['td_window'])
+        
         if 'cantone' in kwargs['file_path']:
             tf_list = ['CBF1','SWI5','ASH1', 'GAL4', 'GAL80']
         elif 'omranian' in kwargs['file_path']:
@@ -310,7 +311,7 @@ def get_td_stats(**kwargs):
     print(roc_dict['auroc'][-1])
     print(pr_dict['aupr'][-1])#+(1-pr_dict['recall'][-1])
     #tdr.plot_scoring(roc_dict, pr_dict)
-    return(roc_dict['auroc'][-1],pr_dict['aupr'][-1], tdr)
+    return(roc_dict['auroc'][-1],pr_dict['aupr'][-1], tdr, df2)
     #lp.plot_horizontal_line(cragged_window[my_statistic].values, 3, 'best crag')
 
 def main(data_folder, output_path, target_dataset, my_statistic, td_score):
