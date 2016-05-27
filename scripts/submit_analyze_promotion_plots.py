@@ -1,13 +1,13 @@
 #!/bin/bash
 #MSUB -A p20519
-#MSUB -l walltime=72:00:00
+#MSUB -l walltime=24:00:00
 #MSUB -l nodes=1:ppn=1
 #MSUB -M jiawu@u.northwestern.edu
 #MSUB -j oe
 #MSUB -o /projects/p20519/jia_output/omranian_rank_plots.txt
 #MSUB -m bae
-#MSUB -q long
-#MSUB -N omranian_short2
+#MSUB -q normal
+#MSUB -N promo
 #MSUB -V
 
 param_set=${MOAB_JOBARRAYINDEX}
@@ -16,4 +16,4 @@ workon seqgen
 module load python/anaconda3
 cd /home/jjw036/Roller/scripts
 
-python analyze_promotion_plot_omranian_short2.py
+python analyze_promotion_plot.py 10
