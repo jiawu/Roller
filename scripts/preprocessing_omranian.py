@@ -59,12 +59,12 @@ raw_data_list = ['../data/invitro/omranian_control.txt','../data/invitro/omrania
 #raw_data_list = ['../data/invitro/omranian_oxidativestress.txt']
 
 overall_df = pd.DataFrame()
-
+"""
 for raw_data in raw_data_list:
     df = create_df(raw_data)
     overall_df = overall_df.append(df)
-
-#overall_df = pd.read_csv('../data/invitro/omranian_parsed_timeseries.tsv',sep='\t')
+"""
+overall_df = pd.read_csv('../data/invitro/omranian_parsed_timeseries.tsv',sep='\t')
 
 genes = overall_df.columns[1:].tolist()
 

@@ -84,7 +84,7 @@ def generate_json(merged_df,method):
         json_list.append(json_dict)
 
     json_list = sorted(json_list, key=lambda k: len(k['imports']), reverse=False)
-    with open('lagged_network.json', 'w') as fp:
+    with open('lagged_network_2.json', 'w') as fp:
         json.dump(json_list, fp, sort_keys=True)
 
     # for every parent, append the edge
@@ -230,7 +230,7 @@ def get_group_stats(sub_group,parsed_info, sub_stats, sub_all_edges):
 4. Check if there's an enrichment, or if cluster is statistically significant
 
 """
-def main(window_type='RandomForest'):
+def main(window_type='RandomForest', CLUSTER=14):
     """
     df = pd.read_csv('../data/invitro/ecocyc_database_export_ver1_02.txt',sep='\t')
 
@@ -250,21 +250,21 @@ def main(window_type='RandomForest'):
     df['parsed_genes_list'] = pathway_gene_list
     df['parsed_genes_str'] = pathway_gene_string
     """
-    if os.path.isfile('lag_df2_parse_biocyc_3.pkl'):
-        lag_df = pd.read_pickle('lag_df2_parse_biocyc_3.pkl')
-        edge_df = pd.read_pickle('edge_df2_parse_biocyc_3.pkl')
+    if os.path.isfile('lag_df2_parse_biocyc_4.pkl'):
+        lag_df = pd.read_pickle('lag_df2_parse_biocyc_4.pkl')
+        edge_df = pd.read_pickle('edge_df2_parse_biocyc_4.pkl')
     else:
         ## Get the lags to associate with the network
         (lag_df, edge_df) = flm.get_true_lags('../data/invitro/omranian_parsed_timeseries.tsv',5,30)
         lag_df['lag_median'] = [np.median(x) for x in lag_df['Lag'].tolist()]
         edge_df['lag_median'] = [np.median(x) for x in edge_df['Lag'].tolist()]
-        lag_df.to_pickle('lag_df2_parse_biocyc_3.pkl')
-        edge_df.to_pickle('edge_df2_parse_biocyc_3.pkl')
+        lag_df.to_pickle('lag_df2_parse_biocyc_4.pkl')
+        edge_df.to_pickle('edge_df2_parse_biocyc_4.pkl')
     
     lag_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in lag_df['Lag'].tolist()]
     edge_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in edge_df['Lag'].tolist()]
 
-    clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments13.csv',sep=',')
+    clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments'+str(CLUSTER)+'.csv',sep=',')
 
     new_lag= lag_df.reset_index()
 
@@ -275,6 +275,8 @@ def main(window_type='RandomForest'):
     merged_lag = pd.merge(merged_lag, clusters[['name','__glayCluster']], how='left', left_on=['child'], right_on=['name'])
     merged_lag = merged_lag.rename(columns = {'__glayCluster':'child_cluster'})
 
+    #generate_json(merged_lag, method = 'lag_median')
+    
     average_lag_over_network = merged_lag['lag_mean'].mean()
     std_lag_over_network = merged_lag['lag_mean'].std()
 
@@ -283,12 +285,9 @@ def main(window_type='RandomForest'):
     within_clusters = merged_lag[merged_lag['parent_cluster'] == merged_lag['child_cluster']]
     between_clusters = merged_lag[merged_lag['parent_cluster'] != merged_lag['child_cluster']]
 
-    target_clusters = within_clusters
+    target_clusters = merged_lag
 
     grouped_by_cluster = target_clusters.groupby('parent_cluster')
-
-    target_clusters.loc[target_clusters['lag_counts']<3, ['lag_median']] = 0
-
 
     clusters = target_clusters['parent_cluster'].unique().tolist()
     cluster_summary = pd.DataFrame()
@@ -297,9 +296,9 @@ def main(window_type='RandomForest'):
     dict_databases = ['community_rank_data.pkl','RandomForest_rank_data.pkl','Lasso_rank_data.pkl']
     db = zip(pd_databases, dict_databases)
     agg_results = pd.DataFrame()
-    parsed_info = {}
+    #parsed_info = {}
     target_fp = 'omranian'
-
+    """
     for pd_d, d_d in db:
         df = pd.read_pickle(pd_d)
         df = df[df['file_path'].str.contains(target_fp)]
@@ -308,7 +307,7 @@ def main(window_type='RandomForest'):
             info = pickle.load(infile)
         
         parsed_info.update( {k: info[k] for k in df['result_path'].tolist() if k in info.keys()})
-
+    """
     clusters.sort()
     for clusterid in clusters:
         print(clusterid, len(clusters))
@@ -365,19 +364,21 @@ def main(window_type='RandomForest'):
         cluster_summary = cluster_summary.append(cluster_result, ignore_index = True)
 
     current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')    
-    cluster_summary.to_csv('cluster_summary_within_c13_' + current_time + '.csv', header=True, index=False, sep='\t')
+    cluster_summary.to_csv('cluster_summary_all_c'+str(CLUSTER)+'_' + current_time + '.csv', header=True, index=False, sep='\t')
+
 
 if __name__ == '__main__':
     if len(sys.argv) >= 2:
         window_type = str(sys.argv[1])
+        CLUSTER = int(sys.argv[2])
+
     else:
         window_type = 'RandomForest'
-    main(window_type)
+    main(window_type, CLUSTER=CLUSTER)
         
 
 """
 pdb.set_trace()
-generate_json(merged_lag, method = 'lag_median')
 
 result_df = grouped_by_cluster.median()
 result_df['count'] = grouped_by_cluster.count()['name_x']

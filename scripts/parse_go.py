@@ -3,7 +3,7 @@ import pandas as pd
 from goatools.go_enrichment import GOEnrichmentStudy
 from goatools.obo_parser import GODag
 from collections import defaultdict
-
+import generate_json
 
 def parse_go():
     go = pd.read_csv('../data/invitro/gene_ontology.tsv', sep='\t')
@@ -25,7 +25,7 @@ def get_clist(clusterid, cluster_table):
 
 eco_go = parse_go()
 
-clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments7.csv',sep=',')
+clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments_parsed16.csv',sep=',')
 
 
 obodag = GODag("go-basic.obo")
@@ -41,6 +41,7 @@ goeaobj = GOEnrichmentStudy(
 # For each cluster, test the list of the genes for gene ontology enrichment
 
 valid_clusters = clusters['__glayCluster'].unique().tolist()
+valid_clusters.remove(99)
 r = []
 for clusterid in valid_clusters:
     genes_0 = get_clist(clusterid, clusters)

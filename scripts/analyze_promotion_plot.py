@@ -130,7 +130,7 @@ def main(job,n_trials=1):
         run_params['file_path'] = file_path
         run_params['data_folder'] = data_folder
 
-        methods_of_interest = ['-td_10', '-td_15','-td_21', '-ml_01', '-ml_11', '-ml_02','-ml_03','-ml_12', '-ml_22', '-ml_33', '-ml_34']
+        methods_of_interest = ['-ml00']
         # 11 methods of interest. so it goes from 82 to 93
         max_window = 21
         if 'omranian' in file_path:

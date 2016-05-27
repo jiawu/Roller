@@ -7,7 +7,7 @@
 #MSUB -o /projects/p20519/jia_output/insilico_rank_plots.txt
 #MSUB -m bae
 #MSUB -q normal
-#MSUB -N parse_biocyc
+#MSUB -N parse_biocyc_all
 #MSUB -V
 
 param_set=${MOAB_JOBARRAYINDEX}
@@ -16,4 +16,4 @@ workon seqgen
 module load python/anaconda3
 cd /home/jjw036/Roller/scripts
 
-python parse_biocyc.py RandomForest
+python parse_biocyc.py RandomForest 15
