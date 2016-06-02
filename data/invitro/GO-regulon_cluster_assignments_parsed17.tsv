@@ -1,0 +1,126 @@
+clusterid	ontology	p-value	study_count	study_n
+4.0	chemotaxis	1.0726594137497991e-05	8.0	55.0
+4.0	dipeptide transport	0.0015234299710944754	5.0	55.0
+4.0	translation	0.007010866605005897	10.0	55.0
+4.0	hypoxanthine catabolic process	0.009200559128952481	3.0	55.0
+4.0	ribosome	1.0135408040181537e-05	11.0	55.0
+4.0	intracellular ribonucleoprotein complex	2.6694982691162465e-05	10.0	55.0
+4.0	cytosolic large ribosomal subunit	0.013409505476471736	6.0	55.0
+4.0	oligopeptide-transporting ATPase activity	2.6694982691162465e-05	5.0	55.0
+4.0	structural constituent of ribosome	2.6694982691162465e-05	10.0	55.0
+4.0	dipeptide transporter activity	0.0011979113931838631	5.0	55.0
+4.0	rRNA binding	0.0014273429836087787	8.0	55.0
+6.0	galactitol metabolic process	1.0128681081107637e-07	6.0	36.0
+6.0	galactitol catabolic process	0.008346609768224303	3.0	36.0
+6.0	galactitol transport	0.02487814504307961	3.0	36.0
+6.0	protein-phosphocysteine-galactitol-phosphotransferase system transporter activity	0.008346609768224303	3.0	36.0
+8.0	lysine biosynthetic process via diaminopimelate	5.147699501512484e-05	5.0	18.0
+8.0	lysine biosynthetic process	0.0006530600345316919	4.0	18.0
+8.0	DNA replication	0.0006530600345316919	6.0	18.0
+10.0	transcription, DNA-templated	0.001557679976760658	10.0	15.0
+10.0	regulation of transcription, DNA-templated	0.001557679976760658	10.0	15.0
+10.0	DNA binding	0.02284073988893376	10.0	15.0
+18.0	iron ion homeostasis	9.133085636882627e-24	18.0	52.0
+18.0	ion transport	2.1670135710298168e-11	18.0	52.0
+18.0	transport	8.043745518141242e-10	33.0	52.0
+18.0	protein transport	8.043745518141242e-10	14.0	52.0
+18.0	protein secretion by the type II secretion system	2.0684546550981698e-09	7.0	52.0
+18.0	siderophore transport	7.487833439604407e-05	5.0	52.0
+18.0	enterobactin biosynthetic process	7.487833439604407e-05	5.0	52.0
+18.0	ferric-enterobactin transport	9.007204052265587e-05	4.0	52.0
+18.0	tricarboxylic acid cycle	0.0027897415509193133	6.0	52.0
+18.0	bacteriocin transport	0.007914094163140298	4.0	52.0
+18.0	type II protein secretion system complex	2.0684546550981698e-09	7.0	52.0
+18.0	protein transporter activity	2.0684546550981698e-09	9.0	52.0
+18.0	ferric-enterobactin transmembrane transporter activity	9.007204052265587e-05	4.0	52.0
+18.0	receptor activity	0.00012506564363913794	5.0	52.0
+18.0	energy transducer activity	0.005536016683003255	3.0	52.0
+19.0	cell division	5.547745775044971e-13	13.0	23.0
+19.0	regulation of cell shape	9.1048653056517e-10	10.0	23.0
+19.0	peptidoglycan biosynthetic process	2.695877922129321e-08	9.0	23.0
+19.0	cell wall organization	9.472528777202272e-07	9.0	23.0
+19.0	FtsZ-dependent cytokinesis	0.024555989181296773	4.0	23.0
+19.0	cell division site	3.2208279059931976e-05	6.0	23.0
+22.0	D-gluconate metabolic process	2.803158899294172e-12	7.0	13.0
+22.0	L-idonate catabolic process	1.3083693761360156e-06	4.0	13.0
+22.0	D-gluconate catabolic process	4.353036873547296e-06	4.0	13.0
+22.0	gluconate transmembrane transport	0.011124064044932455	3.0	13.0
+22.0	gluconate transmembrane transporter activity	0.008707718658267225	3.0	13.0
+30.0	phosphoenolpyruvate-dependent sugar phosphotransferase system	9.021673821690317e-09	10.0	23.0
+30.0	carbohydrate transport	1.6037895704100803e-06	10.0	23.0
+30.0	N-acetylglucosamine transport	1.0802434336316253e-05	4.0	23.0
+30.0	N,N'-diacetylchitobiose import	0.0010351432702740918	3.0	23.0
+30.0	mannose transport	0.0010351432702740918	3.0	23.0
+30.0	UDP-N-acetylglucosamine biosynthetic process	0.0030932770722201124	3.0	23.0
+30.0	glucose import into cell	0.0030932770722201124	3.0	23.0
+30.0	fructose import	0.0068470500857713565	3.0	23.0
+30.0	carbohydrate transmembrane transport	0.02089579224061487	5.0	23.0
+30.0	protein-N(PI)-phosphohistidine-mannose phosphotransferase system transporter activity	0.0010351432702740918	3.0	23.0
+31.0	iron-sulfur cluster assembly	3.399852743066211e-05	6.0	25.0
+31.0	response to oxidative stress	0.004566214493219049	6.0	25.0
+34.0	D-glucuronate catabolic process	0.009971193575504456	3.0	13.0
+34.0	D-galacturonate catabolic process	0.009971193575504456	3.0	13.0
+39.0	fermentation	0.021413407622511194	3.0	12.0
+39.0	[Ni-Fe] hydrogenase complex	0.021413407622511194	3.0	12.0
+39.0	electron carrier activity	0.04862659971190336	5.0	12.0
+41.0	anaerobic respiration	0.0015902305812102505	7.0	31.0
+41.0	[Ni-Fe] hydrogenase complex	0.0013208825280140186	4.0	31.0
+41.0	plasma membrane respiratory chain complex I	0.01304200135824034	4.0	31.0
+41.0	NADH dehydrogenase complex	0.015562200854478004	4.0	31.0
+41.0	NADH dehydrogenase activity	0.0013208825280140186	6.0	31.0
+41.0	hydrogenase (acceptor) activity	0.0013208825280140186	4.0	31.0
+41.0	4 iron, 4 sulfur cluster binding	0.010642154480408174	8.0	31.0
+41.0	iron-sulfur cluster binding	0.03445828786197994	8.0	31.0
+41.0	NADH dehydrogenase (quinone) activity	0.03445828786197994	3.0	31.0
+44.0	bacterial-type flagellum organization	3.338046378136363e-05	6.0	29.0
+44.0	bacterial-type flagellum-dependent cell motility	3.338046378136363e-05	7.0	29.0
+44.0	bacterial-type flagellum assembly	0.016514843446079112	4.0	29.0
+44.0	bacterial-type flagellum	0.008354352912622598	5.0	29.0
+44.0	motor activity	3.126213590347843e-05	5.0	29.0
+45.0	valine biosynthetic process	1.6708223479349545e-07	7.0	44.0
+45.0	branched-chain amino acid biosynthetic process	7.591194080046471e-06	7.0	44.0
+45.0	branched-chain amino acid transport	7.712995722100206e-06	5.0	44.0
+45.0	isoleucine biosynthetic process	9.268908105497434e-06	6.0	44.0
+45.0	peptide transport	0.006384973458724265	6.0	44.0
+45.0	cellular amino acid biosynthetic process	0.009189962144890611	9.0	44.0
+45.0	branched-chain amino acid transmembrane transporter activity	7.712995722100206e-06	5.0	44.0
+49.0	leucine biosynthetic process	3.4237005117620857e-07	5.0	13.0
+49.0	branched-chain amino acid biosynthetic process	2.5738497507512275e-05	5.0	13.0
+51.0	organic phosphonate catabolic process	1.7570519323836579e-12	8.0	39.0
+51.0	phosphate ion transport	7.849817697992835e-12	8.0	39.0
+51.0	organic phosphonate transport	9.164669339493476e-07	5.0	39.0
+51.0	organic phosphonate metabolic process	4.300287294967541e-05	4.0	39.0
+51.0	phosphate ion transmembrane transport	8.345047452041462e-05	5.0	39.0
+51.0	glycerophosphodiester transport	0.00016601143889281291	4.0	39.0
+51.0	glycerol-3-phosphate transport	0.0004045054589919129	4.0	39.0
+51.0	alkylphosphonate transport	0.010608171677129482	3.0	39.0
+51.0	alpha-D-ribose 1-methylphosphonate 5-triphosphate synthase complex	4.300287294967541e-05	4.0	39.0
+51.0	phosphate ion transmembrane-transporting ATPase activity	4.300287294967541e-05	4.0	39.0
+51.0	alpha-D-ribose 1-methylphosphonate 5-triphosphate synthase activity	4.300287294967541e-05	4.0	39.0
+51.0	inorganic phosphate transmembrane transporter activity	0.0004045054589919129	4.0	39.0
+60.0	fatty acid metabolic process	1.922755945514741e-25	16.0	25.0
+60.0	lipid metabolic process	1.9540422502518245e-18	16.0	25.0
+60.0	fatty acid biosynthetic process	5.5143583383271344e-17	11.0	25.0
+60.0	lipid biosynthetic process	7.853695148873954e-06	5.0	25.0
+60.0	fatty acid beta-oxidation	0.00026652434050557726	4.0	25.0
+60.0	glyoxylate cycle	0.0008152217514674458	4.0	25.0
+60.0	malonyl-CoA biosynthetic process	0.0008962279396306673	3.0	25.0
+60.0	acetyl-CoA carboxylase complex	0.0008962279396306673	3.0	25.0
+60.0	acetyl-CoA carboxylase activity	9.259229431119886e-06	4.0	25.0
+61.0	glycogen metabolic process	0.00023046589330399548	4.0	25.0
+61.0	glycogen biosynthetic process	0.03998379731174206	3.0	25.0
+62.0	intracellular pH elevation	0.0019600670220526893	3.0	8.0
+62.0	L-glutamate biosynthetic process	0.04183124425019267	2.0	8.0
+62.0	glutamate synthase (NADPH) activity	0.04183124425019267	2.0	8.0
+69.0	gamma-aminobutyric acid catabolic process	0.039714029499522095	3.0	20.0
+70.0	cytochrome complex assembly	4.956706703929168e-10	8.0	33.0
+70.0	heme transport	2.2775555070238135e-07	6.0	33.0
+70.0	molybdate ion transport	2.9951594333766407e-05	4.0	33.0
+70.0	Mo-molybdopterin cofactor biosynthetic process	0.00023150498241314427	5.0	33.0
+70.0	molybdopterin cofactor biosynthetic process	0.00031703601561644616	4.0	33.0
+70.0	ferredoxin hydrogenase complex	1.1457020888697181e-07	6.0	33.0
+70.0	intrinsic component of periplasmic side of plasma membrane	5.877804831080003e-06	5.0	33.0
+70.0	dimethyl sulfoxide reductase complex	0.0021260085385329426	3.0	33.0
+70.0	molybdate ion transmembrane transporter activity	0.0021260085385329426	3.0	33.0
+70.0	dimethyl sulfoxide reductase activity	0.01891011989683668	3.0	33.0
+70.0	heme transporter activity	0.03418028598414703	3.0	33.0
