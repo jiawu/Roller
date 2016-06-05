@@ -14,6 +14,7 @@ import matplotlib as mpl
 mpl.rcParams['pdf.fonttype'] = 42
 mpl.rcParams['font.sans-serif'] = 'Arial'
 import pdb
+from scipy.stats import pearsonr
 
 from Swing.util.Evaluator import Evaluator
 
@@ -62,7 +63,103 @@ def cc_experiment(experiment):
     return ccf_array
 
 
-def calc_edge_lag(xcorr, genes, sc_frac=0.1, min_ccf=0.5, timestep=1, signed_edge_list=None, flat = True):
+def get_xcorr_indices(diff_ts, lag, tolerance):
+    pair_list = []
+    # get all pairs
+    targets = np.array(np.where((diff_ts >= lag-tolerance ) & (diff_ts <= lag+tolerance)))
+    n_ind = targets.shape[1]
+    pair_list = [tuple(targets[:,x]) for x in range(n_ind)]
+    # only keep tuples where the parent index is greater than the child
+    if lag != 0:
+        pair_list = [ x for x in pair_list if x[1] < x[2]]
+    p_pair_list = [(x[0],x[1]) for x in pair_list]
+    c_pair_list = [(x[0],x[2]) for x in pair_list]
+
+    return(p_pair_list,c_pair_list)
+
+def get_pairwise_xcorr(parent,child,experiment,time_map,lag,tolerance,rc):      
+    ts_shape = time_map.shape[1]-1
+    ts = time_map.iloc[:,:ts_shape]
+    ts = ts.values
+
+    all_ps_values = np.zeros(rc)
+    all_cs_values = np.zeros(rc)
+
+    # make an array of differences
+
+    diff_ts = np.abs(ts[:,:,None] - ts[:,None,:])
+    # get all indices with the same difference
+    ps_values = np.zeros(rc)
+    cs_values = np.zeros(rc)
+    ps = [x[parent].values for x in experiment]
+    cs = [x[child].values for x in experiment]
+    all_ps_values = np.vstack(ps)
+    all_cs_values = np.vstack(cs)
+
+    p_idx,c_idx = get_xcorr_indices(diff_ts, lag, tolerance)
+    ps_values = [all_ps_values[x] for x in p_idx]
+    cs_values = [all_cs_values[x] for x in c_idx]
+
+    rsq, pval = pearsonr(ps_values,cs_values)
+
+    return(rsq,pval)
+
+def calc_edge_lag2(experiments,genes, signed_edge_list=None, tolerance = 8, rc = (26,5), mode=None):
+    
+    # load the interval file
+    edges = signed_edge_list['regulator-target']
+    
+
+    #initialize dataframe to return
+    col, row = np.meshgrid(range(len(genes)), range(len(genes)))
+    edge_lag = pd.DataFrame()
+    edge_lag['parent'] = np.array(genes)[row.flatten()]
+    edge_lag['child'] = np.array(genes)[col.flatten()]
+    edge_lag['Edge'] = list(zip(edge_lag['parent'], edge_lag['child']))
+
+    lag_results = []
+    if mode is 'marbach':
+        time_map = pd.read_csv('../data/invitro/marbach_timesteps.tsv', sep='\t')
+        rc = (23,6)
+        lags = [0,5,10,20,30,40]
+        tolerance = 3
+    else:
+        time_map = pd.read_csv('../data/invitro/omranian_timesteps.tsv', sep='\t')
+        lags = [0,10,20,30,60,90]
+
+    time_steps = time_map['Timestep'].tolist()
+
+    for edge in edges:
+        # Ignore self edges
+        if edge[0] == edge[1]:
+            continue
+
+        tolerance = 8
+        c_list = []
+        for lag in lags:
+            r,p = get_pairwise_xcorr(edge[0],edge[1],experiments,time_map,lag,tolerance,rc)
+            c_list.append((lag,r,p))
+
+        sign = signed_edge_list[signed_edge_list['regulator-target'] == edge]['signs'].tolist()
+
+        best_lag = min(c_list, key = lambda x: x[2])
+        if best_lag[2] > 0.05/len(edges):
+            true_lag = np.nan
+        else:
+            true_lag = best_lag[0]
+        lag_results.append({'Edge':edge, 'Lag':true_lag, 'Sign': sign, 'Lag_list': c_list})
+
+    lag_results = pd.DataFrame(lag_results)
+
+    edge_lag = pd.merge(edge_lag, lag_results, how='outer', on='Edge')
+
+    lag_results['parent'] = [x[0] for x in lag_results['Edge'].tolist()]
+    lag_results['child'] = [x[1] for x in lag_results['Edge'].tolist()]
+
+    return(lag_results, edge_lag)
+
+ 
+def calc_edge_lag(xcorr, genes, sc_frac=0.1, min_ccf=0.5, timestep=1, signed_edge_list=None, flat = True, return_raw = False):
     """
 
     :param xcorr: 4d array
@@ -136,8 +233,7 @@ def calc_edge_lag(xcorr, genes, sc_frac=0.1, min_ccf=0.5, timestep=1, signed_edg
                     lag = [float(x) for x in np.argmin(filtered, axis=1)]*timestep
                 elif sign == '+-':
                     lag = [float(x) for x in np.argmax(np.abs(filtered), axis=1)]*timestep
-
-                lag_results.append({'Edge':edge, 'Lag':lag})
+                lag_results.append({'Edge':edge, 'Lag':lag, 'Raw_CCF': lag})
 
     if not flat:
         lag_results = pd.DataFrame(lag_results)
