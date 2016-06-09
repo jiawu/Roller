@@ -43,7 +43,7 @@ def get_true_lags(exp_path, timepoints, perturbs, dset = 'omranian'):
     signed_edge_list.columns=['regulator', 'target', 'signs']
     signed_edge_list['regulator-target'] = tuple(zip(signed_edge_list['regulator'], signed_edge_list['target']))
 
-    lags=lag_id.calc_edge_lag(exp_xcor, gene_list, 0.5, 0.6, timestep=1, signed_edge_list = signed_edge_list, flat = False)
+    lags=lag_id.calc_edge_lag(exp_xcor, gene_list, 0.7, 0.5, timestep=1, signed_edge_list = signed_edge_list, flat = False)
 
     lags = lags[lags['Parent'] != lags['Child']]
     edge_df = pd.DataFrame(lags['Lag'].values, index=lags['Edge'].values, columns=['Lag'])
