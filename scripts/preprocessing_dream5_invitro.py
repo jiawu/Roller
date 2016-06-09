@@ -23,23 +23,34 @@ final_df = pd.DataFrame()
 
 ## Append certain rows with the same pertubation etc, alternating between repeats
 
-final_df = final_df.append(my_df[ (my_df['#Experiment'] == 25) & (my_df['Repeat'] == 1) ].iloc[:5])
-final_df = final_df.append(my_df[ (my_df['#Experiment'] == 25) & (my_df['Repeat'] == 2) ].iloc[:5])
-final_df = final_df.append(my_df[ (my_df['#Experiment'] == 26) & (my_df['Repeat'] == 1) ].iloc[:5])
-final_df = final_df.append(my_df[ (my_df['#Experiment'] == 26) & (my_df['Repeat'] == 2) ].iloc[:5])
-
+#final_df = final_df.append(my_df[ (my_df['#Experiment'] == 25) & (my_df['Repeat'] == 1) ].iloc[:5])
+#final_df = final_df.append(my_df[ (my_df['#Experiment'] == 25) & (my_df['Repeat'] == 2) ].iloc[:5])
+#final_df = final_df.append(my_df[ (my_df['#Experiment'] == 26) & (my_df['Repeat'] == 1) ].iloc[:5])
+#final_df = final_df.append(my_df[ (my_df['#Experiment'] == 26) & (my_df['Repeat'] == 2) ].iloc[:5])
 final_df = final_df.append(my_df[ (my_df['#Experiment'] == 47) & (my_df['Perturbations'].isnull())].iloc[:5])
 final_df = final_df.append(my_df[ (my_df['#Experiment'] == 47) & (my_df['Perturbations']=='P13')].iloc[:5])
+final_df = final_df.append(my_df[ (my_df['#Experiment'] == 49) & (my_df['Perturbations'].isnull())].iloc[:5])
+
+temp_t0 = my_df[ (my_df['#Experiment'] == 49) & (my_df['Perturbations'].isnull())].iloc[0,:]
+
+final_df = final_df.append(temp_t0)
+final_df = final_df.append(my_df[ (my_df['#Experiment'] == 49) & (my_df['Perturbations'] == 'P16')].iloc[:4])
+
+final_df = final_df.append(temp_t0)
+final_df = final_df.append(my_df[ (my_df['#Experiment'] == 49) & (my_df['Perturbations'] == 'P17')].iloc[:4])
+
+
+
 
 final_df = final_df.append(my_df[ (my_df['#Experiment'] == 50) & (my_df['Perturbations'] =='P8') & (my_df['Repeat'] == 1) ].iloc[:5] )
 final_df = final_df.append(my_df[ (my_df['#Experiment'] == 50) & (my_df['Perturbations'] =='P8') & (my_df['Repeat'] == 2) ].iloc[:5] )
 final_df = final_df.append(my_df[ (my_df['#Experiment'] == 50) & (my_df['Perturbations'] =='P8') & (my_df['Repeat'] == 3) ].iloc[:5] )
 
-final_df = final_df.append(my_df[ (my_df['#Experiment'] == 55) & (my_df['Perturbations'] =='P24') & (my_df['Repeat'] == 1) ].iloc[:5] )
+#final_df = final_df.append(my_df[ (my_df['#Experiment'] == 55) & (my_df['Perturbations'] =='P24') & (my_df['Repeat'] == 1) ].iloc[:5] )
 
-final_df = final_df.append(my_df[ (my_df['#Experiment'] == 98) & (my_df['DeletedGenes'].isnull()) & (my_df['Repeat'] == 1 )].iloc[:5] )
+#final_df = final_df.append(my_df[ (my_df['#Experiment'] == 98) & (my_df['DeletedGenes'].isnull()) & (my_df['Repeat'] == 1 )].iloc[:5] )
 
-final_df = final_df.append(my_df[ (my_df['#Experiment'] == 98) & (my_df['DeletedGenes'].isnull()) & (my_df['Repeat'] == 2 )].iloc[:5] )
+#final_df = final_df.append(my_df[ (my_df['#Experiment'] == 98) & (my_df['DeletedGenes'].isnull()) & (my_df['Repeat'] == 2 )].iloc[:5] )
 
 final_df = final_df.append(my_df[ (my_df['#Experiment'] == 105)].iloc[:30] )
 gene_names = pd.read_csv('../data/invitro/net3_gene_ids.tsv', sep='\t')
@@ -54,11 +65,13 @@ om_df = om_df[om_df['Time'] != 90]
 intersecting_genes = set(om_df.columns.tolist()).intersection(set(unmapped_df.columns.tolist()))
 intersecting_genes = sorted(list(intersecting_genes))
 intersecting_genes.insert(0, intersecting_genes.pop(intersecting_genes.index('Time')))
+
 mapped_df = unmapped_df[intersecting_genes]
 norm_df = zscore_data(mapped_df)
 # Change the time index so that it matches up with omranian...
 x = [10,20,30,40,50]
-t = [b for a in range(18) for b in x]
+t = [b for a in range(14) for b in x]
+pdb.set_trace()
 norm_df['Time'] = t
 
 om_df_parsed = zscore_data(om_df[intersecting_genes])
@@ -67,6 +80,5 @@ om_df_parsed = zscore_data(om_df[intersecting_genes])
 om_df_parsed = om_df_parsed.append(norm_df)
 
 om_df_parsed.to_csv('../data/invitro/omranian_parsed_timeseries.tsv', index=False, sep='\t')
-pdb.set_trace()
 
 

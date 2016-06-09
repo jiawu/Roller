@@ -14,11 +14,13 @@ def parse_go():
 
     gs.columns = ['regulator', 'target', 'exists']
 
-    genes_go = go.iloc[:,[2,4,8]]
+    genes_go = go.iloc[:,[2,4,10]]
     genes_go.columns = ['name','GO_ID', 'alias']
-
+    #parse alias
+    genes_go['parsed_alias']= genes_go['alias'].str.split('|').str[0]
+    
     # first make the eco go annotations
-    genes = genes_go['name'].str.lower().tolist()
+    genes = genes_go['parsed_alias'].tolist()
     go_id = genes_go['GO_ID'].tolist()
     go_tuple = list(zip(genes,go_id))
     eco_go = defaultdict(list)
@@ -40,8 +42,9 @@ def get_clist(clusterid, cluster_table):
 
 
 eco_go = parse_go()
+pdb.set_trace()
 
-clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments7.csv',sep=',')
+clusters = pd.read_csv('../data/invitro/yeast_cluster_assign5.csv',sep=',')
 
 
 obodag = GODag("go-basic.obo")

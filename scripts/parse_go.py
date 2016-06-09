@@ -25,54 +25,70 @@ def get_clist(clusterid, cluster_table):
 
 eco_go = parse_go()
 
-clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments_parsed16.csv',sep=',')
+stats = []
+overall_results = []
+
+for ind in range(17,29):
+    clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments_parsed'+str(ind)+'.csv',sep=',')
 
 
-obodag = GODag("go-basic.obo")
+    obodag = GODag("go-basic.obo")
 
-goeaobj = GOEnrichmentStudy(
-        eco_go.keys(), # List of mouse protein-coding genes
-        eco_go, # geneid/GO associations
-        obodag, # Ontologies
-        propagate_counts = False,
-        alpha = 0.05, # default significance cut-off
-        methods = ['fdr_by']) # defult multipletest correction method
-# For each cluster, get a list of genes.
-# For each cluster, test the list of the genes for gene ontology enrichment
+    goeaobj = GOEnrichmentStudy(
+            eco_go.keys(), # List of mouse protein-coding genes
+            eco_go, # geneid/GO associations
+            obodag, # Ontologies
+            propagate_counts = False,
+            alpha = 0.05, # default significance cut-off
+            methods = ['fdr_by']) # defult multipletest correction method
+    # For each cluster, get a list of genes.
+    # For each cluster, test the list of the genes for gene ontology enrichment
 
-valid_clusters = clusters['__glayCluster'].unique().tolist()
-valid_clusters.remove(99)
-r = []
-for clusterid in valid_clusters:
-    genes_0 = get_clist(clusterid, clusters)
-    goea_results_all = goeaobj.run_study(genes_0)
-    goea_results_sig = [r for r in goea_results_all if r.p_fdr_by < 0.05]
-    print(len(goea_results_sig))
-    ratios = []
-    for result in goea_results_sig:
-        result_tup = (clusterid,result.name, result.ratio_in_study)
-        ratios.append(result_tup)
+    valid_clusters = clusters['__glayCluster'].unique().tolist()
+    valid_clusters.remove(99)
+    res = []
+    expanded_df = pd.DataFrame()
+    for clusterid in valid_clusters:
+        genes_0 = get_clist(clusterid, clusters)
+        goea_results_all = goeaobj.run_study(genes_0)
+        goea_results_sig = [r for r in goea_results_all if r.p_fdr_by < 0.05]
+        print(len(goea_results_sig))
+        ratios = []
+        for result in goea_results_sig:
+            result_tup = (clusterid,result.name, result.ratio_in_study)
 
-    ratios = sorted(ratios, key=lambda tup: tup[1][2][0])
-    my_result = { 'clusterid': clusterid,
-                  'ratios': ratios,
-                  'n_genes': len(genes_0)}
+            expanded_result = { 'clusterid': clusterid,
+                                'ontology': result.name,
+                                'p-value': result.get_pvalue(),
+                                'study_count': result.ratio_in_study[0],
+                                'study_n': result.ratio_in_study[1]}
+            ratios.append(result_tup)
+            expanded_df = expanded_df.append(expanded_result, ignore_index=True)
 
-    r.append(my_result)
+        ratios = sorted(ratios, key=lambda tup: tup[1][2][0])
+        my_result = { 'clusterid': clusterid,
+                      'ratios': ratios,
+                      'n_genes': len(genes_0)}
+        res.append(my_result)
 
-count_ontology = 0
-count_no = 0
-for result in r:
-    # get number of modules over size 10, and has an ontology
-    # get number of modules over size 10 with no ontology
-    if result['n_genes'] > 9:
-        if not result['ratios']:
-            count_no += 1
-        else:
-            count_ontology +=1
-            print(result)
+    ## write to tsv
+    expanded_df.to_csv('../data/invitro/GO-regulon_cluster_assignments_parsed'+str(ind)+'.tsv',sep='\t', index=False)
 
-print("# with ont", count_ontology)
-print("# w/o ont", count_no)
+    count_ontology = 0
+    count_no = 0
+    for result in res:
+        # get number of modules over size 10, and has an ontology
+        # get number of modules over size 10 with no ontology
+        if result['n_genes'] > 9:
+            if not result['ratios']:
+                count_no += 1
+            else:
+                count_ontology +=1
+                print(result)
 
+    print("# with ont", count_ontology)
+    print("# w/o ont", count_no)
+    stats.append((count_ontology,count_no))
+    overall_results.append(res)
 
+pdb.set_trace()
