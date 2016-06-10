@@ -65,6 +65,9 @@ for raw_data in raw_data_list:
     overall_df = overall_df.append(df)
 """
 overall_df = pd.read_csv('../data/invitro/omranian_parsed_timeseries.tsv',sep='\t')
+#final_overall_df = overall_df
+#final_overall_df.to_csv('../data/invitro/omranian_parsed_timeseries.tsv', index=False,sep='\t')
+
 
 genes = overall_df.columns[1:].tolist()
 
@@ -108,3 +111,4 @@ final_overall_df = overall_df[in_df_in_gs]
 final_overall_df.to_csv('../data/invitro/omranian_parsed_timeseries.tsv', index=False,sep='\t')
 
 my_eval = Evaluator('../data/invitro/omranian_parsed_goldstandard.tsv')
+
