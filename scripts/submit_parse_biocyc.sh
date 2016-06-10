@@ -16,4 +16,4 @@ workon seqgen
 module load python/anaconda3
 cd /home/jjw036/Roller/scripts
 
-python parse_biocyc.py RandomForest 15
+python parse_biocyc.py community 26
