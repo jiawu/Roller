@@ -4,10 +4,10 @@
 #MSUB -l nodes=1:ppn=1
 #MSUB -M jiawu@u.northwestern.edu
 #MSUB -j oe
-#MSUB -o /projects/p20519/jia_output/dream4_insilico_rank_plots.txt
+#MSUB -o /projects/p20519/jia_output/dream4_10p.txt
 #MSUB -m bae
 #MSUB -q long
-#MSUB -N promotion_plots_insilico_dream4_high_sampling
+#MSUB -N promotion_plots_insilico_10p
 #MSUB -V
 
 param_set=${MOAB_JOBARRAYINDEX}

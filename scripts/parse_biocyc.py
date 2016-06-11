@@ -16,6 +16,11 @@ sys.path.append('/home/jjw036/Roller/pipelines')
 import Pipelines as pl
 from Swing.util.Evaluator import Evaluator
 import os.path
+import Swing.util.lag_identification as lag_id
+import Swing.util.utility_module as Rutil
+import networkx as nx
+from nxpd import draw
+
 
 def parse_go():
     go = pd.read_csv('../data/invitro/gene_ontology.tsv', sep='\t')
@@ -48,7 +53,7 @@ def generate_json(merged_df,method):
     # the key is the parent
     # first organize default dict such that each parent has all edges
     parent_map = defaultdict(list)
-    for parent,child in merged_lag['index'].tolist():
+    for parent,child in merged_lag['Edge'].tolist():
         parent_map[parent].append(child)
     # then expand the dict into a list of dicts
     json_list = []
@@ -63,7 +68,7 @@ def generate_json(merged_df,method):
             edge_info = {}
             edge_info['t_name'] = 'Module%d.%s' % (child_id, value)
 
-            lag =  merged_lag[merged_lag['index'] == (key,value)][method].tolist()[0]
+            lag =  merged_lag[merged_lag['Edge'] == (key,value)][method].tolist()[0]
             if math.isnan(lag):
                 lag = 0
             edge_info['lag'] = lag
@@ -91,41 +96,89 @@ def generate_json(merged_df,method):
     # dict with name
     return(True)
 
-def run_subswing(df, td_window=6, min_lag = 0, max_lag = 0, window_type = 'RandomForest'):
+def run_subswing(df, td_window=6, min_lag = 0, max_lag = 0, window_type = 'RandomForest', clusterid = None, output_fn = None):
     """
     Pass in subnet_dict
     """
-    true_edges = df['index'].tolist()
+    true_edges = df['Edge'].tolist()
+    #true_edges = df['index'].tolist()
     sub_dict = get_subnetwork_info(df)
+    sub_eval = Evaluator(subnet_dict = sub_dict)
+    
     file_path = "/home/jjw036/Roller/data/invitro/omranian_parsed_timeseries.tsv"
     gene_start_column = 1
     gene_end = None
     time_label = "Time"
     separator = "\t"
 
-    tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_lag =min_lag, max_lag = max_lag, window_type = window_type, sub_dict=sub_dict)
+    window_types = ['Dionesus','RandomForest','Lasso']
+    final_edge_list = []
+    for window_type in window_types:
+        tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_lag =min_lag, max_lag = max_lag, window_type = window_type, sub_dict=sub_dict)
+        
+        # remember the data is already zscored
+        #tdr.zscore_all_data()
+        
+        tdr.set_window(td_window)
+        tdr.create_custom_windows(sub_dict['tfs'])
+        tdr.optimize_params()
+        tdr.crag = False
+        tdr.calc_mse = False
+        tdr.fit_windows(n_trees=100, show_progress=False, n_jobs=-1)
+        tdr.rank_edges(permutation_n=10, n_bootstraps=10)
+        tdr.compile_roller_edges(self_edges=False)
+        tdr.make_static_edge_dict(true_edges, self_edges=False, lag_method='mean_mean')
+        sub_df = tdr.make_sort_df(tdr.edge_dict, sort_by = 'rank')
+        sub_df['Rank'] = np.arange(len(sub_df))
     
-    # remember the data is already zscored
-    #tdr.zscore_all_data()
-    
-    tdr.set_window(td_window)
-    tdr.create_custom_windows(sub_dict['tfs'])
-    tdr.optimize_params()
-    tdr.crag = False
-    tdr.calc_mse = False
-    tdr.fit_windows(n_trees=100, show_progress=False, n_jobs=-1)
-    tdr.rank_edges(permutation_n=10, n_bootstraps=10)
-    tdr.compile_roller_edges(self_edges=False)
-    tdr.make_static_edge_dict(true_edges, self_edges=False, lag_method='mean_mean')
-    sub_df = tdr.make_sort_df(tdr.edge_dict, sort_by = 'rank')
-    sub_df['Rank'] = np.arange(len(sub_df))
+        pr = sub_eval.calc_pr(sub_df.sort('Rank'))
+        roc = sub_eval.calc_roc(sub_df.sort('Rank'))
+        print(window_type,td_window,roc[2].values[-1],pr[2].values[-1])
 
-    sub_eval = Evaluator(subnet_dict = sub_dict)
+        final_edge_list.append(sub_df)
+
+    averaged_rank_data = Rutil.average_rank(final_edge_list,'Rank')
+    col_names = averaged_rank_data.columns.tolist()
+    for i in range(len(window_types)):
+        col_names[i] = window_types[i]+'-rank'
+
+    averaged_rank_data.columns = col_names
+    averaged_rank_data.sort('mean-rank', inplace=True)
+    pr = sub_eval.calc_pr(averaged_rank_data.sort('mean-rank'))
+    roc = sub_eval.calc_roc(averaged_rank_data.sort('mean-rank'))
+    print('community',td_window,roc[2].values[-1],pr[2].values[-1])
     
-    pr = sub_eval.calc_pr(sub_df.sort('Rank'))
-    roc = sub_eval.calc_roc(sub_df.sort('Rank'))
+    
+    #moduleID, source, target, window_size, min_lag, max_lag, true or false, lag or not, lag time, total number of edges in module
+    
+    sub_df = averaged_rank_data
+    
+    sub_df['tp'] = sub_df['regulator-target'].isin(sub_eval.gs_flat)
+    sub_df=sub_df.merge(df,how = 'outer', right_on='Edge',left_on='regulator-target')
+    sub_df['Source'] = [x[0] for x in sub_df['regulator-target'].tolist()]
+    sub_df['Target'] = [x[1] for x in sub_df['regulator-target'].tolist()]
+    sub_df = sub_df[(sub_df['parent_cluster'] == sub_df['child_cluster']) | sub_df['parent_cluster'].isnull()]
+    sub_df['moduleID'] = clusterid
+    sub_df['window_size'] = td_window
+    sub_df['min_lag'] = min_lag
+    sub_df['max_lag'] = max_lag
+    sub_df['total_edges'] = len(df)
+    sub_df['pr'] = pr[2].values[-1]
+    sub_df['roc'] = roc[2].values[-1]
+    sub_df = sub_df.sort('mean-rank')
+    
+    #sub_df = sub_df.iloc[:len(df)]
+
+    if os.path.isfile(output_fn):
+        with open(output_fn,'a') as output:
+            sub_df.to_csv(output, header=False, index=False, sep='\t')
+    else:
+        with open(output_fn,'a') as output:
+            sub_df.to_csv(output, header=True, index=False, sep='\t')
+
     return(pr[2].values[-1], roc[2].values[-1])
 
+    
 def get_subnetwork_info(df):
     sub_genes = df['parent'].unique().tolist() + df['child'].unique().tolist()
     sub_genes = set(sub_genes)
@@ -140,7 +193,7 @@ def get_subnetwork_info(df):
     sub_all_edges = tuple(map(tuple,evaluator.possible_edges(np.array(regulators), np.array(list(targets)))))
    
     sub_all_edges = [ x for x in sub_all_edges if x[0] != x[1] ]
-    sub_true_edges = df['index'].tolist()
+    sub_true_edges = df['Edge'].tolist()
     
     sub_stats = { 'edges': sub_all_edges,
                   'true_edges': sub_true_edges,
@@ -166,7 +219,7 @@ def extract_subnetwork(cluster_id, merged_lag, parsed_info, agg_results):
     sub_all_edges = tuple(map(tuple,evaluator.possible_edges(np.array(regulators), np.array(list(targets)))))
    
     sub_all_edges = [ x for x in sub_all_edges if x[0] != x[1] ]
-    sub_true_edges = merged_lag['index'].tolist()
+    sub_true_edges = merged_lag['Edge'].tolist()
 
     sub_stats = { 'edges': sub_all_edges,
                   'true_edges': sub_true_edges,
@@ -250,25 +303,30 @@ def main(window_type='RandomForest', CLUSTER=14):
     df['parsed_genes_list'] = pathway_gene_list
     df['parsed_genes_str'] = pathway_gene_string
     """
-    if os.path.isfile('lag_df2_parse_biocyc_4.pkl'):
-        lag_df = pd.read_pickle('lag_df2_parse_biocyc_4.pkl')
-        edge_df = pd.read_pickle('edge_df2_parse_biocyc_4.pkl')
+    if os.path.isfile('lag_df2_parse_biocyc_6.pkl'):
+        lag_df = pd.read_pickle('lag_df2_parse_biocyc_6.pkl')
+        edge_df = pd.read_pickle('edge_df2_parse_biocyc_6.pkl')
     else:
+        experiments = lag_id.get_experiment_list('../data/invitro/omranian_parsed_timeseries.tsv',5,26)
+        signed_edge_list = pd.read_csv('../data/invitro/omranian_signed_parsed_goldstandard.tsv',sep='\t',header=None)
+        signed_edge_list.columns=['regulator', 'target', 'signs']
+        signed_edge_list['regulator-target'] = tuple(zip(signed_edge_list['regulator'],signed_edge_list['target']))
+        genes = list(experiments[0].columns.values)
+        lag_df,edge_df = lag_id.calc_edge_lag2(experiments,genes,signed_edge_list)
         ## Get the lags to associate with the network
-        (lag_df, edge_df) = flm.get_true_lags('../data/invitro/omranian_parsed_timeseries.tsv',5,30)
-        lag_df['lag_median'] = [np.median(x) for x in lag_df['Lag'].tolist()]
-        edge_df['lag_median'] = [np.median(x) for x in edge_df['Lag'].tolist()]
-        lag_df.to_pickle('lag_df2_parse_biocyc_4.pkl')
-        edge_df.to_pickle('edge_df2_parse_biocyc_4.pkl')
+        #(lag_df, edge_df) = flm.get_true_lags('../data/invitro/omranian_parsed_timeseries.tsv',5,26)
+        #lag_df['lag_median'] = [np.median(x) for x in lag_df['Lag'].tolist()]
+        #edge_df['lag_median'] = [np.median(x) for x in edge_df['Lag'].tolist()]
+        lag_df.to_pickle('lag_df2_parse_biocyc_6.pkl')
+        edge_df.to_pickle('edge_df2_parse_biocyc_6.pkl')
     
-    lag_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in lag_df['Lag'].tolist()]
-    edge_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in edge_df['Lag'].tolist()]
+    #lag_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in lag_df['Lag'].tolist()]
+    #edge_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in edge_df['Lag'].tolist()]
 
     clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments'+str(CLUSTER)+'.csv',sep=',')
 
     new_lag= lag_df.reset_index()
-
-    new_lag[['parent','child']] = new_lag['index'].apply(pd.Series)
+    #new_lag[['parent','child']] = new_lag['index'].apply(pd.Series)
     merged_lag = pd.merge(new_lag, clusters[['name','__glayCluster']], how='left', left_on=['parent'], right_on=['name'])
     merged_lag = merged_lag.rename(columns = {'__glayCluster':'parent_cluster'})
 
@@ -277,15 +335,15 @@ def main(window_type='RandomForest', CLUSTER=14):
 
     #generate_json(merged_lag, method = 'lag_median')
     
-    average_lag_over_network = merged_lag['lag_mean'].mean()
-    std_lag_over_network = merged_lag['lag_mean'].std()
+    #average_lag_over_network = merged_lag['lag_mean'].mean()
+    #std_lag_over_network = merged_lag['lag_mean'].std()
 
-    zero_lag_edges = merged_lag[merged_lag['lag_mean']<1].count()
+    #zero_lag_edges = merged_lag[merged_lag['lag_mean']<1].count()
 
     within_clusters = merged_lag[merged_lag['parent_cluster'] == merged_lag['child_cluster']]
     between_clusters = merged_lag[merged_lag['parent_cluster'] != merged_lag['child_cluster']]
 
-    target_clusters = merged_lag
+    target_clusters = within_clusters
 
     grouped_by_cluster = target_clusters.groupby('parent_cluster')
 
@@ -309,25 +367,28 @@ def main(window_type='RandomForest', CLUSTER=14):
         parsed_info.update( {k: info[k] for k in df['result_path'].tolist() if k in info.keys()})
     """
     clusters.sort()
+    current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
+    output_file = "community_omranian_clusters_" + current_time + ".csv"
+    output_file2 = "SWING_community_omranian_clusters_" + current_time + ".csv"
     for clusterid in clusters:
         print(clusterid, len(clusters))
         current_group = grouped_by_cluster.get_group(clusterid)
         total_edges = len(current_group)
-        nan_edges = len(current_group[current_group['lag_median'].isnull()])
-        lagged_edges = len(current_group[current_group['lag_median'] > 1])
-        lagged_edges_2 = len(current_group[(current_group['lag_median'] > 2)])
+        nan_edges = len(current_group[current_group['Lag'].isnull()])
+        lagged_edges = len(current_group[current_group['Lag'] >= 10])
+        lagged_edges_2 = len(current_group[(current_group['Lag'] >= 20)])
         sub_dict = get_subnetwork_info(current_group)
         if (len(current_group) < 10) or (len(sub_dict['tfs']) < 3):
             continue
-        pr1,roc1 = run_subswing(current_group, td_window = 5, min_lag = 0, max_lag = 0, window_type = window_type)
-        pr2,roc2 = run_subswing(current_group, td_window = 4, min_lag = 1, max_lag = 1, window_type = window_type)
-        pr3,roc3 = run_subswing(current_group, td_window = 4, min_lag = 0, max_lag = 1, window_type = window_type)
-        pr4,roc4 = run_subswing(current_group, td_window = 3, min_lag = 0, max_lag = 2, window_type = window_type)
-        pr5,roc5 = run_subswing(current_group, td_window = 3, min_lag = 1, max_lag = 1, window_type = window_type)
-        pr6,roc6 = run_subswing(current_group, td_window = 3, min_lag = 2, max_lag = 2, window_type = window_type)
+        pr1,roc1 = run_subswing(current_group, td_window = 5, min_lag = 0, max_lag = 0, window_type = window_type, clusterid = clusterid, output_fn = output_file)
+        pr2,roc2 = run_subswing(current_group, td_window = 4, min_lag = 1, max_lag = 1, window_type = window_type, clusterid = clusterid, output_fn = output_file2)
+        #pr3,roc3 = run_subswing(current_group, td_window = 4, min_lag = 0, max_lag = 1, window_type = window_type, clusterid = clusterid)
+        #pr4,roc4 = run_subswing(current_group, td_window = 3, min_lag = 0, max_lag = 2, window_type = window_type, clusterid = clusterid)
+        #pr5,roc5 = run_subswing(current_group, td_window = 3, min_lag = 1, max_lag = 1, window_type = window_type, clusterid = clusterid)
+        #pr6,roc6 = run_subswing(current_group, td_window = 3, min_lag = 2, max_lag = 2, window_type = window_type, clusterid = clusterid)
         print('Diff pr:', pr1-pr2)
         print('diff roc:', roc1-roc2)
-        print(pr1,roc1,pr2,roc2,pr3,roc3,pr4,roc4,pr5,roc5,pr6,roc6)
+        #print(pr1,roc1,pr2,roc2,pr3,roc3,pr4,roc4,pr5,roc5,pr6,roc6)
 
         
         print('total_edges: %d, nan_edges: %d, lagged_edges: %d, stringently_lagged_edges: %d' % (total_edges, nan_edges, lagged_edges, lagged_edges_2))
@@ -351,20 +412,20 @@ def main(window_type='RandomForest', CLUSTER=14):
                             'baseline_aupr':pr1,
                             'swing_aupr':pr2,
                             'swing_auroc':roc2,
-                            'swing_aupr2':pr3,
-                            'swing_auroc2':roc3,
-                            'swing_aupr3':pr4,
-                            'swing_auroc3':roc4,
-                            'swing_aupr4':pr5,
-                            'swing_auroc4':roc5,
-                            'swing_aupr5':pr6,
-                            'swing_auroc5':roc6
+                            #'swing_aupr2':pr3,
+                            #'swing_auroc2':roc3,
+                            #'swing_aupr3':pr4,
+                            #'swing_auroc3':roc4,
+                            #'swing_aupr4':pr5,
+                            #'swing_auroc4':roc5,
+                            #'swing_aupr5':pr6,
+                            #'swing_auroc5':roc6
 
                             }
         cluster_summary = cluster_summary.append(cluster_result, ignore_index = True)
 
     current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')    
-    cluster_summary.to_csv('cluster_summary_all_c'+str(CLUSTER)+'_' + current_time + '.csv', header=True, index=False, sep='\t')
+    cluster_summary.to_csv('cluster_summary_within_community_c'+str(CLUSTER)+'_' + current_time + '.csv', header=True, index=False, sep='\t')
 
 
 if __name__ == '__main__':
@@ -374,7 +435,10 @@ if __name__ == '__main__':
 
     else:
         window_type = 'RandomForest'
-    main(window_type, CLUSTER=CLUSTER)
+
+    n_trials = 2
+    for x in range(n_trials):
+        main(window_type, CLUSTER=CLUSTER)
         
 
 """
