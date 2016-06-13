@@ -16,6 +16,7 @@ sys.path.append('../pipelines')
 import Pipelines as pl
 from Swing.util.Evaluator import Evaluator
 import os.path
+import Swing.util.lag_identification as lag_id
 
 def parse_go():
     go = pd.read_csv('../data/invitro/gene_ontology.tsv', sep='\t')
@@ -48,7 +49,7 @@ def generate_json(merged_df,method):
     # the key is the parent
     # first organize default dict such that each parent has all edges
     parent_map = defaultdict(list)
-    for parent,child in merged_lag['index'].tolist():
+    for parent,child in merged_lag['Edge'].tolist():
         parent_map[parent].append(child)
     # then expand the dict into a list of dicts
     json_list = []
@@ -63,7 +64,7 @@ def generate_json(merged_df,method):
             edge_info = {}
             edge_info['t_name'] = 'Module%d.%s' % (child_id, value)
 
-            lag =  merged_lag[merged_lag['index'] == (key,value)][method].tolist()[0]
+            lag =  merged_lag[merged_lag['Edge'] == (key,value)][method].tolist()[0]
             if math.isnan(lag):
                 lag = 0
             edge_info['lag'] = lag
@@ -95,7 +96,7 @@ def run_subswing(df, td_window=6, min_lag = 0, max_lag = 0, window_type = 'Rando
     """
     Pass in subnet_dict
     """
-    true_edges = df['index'].tolist()
+    true_edges = df['Edge'].tolist()
     sub_dict = get_subnetwork_info(df)
     file_path = "/home/jjw036/Roller/data/invitro/marbach_parsed_timeseries.tsv"
     gene_start_column = 1
@@ -142,7 +143,7 @@ def get_subnetwork_info(df):
         sub_all_edges = tuple(map(tuple,evaluator.possible_edges(np.array(regulators), np.array(list(targets)))))
    
         sub_all_edges = [ x for x in sub_all_edges if x[0] != x[1] ]
-        sub_true_edges = df['index'].tolist()
+        sub_true_edges = df['Edge'].tolist()
     
     except IndexError:
         sub_stats= {'tfs': []}
@@ -171,7 +172,7 @@ def extract_subnetwork(cluster_id, merged_lag, parsed_info, agg_results):
     sub_all_edges = tuple(map(tuple,evaluator.possible_edges(np.array(regulators), np.array(list(targets)))))
    
     sub_all_edges = [ x for x in sub_all_edges if x[0] != x[1] ]
-    sub_true_edges = merged_lag['index'].tolist()
+    sub_true_edges = merged_lag['Edge'].tolist()
 
     sub_stats = { 'edges': sub_all_edges,
                   'true_edges': sub_true_edges,
@@ -265,35 +266,44 @@ def get_dbs():
 
 def main(window_type='RandomForest', CLUSTER=1):
     
-    if os.path.isfile('sc_lag_df2_parse_biocyc_1.pkl'):
-        lag_df = pd.read_pickle('sc_lag_df2_parse_biocyc_1.pkl')
-        edge_df = pd.read_pickle('sc_edge_df2_parse_biocyc_1.pkl')
+    if os.path.isfile('sc_lag_df2_parse_biocyc_4.pkl'):
+        lag_df = pd.read_pickle('sc_lag_df2_parse_biocyc_4.pkl')
+        edge_df = pd.read_pickle('sc_edge_df2_parse_biocyc_4.pkl')
     else:
         ## Get the lags to associate with the network
-        (lag_df, edge_df) = flm.get_true_lags('../data/invitro/marbach_parsed_timeseries.tsv',6,23, dset='marbach')
-        lag_df['lag_median'] = [np.median(x) for x in lag_df['Lag'].tolist()]
-        edge_df['lag_median'] = [np.median(x) for x in edge_df['Lag'].tolist()]
-        lag_df.to_pickle('sc_lag_df2_parse_biocyc_1.pkl')
-        edge_df.to_pickle('sc_edge_df2_parse_biocyc_1.pkl')
+        #(lag_df, edge_df) = flm.get_true_lags('../data/invitro/marbach_parsed_timeseries.tsv',6,23, dset='marbach')
+        experiments = lag_id.get_experiment_list('../data/invitro/marbach_parsed_timeseries.tsv',6,23)
+        signed_edge_list = pd.read_csv('../data/invitro/marbach_signed_parsed_goldstandard.tsv',sep='\t',header=None)
+        signed_edge_list.columns=['regulator', 'target', 'signs']
+        signed_edge_list['regulator-target'] = tuple(zip(signed_edge_list['regulator'],signed_edge_list['target']))
+        genes = list(experiments[0].columns.values)
+        lag_df,edge_df = lag_id.calc_edge_lag2(experiments,genes,signed_edge_list, mode='marbach')
+        lag_df.to_pickle('sc_lag_df2_parse_biocyc_4.pkl')
+        edge_df.to_pickle('sc_edge_df2_parse_biocyc_4.pkl')
+        
+        #lag_df['lag_median'] = [np.median(x) for x in lag_df['Lag'].tolist()]
+        #edge_df['lag_median'] = [np.median(x) for x in edge_df['Lag'].tolist()]
+        #lag_df.to_pickle('sc_lag_df2_parse_biocyc_3.pkl')
+        #edge_df.to_pickle('sc_edge_df2_parse_biocyc_3.pkl')
     
-    lag_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in lag_df['Lag'].tolist()]
-    edge_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in edge_df['Lag'].tolist()]
+    #lag_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in lag_df['Lag'].tolist()]
+    #edge_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in edge_df['Lag'].tolist()]
 
     clusters = pd.read_csv('../data/invitro/yeast_cluster_assign'+str(CLUSTER)+'.csv',sep=',')
 
     new_lag= lag_df.reset_index()
 
-    new_lag[['parent','child']] = new_lag['index'].apply(pd.Series)
+    #new_lag[['parent','child']] = new_lag['index'].apply(pd.Series)
     merged_lag = pd.merge(new_lag, clusters[['name','__glayCluster']], how='left', left_on=['parent'], right_on=['name'])
     merged_lag = merged_lag.rename(columns = {'__glayCluster':'parent_cluster'})
 
     merged_lag = pd.merge(merged_lag, clusters[['name','__glayCluster']], how='left', left_on=['child'], right_on=['name'])
     merged_lag = merged_lag.rename(columns = {'__glayCluster':'child_cluster'})
 
-    average_lag_over_network = merged_lag['lag_mean'].mean()
-    std_lag_over_network = merged_lag['lag_mean'].std()
+    #average_lag_over_network = merged_lag['lag_mean'].mean()
+    #std_lag_over_network = merged_lag['lag_mean'].std()
 
-    zero_lag_edges = merged_lag[merged_lag['lag_mean']<1].count()
+    #zero_lag_edges = merged_lag[merged_lag['lag_mean']<1].count()
 
     within_clusters = merged_lag[merged_lag['parent_cluster'] == merged_lag['child_cluster']]
     between_clusters = merged_lag[merged_lag['parent_cluster'] != merged_lag['child_cluster']]
@@ -302,7 +312,7 @@ def main(window_type='RandomForest', CLUSTER=1):
 
     grouped_by_cluster = target_clusters.groupby('parent_cluster')
 
-    target_clusters.loc[target_clusters['lag_counts']<3, ['lag_median']] = 0
+    #target_clusters.loc[target_clusters['lag_counts']<3, ['lag_median']] = 0
 
 
     clusters = target_clusters['parent_cluster'].unique().tolist()
@@ -313,9 +323,9 @@ def main(window_type='RandomForest', CLUSTER=1):
         print(clusterid, len(clusters))
         current_group = grouped_by_cluster.get_group(clusterid)
         total_edges = len(current_group)
-        nan_edges = len(current_group[current_group['lag_median'].isnull()])
-        lagged_edges = len(current_group[current_group['lag_median'] > 1])
-        lagged_edges_2 = len(current_group[(current_group['lag_median'] > 2)])
+        nan_edges = len(current_group[current_group['Lag'].isnull()])
+        lagged_edges = len(current_group[current_group['Lag'] >= 10])
+        lagged_edges_2 = len(current_group[(current_group['Lag'] >= 20)])
         sub_dict = get_subnetwork_info(current_group)
         if (len(current_group) < 10) or (len(sub_dict['tfs']) < 3):
             continue
