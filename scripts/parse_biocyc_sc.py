@@ -17,6 +17,9 @@ import Pipelines as pl
 from Swing.util.Evaluator import Evaluator
 import os.path
 import Swing.util.lag_identification as lag_id
+import Swing.util.utility_module as Rutil
+import networkx as nx
+from nxpd import draw
 
 def parse_go():
     go = pd.read_csv('../data/invitro/gene_ontology.tsv', sep='\t')
@@ -103,28 +106,66 @@ def run_subswing(df, td_window=6, min_lag = 0, max_lag = 0, window_type = 'Rando
     gene_end = None
     time_label = "Time"
     separator = "\t"
+    window_types = ['Dionesus', 'RandomForest', 'Lasso']
+    final_edge_list = []
+    for window_type in window_types:
+        tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_lag =min_lag, max_lag = max_lag, window_type = window_type, sub_dict=sub_dict)
+        
+        # remember the data is already zscored
+        #tdr.zscore_all_data()
+        
+        tdr.set_window(td_window)
+        tdr.create_custom_windows(sub_dict['tfs'])
+        tdr.optimize_params()
+        tdr.crag = False
+        tdr.calc_mse = False
+        tdr.fit_windows(n_trees=100, show_progress=False, n_jobs=-1)
+        tdr.rank_edges(permutation_n=10, n_bootstraps=10)
+        tdr.compile_roller_edges(self_edges=False)
+        tdr.make_static_edge_dict(true_edges, self_edges=False, lag_method='mean_mean')
+        sub_df = tdr.make_sort_df(tdr.edge_dict, sort_by = 'rank')
+        sub_df['Rank'] = np.arange(len(sub_df))
 
-    tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_lag =min_lag, max_lag = max_lag, window_type = window_type, sub_dict=sub_dict)
     
-    # remember the data is already zscored
-    #tdr.zscore_all_data()
-    
-    tdr.set_window(td_window)
-    tdr.create_custom_windows(sub_dict['tfs'])
-    tdr.optimize_params()
-    tdr.crag = False
-    tdr.calc_mse = False
-    tdr.fit_windows(n_trees=100, show_progress=False, n_jobs=-1)
-    tdr.rank_edges(permutation_n=10, n_bootstraps=10)
-    tdr.compile_roller_edges(self_edges=False)
-    tdr.make_static_edge_dict(true_edges, self_edges=False, lag_method='mean_mean')
-    sub_df = tdr.make_sort_df(tdr.edge_dict, sort_by = 'rank')
-    sub_df['Rank'] = np.arange(len(sub_df))
+        pr = sub_eval.calc_pr(sub_df.sort('Rank'))
+        roc = sub_eval.calc_roc(sub_df.sort('Rank'))
+        print(window_type,td_window,roc[2].values[-1],pr[2].values[-1])
+        final_edge_list.append(sub_df)
+    averaged_rank_data = Rutil.average_rank(final_edge_list,'Rank')
+    col_names = averaged_rank_data.columns.tolist()
+    for i in range(len(window_types)):
+        col_names[i] = window_types[i]+'-rank'
+    averaged_rank_data.columns = col_names
+    averaged_rank_data.sort('mean-rank', inplace=True)
+    pr = sub_eval.calc_pr(averaged_rank_data.sort('mean-rank'))
+    roc = sub_eval.calc_roc(averaged_rank_data.sort('mean-rank'))
+    print('community',td_window,roc[2].values[-1],pr[2].values[-1])
 
-    sub_eval = Evaluator(subnet_dict = sub_dict)
-    
-    pr = sub_eval.calc_pr(sub_df.sort('Rank'))
-    roc = sub_eval.calc_roc(sub_df.sort('Rank'))
+
+    sub_df = averaged_rank_data
+    sub_df['tp'] = sub_df['regulator-target'].isin(sub_eval.gs_flat)
+    sub_df=sub_df.merge(df,how = 'outer', right_on='Edge',left_on='regulator-target')
+    sub_df['Source'] = [x[0] for x in sub_df['regulator-target'].tolist()]
+    sub_df['Target'] = [x[1] for x in sub_df['regulator-target'].tolist()]
+    sub_df = sub_df[(sub_df['parent_cluster'] == sub_df['child_cluster']) | sub_df['parent_cluster'].isnull()]
+    sub_df['moduleID'] = clusterid
+    sub_df['window_size'] = td_window
+    sub_df['min_lag'] = min_lag
+    sub_df['max_lag'] = max_lag
+    sub_df['total_edges'] = len(df)
+    sub_df['pr'] = pr[2].values[-1]
+    sub_df['roc'] = roc[2].values[-1]
+
+    sub_df = sub_df.sort('mean-rank')
+
+
+
+    if os.path.isfile(output_fn):
+        with open(output_fn,'a') as output:
+            sub_df.to_csv(output, header=False, index=False, sep='\t')
+    else:
+        with open(output_fn,'a') as output:
+            sub_df.to_csv(output, header=True, index=False, sep='\t')
     return(pr[2].values[-1], roc[2].values[-1])
 
 def get_subnetwork_info(df):
@@ -331,13 +372,13 @@ def main(window_type='RandomForest', CLUSTER=1):
             continue
         pr1,roc1 = run_subswing(current_group, td_window = 6, min_lag = 0, max_lag = 0, window_type = window_type)
         pr2,roc2 = run_subswing(current_group, td_window = 5, min_lag = 1, max_lag = 1, window_type = window_type)
-        pr3,roc3 = run_subswing(current_group, td_window = 5, min_lag = 0, max_lag = 1, window_type = window_type)
-        pr4,roc4 = run_subswing(current_group, td_window = 4, min_lag = 0, max_lag = 2, window_type = window_type)
-        pr5,roc5 = run_subswing(current_group, td_window = 4, min_lag = 1, max_lag = 2, window_type = window_type)
-        pr6,roc6 = run_subswing(current_group, td_window = 4, min_lag = 2, max_lag = 2, window_type = window_type)
+        #pr3,roc3 = run_subswing(current_group, td_window = 5, min_lag = 0, max_lag = 1, window_type = window_type)
+        #pr4,roc4 = run_subswing(current_group, td_window = 4, min_lag = 0, max_lag = 2, window_type = window_type)
+        #pr5,roc5 = run_subswing(current_group, td_window = 4, min_lag = 1, max_lag = 2, window_type = window_type)
+        #pr6,roc6 = run_subswing(current_group, td_window = 4, min_lag = 2, max_lag = 2, window_type = window_type)
         print('Diff pr:', pr1-pr2)
         print('diff roc:', roc1-roc2)
-        print(pr1,roc1,pr2,roc2,pr3,roc3,pr4,roc4,pr5,roc5,pr6,roc6)
+        #print(pr1,roc1,pr2,roc2,pr3,roc3,pr4,roc4,pr5,roc5,pr6,roc6)
 
         
         print('total_edges: %d, nan_edges: %d, lagged_edges: %d, stringently_lagged_edges: %d' % (total_edges, nan_edges, lagged_edges, lagged_edges_2))
@@ -360,14 +401,14 @@ def main(window_type='RandomForest', CLUSTER=1):
                             'baseline_aupr':pr1,
                             'swing_aupr':pr2,
                             'swing_auroc':roc2,
-                            'swing_aupr2':pr3,
-                            'swing_auroc2':roc3,
-                            'swing_aupr3':pr4,
-                            'swing_auroc3':roc4,
-                            'swing_aupr4':pr5,
-                            'swing_auroc4':roc5,
-                            'swing_aupr5':pr6,
-                            'swing_auroc5':roc6
+                            #'swing_aupr2':pr3,
+                            #'swing_auroc2':roc3,
+                            #'swing_aupr3':pr4,
+                            #'swing_auroc3':roc4,
+                            #'swing_aupr4':pr5,
+                            #'swing_auroc4':roc5,
+                            #'swing_aupr5':pr6,
+                            #'swing_auroc5':roc6
 
                             }
         cluster_summary = cluster_summary.append(cluster_result, ignore_index = True)
