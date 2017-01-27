@@ -28,7 +28,7 @@ eco_go = parse_go()
 stats = []
 overall_results = []
 
-for ind in range(17,29):
+for ind in range(26,27):
     clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments_parsed'+str(ind)+'.csv',sep=',')
 
 
@@ -45,6 +45,7 @@ for ind in range(17,29):
     # For each cluster, test the list of the genes for gene ontology enrichment
 
     valid_clusters = clusters['__glayCluster'].unique().tolist()
+    pdb.set_trace()
     valid_clusters.remove(99)
     res = []
     expanded_df = pd.DataFrame()
