@@ -31,7 +31,8 @@ def parse_go():
     go_tuple = list(zip(genes,go_id))
     eco_go = defaultdict(list)
     for genes,go_id in go_tuple:
-        eco_go[genes].append(go_id)    
+        eco_go[genes].append(go_id)
+    
     return(eco_go)
 
 def get_clist(clusterid, cluster_table):
@@ -324,7 +325,6 @@ def main(window_type='RandomForest', CLUSTER=14):
     clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments'+str(CLUSTER)+'.csv',sep=',')
 
     new_lag= lag_df.reset_index()
-    
     merged_lag = pd.merge(new_lag, clusters[['name','__glayCluster']], how='left', left_on=['parent'], right_on=['name'])
     merged_lag = merged_lag.rename(columns = {'__glayCluster':'parent_cluster'})
 
@@ -437,3 +437,68 @@ if __name__ == '__main__':
     n_trials = 2
     for x in range(n_trials):
         main(window_type, CLUSTER=CLUSTER)
+<<<<<<< HEAD
+=======
+        
+
+"""
+pdb.set_trace()
+
+result_df = grouped_by_cluster.median()
+result_df['count'] = grouped_by_cluster.count()['name_x']
+
+valid_clusters = result_df[result_df['count']>9]['child_cluster'].tolist()
+
+
+omranian_promotion = pd.read_pickle('/projects/p20519/roller_output/pickles/omranian_promotion.pkl')
+
+promotion_lag = pd.merge(merged_lag, omranian_promotion, how='left', left_on=['index'], right_on=['regulator-target'])
+
+promotion_lag['rank_diff_D'] = promotion_lag['rank_importance_Dionesus-td_6']-promotion_lag['rank_importance_Dionesus-td_4']
+
+
+eco_go = parse_go()
+
+clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments.csv',sep=',')
+
+
+obodag = GODag("go-basic.obo")
+
+goeaobj = GOEnrichmentStudy(
+        eco_go.keys(), # List of mouse protein-coding genes
+        eco_go, # geneid/GO associations
+        obodag, # Ontologies
+        propagate_counts = False,
+        alpha = 0.05, # default significance cut-off
+        methods = ['fdr_by']) # defult multipletest correction method
+# For each cluster, get a list of genes.
+# For each cluster, test the list of the genes for gene ontology enrichment
+
+valid_clusters = clusters['__glayCluster'].unique().tolist()
+for clusterid in valid_clusters:
+    genes_0 = get_clist(clusterid, clusters)
+    goea_results_all = goeaobj.run_study(genes_0)
+    goea_results_sig = [r for r in goea_results_all if r.p_fdr_by < 0.05]
+    print(len(goea_results_sig))
+    for result in goea_results_sig:
+        print(clusterid,result.name, result.ratio_in_study)
+
+
+# show an enrichment modules with lag
+
+# divide edges into modules
+
+# create file in json format
+
+
+# for each node, add list of pathways
+
+
+# for each pathway, get genes involved in pathway
+
+# for each pathway, get a list of interactions within that pathway
+# for each pathway, get a list of interactions related to that pathway
+
+# get list of lags, then for each lag 
+"""
+>>>>>>> e83ccbe6cb30948be1802b7c6acd8b184fd85717
