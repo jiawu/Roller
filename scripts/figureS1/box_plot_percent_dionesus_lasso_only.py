@@ -43,8 +43,16 @@ def parse_tdr_results(agg_df,test_statistic, datasets):
         SWING_Lasso = current_df[(current_df['td_window'] == 18) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('Lasso'))& (current_df['data_folder'].str.contains('yeast') )]
         SWING_Dionesus = current_df[(current_df['td_window'] == 18) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('Dionesus'))& (current_df['data_folder'].str.contains('yeast') )]
         SWING_Community = current_df[(current_df['td_window'] == 18) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('community'))& (current_df['data_folder'].str.contains('yeast') )]
+        Ref1 = current_df[(current_df['td_window'] == 21) & (current_df['data_folder'].str.contains('Dionesus')) & (current_df['data_folder'].str.contains('yeast'))]
+        comparisons = [Ref1]
+        
+        comparison_range = [9,10,12,15,18]
+        for c in comparison_range:
+            selection = current_df[(current_df['td_window'] == c) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('Dionesus')) & (current_df['data_folder'].str.contains('ecoli'))]
+            comparisons.append(selection)
 
 
+<<<<<<< Updated upstream
         RF2 = current_df[(current_df['td_window'] == 21) & (current_df['data_folder'].str.contains('Dionesus'))& (current_df['data_folder'].str.contains('ecoli') )]
         SWING_RF2 = current_df[(current_df['td_window'] == 18) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('RandomForest'))& (current_df['data_folder'].str.contains('ecoli') )]
         SWING_Lasso2 = current_df[(current_df['td_window'] == 18) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('Lasso'))& (current_df['data_folder'].str.contains('ecoli') )]
@@ -52,6 +60,8 @@ def parse_tdr_results(agg_df,test_statistic, datasets):
         SWING_Community2 = current_df[(current_df['td_window'] == 18) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('community'))& (current_df['data_folder'].str.contains('ecoli') )]
 
 
+=======
+>>>>>>> Stashed changes
         for category in comparisons:
             auroc_list.append(category[test_statistic][0:n_trials].tolist())
 
