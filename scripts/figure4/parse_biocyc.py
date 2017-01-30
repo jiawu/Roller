@@ -101,6 +101,7 @@ def run_subswing(df, td_window=6, min_lag = 0, max_lag = 0, window_type = 'Rando
     Pass in subnet_dict
     """
     true_edges = df['Edge'].tolist()
+    #true_edges = df['index'].tolist()
     sub_dict = get_subnetwork_info(df)
     sub_eval = Evaluator(subnet_dict = sub_dict)
     
@@ -325,6 +326,7 @@ def main(window_type='RandomForest', CLUSTER=14):
     clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments'+str(CLUSTER)+'.csv',sep=',')
 
     new_lag= lag_df.reset_index()
+    #new_lag[['parent','child']] = new_lag['index'].apply(pd.Series)
     merged_lag = pd.merge(new_lag, clusters[['name','__glayCluster']], how='left', left_on=['parent'], right_on=['name'])
     merged_lag = merged_lag.rename(columns = {'__glayCluster':'parent_cluster'})
 
@@ -437,8 +439,6 @@ if __name__ == '__main__':
     n_trials = 2
     for x in range(n_trials):
         main(window_type, CLUSTER=CLUSTER)
-<<<<<<< HEAD
-=======
         
 
 """
@@ -501,4 +501,3 @@ for clusterid in valid_clusters:
 
 # get list of lags, then for each lag 
 """
->>>>>>> e83ccbe6cb30948be1802b7c6acd8b184fd85717
