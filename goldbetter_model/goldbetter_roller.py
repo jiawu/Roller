@@ -1,7 +1,7 @@
 __author__ = 'jfinkle'
 
 
-from Roller import Roller
+from Swing_old import Swing
 from sklearn.preprocessing import Imputer
 from linear_wrapper import LassoWrapper
 import numpy as np
@@ -13,7 +13,7 @@ import sys
 
 file_path = "goldbetter_data.txt"
 gene_start_column = 2
-roll_me = Roller(file_path, gene_start_column)
+roll_me = Swing(file_path, gene_start_column)
 window_size = 10000-1
 #get only TFs data, window size of 4
 roll_me.set_window(window_size)

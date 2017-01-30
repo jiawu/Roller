@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 import os
 import pandas as pd
-from Roller.util.Evaluator import Evaluator
+from Swing_old.util.Evaluator import Evaluator
 import pdb
 import numpy as np
 import kdpee
@@ -26,7 +26,7 @@ nfiles = len(filenames)
 #organize pickled objects by dataset analyzed
 obj_list = []
 counter = 0
-image_file_path = "/home/jjw036/Roller/aggregated"
+image_file_path = "/home/jjw036/Swing/aggregated"
 
 
 #todo: calculate distance between two edge lists

@@ -6,7 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 import os
 import pandas as pd
-from Roller.util.Evaluator import Evaluator
+from Swing_old.util.Evaluator import Evaluator
 import pdb
 import numpy as np
 import kdpee
@@ -18,7 +18,7 @@ nfiles = len(filenames)
 #organize pickled objects by dataset analyzed
 obj_list = []
 counter = 0
-image_file_path = "/home/jjw036/Roller/aggregated"
+image_file_path = "/home/jjw036/Swing/aggregated"
 
 target_dataset =  "data/dream4/insilico_size10_5_timeseries.tsv"
 
@@ -83,7 +83,7 @@ for file in filenames:
       a_fpr_list.append(a_fpr[14])
       a_auroc_list.append(a_auroc[-1])
 
-      # create barplots for each Roller of a certain window size
+      # create barplots for each Swing of a certain window size
       # window size = bar plot
       # then group all barplots into a 3D bar plot
       if window_size not in window_size_list:

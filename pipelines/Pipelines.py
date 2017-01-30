@@ -1,6 +1,9 @@
 import pandas as pd
-from Roller.tdRoller import tdRoller
-from Roller.util.Evaluator import Evaluator
+from Swing import Swing
+from Swing.util.Evaluator import Evaluator
+import numpy as np
+import Swing.util.utility_module as Rutil
+
 import pdb
 
 def get_td_stats(**kwargs): 
@@ -128,7 +131,7 @@ def main(data_folder, output_path, target_dataset, my_statistic, td_score):
     max_series = []
     min_series = []
     mean_series = []
-    ## iterate through window_sizes 
+    ## iterate through window_sizes
     unique_window_sizes = list(set(analyzer.overall_df['window_width'].tolist()))
     lp.set_x_values(unique_window_sizes)
     for color_index, window_size in enumerate(unique_window_sizes):
@@ -139,7 +142,7 @@ def main(data_folder, output_path, target_dataset, my_statistic, td_score):
         for index in unique_indices:
             value = grouped.get_group((window_size, index)).mean()[my_statistic]
             series_y.append(value)
-            
+
         ## plot horizontal line for the maximum window size
         if window_size == analyzer.current_roller.overall_width:
             lp.plot_horizontal_line(value, 19, "Status Quo")
@@ -161,11 +164,11 @@ def main(data_folder, output_path, target_dataset, my_statistic, td_score):
 
     ## print best cragging score
     cragged_window = analyzer.predict_best_window()
-    
+
     lp.plot_horizontal_line(cragged_window[my_statistic].values, 3, 'best crag')
     # plot the tdroller score
     lp.plot_horizontal_line(td_score,17, 'tdRoller')
-    lp.add_formatting(y_label=my_statistic)        
+    lp.add_formatting(y_label=my_statistic)
 
 
     lp.save_plot(output_path, '_'+my_statistic)

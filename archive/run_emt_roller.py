@@ -1,4 +1,4 @@
-from Roller import Roller
+from Swing_old import Swing
 from sklearn.preprocessing import Imputer
 from linear_wrapper import LassoWrapper
 import numpy as np
@@ -55,7 +55,7 @@ def plot_figure(coeff_matrix,nth_window, row_labels, col_labels, window_size,pre
 
 file_path = "compressed_katrina_data.txt"
 gene_start_column = 5
-roll_me = Roller(file_path, gene_start_column)
+roll_me = Swing(file_path, gene_start_column)
 window_size = 11
 #get only TFs data, window size of 4
 roll_me.set_window(window_size)

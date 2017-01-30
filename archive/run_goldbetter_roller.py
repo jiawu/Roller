@@ -1,4 +1,4 @@
-from Roller import Roller
+from Swing_old import Swing
 from sklearn.preprocessing import Imputer
 from linear_wrapper import LassoWrapper
 import numpy as np
@@ -55,10 +55,10 @@ def plot_figure(coeff_matrix,nth_window, row_labels, col_labels, window_size,pre
     figure1.savefig(prefix+'figure'+str(nth_window)+'.png')
 
 
-#file_path = "/Users/jjw036/Roller/experiments/dream5_experiment/raw_data/insilico_size10_1_timeseries.tsv"
-file_path = "/Users/jjw036/Roller/goldbetter_model/goldbetter_data.txt"
+#file_path = "/Users/jjw036/Swing/experiments/dream5_experiment/raw_data/insilico_size10_1_timeseries.tsv"
+file_path = "/Users/jjw036/Swing/goldbetter_model/goldbetter_data.txt"
 gene_start_column = 2
-roll_me = Roller(file_path, gene_start_column)
+roll_me = Swing(file_path, gene_start_column)
 window_size = 1000
 roll_me.set_step(300)
 #get only TFs data, window size of 4

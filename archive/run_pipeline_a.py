@@ -1,14 +1,14 @@
 from __future__ import absolute_import
-import Roller
+import Swing_old
 from sklearn.preprocessing import Imputer
-from Roller.util.linear_wrapper import LassoWrapper
+from Swing_old.util.linear_wrapper import LassoWrapper
 import numpy as np
 import matplotlib as mpl
-from Roller.util.permutation_test import Permuter
+from Swing_old.util.permutation_test import Permuter
 import itertools
-from Roller.util import utility_module as utility
-from Roller.util.Ranker import LassoBootstrapper
-from Roller.util.Evaluator import Evaluator
+from Swing_old.util import utility_module as utility
+from Swing_old.util.Ranker import LassoBootstrapper
+from Swing_old.util.Evaluator import Evaluator
 import pdb
 import pickle
 import scipy
@@ -146,7 +146,7 @@ def initialize_model(pd):
     window_size = pd['window_size']
     alpha = pd['alpha']
 
-    roll_me = Roller.Roller(file_path, gene_start_column, gene_end, time_label, separator)
+    roll_me = Swing_old.Swing(file_path, gene_start_column, gene_end, time_label, separator)
     roll_me.set_window(window_size)
     pdb.set_trace()
     total_window_number = roll_me.get_n_windows()

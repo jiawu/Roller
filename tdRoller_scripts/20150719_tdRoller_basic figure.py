@@ -26,7 +26,7 @@ auroc_mean = pd.Series([np.mean(row) for row in auroc.values.T], index=aupr.colu
 auroc_std.name='std'
 
 
-idx = ['All_Data', 'Roller', 'tdRFR_optimized']
+idx = ['All_Data', 'Swing', 'tdRFR_optimized']
 
 temp_mean = aupr_mean[idx].values
 temp_std = aupr_std[idx].values
@@ -36,9 +36,9 @@ width = 0.9
 # Pull the formatting out here
 bar_kwargs = {'width':width,'color':'c','zorder':5, 'align':'center'}
 err_kwargs = {'zorder':0,'fmt':'none','lw':2,'ecolor':'k'}
-labels = (['All Data', 'Roller', 'tdRFR'])
+labels = (['All Data', 'Swing', 'tdRFR'])
 
-print round(stats.ttest_ind(auroc['All_Data'], auroc['Roller'])[1], 4)
+print round(stats.ttest_ind(auroc['All_Data'], auroc['Swing'])[1], 4)
 print round(stats.ttest_ind(auroc['All_Data'], auroc['tdRFR_optimized'])[1], 4)
 sys.exit()
 idx = np.arange(len(temp_mean))
@@ -51,12 +51,12 @@ plt.savefig('aupr.pdf', format='pdf')
 sys.exit()
 # This stuff didn't work out so well
 ttest_vals=[1, 1, 1]
-ttest_vals[0] = round(stats.ttest_ind(auroc['All_Data'], auroc['Roller'])[1], 4)
+ttest_vals[0] = round(stats.ttest_ind(auroc['All_Data'], auroc['Swing'])[1], 4)
 ttest_vals[1] = round(stats.ttest_ind(auroc['All_Data'], auroc['tdRFR_optimized'])[1], 4)
-ttest_vals[2] = round(stats.ttest_ind(auroc['Roller'], auroc['tdRFR_optimized'])[1], 4)
+ttest_vals[2] = round(stats.ttest_ind(auroc['Swing'], auroc['tdRFR_optimized'])[1], 4)
 ind  = np.arange(len(idx))    # the x locations for the groups
 width= 0.85
-labels = (['All Data', 'Roller', 'tdRFR'])
+labels = (['All Data', 'Swing', 'tdRFR'])
 
 # Pull the formatting out here
 bar_kwargs = {'width':width,'color':'c','zorder':5}

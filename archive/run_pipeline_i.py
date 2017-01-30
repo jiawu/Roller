@@ -2,7 +2,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import sys
-import Roller
+import Swing_old
 import uuid
 import pickle
 """
@@ -30,7 +30,7 @@ if __name__ == "__main__":
       gene_end = None
       gold_standard = INPUT_PATH + str(network_index) + "_goldstandard.tsv"
 
-      roller = Roller.Roller(file_path, gene_start_column, gene_end, time_label,separator,window_type=INF_METHOD)
+      roller = Swing_old.Swing(file_path, gene_start_column, gene_end, time_label,separator,window_type=INF_METHOD)
       print("Overall Width: " + str(roller.overall_width))
       roller.zscore_all_data()
 

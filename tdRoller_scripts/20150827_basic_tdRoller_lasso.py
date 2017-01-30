@@ -1,8 +1,8 @@
 __author__ = 'Justin Finkle'
 __email__ = 'jfinkle@u.northwestern.edu'
 import pdb
-from Roller.tdRoller import tdRoller
-from Roller.util.Evaluator import Evaluator
+from Swing_old.tdSwing import tdSwing
+from Swing_old.util.Evaluator import Evaluator
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -21,7 +21,7 @@ pd.options.display.float_format = '{:,.5f}'.format
 
 #np.random.seed(8)
 
-tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator, window_type='Lasso')
+tdr = tdSwing(file_path, gene_start_column, gene_end, time_label, separator, window_type='Lasso')
 tdr.zscore_all_data()
 tdr.set_window(14)
 tdr.optimize_params()
