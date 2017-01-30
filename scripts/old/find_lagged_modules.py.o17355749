@@ -1,0 +1,28 @@
+----------------------------------------
+PBS: Begin PBS Prologue Thu May 12 13:05:08 CDT 2016 1463076308
+PBS: Job ID:		17355749.qsched02.quest.it.northwestern.edu
+PBS: Username:		jjw036
+PBS: Group:		jjw036
+PBS: Executing queue:     short
+PBS: Job name:		find_lagged_modules.py
+PBS: Account:		p20519
+----------------------------------------
+   The following variables are not
+   guaranteed to be the same in 
+   prologue and the job run script  
+----------------------------------------
+PBS: Temporary Dir($TMPDIR):	/tmp/17355749.qsched02.quest.it.northwestern.edu
+PBS: Master Node($PBS_MSHOST):		qnode4121
+PBS: node file($PBS_NODEFILE):  /hpc/opt/torque/nodes/qnode4121/aux//17355749.qsched02.quest.it.northwestern.edu
+PBS: PATH (in prologue) : /bin:/usr/bin
+PBS: WORKDIR ($PBS_O_WORKDIR) is:  /home/jjw036/Roller/scripts
+----------------------------------------
+PBS: End PBS Prologue Thu May 12 13:05:08 CDT 2016 1463076308
+----------------------------------------
+PBS job ended
+Begin PBS Epilogue Thu May 12 13:05:13 CDT 2016 1463076313
+JobID: 17355749.qsched02.quest.it.northwestern.edu
+Session ID:			11817
+Resources Used:			cput=00:00:00,mem=0kb,vmem=0kb,walltime=00:00:00
+Job exit value:			2
+----------------------------------------
