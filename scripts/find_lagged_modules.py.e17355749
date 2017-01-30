@@ -1,7 +1,0 @@
-/hpc/opt/torque/nodes/qnode4121/mom_priv/jobs/17355749.qsched02.quest.it.northwestern.edu.SC: line 9: import: command not found
-/hpc/opt/torque/nodes/qnode4121/mom_priv/jobs/17355749.qsched02.quest.it.northwestern.edu.SC: line 10: import: command not found
-/hpc/opt/torque/nodes/qnode4121/mom_priv/jobs/17355749.qsched02.quest.it.northwestern.edu.SC: line 12: import: command not found
-/hpc/opt/torque/nodes/qnode4121/mom_priv/jobs/17355749.qsched02.quest.it.northwestern.edu.SC: line 13: from: command not found
-/hpc/opt/torque/nodes/qnode4121/mom_priv/jobs/17355749.qsched02.quest.it.northwestern.edu.SC: line 14: import: command not found
-/hpc/opt/torque/nodes/qnode4121/mom_priv/jobs/17355749.qsched02.quest.it.northwestern.edu.SC: line 16: syntax error near unexpected token `('
-/hpc/opt/torque/nodes/qnode4121/mom_priv/jobs/17355749.qsched02.quest.it.northwestern.edu.SC: line 16: `def get_true_edges(gold_filename):'
