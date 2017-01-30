@@ -5,7 +5,7 @@ import numpy as np
 import Swing.util.utility_module as Rutil
 
 import pdb
-
+from plot_fig1 import plot_fig1
 def get_td_stats2(**kwargs):
     kwargs.setdefault('td_window',6)
     kwargs.setdefault('min_lag',1)
@@ -203,7 +203,6 @@ def get_td_stats_custom(**kwargs):
     else:
         tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_lag = kwargs['min_lag'], max_lag = kwargs['max_lag'], window_type ='RandomForest')
 
-
     # turning off zscoring for omranian
     if 'omranian' not in file_path:
         tdr.zscore_all_data()
@@ -222,6 +221,9 @@ def get_td_stats_custom(**kwargs):
         tf_list = ['G%s'%x for x in range(1,11)]
 
     tdr.create_custom_windows(tf_list)
+    
+    plot_fig1(tdr.window_list[0].explanatory_data)
+    pdb.set_trace()
     if kwargs['filter_noisy']:
         tdr.filter_noisy()
     if kwargs['alpha'] is not None:

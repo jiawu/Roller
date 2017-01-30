@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 class BasePlot:
 
     def __init__(self):
-        self.f = plt.figure(figsize=(10,10))
+        self.f = plt.figure(figsize=(10,2))
         self.axes = self.f.gca()
 
         #initialize colormap

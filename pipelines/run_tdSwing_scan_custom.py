@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('Agg')
 import pdb
 import sys
 import Pipelines as pl
