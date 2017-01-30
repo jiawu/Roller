@@ -36,20 +36,22 @@ def parse_tdr_results(agg_df,test_statistic, datasets):
     for dataset in datasets:
         auroc_list = []
         current_df = agg_df[agg_df['file_path'].str.contains(dataset)]
-        pdb.set_trace()
 
-        RF = current_df[(current_df['td_window'] == 21) & (current_df['data_folder'].str.contains('Dionesus')) & (current_df['data_folder'].str.contains('yeast'))]
-        SWING_RF = current_df[(current_df['td_window'] == 18) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('RandomForest'))]
-        SWING_Lasso = current_df[(current_df['td_window'] == 18) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('Lasso'))& (current_df['data_folder'].str.contains('yeast') )]
-        SWING_Dionesus = current_df[(current_df['td_window'] == 18) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('Dionesus'))& (current_df['data_folder'].str.contains('yeast') )]
-        SWING_Community = current_df[(current_df['td_window'] == 18) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('community'))& (current_df['data_folder'].str.contains('yeast') )]
+        Ref1 = current_df[(current_df['td_window'] == 21) & (current_df['data_folder'].str.contains('Lasso')) & (current_df['data_folder'].str.contains('yeast'))]
+        comparisons = [Ref1]
+        
+        comparison_range = [15]
+        for c in comparison_range:
+            selection = current_df[(current_df['td_window'] == c) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('Lasso')) & (current_df['data_folder'].str.contains('yeast'))]
+            comparisons.append(selection)
 
+        Ref2 = current_df[(current_df['td_window'] == 21) & (current_df['data_folder'].str.contains('Lasso')) & (current_df['data_folder'].str.contains('ecoli'))]
+        comparisons.append(Ref2)
 
-        RF2 = current_df[(current_df['td_window'] == 21) & (current_df['data_folder'].str.contains('Dionesus'))& (current_df['data_folder'].str.contains('ecoli') )]
-        SWING_RF2 = current_df[(current_df['td_window'] == 18) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('RandomForest'))& (current_df['data_folder'].str.contains('ecoli') )]
-        SWING_Lasso2 = current_df[(current_df['td_window'] == 18) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('Lasso'))& (current_df['data_folder'].str.contains('ecoli') )]
-        SWING_Dionesus2 = current_df[(current_df['td_window'] == 18) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('Dionesus'))& (current_df['data_folder'].str.contains('ecoli') )]
-        SWING_Community2 = current_df[(current_df['td_window'] == 18) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('community'))& (current_df['data_folder'].str.contains('ecoli') )]
+        comparison_range = [15]
+        for c in comparison_range:
+            selection = current_df[(current_df['td_window'] == c) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('Dionesus')) & (current_df['data_folder'].str.contains('ecoli'))]
+            comparisons.append(selection)
 
 
         for category in comparisons:
@@ -59,14 +61,14 @@ def parse_tdr_results(agg_df,test_statistic, datasets):
         reference_box = auroc_list[0]
         ref_mean = np.mean(reference_box)
 
-        for box in auroc_list[0:6]:
+        for box in auroc_list[0:2]:
             cum_aurocs.append((box-ref_mean)/ref_mean*100)
         
-        reference_box2 = auroc_list[6]
+        reference_box2 = auroc_list[2]
         ref_mean2 = np.mean(reference_box2)
 
         
-        for box in auroc_list[6:]:
+        for box in auroc_list[2:]:
             cum_aurocs.append((box-ref_mean2)/ref_mean*100)
 
 
@@ -77,19 +79,11 @@ def parse_tdr_results(agg_df,test_statistic, datasets):
         cum_auroc = np.hstack(cum_aurocs[idx::len(auroc_list)]).tolist()
         final_auroc_list.append(cum_auroc)
         
-    label_list.append("Dionesus")
-    label_list.append("SWING Dionesus - 9")
-    label_list.append("SWING Dionesus - 10")
-    label_list.append("SWING Dionesus - 12")
-    label_list.append("SWING Dionesus - 15")
-    label_list.append("SWING Dionesus - 18")
+    label_list.append("Lasso")
+    label_list.append("SWING Lasso - 15")
+    label_list.append("Lasso")
+    label_list.append("SWING Lasso - 15")
     
-    label_list.append("Dionesus")
-    label_list.append("SWING Dionesus - 9")
-    label_list.append("SWING Dionesus - 10")
-    label_list.append("SWING Dionesus - 12")
-    label_list.append("SWING Dionesus - 15")
-    label_list.append("SWING Dionesus - 18")
 
     
     return((label_list, final_auroc_list))
@@ -119,14 +113,14 @@ with PdfPages(output_path+save_tag+'.pdf') as pdf:
 
         bp.plot_box(bp_data, label_list)
 
-        scoring_scheme = [(0,1), (0,2), (0,3),(0,4), (5,6), (5,7), (5,8), (5,9)]
+        #scoring_scheme = [(0,1), (0,2), (0,3),(0,4), (5,6), (5,7), (5,8), (5,9)]
 
-        tests = bp.sigtest(bp_data, score=scoring_scheme)
+        #tests = bp.sigtest(bp_data, score=scoring_scheme)
 
         title = "All Networks"
         bp.add_formatting(title, y_label="% "+ test.upper())
         labels = ['Yeast', 'E. Coli']
-        bp.add_sections(6, labels, offset=0.25)
+        bp.add_sections(2, labels, offset=0.25)
 
         #tests = bp.add_significance(tests, style = 'cascade')
         

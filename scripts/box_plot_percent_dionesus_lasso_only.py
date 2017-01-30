@@ -51,7 +51,9 @@ def parse_tdr_results(agg_df,test_statistic, datasets):
         SWING_Dionesus2 = current_df[(current_df['td_window'] == 18) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('Dionesus'))& (current_df['data_folder'].str.contains('ecoli') )]
         SWING_Community2 = current_df[(current_df['td_window'] == 18) & (current_df['min_lag']==1) & (current_df['max_lag'] == 3) & (current_df['data_folder'].str.contains('community'))& (current_df['data_folder'].str.contains('ecoli') )]
 
+        comparisons = [RF, SWING_RF, SWING_Lasso, SWING_Dionesus, SWING_Community,RF2, SWING_RF2, SWING_Lasso2, SWING_Dionesus2, SWING_Community2 ]
 
+        
         for category in comparisons:
             auroc_list.append(category[test_statistic][0:n_trials].tolist())
 
@@ -59,38 +61,41 @@ def parse_tdr_results(agg_df,test_statistic, datasets):
         reference_box = auroc_list[0]
         ref_mean = np.mean(reference_box)
 
-        for box in auroc_list[0:6]:
+        for box in auroc_list[0:5]:
             cum_aurocs.append((box-ref_mean)/ref_mean*100)
         
-        reference_box2 = auroc_list[6]
+        reference_box2 = auroc_list[5]
         ref_mean2 = np.mean(reference_box2)
 
         
-        for box in auroc_list[6:]:
+        for box in auroc_list[5:]:
             cum_aurocs.append((box-ref_mean2)/ref_mean*100)
 
 
-    final_auroc_list = []
-
-    for idx,box in enumerate(auroc_list):
-        print(idx)
-        cum_auroc = np.hstack(cum_aurocs[idx::len(auroc_list)]).tolist()
-        final_auroc_list.append(cum_auroc)
-        
-    label_list.append("Dionesus")
-    label_list.append("SWING Dionesus - 9")
-    label_list.append("SWING Dionesus - 10")
-    label_list.append("SWING Dionesus - 12")
-    label_list.append("SWING Dionesus - 15")
-    label_list.append("SWING Dionesus - 18")
+    final_RF = np.hstack(cum_aurocs[0::10]).tolist()        
+    final_SWING_RF = np.hstack(cum_aurocs[1::10]).tolist()        
+    final_SWING_Lasso = np.hstack(cum_aurocs[2::10]).tolist()        
+    final_SWING_Dionesus = np.hstack(cum_aurocs[3::10]).tolist()        
+    final_SWING_Community = np.hstack(cum_aurocs[4::10]).tolist()        
     
-    label_list.append("Dionesus")
-    label_list.append("SWING Dionesus - 9")
-    label_list.append("SWING Dionesus - 10")
-    label_list.append("SWING Dionesus - 12")
-    label_list.append("SWING Dionesus - 15")
-    label_list.append("SWING Dionesus - 18")
+    final_RF2 = np.hstack(cum_aurocs[5::10]).tolist()        
+    final_SWING_RF2 = np.hstack(cum_aurocs[6::10]).tolist()        
+    final_SWING_Lasso2 = np.hstack(cum_aurocs[7::10]).tolist()        
+    final_SWING_Dionesus2 = np.hstack(cum_aurocs[8::10]).tolist()        
+    final_SWING_Community2 = np.hstack(cum_aurocs[9::10]).tolist()
 
+    final_auroc_list = [final_RF, final_SWING_RF, final_SWING_Lasso, final_SWING_Dionesus, final_SWING_Community, final_RF2, final_SWING_RF2, final_SWING_Lasso2, final_SWING_Dionesus2, final_SWING_Community2]
+        
+    label_list.append("RandomForest")
+    label_list.append("SWING RF")
+    label_list.append("SWING Lasso")
+    label_list.append("SWING Dionesus")
+    label_list.append("SWING Community")
+    label_list.append("RandomForest")
+    label_list.append("SWING RF")
+    label_list.append("SWING Lasso")
+    label_list.append("SWING Dionesus")
+    label_list.append("SWING Community")
     
     return((label_list, final_auroc_list))
 
@@ -126,7 +131,7 @@ with PdfPages(output_path+save_tag+'.pdf') as pdf:
         title = "All Networks"
         bp.add_formatting(title, y_label="% "+ test.upper())
         labels = ['Yeast', 'E. Coli']
-        bp.add_sections(6, labels, offset=0.25)
+        bp.add_sections(5, labels, offset=0.25)
 
         #tests = bp.add_significance(tests, style = 'cascade')
         
