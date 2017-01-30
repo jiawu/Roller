@@ -25,7 +25,7 @@ class BoxPlot(BasePlot):
                       example: the window size
         :return fig obj:
         """
-        bp=self.axes.boxplot(y_values, labels=labels, widths = 0.5,medianprops = self.medianprops, whiskerprops=self.whiskerprops,flierprops=self.flierprops, meanprops=self.meanpointprops,showmeans=True, boxprops=self.boxprops, capprops=self.capprops, vert=False)
+        bp=self.axes.boxplot(y_values, labels=labels, widths = 0.3,medianprops = self.medianprops, whiskerprops=self.whiskerprops,flierprops=self.flierprops, meanprops=self.meanpointprops,showmeans=True, boxprops=self.boxprops, capprops=self.capprops)
         return(bp)
 
     def add_formatting(self, title, y_label):
@@ -40,7 +40,7 @@ class BoxPlot(BasePlot):
         xlabels = self.axes.get_xticklabels()
         for label in (self.axes.get_xticklabels()):
             label.set_fontsize(18)
-            label.set_rotation('horizontal')
+            label.set_rotation('vertical')
         for label in (self.axes.get_yticklabels()):
             label.set_fontsize(20)
         for l in self.axes.get_xticklines() + self.axes.get_yticklines():

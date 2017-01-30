@@ -6,6 +6,7 @@ import Swing.util.utility_module as Rutil
 
 import pdb
 from plot_fig1 import plot_fig1
+
 def get_td_stats2(**kwargs):
     kwargs.setdefault('td_window',6)
     kwargs.setdefault('min_lag',1)
@@ -223,7 +224,7 @@ def get_td_stats_custom(**kwargs):
     tdr.create_custom_windows(tf_list)
     
     plot_fig1(tdr.window_list[0].explanatory_data)
-    pdb.set_trace()
+    
     if kwargs['filter_noisy']:
         tdr.filter_noisy()
     if kwargs['alpha'] is not None:
