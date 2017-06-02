@@ -8,15 +8,13 @@ import numpy as np
 import networkx as nx
 from Swing.util.Evaluator import Evaluator
 from Swing.util.lag_identification import get_experiment_list, xcorr_experiments, calc_edge_lag
-from nxpd import draw
-from nxpd import nxpdParams
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib import rcParams
 from matplotlib.path import Path
 import matplotlib.patches as patches
 from matplotlib.patches import Polygon
-import brewer2mpl
+import palettable
 # import seaborn as sns
 from scipy.stats import fisher_exact, linregress, ttest_rel, mannwhitneyu, ttest_ind, pearsonr
 from scipy.special import logit
@@ -485,9 +483,9 @@ if __name__ == "__main__":
         'ytick.labelsize': 16,
         'text.usetex': False,
     }
-    colors1 = brewer2mpl.get_map('Set1', 'qualitative', 8).mpl_colors
-    colors2 = brewer2mpl.get_map('Set2', 'qualitative', 8).mpl_colors
-    colors3 = brewer2mpl.get_map('Paired', 'qualitative', 8).mpl_colors
+    colors1 = palettable.colorbrewer.get_map('Set1', 'qualitative', 8).mpl_colors
+    colors2 = palettable.colorbrewer.get_map('Set2', 'qualitative', 8).mpl_colors
+    colors3 = palettable.colorbrewer.get_map('Paired', 'qualitative', 8).mpl_colors
     rcParams.update(params)
     m = ['Dionesus', 'RF']
     rd = {'Dionesus': 'D', 'RF': 'RF'}
@@ -548,6 +546,8 @@ if __name__ == "__main__":
         f.tight_layout()
         g.tight_layout()
         h.tight_layout()
+        plt.show()
+        sys.exit()
 
         f_filename = '../manuscript/Figures/gnw_improvement_%s.pdf' % score
         g_filename = '../manuscript/Figures/lag_promotion.pdf'
