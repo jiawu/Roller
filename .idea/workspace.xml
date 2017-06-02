@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/figureS4/box_plot_large_network_comparison.py" afterPath="$PROJECT_DIR$/scripts/100node_comparison/box_plot_large_network_comparison.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/edge_promotion.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Roller.iws" />
@@ -23,12 +23,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="box_plot_large_network_comparison.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="box_plot_large_network_comparison.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/100node_comparison/box_plot_large_network_comparison.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="257">
-              <caret line="41" column="49" lean-forward="true" selection-start-line="41" selection-start-column="49" selection-end-line="41" selection-end-column="49" />
+            <state relative-caret-position="135">
+              <caret line="9" column="31" lean-forward="true" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="edge_promotion.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="6135">
+              <caret line="409" column="11" lean-forward="false" selection-start-line="409" selection-start-column="6" selection-end-line="409" selection-end-column="11" />
+              <folding>
+                <element signature="e#71#81#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -47,6 +59,7 @@
     <findStrings>
       <find>n_trials</find>
       <find>index</find>
+      <find>print</find>
     </findStrings>
   </component>
   <component name="FindManager">
@@ -95,10 +108,10 @@
         <option value="$PROJECT_DIR$/scripts/gardner_lag_ident.py" />
         <option value="$PROJECT_DIR$/pipelines/Pipelines.py" />
         <option value="$PROJECT_DIR$/scripts/gardner_edge_promotion.py" />
-        <option value="$PROJECT_DIR$/scripts/edge_promotion.py" />
         <option value="$PROJECT_DIR$/Swing/util/lag_identification.py" />
         <option value="$PROJECT_DIR$/scripts/ecoli_lag_ident.py" />
         <option value="$PROJECT_DIR$/scripts/figureS4/box_plot_large_network_comparison.py" />
+        <option value="$PROJECT_DIR$/scripts/edge_promotion.py" />
       </list>
     </option>
   </component>
@@ -160,71 +173,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Swing" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="swing" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Roller" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="swing" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Roller" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="figureS4" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="swing" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Roller" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="100node_comparison" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="swing" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Roller" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="data" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -520,13 +469,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1413916753036</updated>
-    </task>
-    <task id="LOCAL-00130" summary="tdRoller now accounts for edges that don't have meaningful importance scores">
-      <created>1437169105785</created>
-      <option name="number" value="00130" />
-      <option name="presentableId" value="LOCAL-00130" />
-      <option name="project" value="LOCAL" />
-      <updated>1437169105785</updated>
     </task>
     <task id="LOCAL-00131" summary="Basic plotting added to make a figure for Neda">
       <created>1437363214546</created>
@@ -864,7 +806,14 @@
       <option name="project" value="LOCAL" />
       <updated>1496428551936</updated>
     </task>
-    <option name="localTasksCounter" value="179" />
+    <task id="LOCAL-00179" summary="Move files to new scripts subfolder">
+      <created>1496428710769</created>
+      <option name="number" value="00179" />
+      <option name="presentableId" value="LOCAL-00179" />
+      <option name="project" value="LOCAL" />
+      <updated>1496428710769</updated>
+    </task>
+    <option name="localTasksCounter" value="180" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -894,8 +843,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="773" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1890625" sideWeight="0.6923077" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1890625" sideWeight="0.6923077" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33015874" sideWeight="0.50080776" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20883977" sideWeight="0.49919224" order="2" side_tool="false" content_ui="tabs" />
@@ -952,7 +902,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Functionalize edge promotion code" />
     <MESSAGE value="Generate 100 node networks for yeast and E coli.&#10;&#10;Code modified to work for Python 3" />
     <MESSAGE value="Start network creation where it was halted" />
     <MESSAGE value="Updated data generation script&#10;&#10;Ecoli and yeast networks made for size 10, 100, and 1000" />
@@ -977,7 +926,8 @@
     <MESSAGE value="Updated code for making figures&#10;&#10;Subplots are get made together now. Less post processing is necessary" />
     <MESSAGE value="Move script to identify lags. Identify lags in gardner data" />
     <MESSAGE value="Update script to make boxplots for 100 node networks&#10;&#10;-Alpha value column exists for omranian data, needed to be corrected.&#10;-Reformat boxplot script code to pep8" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update script to make boxplots for 100 node networks&#10;&#10;-Alpha value column exists for omranian data, needed to be corrected.&#10;-Reformat boxplot script code to pep8" />
+    <MESSAGE value="Move files to new scripts subfolder" />
+    <option name="LAST_COMMIT_MESSAGE" value="Move files to new scripts subfolder" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1271,7 +1221,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.py" />
     <entry file="file://$PROJECT_DIR$/scripts/ecoli_lag_ident.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="525">
@@ -1281,9 +1230,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/100node_comparison/box_plot_large_network_comparison.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="41" column="49" lean-forward="true" selection-start-line="41" selection-start-column="49" selection-end-line="41" selection-end-column="49" />
+        <state relative-caret-position="135">
+          <caret line="9" column="31" lean-forward="true" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/edge_promotion.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6135">
+          <caret line="409" column="11" lean-forward="false" selection-start-line="409" selection-start-column="6" selection-end-line="409" selection-end-column="11" />
+          <folding>
+            <element signature="e#71#81#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
