@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/swing.iml" afterPath="$PROJECT_DIR$/.idea/swing.iml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/figureS4/box_plot_large_network_comparison.py" afterPath="$PROJECT_DIR$/scripts/100node_comparison/box_plot_large_network_comparison.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/figureS4/box_plot_large_network_comparison.py" afterPath="$PROJECT_DIR$/scripts/figureS4/box_plot_large_network_comparison.py" />
     </list>
     <ignored path="Roller.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,10 +24,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="box_plot_large_network_comparison.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/scripts/figureS4/box_plot_large_network_comparison.py">
+        <entry file="file://$PROJECT_DIR$/scripts/100node_comparison/box_plot_large_network_comparison.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+            <state relative-caret-position="257">
+              <caret line="41" column="49" lean-forward="true" selection-start-line="41" selection-start-column="49" selection-end-line="41" selection-end-column="49" />
               <folding />
             </state>
           </provider>
@@ -58,6 +56,11 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -203,6 +206,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="100node_comparison" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="swing" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Roller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="data" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -240,13 +261,15 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/scripts/100node_comparison" />
+      <recent name="$PROJECT_DIR$/scripts" />
+      <recent name="$PROJECT_DIR$/Swing/util" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/scripts" />
       <recent name="$PROJECT_DIR$/Roller/unittests" />
       <recent name="$PROJECT_DIR$/Roller" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/Swing/util" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -346,7 +369,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="swing" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/figureS4/box_plot_large_network_comparison.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/100node_comparison/box_plot_large_network_comparison.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -497,13 +520,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1413916753036</updated>
-    </task>
-    <task id="LOCAL-00129" summary="added make_possible_edge_list() to Roller">
-      <created>1437165932226</created>
-      <option name="number" value="00129" />
-      <option name="presentableId" value="LOCAL-00129" />
-      <option name="project" value="LOCAL" />
-      <updated>1437165932226</updated>
     </task>
     <task id="LOCAL-00130" summary="tdRoller now accounts for edges that don't have meaningful importance scores">
       <created>1437169105785</created>
@@ -841,7 +857,14 @@
       <option name="project" value="LOCAL" />
       <updated>1463456596558</updated>
     </task>
-    <option name="localTasksCounter" value="178" />
+    <task id="LOCAL-00178" summary="Update script to make boxplots for 100 node networks&#10;&#10;-Alpha value column exists for omranian data, needed to be corrected.&#10;-Reformat boxplot script code to pep8">
+      <created>1496428551936</created>
+      <option name="number" value="00178" />
+      <option name="presentableId" value="LOCAL-00178" />
+      <option name="project" value="LOCAL" />
+      <updated>1496428551936</updated>
+    </task>
+    <option name="localTasksCounter" value="179" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -871,9 +894,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="773" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1890625" sideWeight="0.6923077" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1890625" sideWeight="0.6923077" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33015874" sideWeight="0.50080776" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20883977" sideWeight="0.49919224" order="2" side_tool="false" content_ui="tabs" />
@@ -930,7 +952,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Start visualization of edge promotion" />
     <MESSAGE value="Functionalize edge promotion code" />
     <MESSAGE value="Generate 100 node networks for yeast and E coli.&#10;&#10;Code modified to work for Python 3" />
     <MESSAGE value="Start network creation where it was halted" />
@@ -955,7 +976,8 @@
     <MESSAGE value="Updated manuscript figures" />
     <MESSAGE value="Updated code for making figures&#10;&#10;Subplots are get made together now. Less post processing is necessary" />
     <MESSAGE value="Move script to identify lags. Identify lags in gardner data" />
-    <option name="LAST_COMMIT_MESSAGE" value="Move script to identify lags. Identify lags in gardner data" />
+    <MESSAGE value="Update script to make boxplots for 100 node networks&#10;&#10;-Alpha value column exists for omranian data, needed to be corrected.&#10;-Reformat boxplot script code to pep8" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update script to make boxplots for 100 node networks&#10;&#10;-Alpha value column exists for omranian data, needed to be corrected.&#10;-Reformat boxplot script code to pep8" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1257,10 +1279,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/figureS4/box_plot_large_network_comparison.py">
+    <entry file="file://$PROJECT_DIR$/scripts/100node_comparison/box_plot_large_network_comparison.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+        <state relative-caret-position="257">
+          <caret line="41" column="49" lean-forward="true" selection-start-line="41" selection-start-column="49" selection-end-line="41" selection-end-column="49" />
           <folding />
         </state>
       </provider>
