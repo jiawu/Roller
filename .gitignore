@@ -3,3 +3,4 @@
 output/
 scripts/old/
 .idea/
+*.ipynb
