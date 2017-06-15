@@ -91,6 +91,8 @@ for name, group in g:
     subgroup = group.groupby('td_window')
     sg_mean = subgroup.mean()
     sg_std = subgroup.std()
+    print(group)
+    sys.exit()
     try:
         current_stats = [net_name, system, sg_mean.loc[21, 'aupr'], sg_std.loc[21, 'aupr'],
                          sg_mean.loc[15, 'aupr'], sg_std.loc[15, 'aupr'],
@@ -103,8 +105,8 @@ for name, group in g:
 net_stats = pd.DataFrame(net_stats, columns=['network', 'system', 'base_aupr_mean', 'base_aupr_std', 'swing_aupr_mean',
                                              'swing_aupr_std', 'base_auroc_mean', 'base_auroc_std', 'swing_auroc_mean',
                                              'swing_auroc_std'])
-net_stats['aupr_diff'] = (net_stats['swing_aupr_mean']-net_stats['base_aupr_mean'])/net_stats['base_aupr_mean']*100
-net_stats['auroc_diff'] = (net_stats['swing_auroc_mean']-net_stats['base_auroc_mean'])/net_stats['base_auroc_mean']*100
+net_stats['aupr_diff'] = (net_stats['swing_aupr_mean']-net_stats['base_aupr_mean'])
+net_stats['auroc_diff'] = (net_stats['swing_auroc_mean']-net_stats['base_auroc_mean'])
 
 sns.boxplot(data=net_stats, x='system', y='auroc_diff')
 plt.ylabel('AUROC Increase (%)')
