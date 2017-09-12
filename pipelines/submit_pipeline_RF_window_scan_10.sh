@@ -13,6 +13,6 @@
 nwindows=${MOAB_JOBARRAYINDEX}
 
 workon seqgen
-module load python/anaconda
+module load python/anaconda3
 cd ~/Roller/pipelines
 python run_pipeline_RF_window_scan_10.py ${nwindows} none

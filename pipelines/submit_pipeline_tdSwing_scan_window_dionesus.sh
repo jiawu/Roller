@@ -1,13 +1,13 @@
 #!/bin/bash
 #MSUB -A p20519
-#MSUB -l walltime=4:00:00
-#MSUB -l nodes=1:ppn=2
+#MSUB -l walltime=72:00:00
+#MSUB -l nodes=1:ppn=1
 #MSUB -M jiawu@u.northwestern.edu
 #MSUB -j oe
-#MSUB -o /projects/p20519/jia_output/large_dionesus.txt
+#MSUB -o /projects/p20519/jia_output/sensitivity.txt
 #MSUB -m bae
-#MSUB -q normal
-#MSUB -N dionesus_largenetworks
+#MSUB -q long
+#MSUB -N dionesus
 #MSUB -V
 
 param_set=${MOAB_JOBARRAYINDEX}
@@ -18,7 +18,7 @@ cd /home/jjw036/Roller/pipelines
 
 
 iterating_param="td_window"
-iterating_style="num 15"
+iterating_style="num 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21"
 
 
 if [[ ${param_set} == 1 ]] 
@@ -215,8 +215,8 @@ else
     echo "out of bounds"
 fi
 
-echo "python run_tdSwing_scan_custom.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}"
-python run_tdSwing_scan_custom.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
+echo "python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}"
+python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
 #python run_tdSwing_scan_vgranger.py ${data_folder} ${output_folder} ${file_path} ${iterating_param2} ${iterating_style2}
 
 #data_folder=${data_folder/Dionesus/Dionesus}

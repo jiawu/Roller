@@ -27,7 +27,13 @@ def main(data_folder, output_path, target_dataset, my_iterating_param, param_tes
         for trial in range(0,n_trials):
             trial_start = time.time()
             run_params = default_params.copy()
-            run_params[my_iterating_param]=current_param_value
+
+            if param_test_style == "pair":
+                run_params[my_iterating_param[0]] = current_param_value[0]
+                run_params[my_iterating_param[1]] = current_param_value[1]
+            
+            else:
+                run_params[my_iterating_param]=current_param_value
 
             if (run_params['td_window'] == 21) or (('_sampling' in run_params['file_path']) and run_params['td_window'] == 7) or (('dream8/insilico' in run_params['file_path']) and run_params['td_window'] == 11) or(('dream8/invitro' in run_params['file_path']) and run_params['td_window'] == 7):
                 run_params['min_lag'] = 0
@@ -85,6 +91,10 @@ if __name__ == "__main__":
 
     elif param_test_style == "boolean":
         param_tests = [False, True]
+
+    elif param_test_style == "pair":
+        param_tests = list(zip( map(int, sys.argv[6::2]), map(int, sys.argv[7::2])))
+        my_iterating_param = my_iterating_param.split("^")
         
     n_trials = 20
 
@@ -99,4 +109,9 @@ if __name__ == "__main__":
     #**kwargs allows me to change the iterating parameter very easily
 
 
+    n_trials = 10
+
+    #always save the full parameter list and date in the dataframe for each test. for posterity!
+
+    main(data_folder, output_path, target_dataset, my_iterating_param, param_test_style, param_tests, n_trials)
     

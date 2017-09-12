@@ -3,62 +3,10 @@ from Swing import Swing
 from Swing.util.Evaluator import Evaluator
 import numpy as np
 import Swing.util.utility_module as Rutil
+import re
 
 import pdb
 
-def get_td_stats(**kwargs): 
-    kwargs.setdefault('td_window',6)
-    kwargs.setdefault('min_lag',0)
-    kwargs.setdefault('max_lag',4)
-    kwargs.setdefault('n_trees',10)
-    kwargs.setdefault('permutation_n',10)
-    kwargs.setdefault('lag_method','median_median')
-    kwargs.setdefault('sort_by', 'rank')
-    kwargs.setdefault('calc_mse',False)
-
-    gene_start_column = 1
-    time_label = "Time"
-    separator = "\t"
-    gene_end = None
-    file_path = kwargs['file_path']
-
-    df = pd.read_csv(file_path,sep=separator)
-    current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
-    node_list = df.columns.tolist()
-    node_list.pop(0)
-
-    evaluator = Evaluator(current_gold_standard, '\t', node_list=node_list)
-    true_edges = evaluator.gs_flat.tolist()
-    pd.options.display.float_format = '{:,.5f}'.format
-
-    #np.random.seed(8)
-    if "Lasso" in kwargs['data_folder']:
-        tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator, window_type="Lasso")
-    elif "Dionesus" in kwargs['data_folder']:
-        tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator, window_type="Dionesus")
-    else:
-        tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator)
-
-
-
-    tdr.zscore_all_data()
-    tdr.set_window(kwargs['td_window'])
-    tdr.create_windows()
-    tdr.augment_windows(min_lag=kwargs['min_lag'], max_lag=kwargs['max_lag'])
-    tdr.fit_windows(n_trees=kwargs['n_trees'], show_progress=False, calc_mse = kwargs['calc_mse'])
-    tdr.rank_edges(permutation_n=kwargs['permutation_n'], calc_mse = kwargs['calc_mse'])
-    tdr.compile_roller_edges(self_edges=True, calc_mse = kwargs['calc_mse'])
-
-    tdr.make_static_edge_dict(true_edges, lag_method=kwargs['lag_method'])
-    df2 = tdr.make_sort_df(tdr.edge_dict, sort_by = kwargs['sort_by'])
-    
-    print len(df2)
-    roc_dict, pr_dict = tdr.score(df2)
-    print roc_dict['auroc'][-1]
-    print pr_dict['aupr'][-1]#+(1-pr_dict['recall'][-1])
-    #tdr.plot_scoring(roc_dict, pr_dict)
-    return((roc_dict['auroc'][-1],pr_dict['aupr'][-1]))
-    #lp.plot_horizontal_line(cragged_window[my_statistic].values, 3, 'best crag')
 
 def get_td_stats_test(**kwargs): 
     kwargs.setdefault('td_window',6)
@@ -69,6 +17,7 @@ def get_td_stats_test(**kwargs):
     kwargs.setdefault('lag_method','median_median')
     kwargs.setdefault('sort_by', 'rank')
     kwargs.setdefault('calc_mse',False)
+    kwargs.setdefault('window_type',None)
 
     gene_start_column = 1
     time_label = "Time"
@@ -102,37 +51,10 @@ def get_td_stats_test(**kwargs):
         tdr.make_static_edge_dict(true_edges, lag_method=kwargs['lag_method'])
         df2 = tdr.make_sort_df(tdr.edge_dict, sort_by = kwargs['sort_by'])
         final_edge_list.append(df2)
-        print len(df2)
         roc_dict, pr_dict = tdr.score(df2)
-        print roc_dict['auroc'][-1]
-        print pr_dict['aupr'][-1]#+(1-pr_dict['recall'][-1])
         #tdr.plot_scoring(roc_dict, pr_dict)
         df2.to_csv("janes_"+type+".csv", sep=",")
     
-<<<<<<< Updated upstream
-    pdb.set_trace()
-=======
-    plot_fig1(tdr.window_list[0].explanatory_data)
-    
-    if kwargs['filter_noisy']:
-        tdr.filter_noisy()
-    if kwargs['alpha'] is not None:
-        tdr.alpha = kwargs['alpha']
-    tdr.optimize_params()
-    tdr.crag = False
-    tdr.calc_mse = kwargs['calc_mse']
-
-    tdr.fit_windows(n_trees=kwargs['n_trees'], show_progress=False, n_jobs=1)
-    tdr.rank_edges(permutation_n=kwargs['permutation_n'], n_bootstraps=kwargs['bootstrap_n'])
-
-    tdr.compile_roller_edges(self_edges=False)
-
-    tdr.make_static_edge_dict(true_edges, self_edges=False, lag_method=kwargs['lag_method'])
-    df2 = tdr.make_sort_df(tdr.edge_dict, sort_by = kwargs['sort_by'])
-    print(len(df2))
-    df2['Rank'] = np.arange(len(df2))
-
-    roc_dict, pr_dict = tdr.score(df2)
 
     print(roc_dict['auroc'][-1])
     print(pr_dict['aupr'][-1])#+(1-pr_dict['recall'][-1])
@@ -141,10 +63,10 @@ def get_td_stats_test(**kwargs):
     #lp.plot_horizontal_line(cragged_window[my_statistic].values, 3, 'best crag')
 
 def get_td_stats(**kwargs):
-    kwargs.setdefault('td_window',6)
+    kwargs.setdefault('td_window',15)
     kwargs.setdefault('min_lag',1)
     kwargs.setdefault('max_lag',3)
-    kwargs.setdefault('n_trees',10)
+    kwargs.setdefault('n_trees',100)
     kwargs.setdefault('permutation_n',10)
     kwargs.setdefault('lag_method','mean_mean')
     kwargs.setdefault('calc_mse',False)
@@ -152,6 +74,30 @@ def get_td_stats(**kwargs):
     kwargs.setdefault('sort_by', 'rank')
     kwargs.setdefault('filter_noisy',False)
     kwargs.setdefault('alpha',None)
+    kwargs.setdefault('window_type', None)
+
+    gene_start_column = 1
+    time_label = "Time"
+    separator = "\t"
+    gene_end = None
+    file_path = kwargs['file_path']
+    
+    df = pd.read_csv(file_path,sep=separator)
+    current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
+    node_list = df.columns.tolist()
+    node_list.pop(0)
+
+    evaluator = Evaluator(current_gold_standard, '\t', node_list=node_list)
+    true_edges = evaluator.gs_flat.tolist()
+    pd.options.display.float_format = '{:,.5f}'.format
+
+    if kwargs['window_type'] == None:
+        inf_method = ['Lasso', 'RandomForest', 'Dionesus']
+        matches=re.findall(r"(?=(" + '|'.join(inf_method)+r"))",kwargs['data_folder'])
+        kwargs['window_type'] = matches[0]
+
+    tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_lag = kwargs['min_lag'], max_lag = kwargs['max_lag'], window_type = kwargs['window_type'])
+    final_edge_list = []
 
     # turning off zscoring for omranian
     if 'omranian' not in file_path:
@@ -179,7 +125,7 @@ def get_td_stats(**kwargs):
     tdr.crag = False
     tdr.calc_mse = kwargs['calc_mse']
 
-    tdr.fit_windows(n_trees=kwargs['n_trees'], show_progress=False, n_jobs=1)
+    tdr.fit_windows(n_trees=kwargs['n_trees'], show_progress=False, n_jobs=-1)
     tdr.rank_edges(permutation_n=kwargs['permutation_n'], n_bootstraps=kwargs['bootstrap_n'])
 
     tdr.compile_roller_edges(self_edges=False)
@@ -193,33 +139,8 @@ def get_td_stats(**kwargs):
 
     print(roc_dict['auroc'][-1])
     print(pr_dict['aupr'][-1])#+(1-pr_dict['recall'][-1])
-    #tdr.plot_scoring(roc_dict, pr_dict)
     return(roc_dict['auroc'][-1],pr_dict['aupr'][-1], tdr)
-    #lp.plot_horizontal_line(cragged_window[my_statistic].values, 3, 'best crag')
 
-def get_td_stats(**kwargs):
-    kwargs.setdefault('td_window',6)
-    kwargs.setdefault('min_lag',1)
-    kwargs.setdefault('max_lag',3)
-    kwargs.setdefault('n_trees',10)
-    kwargs.setdefault('permutation_n',10)
-    kwargs.setdefault('lag_method','mean_mean')
-    kwargs.setdefault('calc_mse',False)
-    kwargs.setdefault('bootstrap_n',10)
-    kwargs.setdefault('sort_by', 'rank')
-    kwargs.setdefault('filter_noisy',False)
-    kwargs.setdefault('alpha',None)
-
->>>>>>> e83ccbe6cb30948be1802b7c6acd8b184fd85717
-    gene_start_column = 1
-    time_label = "Time"
-    separator = "\t"
-    gene_end = None
-    file_path = kwargs['file_path']
->>>>>>> Stashed changes
-
-    return((roc_dict['auroc'][-1],pr_dict['aupr'][-1]))
-      #lp.plot_horizontal_line(cragged_window[my_statistic].values, 3, 'best crag')
 
 def main(data_folder, output_path, target_dataset, my_statistic, td_score):
     #Analyzer computes AUROC/AUPR/Cragging Scores and organizes it in a table

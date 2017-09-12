@@ -13,6 +13,6 @@
 nwindows=${MOAB_JOBARRAYINDEX}
 
 workon seqgen
-module load python/anaconda
+module load python/anaconda3
 cd ~/Roller
 python run_pipeline_lasso_window_scan_100.py ${nwindows}

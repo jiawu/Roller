@@ -1,10 +1,10 @@
 #!/bin/bash
 #MSUB -A p20519
-#MSUB -l walltime=24:00:00
+#MSUB -l walltime=72:00:00
 #MSUB -l nodes=1:ppn=1
 #MSUB -M jiawu@u.northwestern.edu
 #MSUB -j oe
-#MSUB -o /projects/p20519/jia_output/td_scan.txt
+#MSUB -o /projects/p20519/jia_output/sensitivity.txt
 #MSUB -m bae
 #MSUB -q normal
 #MSUB -N 100node_yeast_sampling
@@ -13,7 +13,7 @@
 param_set=${MOAB_JOBARRAYINDEX}
 #param_set=$1
 workon seqgen
-module load python/anaconda
+module load python/anaconda3
 cd /home/jjw036/Roller/pipelines
 
 
@@ -73,6 +73,7 @@ then
 elif [[ ${param_set} -ge 39 && ${param_set} -lt 59 ]]
 then
     insilico_dataset_index=$((${param_set}-38))
+            pth="/home/db.set_trace()
 
     data_folder="/projects/p20519/roller_output/gnw/RandomForest/ecoli-insilico_size10_${insilico_dataset_index}"
     output_folder="/projects/p20519/roller_output/gnw/RandomForest/ecoli-insilico_size10_${insilico_dataset_index}_"

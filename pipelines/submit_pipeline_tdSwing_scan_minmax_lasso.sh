@@ -1,13 +1,13 @@
 #!/bin/bash
 #MSUB -A p20519
-#MSUB -l walltime=24:00:00
+#MSUB -l walltime=72:00:00
 #MSUB -l nodes=1:ppn=1
 #MSUB -M jiawu@u.northwestern.edu
 #MSUB -j oe
-#MSUB -o /projects/p20519/jia_output/td_scan.txt
+#MSUB -o /projects/p20519/jia_output/sensitivity.txt
 #MSUB -m bae
-#MSUB -q normal
-#MSUB -N filter_scans_for_dream4_lasso
+#MSUB -q long
+#MSUB -N Lasso
 #MSUB -V
 
 param_set=${MOAB_JOBARRAYINDEX}
@@ -17,11 +17,9 @@ module load python/anaconda3
 cd /home/jjw036/Roller/pipelines
 
 
-iterating_param="filter_noisy"
-iterating_style="boolean true false"
+iterating_param="min_lag^max_lag"
+iterating_style="pair 0 0 0 1 1 1 0 2 1 2 2 2 0 3 1 3 2 3 3 3"
 
-iterating_param2="td_window"
-iterating_style2="num 20"
 
 if [[ ${param_set} == 1 ]] 
 then
@@ -45,17 +43,18 @@ then
     #param_set 4 = dataset 1, param_set 5 = dataset 2, etc etc
     insilico_dataset_index=$((${param_set}-3))
 
-    data_folder="/projects/p20519/roller_output/stability_analysis/Lasso/insilico_size10_${insilico_dataset_index}"
-    output_folder="/projects/p20519/roller_output/stability_analysis/Lasso/insilico_size10_${insilico_dataset_index}_ntrees_"
+    data_folder="/projects/p20519/roller_output/dream4/sampling/Lasso/insilico_size10_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/dream4/sampling/Lasso/insilico_size10_${insilico_dataset_index}_"
     file_path="/home/jjw036/Roller/data/dream4/insilico_size10_${insilico_dataset_index}_timeseries.tsv"
     
 elif [[ "${param_set}" -ge 9 && "${param_set}" -lt 14 ]]
 then
     insilico_dataset_index=$((${param_set}-8))
 
-    data_folder="/projects/p20519/roller_output/sampling/Lasso/uniform_samplinginsilico_size10_${insilico_dataset_index}"
-    output_folder="/projects/p20519/roller_output/sampling/Lasso/uniform_samplinginsilico_size10_${insilico_dataset_index}_ntrees_"
-    file_path="/home/jjw036/Roller/data/dream4/uniform_sampling/uniform_samplinginsilico_size10_${insilico_dataset_index}_timeseries.tsv"
+    data_folder="/projects/p20519/roller_output/high_sampling/Lasso/insilico_size10_${insilico_dataset_index}"
+    output_folder="/projects/p20519/roller_output/high_sampling/Lasso/insilico_size10_${insilico_dataset_index}_"
+    file_path="/home/jjw036/Roller/data/dream4/high_sampling/insilico_size10_${insilico_dataset_index}_timeseries.tsv"
+
 
 elif [[ ${param_set} -ge 14 && ${param_set} -lt 19 ]]
 then
@@ -152,6 +151,7 @@ then
     output_folder="/projects/p20519/roller_output/community_rfd/ecoli-insilico_size10_${insilico_dataset_index}_"
     file_path="/home/jjw036/Roller/data/gnw_insilico/network_data/Ecoli/Ecoli-${insilico_dataset_index}_timeseries.tsv"
   
+
 elif [[ "${param_set}" -ge 132 && "${param_set}" -lt 137 ]]
 then
     #process the in silico datasets a little bit more smoothly
@@ -201,7 +201,15 @@ then
     data_folder="/projects/p20519/roller_output/large_networks/Lasso/ecoli-insilico_size1000_${insilico_dataset_index}"
     output_folder="/projects/p20519/roller_output/large_networks/Lasso/ecoli-insilico_size1000_${insilico_dataset_index}_"
     file_path="/projects/p20519/Roller_large_dataset/Ecoli1000/Ecoli1000-${insilico_dataset_index}_timeseries.tsv"
+  
+  elif [[ "${param_set}" -ge 187 && "${param_set}" -lt 188 ]]
+then
+    #process the in silico datasets a little bit more smoothly
+    #param_set 4 = dataset 1, param_set 5 = dataset 2, etc etc
 
+    data_folder="/projects/p20519/roller_output/large_networks/Lasso/omranian"
+    output_folder="/projects/p20519/roller_output/large_networks/Lasso/omranian_"
+    file_path="/home/jjw036/Roller/data/invitro/omranian_parsed_timeseries.tsv"
 
   
 else

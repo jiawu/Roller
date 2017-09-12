@@ -13,7 +13,7 @@
 nwindows=${MOAB_JOBARRAYINDEX}
 
 workon seqgen
-module load python/anaconda
+module load python/anaconda3
 cd /projects/p20519/Roller
 python run_pipeline_RF_window_scan_whitfield_shojaie.py ${nwindows}
 python run_pipeline_RF_window_scan_whitfield_muk.py ${nwindows}

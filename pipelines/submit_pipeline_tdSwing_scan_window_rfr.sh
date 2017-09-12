@@ -1,12 +1,12 @@
 #!/bin/bash
 #MSUB -A p20519
-#MSUB -l walltime=24:00:00
-#MSUB -l nodes=1:ppn=4
+#MSUB -l walltime=72:00:00
+#MSUB -l nodes=1:ppn=1
 #MSUB -M jiawu@u.northwestern.edu
 #MSUB -j oe
-#MSUB -o /projects/p20519/jia_output/large_RF.txt
+#MSUB -o /projects/p20519/jia_output/sensitivity.txt
 #MSUB -m bae
-#MSUB -q normal
+#MSUB -q long
 #MSUB -N RandomForest
 #MSUB -V
 
@@ -18,11 +18,11 @@ cd /home/jjw036/Roller/pipelines
 
 
 iterating_param="td_window"
-iterating_style="num 15"
+iterating_style="num 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21"
 #iterating_style="num 5 10 15 21"
 
-iterating_param2="td_window"
-iterating_style2="num 20"
+#iterating_param2="td_window"
+#iterating_style2="num 20"
 
 if [[ ${param_set} == 1 ]] 
 then
@@ -163,15 +163,6 @@ then
     output_folder="/projects/p20519/roller_output/stability_analysis/RandomForest/insilico_size100_${insilico_dataset_index}_ntrees_"
     file_path="/home/jjw036/Roller/data/dream4/insilico_size100_${insilico_dataset_index}_timeseries.tsv"
 
-elif [[ "${param_set}" -ge 132 && "${param_set}" -lt 137 ]]
-then
-    #process the in silico datasets a little bit more smoothly
-    #param_set 4 = dataset 1, param_set 5 = dataset 2, etc etc
-    insilico_dataset_index=$((${param_set}-131))
-
-    data_folder="/projects/p20519/roller_output/stability_analysis/RandomForest/insilico_size100_${insilico_dataset_index}"
-    output_folder="/projects/p20519/roller_output/stability_analysis/RandomForest/insilico_size100_${insilico_dataset_index}_ntrees_"
-    file_path="/home/jjw036/Roller/data/dream4/insilico_size100_${insilico_dataset_index}_timeseries.tsv"
 
 elif [[ "${param_set}" -ge 137 && "${param_set}" -lt 157 ]]
 then
@@ -226,8 +217,8 @@ else
     echo "out of bounds"
 fi
 
-echo "python run_tdSwing_scan_custom.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}"
-python run_tdSwing_scan_custom.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
+echo "python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}"
+python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
 #python run_tdSwing_scan_vgranger.py ${data_folder} ${output_folder} ${file_path} ${iterating_param2} ${iterating_style2}
 
 #data_folder=${data_folder/RandomForest/Lasso}

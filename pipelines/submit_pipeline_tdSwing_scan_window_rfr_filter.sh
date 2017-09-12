@@ -13,7 +13,7 @@
 param_set=${MOAB_JOBARRAYINDEX}
 #param_set=$1
 workon seqgen
-module load python/anaconda
+module load python/anaconda3
 cd /home/jjw036/Roller/pipelines
 
 
@@ -210,6 +210,8 @@ fi
 
 echo "python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}"
 python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
+echo "python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param2} ${iterating_style2}"
+python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param2} ${iterating_style2}
 #python run_tdSwing_scan_vgranger.py ${data_folder} ${output_folder} ${file_path} ${iterating_param2} ${iterating_style2}
 
 #data_folder=${data_folder/RandomForest/Lasso}

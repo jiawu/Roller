@@ -1,13 +1,13 @@
 #!/bin/bash
 #MSUB -A p20519
-#MSUB -l walltime=24:00:00
-#MSUB -l nodes=1:ppn=4
+#MSUB -l walltime=72:00:00
+#MSUB -l nodes=1:ppn=1
 #MSUB -M jiawu@u.northwestern.edu
 #MSUB -j oe
-#MSUB -o /projects/p20519/jia_output/large_lasso.txt
+#MSUB -o /projects/p20519/jia_output/sensitivity.txt
 #MSUB -m bae
-#MSUB -q normal
-#MSUB -N Lasso_Large_networks
+#MSUB -q long
+#MSUB -N Lasso
 #MSUB -V
 
 param_set=${MOAB_JOBARRAYINDEX}
@@ -16,12 +16,12 @@ workon seqgen
 module load python/anaconda3
 cd /home/jjw036/Roller/pipelines
 
-
 iterating_param="td_window"
-iterating_style="num 15"
+iterating_style="num 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21"
 
-iterating_param2="td_window"
-iterating_style2="num 20"
+#iterating_param="min_lag^max_lag"
+#iterating_style="pair 0 0 0 1 1 1 0 2 1 2 2 2 0 3 1 3 2 3 3 3"
+
 
 if [[ ${param_set} == 1 ]] 
 then
@@ -218,8 +218,8 @@ else
     echo "out of bounds"
 fi
 
-echo "python run_tdSwing_scan_custom.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}"
-python run_tdSwing_scan_custom.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
+echo "python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}"
+python run_tdSwing_scan.py ${data_folder} ${output_folder} ${file_path} ${iterating_param} ${iterating_style}
 #python run_tdSwing_scan_vgranger.py ${data_folder} ${output_folder} ${file_path} ${iterating_param2} ${iterating_style2}
 
 #data_folder=${data_folder/Lasso/Lasso}

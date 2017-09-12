@@ -17,7 +17,7 @@ param_set=${MOAB_JOBARRAYINDEX}
 ## enter range 1000 to get 1
 #param_set=$1
 workon seqgen
-module load python/anaconda3
+module load python/anaconda33
 cd /home/jjw036/Roller/pipelines
 
 converted_float=${param_set}

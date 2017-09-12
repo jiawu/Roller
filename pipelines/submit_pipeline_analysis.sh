@@ -13,6 +13,6 @@
 nwindows=${MOAB_JOBARRAYINDEX}
 
 workon seqgen
-module load python/anaconda
+module load python/anaconda3
 cd /projects/p20519/Roller
 python run_post_analysis_cragging.py

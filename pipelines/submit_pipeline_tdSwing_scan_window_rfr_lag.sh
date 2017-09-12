@@ -13,7 +13,7 @@
 param_set=${MOAB_JOBARRAYINDEX}
 #param_set=$1
 workon seqgen
-module load python/anaconda
+module load python/anaconda33
 cd /home/jjw036/Roller/pipelines
 
 
