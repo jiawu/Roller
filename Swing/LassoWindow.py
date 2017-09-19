@@ -2,7 +2,7 @@ import warnings
 import numpy as np
 import pandas as pd
 from sklearn import linear_model
-from sklearn.cross_validation import KFold
+from sklearn.model_selection import KFold
 from scipy import integrate
 from scipy import stats
 from sklearn.metrics import mean_squared_error
