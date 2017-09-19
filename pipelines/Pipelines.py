@@ -34,7 +34,6 @@ def get_td_stats_test(**kwargs):
     true_edges = evaluator.gs_flat.tolist()
     pd.options.display.float_format = '{:,.5f}'.format
 
-    pdb.set_trace()
     td_types = ["Dionesus", "RandomForest", "Lasso"]
     final_edge_list = []
     for type in td_types:
@@ -83,10 +82,17 @@ def get_td_stats(**kwargs):
     file_path = kwargs['file_path']
     
     df = pd.read_csv(file_path,sep=separator)
-    current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
+    if "high_sampling" in file_path:
+        
+        prefix = file_path.split('/')[-1].split('_')[0]
+        pref = file_path.split('/')[-1]
+        folder = file_path.rstrip(pref)
+        current_gold_standard = "{}{}_goldstandard.tsv".format(folder,prefix)
+
+    else:    
+        current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
     node_list = df.columns.tolist()
     node_list.pop(0)
-
     evaluator = Evaluator(current_gold_standard, '\t', node_list=node_list)
     true_edges = evaluator.gs_flat.tolist()
     pd.options.display.float_format = '{:,.5f}'.format
@@ -95,6 +101,7 @@ def get_td_stats(**kwargs):
         inf_method = ['Lasso', 'RandomForest', 'Dionesus']
         matches=re.findall(r"(?=(" + '|'.join(inf_method)+r"))",kwargs['data_folder'])
         kwargs['window_type'] = matches[0]
+
 
     tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_lag = kwargs['min_lag'], max_lag = kwargs['max_lag'], window_type = kwargs['window_type'])
     final_edge_list = []
@@ -135,7 +142,7 @@ def get_td_stats(**kwargs):
     print(len(df2))
     df2['Rank'] = np.arange(len(df2))
 
-    roc_dict, pr_dict = tdr.score(df2)
+    roc_dict, pr_dict = tdr.score(df2, gold_standard_file = current_gold_standard)
 
     print(roc_dict['auroc'][-1])
     print(pr_dict['aupr'][-1])#+(1-pr_dict['recall'][-1])

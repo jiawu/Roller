@@ -34,10 +34,20 @@ def main(data_folder, output_path, target_dataset, my_iterating_param, param_tes
             
             else:
                 run_params[my_iterating_param]=current_param_value
-
-            if (run_params['td_window'] == 21) or (('_sampling' in run_params['file_path']) and run_params['td_window'] == 7) or (('dream8/insilico' in run_params['file_path']) and run_params['td_window'] == 11) or(('dream8/invitro' in run_params['file_path']) and run_params['td_window'] == 7):
-                run_params['min_lag'] = 0
-                run_params['max_lag'] = 0
+            
+            # Check max_lag restriction
+            if 'size10' in run_params['data_folder']:
+                max_window = 21
+            if 'high_sampling' in run_params['data_folder']:
+                interval = run_params['file_path'].split('/')[-1].split('_')[1]
+                max_window = int(1000/int(interval)+1)
+            else:
+                max_window = 21
+            lag_gap = max_window-run_params['td_window']
+            if lag_gap < run_params['max_lag']:
+                run_params['max_lag'] = lag_gap
+                if run_params['min_lag'] > run_params['max_lag']:
+                    run_params['min_lag'] = run_params['max_lag']
             
             if 'community' in data_folder:
                 roc,pr, tdr = pl.get_td_community(**run_params)
@@ -48,6 +58,9 @@ def main(data_folder, output_path, target_dataset, my_iterating_param, param_tes
 
             trial_end = time.time()
             run_params['trial_time'] = trial_end-trial_start
+            for key in run_params.keys():
+                if run_param[key] is None:
+                    run_param[key] = "None"
             run_result=pd.Series(run_params)
             overall_df = overall_df.append(run_result, ignore_index=True)
             print(run_result)
@@ -73,27 +86,30 @@ if __name__ == "__main__":
     output_path = str(sys.argv[2])
     target_dataset = str(sys.argv[3])
     my_iterating_param = str(sys.argv[4])
-    param_test_style = str(sys.argv[5])
+    param_test_combo = str(sys.argv[5])
+
+    param_test_style = param_test_combo.split("_")[0]
 
     if param_test_style == "log":
         param_tests = [10,100,500,1000]
 
     elif param_test_style == "minmax":
-        param_min = int(sys.argv[6])
-        param_max = int(sys.argv[7])
+        param_min = param_test_combo[1]
+        param_max = param_test_combo[2]
         param_tests = [i for i in range(param_min, param_max+1)]
     
     elif param_test_style == "num":
-        param_tests = [int(x) for x in sys.argv[6:]]
+        param_tests = [int(x) for x in param_test_combo.split("_")[1:]]
         
     elif param_test_style == "string":
-        param_tests = [str(x) for x in sys.argv[6:]]
+        param_tests = [str(x) for x in param_test_combo.split("_")[1:]]
 
     elif param_test_style == "boolean":
         param_tests = [False, True]
 
     elif param_test_style == "pair":
-        param_tests = list(zip( map(int, sys.argv[6::2]), map(int, sys.argv[7::2])))
+        pli =param_test_combo.split("_")
+        param_tests = list(zip( map(int, pli[1::2]), map(int, pli[2::2])))
         my_iterating_param = my_iterating_param.split("^")
         
     n_trials = 20
@@ -102,14 +118,12 @@ if __name__ == "__main__":
 
     current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
 
-    default_params = {'data_folder':data_folder, 'file_path':target_dataset, 'td_window':14,'min_lag':0,'max_lag':4,'n_trees':500,'permutation_n':5, 'lag_method':'median_median','sort_by':'rank', 'calc_mse':False, 'n_trials':n_trials, 'run_time':current_time, 'iterating_param':my_iterating_param}
+    default_params = {'data_folder':data_folder, 'file_path':target_dataset, 'td_window':14,'min_lag':1,'max_lag':3,'n_trees':500,'permutation_n':5, 'lag_method':'median_median','sort_by':'rank', 'calc_mse':False, 'n_trials':n_trials, 'run_time':current_time, 'iterating_param':my_iterating_param}
 
     overall_df = pd.DataFrame()
 
     #**kwargs allows me to change the iterating parameter very easily
 
-
-    n_trials = 10
 
     #always save the full parameter list and date in the dataframe for each test. for posterity!
 
