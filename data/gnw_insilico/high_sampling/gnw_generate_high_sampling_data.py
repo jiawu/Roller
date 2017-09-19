@@ -202,7 +202,7 @@ if __name__ == '__main__':
     sim_settings = directory + 'high_sampling_settings.txt'
 
     network = ['Ecoli', 'Yeast']
-    n_nodes = [10]
+    n_nodes = [100]
     num_nets = 20
 
     jar_file = jar_location + 'gnw-3.1.2b.jar'
