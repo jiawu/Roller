@@ -59,8 +59,8 @@ def main(data_folder, output_path, target_dataset, my_iterating_param, param_tes
             trial_end = time.time()
             run_params['trial_time'] = trial_end-trial_start
             for key in run_params.keys():
-                if run_param[key] is None:
-                    run_param[key] = "None"
+                if run_params[key] is None:
+                    run_params[key] = "None"
             run_result=pd.Series(run_params)
             overall_df = overall_df.append(run_result, ignore_index=True)
             print(run_result)
@@ -112,7 +112,7 @@ if __name__ == "__main__":
         param_tests = list(zip( map(int, pli[1::2]), map(int, pli[2::2])))
         my_iterating_param = my_iterating_param.split("^")
         
-    n_trials = 20
+    n_trials = 2
 
     #always save the full parameter list and date in the dataframe for each test. for posterity!
 

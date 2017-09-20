@@ -23,5 +23,5 @@ python run_tdSwing_scan.py ${P1} ${P2} ${P3} ${P4} ${P5}
 EOJ  
 `
 echo "JobID = ${JOB} for parameters ${P1} ${P2} ${P3} ${P4} ${P5} submitted on `date`"
-done < job_params_3.txt
+done < job_params_large_networks.txt
 exit
