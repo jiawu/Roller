@@ -1,5 +1,5 @@
 #!/bin/bash     
-while read P1 P2
+while read P1 P2 P3 P4 P5
 do
     JOB=`msub - << EOJ        
 
