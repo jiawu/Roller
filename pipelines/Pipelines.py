@@ -147,15 +147,14 @@ def get_td_stats(**kwargs):
     tdr.compile_roller_edges(self_edges=False)
 
     tdr.make_static_edge_dict(true_edges, self_edges=False, lag_method=kwargs['lag_method'])
-    df2 = tdr.make_sort_df(tdr.edge_dict, sort_by = kwargs['sort_by'])
-    print(len(df2))
+    df2 = tdr.make_sort_df(tdr.edge_dict, sort_by=kwargs['sort_by'])
     df2['Rank'] = np.arange(len(df2))
 
     roc_dict, pr_dict = tdr.score(df2, gold_standard_file = current_gold_standard)
 
     print(roc_dict['auroc'][-1])
     print(pr_dict['aupr'][-1])#+(1-pr_dict['recall'][-1])
-    return roc_dict['auroc'][-1], pr_dict['aupr'][-1], tdr
+    return roc_dict['auroc'][-1], pr_dict['aupr'][-1], tdr, df2['regulator-target'].tolist()
 
 
 def main(data_folder, output_path, target_dataset, my_statistic, td_score):
