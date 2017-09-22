@@ -2,750 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="09130471-880b-4c90-82ee-80e058e822d9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-10.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-10_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-10_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-10_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-10_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-10_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-10_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-10_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-10_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-10_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-10_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-10_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-10_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-11.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-11_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-11_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-11_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-11_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-11_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-11_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-11_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-11_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-11_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-11_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-11_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-11_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-12.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-12_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-12_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-12_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-12_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-12_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-12_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-12_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-12_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-12_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-12_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-12_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-12_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-13.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-13_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-13_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-13_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-13_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-13_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-13_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-13_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-13_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-13_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-13_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-13_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-13_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-14.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-14_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-14_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-14_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-14_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-14_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-14_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-14_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-14_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-14_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-14_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-14_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-14_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-15.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-15_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-15_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-15_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-15_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-15_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-15_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-15_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-15_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-15_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-15_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-15_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-15_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-16.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-16_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-16_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-16_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-16_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-16_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-16_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-16_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-16_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-16_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-16_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-16_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-16_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-17.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-17_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-17_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-17_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-17_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-17_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-17_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-17_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-17_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-17_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-17_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-17_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-17_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-18.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-18_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-18_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-18_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-18_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-18_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-18_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-18_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-18_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-18_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-18_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-18_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-18_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-19.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-19_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-19_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-19_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-19_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-19_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-19_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-19_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-19_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-19_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-19_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-19_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-19_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-1_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-1_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-1_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-1_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-1_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-1_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-1_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-1_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-1_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-1_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-1_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-1_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-20.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-20_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-20_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-20_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-20_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-20_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-20_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-20_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-20_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-20_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-20_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-20_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-20_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-2_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-2_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-2_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-2_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-2_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-2_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-2_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-2_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-2_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-2_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-2_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-2_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-3_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-3_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-3_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-3_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-3_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-3_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-3_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-3_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-3_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-3_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-3_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-3_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-4_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-4_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-4_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-4_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-4_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-4_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-4_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-4_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-4_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-4_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-4_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-4_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-5.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-5_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-5_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-5_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-5_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-5_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-5_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-5_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-5_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-5_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-5_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-5_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-5_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-6.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-6_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-6_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-6_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-6_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-6_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-6_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-6_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-6_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-6_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-6_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-6_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-6_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-7.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-7_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-7_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-7_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-7_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-7_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-7_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-7_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-7_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-7_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-7_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-7_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-7_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-8.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-8_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-8_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-8_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-8_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-8_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-8_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-8_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-8_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-8_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-8_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-8_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-8_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-9.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-9_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-9_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-9_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-9_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-9_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-9_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-9_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-9_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-9_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-9_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-9_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli10/Ecoli-9_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-10.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-10_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-11.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-11_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-12.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-12_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-13.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-13_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-14.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-14_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-15.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-15_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-16.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-16_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-17.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-17_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-18.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-18_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-19.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-19_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-1_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-20.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-20_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-2_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-3_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-4_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-5.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-5_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-6.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-6_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-7.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-7_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-8.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-8_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-9.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-9_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-10.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-10_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-10_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-10_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-10_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-10_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-10_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-10_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-10_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-10_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-10_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-10_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-10_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-11.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-11_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-11_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-11_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-11_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-11_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-11_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-11_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-11_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-11_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-11_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-11_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-11_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-12.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-12_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-12_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-12_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-12_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-12_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-12_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-12_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-12_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-12_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-12_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-12_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-12_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-13.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-13_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-13_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-13_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-13_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-13_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-13_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-13_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-13_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-13_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-13_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-13_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-13_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-14.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-14_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-14_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-14_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-14_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-14_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-14_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-14_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-14_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-14_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-14_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-14_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-14_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-15.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-15_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-15_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-15_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-15_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-15_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-15_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-15_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-15_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-15_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-15_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-15_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-15_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-16.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-16_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-16_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-16_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-16_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-16_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-16_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-16_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-16_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-16_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-16_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-16_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-16_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-17.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-17_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-17_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-17_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-17_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-17_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-17_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-17_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-17_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-17_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-17_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-17_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-17_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-18.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-18_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-18_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-18_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-18_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-18_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-18_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-18_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-18_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-18_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-18_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-18_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-18_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-19.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-19_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-19_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-19_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-19_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-19_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-19_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-19_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-19_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-19_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-19_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-19_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-19_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-1_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-1_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-1_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-1_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-1_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-1_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-1_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-1_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-1_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-1_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-1_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-1_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-20.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-20_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-20_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-20_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-20_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-20_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-20_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-20_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-20_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-20_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-20_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-20_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-20_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-2_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-2_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-2_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-2_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-2_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-2_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-2_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-2_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-2_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-2_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-2_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-2_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-3_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-3_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-3_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-3_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-3_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-3_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-3_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-3_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-3_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-3_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-3_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-3_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-4_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-4_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-4_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-4_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-4_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-4_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-4_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-4_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-4_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-4_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-4_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-4_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-5.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-5_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-5_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-5_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-5_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-5_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-5_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-5_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-5_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-5_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-5_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-5_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-5_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-6.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-6_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-6_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-6_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-6_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-6_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-6_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-6_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-6_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-6_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-6_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-6_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-6_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-7.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-7_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-7_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-7_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-7_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-7_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-7_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-7_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-7_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-7_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-7_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-7_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-7_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-8.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-8_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-8_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-8_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-8_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-8_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-8_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-8_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-8_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-8_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-8_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-8_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-8_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-9.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-9_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-9_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-9_goldstandard.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-9_goldstandard_signed.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-9_noexpnoise_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-9_noexpnoise_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-9_noexpnoise_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-9_noexpnoise_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-9_normalization_constant.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-9_proteins_dream4_timeseries.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-9_proteins_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast10/Yeast-9_wildtype.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-10.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-10_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-11.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-11_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-12.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-12_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-13.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-13_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-14.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-14_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-15.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-15_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-16.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-16_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-17.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-17_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-18.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-18_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-19.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-19_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-1_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-20.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-20_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-2_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-3_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-4_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-5.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-5_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-6.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-6_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-7.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-7_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-8.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-8_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-9.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Yeast100/Yeast100-9_dream4_timeseries_perturbations.tsv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/gnw_generate_high_sampling_data.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/gnw_insilico/high_sampling/high_sampling_settings.txt" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-10.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-10_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-11.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-11_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-12.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-12_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-13.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-13_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-14.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-14_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-15.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-15_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-16.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-16_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-17.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-17_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-18.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-18_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-19.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-19_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-1_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-2.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-20.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-20_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-2_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-3.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-3_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-4.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-5.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-5_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-6.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-6_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-7.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-7_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-8.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-8_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-9.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli/Ecoli-9_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-10_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-11_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-12_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-13_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-14_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-15_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-16_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-17_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-18_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-19_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-1_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-20_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-2_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-3_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-4_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-5_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-6_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-7_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-8_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Ecoli100/Ecoli100-9_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-10.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-10_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-11.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-11_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-12.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-12_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-13.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-13_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-14.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-14_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-15.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-15_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-16.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-16_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-17.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-17_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-18.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-18_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-19.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-19_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-1_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-2.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-20.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-20_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-2_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-3.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-3_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-4.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-5.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-5_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-6.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-6_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-7.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-7_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-8.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-8_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-9.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast/Yeast-9_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-10.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-10_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-11.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-11_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-12.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-12_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-13.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-13_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-14.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-14_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-15.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-15_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-16.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-16_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-17.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-17_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-18.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-18_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-19.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-19_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-1_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-2.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-20.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-20_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-2_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-3.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-3_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-4.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-4_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-5.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-5_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-6.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-6_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-7.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-7_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-8.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-8_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-9.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/gnw_insilico/network_data/Yeast100/Yeast100-9_dream4_timeseries_perturbations.tsv" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/notebooks/DREAM4 true lag identification.ipynb" afterPath="$PROJECT_DIR$/scripts/notebooks/DREAM4 true lag identification.ipynb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/figure3/gardner_window_scan.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Swing/Swing.py" afterPath="$PROJECT_DIR$/Swing/Swing.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pipelines/Pipelines.py" afterPath="$PROJECT_DIR$/pipelines/Pipelines.py" />
     </list>
     <ignored path="Roller.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -764,11 +24,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Swing.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Swing.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Swing/Swing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="185" column="0" lean-forward="false" selection-start-line="185" selection-start-column="0" selection-end-line="185" selection-end-column="0" />
+            <state relative-caret-position="563">
+              <caret line="809" column="40" lean-forward="false" selection-start-line="809" selection-start-column="40" selection-end-line="809" selection-end-column="40" />
               <folding>
                 <element signature="e#71#84#0" expanded="true" />
               </folding>
@@ -776,23 +36,38 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="high_sampling_settings.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data/gnw_insilico/high_sampling/high_sampling_settings.txt">
+      <file leaf-file-name="run_tdSwing_scan.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pipelines/run_tdSwing_scan.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1485">
-              <caret line="99" column="21" lean-forward="false" selection-start-line="99" selection-start-column="21" selection-end-line="99" selection-end-column="21" />
-              <folding />
+            <state relative-caret-position="918">
+              <caret line="54" column="45" lean-forward="false" selection-start-line="54" selection-start-column="33" selection-end-line="54" selection-end-column="45" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="gnw_generate_high_sampling_data.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/data/gnw_insilico/high_sampling/gnw_generate_high_sampling_data.py">
+      <file leaf-file-name="Pipelines.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pipelines/Pipelines.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="624">
-              <caret line="222" column="28" lean-forward="false" selection-start-line="222" selection-start-column="28" selection-end-line="222" selection-end-column="28" />
+            <state relative-caret-position="502">
+              <caret line="146" column="32" lean-forward="true" selection-start-line="146" selection-start-column="32" selection-end-line="146" selection-end-column="32" />
               <folding>
-                <element signature="e#71#81#0" expanded="true" />
+                <element signature="e#0#19#0" expanded="true" />
+                <element signature="e#210#2337#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="gardner_window_scan.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/figure3/gardner_window_scan.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="237">
+              <caret line="32" column="25" lean-forward="false" selection-start-line="32" selection-start-column="25" selection-end-line="32" selection-end-column="25" />
+              <folding>
+                <element signature="e#16#35#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -816,7 +91,17 @@
       <find>perturbation</find>
       <find>load</find>
       <find>simulate</find>
+      <find>iterating_</find>
+      <find>window_type</find>
+      <find>get_td_stats</find>
+      <find>parens</find>
+      <find>[DONE]</find>
+      <find>Compiling</find>
+      <find>Scoring</find>
     </findStrings>
+    <replaceStrings>
+      <replace />
+    </replaceStrings>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -861,19 +146,21 @@
         <option value="$PROJECT_DIR$/scripts/edge_promotion.ipynb" />
         <option value="$PROJECT_DIR$/Swing/util/Evaluator.py" />
         <option value="$PROJECT_DIR$/scripts/gardner_lag_ident.py" />
-        <option value="$PROJECT_DIR$/pipelines/Pipelines.py" />
         <option value="$PROJECT_DIR$/scripts/gardner_edge_promotion.py" />
         <option value="$PROJECT_DIR$/scripts/edge_promotion.py" />
         <option value="$PROJECT_DIR$/Swing/util/lag_identification.py" />
         <option value="$PROJECT_DIR$/scripts/ecoli_lag_ident.py" />
         <option value="$PROJECT_DIR$/scripts/figureS4/box_plot_large_network_comparison.py" />
-        <option value="$PROJECT_DIR$/Swing/Swing.py" />
         <option value="$PROJECT_DIR$/scripts/notebooks/Uniform vs Nonuniform Sampling.ipynb" />
         <option value="$PROJECT_DIR$/scripts/notebooks/edge_promotion.ipynb" />
         <option value="$PROJECT_DIR$/data/gnw_insilico/high_sampling/high_sampling_settings.txt" />
         <option value="$PROJECT_DIR$/data/gnw_insilico/gnw_generate_data.py" />
         <option value="$PROJECT_DIR$/data/gnw_insilico/high_sampling/gnw_generate_high_sampling_data.py" />
         <option value="$PROJECT_DIR$/data/gnw_insilico/high_sampling/Ecoli100/Ecoli100-1.xml" />
+        <option value="$PROJECT_DIR$/Swing/util/utility_module.py" />
+        <option value="$PROJECT_DIR$/pipelines/Pipelines.py" />
+        <option value="$PROJECT_DIR$/scripts/figure3/gardner_window_scan.py" />
+        <option value="$PROJECT_DIR$/Swing/Swing.py" />
       </list>
     </option>
   </component>
@@ -913,7 +200,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -930,15 +216,7 @@
             <path>
               <item name="swing" type="b2602c69:ProjectViewProjectNode" />
               <item name="Roller" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="gnw_insilico" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="swing" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Roller" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="gnw_insilico" type="462c0819:PsiDirectoryNode" />
-              <item name="high_sampling" type="462c0819:PsiDirectoryNode" />
+              <item name="pipelines" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="swing" type="b2602c69:ProjectViewProjectNode" />
@@ -949,6 +227,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1001,7 +280,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.gnw_generate_high_sampling_data">
+  <component name="RunManager" selected="Python.gardner_window_scan">
     <configuration default="true" type="tests" factoryName="Doctests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -1132,36 +411,19 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
-    <configuration name="ecoli_lag_ident" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="gardner_window_scan" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts/figure3" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="swing" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/ecoli_lag_ident.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-    </configuration>
-    <configuration name="edge_promotion" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="swing" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/edge_promotion.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/figure3/gardner_window_scan.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -1200,20 +462,37 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
+    <configuration name="utility_module" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Swing/util" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="swing" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Swing/util/utility_module.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.edge_promotion" />
-      <item index="1" class="java.lang.String" itemvalue="Python.ecoli_lag_ident" />
-      <item index="2" class="java.lang.String" itemvalue="Python.box_plot_large_network_comparison" />
-      <item index="3" class="java.lang.String" itemvalue="Python.gnw_generate_data" />
-      <item index="4" class="java.lang.String" itemvalue="Python.gnw_generate_high_sampling_data" />
+      <item index="0" class="java.lang.String" itemvalue="Python.box_plot_large_network_comparison" />
+      <item index="1" class="java.lang.String" itemvalue="Python.gnw_generate_data" />
+      <item index="2" class="java.lang.String" itemvalue="Python.gnw_generate_high_sampling_data" />
+      <item index="3" class="java.lang.String" itemvalue="Python.gardner_window_scan" />
+      <item index="4" class="java.lang.String" itemvalue="Python.utility_module" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.gnw_generate_high_sampling_data" />
-        <item index="1" class="java.lang.String" itemvalue="Python.gnw_generate_data" />
-        <item index="2" class="java.lang.String" itemvalue="Python.box_plot_large_network_comparison" />
-        <item index="3" class="java.lang.String" itemvalue="Python.ecoli_lag_ident" />
-        <item index="4" class="java.lang.String" itemvalue="Python.edge_promotion" />
+        <item index="0" class="java.lang.String" itemvalue="Python.gardner_window_scan" />
+        <item index="1" class="java.lang.String" itemvalue="Python.utility_module" />
+        <item index="2" class="java.lang.String" itemvalue="Python.gnw_generate_high_sampling_data" />
+        <item index="3" class="java.lang.String" itemvalue="Python.gnw_generate_data" />
+        <item index="4" class="java.lang.String" itemvalue="Python.box_plot_large_network_comparison" />
       </list>
     </recent_temporary>
   </component>
@@ -1230,13 +509,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1413916753036</updated>
-    </task>
-    <task id="LOCAL-00131" summary="Basic plotting added to make a figure for Neda">
-      <created>1437363214546</created>
-      <option name="number" value="00131" />
-      <option name="presentableId" value="LOCAL-00131" />
-      <option name="project" value="LOCAL" />
-      <updated>1437363214547</updated>
     </task>
     <task id="LOCAL-00132" summary="Basic plotting added to make a figure for Neda. Mostly useless">
       <created>1437404670742</created>
@@ -1574,7 +846,14 @@
       <option name="project" value="LOCAL" />
       <updated>1504815179984</updated>
     </task>
-    <option name="localTasksCounter" value="180" />
+    <task id="LOCAL-00180" summary="Update gitignore">
+      <created>1505848236895</created>
+      <option name="number" value="00180" />
+      <option name="presentableId" value="LOCAL-00180" />
+      <option name="project" value="LOCAL" />
+      <updated>1505848236896</updated>
+    </task>
+    <option name="localTasksCounter" value="181" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1603,29 +882,42 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="773" extended-state="6" />
+    <frame x="0" y="23" width="1920" height="1053" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24375" sideWeight="0.6923077" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33015874" sideWeight="0.50080776" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20876826" sideWeight="0.49919224" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19616519" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32928178" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20876826" sideWeight="0.50319487" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19519833" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32881" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20876826" sideWeight="0.4968051" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43006262" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24866879" sideWeight="0.6923077" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32423207" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23351866" sideWeight="0.30769232" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43006262" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33015874" sideWeight="0.50080776" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20876826" sideWeight="0.49919224" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19616519" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32928178" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32423207" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24375" sideWeight="0.6923077" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43006262" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23351866" sideWeight="0.30769232" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -1662,7 +954,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Generate 100 node networks for yeast and E coli.&#10;&#10;Code modified to work for Python 3" />
     <MESSAGE value="Start network creation where it was halted" />
     <MESSAGE value="Updated data generation script&#10;&#10;Ecoli and yeast networks made for size 10, 100, and 1000" />
     <MESSAGE value="Work on edge promotion and lag trends&#10;&#10;SWING enriches promotion of lagged edges in Yeast networks, but not Ecoli." />
@@ -1687,7 +978,8 @@
     <MESSAGE value="Move script to identify lags. Identify lags in gardner data" />
     <MESSAGE value="Modify jupyter notebooks for 100node and 10node plots" />
     <MESSAGE value="Restore gardner analysis files and notebook from backup" />
-    <option name="LAST_COMMIT_MESSAGE" value="Restore gardner analysis files and notebook from backup" />
+    <MESSAGE value="Update gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update gitignore" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1707,6 +999,11 @@
           <line>23</line>
           <option name="timeStamp" value="64" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/scripts/figure3/gardner_window_scan.py</url>
+          <line>51</line>
+          <option name="timeStamp" value="116" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
@@ -1718,54 +1015,11 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="115" />
+      <option name="time" value="117" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="36" column="50" lean-forward="false" selection-start-line="36" selection-start-column="50" selection-end-line="36" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tdRoller_scripts/20150716_basic_tdRoller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/goldbetter_model/goldbetter_data.txt" />
-    <entry file="file://$PROJECT_DIR$/archive/run_test_pipeline.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1775,13 +1029,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/granger_testing.py" />
     <entry file="file://$PROJECT_DIR$/goldbetter_model/goldbetter_model.py" />
-    <entry file="file://$PROJECT_DIR$/Swing/util/utility_module.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="144" column="44" lean-forward="false" selection-start-line="142" selection-start-column="4" selection-end-line="144" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pipelines/run_pipeline_dionesus_window_scan_10.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1849,13 +1096,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="90" column="0" lean-forward="false" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pipelines/Pipelines.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="296" column="62" lean-forward="false" selection-start-line="296" selection-start-column="62" selection-end-line="296" selection-end-column="62" />
         </state>
       </provider>
     </entry>
@@ -1938,17 +1178,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1485">
           <caret line="99" column="21" lean-forward="false" selection-start-line="99" selection-start-column="21" selection-end-line="99" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Swing/Swing.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="185" column="0" lean-forward="false" selection-start-line="185" selection-start-column="0" selection-end-line="185" selection-end-column="0" />
-          <folding>
-            <element signature="e#71#84#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1963,7 +1192,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1971,7 +1199,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1986,7 +1213,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="19" lean-forward="false" selection-start-line="0" selection-start-column="19" selection-end-line="0" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1994,8 +1220,94 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="624">
           <caret line="222" column="28" lean-forward="false" selection-start-line="222" selection-start-column="28" selection-end-line="222" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/figure3/gardner_edge_promotion.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1176">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pipelines/submit_pipeline_lasso_window_scan_10.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pipelines/submit_pipeline_tdSwing_turbo.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pipelines/job_params_3.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Swing/util/utility_module.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="142" column="49" lean-forward="false" selection-start-line="142" selection-start-column="49" selection-end-line="142" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pipelines/run_tdSwing_scan.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="918">
+          <caret line="54" column="45" lean-forward="false" selection-start-line="54" selection-start-column="33" selection-end-line="54" selection-end-column="45" />
           <folding>
-            <element signature="e#71#81#0" expanded="true" />
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/figure3/gardner_window_scan.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="32" column="25" lean-forward="false" selection-start-line="32" selection-start-column="25" selection-end-line="32" selection-end-column="25" />
+          <folding>
+            <element signature="e#16#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pipelines/Pipelines.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="502">
+          <caret line="146" column="32" lean-forward="true" selection-start-line="146" selection-start-column="32" selection-end-line="146" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#210#2337#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.pyenv/versions/3.5.2/lib/python3.5/site-packages/sklearn/cross_validation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="43" column="0" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Swing/Swing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="563">
+          <caret line="809" column="40" lean-forward="false" selection-start-line="809" selection-start-column="40" selection-end-line="809" selection-end-column="40" />
+          <folding>
+            <element signature="e#71#84#0" expanded="true" />
           </folding>
         </state>
       </provider>

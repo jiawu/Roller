@@ -3,7 +3,7 @@ import sys
 from sklearn.linear_model import Lasso
 import numpy as np
 import warnings
-from sklearn.cross_validation import KFold
+from sklearn.model_selection import KFold
 
 #Note: if the optimal alpha value is very small, then another method other than LASSO should be used
 

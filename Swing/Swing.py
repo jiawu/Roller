@@ -310,16 +310,16 @@ class Swing(object):
         :return:
         """
         if self.min_lag > self.max_lag and self.max_lag is not None:
-            raise Exception('The minimum lag cannot be greater than the maximum lag')
+            raise ValueError('The minimum lag cannot be greater than the maximum lag')
 
         if self.min_lag < 0:
-            raise Exception('The minimum lag cannot be negative')
+            raise ValueError('The minimum lag cannot be negative')
 
         if self.min_lag > self.get_n_windows():
-            raise Exception('The minimum lag cannot be greater than the number of windows')
+            raise ValueError('The minimum lag cannot be greater than the number of windows')
 
         if self.max_lag >= self.get_n_windows():
-            raise Exception('The maximum lag cannot be greater than or equal to the number of windows')
+            raise ValueError('The maximum lag cannot be greater than or equal to the number of windows')
 
     def strip_dataframe(self, dataframe):
         """
@@ -623,7 +623,7 @@ class Swing(object):
         Edges across all windows will be compiled into a single edge list
         :return:
         """
-        print("Compiling all model edges...")
+        print("Compiling all model edges...", end='')
         df = None
         for ww, window in enumerate(self.window_list):
             # Get the edges and associated values in table form
@@ -706,7 +706,7 @@ class Swing(object):
         Make a dictionary of edges
         :return:
         """
-        print("Lumping edges...")
+        print("Lumping edges...", end='')
         df = self.full_edge_list.copy()
 
         # Only keep edges with importance > 0. Values below 0 are not helpful for model building
@@ -733,7 +733,7 @@ class Swing(object):
         lump_method = eval('np.'+lag_lump_method)
         for idx,edge in enumerate(full_edge_set):
             if idx%1000 ==0:
-                print(str(idx)+" out of "+ str(len(full_edge_set)))
+                print(str(idx)+" out of "+ str(len(full_edge_set)), end='')
             if edge in edge_diff:
                 self.edge_dict[edge] = {"dataframe": None, "mean_importance": 0, 'real_edge': (edge in true_edges),
                                         "max_importance": 0, 'max_edge': None, 'lag_importance': 0,
@@ -751,7 +751,7 @@ class Swing(object):
                                     'max_edge':(current_df.P_window[max_idx], current_df.C_window[max_idx]),
                                     'lag_importance': lag_imp, 'lag_method':lag_method,
                                     'rank_importance': lag_rank, 'adj_importance':lag_adj_imp}
-        print("[DONE]")
+        print("...[DONE]")
         if edge_diff:
             message = 'The last %i edges had no meaningful importance score' \
                       ' and were placed at the bottom of the list' %len(edge_diff)
@@ -767,7 +767,7 @@ class Swing(object):
 
         sort_field = sort_by+"_importance"
 
-        print("Calculating {} edge importance...".format(sort_by))
+        print("Calculating {} edge importance...".format(sort_by), end='')
         temp_dict = {edge: df[edge][sort_field] for edge in df.keys()}
         sort_df = pd.DataFrame.from_dict(temp_dict, orient='index')
         sort_df.columns = [sort_field]
@@ -807,7 +807,7 @@ class Swing(object):
         :param gold_standard_file:
         :return:
         """
-        print("Scoring model...")
+        print("Scoring model...", end='')
         if gold_standard_file is None:
             current_gold_standard = self.file_path.replace("timeseries.tsv","goldstandard.tsv")
         else:
