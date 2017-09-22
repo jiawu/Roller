@@ -23,7 +23,7 @@ from sklearn.neighbors import KernelDensity
 
 
 def parse_go():
-    go = pd.read_csv('../data/invitro/gene_ontology.tsv', sep='\t')
+    go = pd.read_csv('../../data/invitro/gene_ontology.tsv', sep='\t')
     genes_go = go.iloc[:,[2,4]]
     genes_go.columns = ['name','GO_ID']
     genes = genes_go['name'].str.lower().tolist()
@@ -92,21 +92,21 @@ def main(window_type='RandomForest', lag_thresh=4, fill_na=False, median_thresh=
     df['parsed_genes_list'] = pathway_gene_list
     df['parsed_genes_str'] = pathway_gene_string
     """
-    if os.path.isfile('lag_df2_parse_biocyc_6.pkl'):
-        lag_df = pd.read_pickle('lag_df2_parse_biocyc_6.pkl')
-        edge_df = pd.read_pickle('edge_df2_parse_biocyc_6.pkl')
-    #else:
+    if os.path.isfile('lag_biocyc_6.pkl'):
+        lag_df = pd.read_pickle('lag_biocyc_6.pkl')
+        edge_df = pd.read_pickle('edge_biocyc_6.pkl')
+    else:
         ## Get the lags to associate with the network
-        #(lag_df, edge_df) = flm.get_true_lags('../data/invitro/omranian_parsed_timeseries.tsv',5,30)
-        #lag_df['lag_median'] = [np.median(x) for x in lag_df['Lag'].tolist()]
-        #edge_df['lag_median'] = [np.median(x) for x in edge_df['Lag'].tolist()]
-        #lag_df.to_pickle('lag_df2_parse_biocyc_3.pkl')
-        #edge_df.to_pickle('edge_df2_parse_biocyc_3.pkl')
+        (lag_df, edge_df) = flm.get_true_lags('../../data/invitro/omranian_parsed_timeseries.tsv',5,30)
+        lag_df['lag_median'] = [np.median(x) for x in lag_df['Lag'].tolist()]
+        edge_df['lag_median'] = [np.median(x) for x in edge_df['Lag'].tolist()]
+        lag_df.to_pickle('lag_biocyc_6.pkl')
+        edge_df.to_pickle('edge_biocyc_6.pkl')
     
-    #lag_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in lag_df['Lag'].tolist()]
-    #edge_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in edge_df['Lag'].tolist()]
+    lag_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in lag_df['Lag'].tolist()]
+    edge_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in edge_df['Lag'].tolist()]
 
-    clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments'+str(CLUSTER)+'.csv',sep=',')
+    clusters = pd.read_csv('../../data/invitro/regulon_cluster_assignments'+str(CLUSTER)+'.csv',sep=',')
     #clusters = pd.read_csv('../data/invitro/yeast_cluster_assign'+str(CLUSTER)+'.csv',sep=',')
 
     new_lag= lag_df.reset_index()

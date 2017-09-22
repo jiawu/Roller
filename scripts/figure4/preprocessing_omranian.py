@@ -8,7 +8,6 @@ from datetime import datetime
 import numpy as np
 
 sys.path.append("../pipelines")
-import Pipelines as tdw
 import Swing.util.lag_identification as lag_id
 from Swing.util.Evaluator import Evaluator
 
@@ -39,7 +38,7 @@ def create_df(raw_data_path):
     final_frame=final_frame[cols]
 
 #mapping the names to the map and the gold standard
-    name_map = pd.read_csv('../data/invitro/ecoli_gene_map.txt', sep = '\t')
+    name_map = pd.read_csv('../../data/invitro/ecoli_gene_map.txt', sep = '\t')
 
 #map the probe name to the gene name
     gene_list = []
@@ -55,25 +54,25 @@ def create_df(raw_data_path):
 #check if gene name exists in map
 
 #raw_data_list = ['../data/invitro/omranian_coldstress.txt','../data/invitro/omranian_heatstress.txt','../data/invitro/omranian_control.txt','../data/invitro/omranian_oxidativestress.txt']
-raw_data_list = ['../data/invitro/omranian_control.txt','../data/invitro/omranian_coldstress.txt','../data/invitro/omranian_heatstress.txt', '../data/invitro/omranian_oxidativestress.txt']
+raw_data_list = ['../../data/invitro/omranian_control.txt','../../data/invitro/omranian_coldstress.txt','../../data/invitro/omranian_heatstress.txt', '../../data/invitro/omranian_oxidativestress.txt']
 #raw_data_list = ['../data/invitro/omranian_oxidativestress.txt']
 
 overall_df = pd.DataFrame()
-"""
+
 for raw_data in raw_data_list:
     df = create_df(raw_data)
     overall_df = overall_df.append(df)
-"""
-overall_df = pd.read_csv('../data/invitro/omranian_parsed_timeseries.tsv',sep='\t')
-#final_overall_df = overall_df
-#final_overall_df.to_csv('../data/invitro/omranian_parsed_timeseries.tsv', index=False,sep='\t')
+
+#overall_df = pd.read_csv('../../data/invitro/omranian_parsed_timeseries.tsv',sep='\t')
+final_overall_df = overall_df
+final_overall_df.to_csv('../../data/invitro/iomranian_parsed_timeseries.tsv', index=False,sep='\t')
 
 
 genes = overall_df.columns[1:].tolist()
 
-with open('../data/invitro/omranian_tf_list.tsv','r') as f:
+with open('../../data/invitro/omranian_tf_list.tsv','r') as f:
     tf_list = f.read().splitlines()
-with open('../data/invitro/omranian_target_list.tsv','r') as f:
+with open('../../data/invitro/omranian_target_list.tsv','r') as f:
     target_list = f.read().splitlines()
 
 gs_list = tf_list+target_list
@@ -84,7 +83,7 @@ gs_list = list(set(gs_list))
 not_measured_genes = list(set(gs_list)-set(genes))
 #remove these genes from gold standard
 
-parsed_gs = pd.read_csv('../data/invitro/omranian_parsed_goldstandard.tsv',sep='\t', header=None)
+parsed_gs = pd.read_csv('../../data/invitro/omranian_parsed_goldstandard.tsv',sep='\t', header=None)
 
 parsed_gs.columns = ['regulator', 'target', 'effect']
 parsed_gs = parsed_gs[~parsed_gs['regulator'].isin(not_measured_genes)]
@@ -92,14 +91,14 @@ parsed_gs = parsed_gs[~parsed_gs['target'].isin(not_measured_genes)]
 
 parsed_gs = parsed_gs[~(parsed_gs['regulator']==parsed_gs['target'])]
 
-parsed_gs.to_csv('../data/invitro/omranian_parsed_goldstandard.tsv',sep='\t',index=False, header=False)
+parsed_gs.to_csv('../../data/invitro/iomranian_parsed_goldstandard.tsv',sep='\t',index=False, header=False)
 
 parsed_gs_list = list(set(parsed_gs['regulator'].tolist()+parsed_gs['target'].tolist()))
 
-with open('../data/invitro/omranian_all_genes_list.tsv', 'w') as outfile:
+with open('../../data/invitro/omranian_all_genes_list.tsv', 'w') as outfile:
     outfile.write("\n".join(parsed_gs_list))
 
-with open('../data/invitro/omranian_parsed_tf_list.tsv', 'w') as outfile:
+with open('../../data/invitro/omranian_parsed_tf_list.tsv', 'w') as outfile:
     outfile.write("\n".join(parsed_gs['regulator'].unique().tolist()))
 
 not_in_gs = list(set(genes) - set(gs_list))
@@ -108,7 +107,7 @@ not_in_gs = list(set(genes) - set(gs_list))
 in_df_in_gs = ['Time'] + list(set(gs_list).intersection(genes))
 final_overall_df = overall_df[in_df_in_gs]
 
-final_overall_df.to_csv('../data/invitro/omranian_parsed_timeseries.tsv', index=False,sep='\t')
+final_overall_df.to_csv('../../data/invitro/iomranian_parsed_timeseries.tsv', index=False,sep='\t')
 
-my_eval = Evaluator('../data/invitro/omranian_parsed_goldstandard.tsv')
+my_eval = Evaluator('../../data/invitro/iomranian_parsed_goldstandard.tsv')
 

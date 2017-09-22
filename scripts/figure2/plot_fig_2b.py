@@ -2,7 +2,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import sys
-sys.path.append('../pipelines')
+sys.path.append('../../pipelines')
 import pdb
 import Pipelines as pl
 import numpy as np

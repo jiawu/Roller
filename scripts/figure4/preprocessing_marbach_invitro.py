@@ -1,17 +1,11 @@
 import pandas as pd
 import pdb
 import scipy.stats as stats
+from preprocessing_dream5_invitro_interpolated import zscore_data, interpolate
 
-
-def zscore_data(df):
-    p = df.values
-    z = pd.DataFrame(stats.zscore(p,axis=0,ddof=1),index=df.index, columns=df.columns)
-    z['Time'] = df['Time']
-    return(z)
-
-db_path = '../data/invitro/net4_chip_features.tsv'
+db_path = '../../data/invitro/net4_chip_features.tsv'
 my_df = pd.read_csv(db_path, sep='\t')
-db_path2 = '../data/invitro/net4_expression_data.tsv'
+db_path2 = '../../data/invitro/net4_expression_data.tsv'
 my_df2 = pd.read_csv(db_path2, sep='\t')
 my_df = my_df.join(my_df2)
 my_df = my_df[~my_df['Time'].isnull()]
@@ -26,21 +20,49 @@ final_df = pd.DataFrame()
 
 ## Append certain rows with the same pertubation etc, alternating between repeats
 
-final_df = final_df.append(my_df[ (my_df['#Experiment'] == 26) & (my_df['Repeat'] == 1) ].iloc[:6])
-final_df = final_df.append(my_df[ (my_df['#Experiment'] == 30) & (my_df['Repeat'] == 1) ].iloc[:6])
-final_df = final_df.append(my_df[ (my_df['#Experiment'] == 48) & (my_df['Repeat'] == 1) ].iloc[:12])
-final_df = final_df.append(my_df[ (my_df['#Experiment'] == 49) & (my_df['Repeat'] == 1) &(my_df['Perturbations'].isnull())].iloc[:6])
-final_df = final_df.append(my_df[ (my_df['#Experiment'] == 49) & (my_df['Repeat'] == 1) &(my_df['Perturbations']=='P19')].iloc[:36])
+pdb.set_trace()
+ts = my_df[ (my_df['#Experiment'] == 26) & (my_df['Repeat'] == 1) ].iloc[:6]
+final_df = final_df.append(interpolate(ts, [0,10,20,30,40,50]))
+final_df = final_df.append(interpolate(ts, [60,70,80,90,100,110]))
+final_df = final_df.append(interpolate(ts, [120,130,140,150,160,170]))
 
-final_df = final_df.append(my_df[ (my_df['#Experiment'] == 51) & (my_df['Repeat'] == 1) &(my_df['Perturbations'].isnull())].iloc[:6])
-final_df = final_df.append(my_df[ (my_df['#Experiment'] == 51) & (my_df['Repeat'] == 1) &(my_df['Perturbations']=='P24')].iloc[:6])
+ts = my_df[ (my_df['#Experiment'] == 30) & (my_df['Repeat'] == 1) ].iloc[:6]
+final_df = final_df.append(interpolate(ts, [0,10,20,30,40,50]))
+final_df = final_df.append(interpolate(ts, [60,70,80,90,100,110]))
+final_df = final_df.append(interpolate(ts, [120,130,140,150,160,170]))
 
-final_df = final_df.append(my_df[ (my_df['#Experiment'] == 58) & (my_df['Repeat'] == 1)&(my_df['DeletedGenes'].isnull())].iloc[:30])
+ts = my_df[ (my_df['#Experiment'] == 48) & (my_df['Repeat'] == 1) & (my_df['Perturbations'].isnull())].iloc[:12]
+final_df = final_df.append(interpolate(ts, [0,10,20,30,40,50]))
 
-final_df = final_df.append(my_df[ (my_df['#Experiment'] == 58) & (my_df['Repeat'] == 1)&(my_df['DeletedGenes']=='G3606')].iloc[:30])
+#ts = my_df[ (my_df['#Experiment'] == 49) & (my_df['Repeat'] == 1) &(my_df['Perturbations'].isnull())].iloc[:6]
+#final_df = final_df.append(interpolate(ts, [830,840,850,860,865,870]))
+
+pdb.set_trace()
+ts = my_df[ (my_df['#Experiment'] == 49) & (my_df['Repeat'] == 1) &(my_df['Perturbations']=='P19')].iloc[:36]
+final_df = final_df.append(interpolate(ts, [874,884,894,904,914,924]))
+final_df = final_df.append(interpolate(ts, [934,944,954,964,974,984]))
+final_df = final_df.append(interpolate(ts, [874,884,894,904,914,924]))
+final_df = final_df.append(interpolate(ts, [934,944,954,964,974,984]))
 
 
-master_map = pd.read_csv('../data/invitro/marbach_gene_ids.tsv', sep='\t')
+pdb.set_trace()
+ts = my_df[ (my_df['#Experiment'] == 51) & (my_df['Repeat'] == 1) &(my_df['Perturbations']=='P24')].iloc[:6]
+final_df = final_df.append(interpolate(ts, [0,10,20,30,40,50]))
+
+
+ts = my_df[ (my_df['#Experiment'] == 58) & (my_df['Repeat'] == 1)&(my_df['DeletedGenes'].isnull())].iloc[:30]
+final_df = final_df.append(interpolate(ts, [30,40,50,60,70,80]))
+final_df = final_df.append(interpolate(ts, [90,100,110,120,130,140]))
+final_df = final_df.append(interpolate(ts, [150,160,170,180,190,200]))
+final_df = final_df.append(interpolate(ts, [210,220,230,240,250,260]))
+
+ts = my_df[ (my_df['#Experiment'] == 58) & (my_df['Repeat'] == 1)&(my_df['DeletedGenes']=='G3606')].iloc[:30]
+final_df = final_df.append(interpolate(ts, [30,40,50,60,70,80]))
+final_df = final_df.append(interpolate(ts, [90,100,110,120,130,140]))
+final_df = final_df.append(interpolate(ts, [150,160,170,180,190,200]))
+final_df = final_df.append(interpolate(ts, [210,220,230,240,250,260]))
+
+master_map = pd.read_csv('../../data/invitro/marbach_gene_ids.tsv', sep='\t')
 master_map.columns = ['anonID', 'geneid']
 map_dict = master_map.set_index('anonID').T.to_dict('record')
 # replace gs file with IDs
@@ -49,7 +71,7 @@ parsed_df = final_df.rename(columns=map_dict[0])
 col_names = ['Time'] + master_map['geneid'].values.tolist()
 parsed_df = parsed_df[col_names]
 
-gs = pd.read_csv('../data/invitro/marbach_parsed_goldstandard.tsv',sep='\t', header=None)
+gs = pd.read_csv('../../data/invitro/marbach_parsed_goldstandard.tsv',sep='\t', header=None)
 
 all_genes = gs.iloc[:,0].unique().tolist() + gs.iloc[:,1].unique().tolist()
 all_genes_gs = set(all_genes)
@@ -61,12 +83,12 @@ col_names = ['Time'] + list(shared_genes)
 parsed_df = parsed_df[col_names]
 
 
-tf_list = pd.read_csv('../data/invitro/marbach_tf_list.tsv',sep='\t', header=None)
+tf_list = pd.read_csv('../../data/invitro/marbach_tf_list.tsv',sep='\t', header=None)
 shared_tfs = list(shared_genes.intersection(set(tf_list.iloc[:,0].tolist())))
 
-with open('../data/invitro/marbach_parsed_tf_list.tsv', 'w') as outfile:
+with open('../../data/invitro/marbach_parsed_tf_list.tsv', 'w') as outfile:
     outfile.write("\n".join(shared_tfs))
-with open('../data/invitro/marbach_all_genes_list.tsv', 'w') as outfile:
+with open('../../data/invitro/marbach_all_genes_list.tsv', 'w') as outfile:
     outfile.write("\n".join(list(shared_genes)))
 
 
@@ -84,10 +106,10 @@ with open('../data/invitro/marbach_all_genes_list.tsv', 'w') as outfile:
 norm_df = zscore_data(parsed_df)
 # Change the time index so that it matches up with omranian...
 x = [10,20,30,40,50,60]
-t = [b for a in range(23) for b in x]
+t = [b for a in range(int(norm_df.shape[0]/6)) for b in x]
 norm_df['Time'] = t
 
 
-norm_df.to_csv('../data/invitro/marbach_parsed_timeseries.tsv', index=False, sep='\t')
+norm_df.to_csv('../../data/invitro/imarbach_parsed_timeseries.tsv', index=False, sep='\t')
 
 

@@ -18,7 +18,7 @@ from Swing.util.Evaluator import Evaluator
 import os.path
 
 def parse_go():
-    go = pd.read_csv('../data/invitro/gene_ontology.tsv', sep='\t')
+    go = pd.read_csv('../../data/invitro/gene_ontology.tsv', sep='\t')
     genes_go = go.iloc[:,[2,4]]
     genes_go.columns = ['name','GO_ID']
     genes = genes_go['name'].str.lower().tolist()
@@ -231,41 +231,12 @@ def get_group_stats(sub_group,parsed_info, sub_stats, sub_all_edges):
 
 """
 def main(window_type='RandomForest', CLUSTER=14):
-    """
-    df = pd.read_csv('../data/invitro/ecocyc_database_export_ver1_02.txt',sep='\t')
+    if os.path.isfile('../pickles/lag_df2_parse_biocyc_6.pkl'):
 
-    # Parse the gene lists for each pathway
+        lag_df = pd.read_pickle('../pickles/lag_df2_parse_biocyc_6.pkl')
+        edge_df = pd.read_pickle('../pickles/edge_df2_parse_biocyc_6.pkl')
 
-    pathway_gene_list = []
-    pathway_gene_string = []
-    for idx, row in df.iterrows():
-        gene_string = row['Genes of pathway']
-        parsed = gene_string.replace(' ','').replace('"','').lower().split('//')
-        parsed_str = gene_string.replace(' ','').replace('"','').lower().replace('//',' ')
-        
-        pathway_gene_list.append(parsed)
-        pathway_gene_string.append(parsed_str)
-        print(parsed)
-
-    df['parsed_genes_list'] = pathway_gene_list
-    df['parsed_genes_str'] = pathway_gene_string
-    """
-    if os.path.isfile('lag_df2_parse_biocyc_6.pkl'):
-
-        lag_df = pd.read_pickle('lag_df2_parse_biocyc_6.pkl')
-        edge_df = pd.read_pickle('edge_df2_parse_biocyc_6.pkl')
-    #else:
-        ## Get the lags to associate with the network
-        #(lag_df, edge_df) = flm.get_true_lags('../data/invitro/omranian_parsed_timeseries.tsv',5,26)
-        #lag_df['lag_median'] = [np.median(x) for x in lag_df['Lag'].tolist()]
-        #edge_df['lag_median'] = [np.median(x) for x in edge_df['Lag'].tolist()]
-        #lag_df.to_pickle('lag_df2_parse_biocyc_3.pkl')
-        #edge_df.to_pickle('edge_df2_parse_biocyc_3.pkl')
-    
-    #lag_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in lag_df['Lag'].tolist()]
-    #edge_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in edge_df['Lag'].tolist()]
-
-    clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments'+str(CLUSTER)+'.csv',sep=',')
+    clusters = pd.read_csv('../../data/invitro/regulon_cluster_assignments'+str(CLUSTER)+'.csv',sep=',')
 
     new_lag= lag_df.reset_index()
 
@@ -283,27 +254,35 @@ def main(window_type='RandomForest', CLUSTER=14):
     clusters = target_clusters['parent_cluster'].unique().tolist()
 
     small_clusters = []
-    
+    big_clusters = [0,1,2,3,4,6,7,8,9,10,11,14,15,21,22,23,25,27,28,30,32,34,37,43,45,48,49,51,52,57,58,59,62,64,70]
+
+    new_id = [x for x in range(0,len(big_clusters))]
+
     for clusterid in clusters:
         current_group = grouped_by_cluster.get_group(clusterid)
         sub_dict = get_subnetwork_info(current_group)
-        if (len(current_group)<10) or (len(sub_dict['tfs']) <3):
+        #if (len(current_group)<10) or (len(sub_dict['tfs']) <3):
+        if int(clusterid) not in big_clusters:
             small_clusters.append(int(clusterid))
     print(len(merged_lag['parent_cluster'].unique()))
     merged_lag['parent_cluster'] = merged_lag['parent_cluster'].replace(small_clusters, 99)
     merged_lag['child_cluster'] = merged_lag['child_cluster'].replace(small_clusters, 99)
     ## Read the cluster assignments file and change all the small cluster IDs to 99
     ## save as a parsed cluster assignment file
-    clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments'+str(CLUSTER)+'.csv',sep=',')
+    clusters = pd.read_csv('../../data/invitro/regulon_cluster_assignments'+str(CLUSTER)+'.csv',sep=',')
     parsed_clusters = clusters.copy()
     parsed_clusters['__glayCluster'] = clusters['__glayCluster'].replace(small_clusters,99)
     
-    parsed_path = '../data/invitro/regulon_cluster_assignments_parsed'+str(CLUSTER)+'.csv'
+    
+    parsed_path = '../../data/invitro/regulon_cluster_assignments_parsed'+str(CLUSTER)+'.csv'
     parsed_clusters.to_csv(parsed_path, sep=',', index=False)
     
     print(len(merged_lag['parent_cluster'].unique()))
     merged_lag = merged_lag[merged_lag['parent_cluster'] != 99]
     merged_lag = merged_lag[merged_lag['child_cluster'] != 99]
+    
+    merged_lag['parent_cluster'] = merged_lag['parent_cluster'].replace(big_clusters, new_id)
+    merged_lag['child_cluster'] = merged_lag['child_cluster'].replace(big_clusters, new_id)
 
     generate_json(merged_lag, method = 'Lag', CLUSTER=CLUSTER)
     
@@ -337,7 +316,7 @@ promotion_lag['rank_diff_D'] = promotion_lag['rank_importance_Dionesus-td_6']-pr
 
 eco_go = parse_go()
 
-clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments.csv',sep=',')
+clusters = pd.read_csv('../../data/invitro/regulon_cluster_assignments.csv',sep=',')
 
 
 obodag = GODag("go-basic.obo")

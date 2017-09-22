@@ -52,8 +52,8 @@ clusterid	ontology	p-value	study_count	study_n
 14.0	tryptophan catabolic process	0.017324475737407124	3.0	40.0
 19.0	response to copper ion	1.318400008969962e-07	6.0	20.0
 19.0	response to silver ion	2.9552678915571673e-06	4.0	20.0
-19.0	cellular copper ion homeostasis	1.1045236623859253e-05	4.0	20.0
 19.0	detoxification of copper ion	1.1045236623859253e-05	4.0	20.0
+19.0	cellular copper ion homeostasis	1.1045236623859253e-05	4.0	20.0
 19.0	electron transport coupled proton transport	0.00013607882908642355	4.0	20.0
 19.0	aerobic electron transport chain	0.00021971111521643214	4.0	20.0
 19.0	copper ion export	0.0010625752623688615	3.0	20.0
@@ -65,8 +65,8 @@ clusterid	ontology	p-value	study_count	study_n
 19.0	cytochrome bo3 ubiquinol oxidase activity	2.9552678915571673e-06	4.0	20.0
 19.0	oxidoreduction-driven active transmembrane transporter activity	2.9552678915571673e-06	4.0	20.0
 19.0	cytochrome o ubiquinol oxidase activity	0.00030753507226143	3.0	20.0
-19.0	copper ion transmembrane transporter activity	0.00030753507226143	3.0	20.0
 19.0	cytochrome-c oxidase activity	0.00030753507226143	3.0	20.0
+19.0	copper ion transmembrane transporter activity	0.00030753507226143	3.0	20.0
 19.0	hydrogen ion transmembrane transporter activity	0.000408281735266872	4.0	20.0
 20.0	fatty acid metabolic process	1.943775149203927e-27	16.0	21.0
 20.0	lipid metabolic process	2.0618151028341628e-20	16.0	21.0
@@ -94,15 +94,15 @@ clusterid	ontology	p-value	study_count	study_n
 33.0	maltose transport	2.3101386522994873e-06	5.0	35.0
 33.0	N-acetylglucosamine transport	3.1937631950880774e-05	4.0	35.0
 33.0	carbohydrate metabolic process	0.0001493979227284086	11.0	35.0
-33.0	alpha-glucan catabolic process	0.001912764738546008	3.0	35.0
 33.0	N,N'-diacetylchitobiose import	0.001912764738546008	3.0	35.0
 33.0	mannose transport	0.001912764738546008	3.0	35.0
-33.0	UDP-N-acetylglucosamine biosynthetic process	0.006516987862523652	3.0	35.0
+33.0	alpha-glucan catabolic process	0.001912764738546008	3.0	35.0
 33.0	glucose import into cell	0.006516987862523652	3.0	35.0
+33.0	UDP-N-acetylglucosamine biosynthetic process	0.006516987862523652	3.0	35.0
 33.0	fructose import	0.015111112200205563	3.0	35.0
 33.0	maltose transport complex	3.1937631950880774e-05	4.0	35.0
-33.0	protein-N(PI)-phosphohistidine-mannose phosphotransferase system transporter activity	0.001912764738546008	3.0	35.0
 33.0	maltose-transporting ATPase activity	0.001912764738546008	3.0	35.0
+33.0	protein-N(PI)-phosphohistidine-mannose phosphotransferase system transporter activity	0.001912764738546008	3.0	35.0
 44.0	molybdate ion transport	3.746694122571524e-05	4.0	28.0
 44.0	Mo-molybdopterin cofactor biosynthetic process	0.00014506133961848471	5.0	28.0
 44.0	cytochrome complex assembly	0.00014506133961848471	5.0	28.0
@@ -135,8 +135,8 @@ clusterid	ontology	p-value	study_count	study_n
 53.0	oxidoreductase activity	0.00021705570792719317	18.0	45.0
 53.0	iron-sulfur cluster binding	0.00068252868957409	11.0	45.0
 53.0	4 iron, 4 sulfur cluster binding	0.000753928343607261	10.0	45.0
-53.0	succinate dehydrogenase activity	0.0009789083638261555	4.0	45.0
 53.0	hydrogenase (acceptor) activity	0.0009789083638261555	4.0	45.0
+53.0	succinate dehydrogenase activity	0.0009789083638261555	4.0	45.0
 53.0	oxidoreductase activity, acting on NAD(P)H	0.004728523061350156	4.0	45.0
 53.0	succinate dehydrogenase (ubiquinone) activity	0.0373443103566468	3.0	45.0
 57.0	iron-sulfur cluster assembly	1.576305687176042e-09	9.0	40.0

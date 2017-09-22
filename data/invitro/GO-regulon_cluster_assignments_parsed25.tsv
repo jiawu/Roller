@@ -12,8 +12,8 @@ clusterid	ontology	p-value	study_count	study_n
 1.0	protein maturation	0.0004165984928057203	11.0	453.0
 1.0	fatty acid biosynthetic process	0.001900027928078927	11.0	453.0
 1.0	enterobactin biosynthetic process	0.002141364180720418	7.0	453.0
-1.0	protein secretion by the type II secretion system	0.002141364180720418	7.0	453.0
 1.0	fermentation	0.002141364180720418	7.0	453.0
+1.0	protein secretion by the type II secretion system	0.002141364180720418	7.0	453.0
 1.0	aerobic respiration	0.0022263368289133713	12.0	453.0
 1.0	hydrogen sulfide biosynthetic process	0.0022263368289133713	6.0	453.0
 1.0	methionine biosynthetic process	0.0035599644682407705	10.0	453.0
@@ -46,8 +46,8 @@ clusterid	ontology	p-value	study_count	study_n
 1.0	succinate dehydrogenase activity	0.0003753189240725057	7.0	453.0
 1.0	2 iron, 2 sulfur cluster binding	0.0015077616388574485	15.0	453.0
 1.0	NADH dehydrogenase (quinone) activity	0.0022263368289133713	6.0	453.0
-1.0	succinate dehydrogenase (ubiquinone) activity	0.0022263368289133713	6.0	453.0
 1.0	heme transporter activity	0.0022263368289133713	6.0	453.0
+1.0	succinate dehydrogenase (ubiquinone) activity	0.0022263368289133713	6.0	453.0
 1.0	hydrolase activity	0.010314845587237538	29.0	453.0
 1.0	molybdenum ion binding	0.011395589345634243	10.0	453.0
 1.0	hydrogenase (acceptor) activity	0.011395589345634243	6.0	453.0
@@ -99,25 +99,25 @@ clusterid	ontology	p-value	study_count	study_n
 15.0	regulation of cell shape	0.00444475791898542	10.0	122.0
 15.0	aerobic electron transport chain	0.005625555293312459	5.0	122.0
 15.0	glycerophosphodiester transport	0.006815943472847697	4.0	122.0
-15.0	cellular copper ion homeostasis	0.006815943472847697	4.0	122.0
 15.0	detoxification of copper ion	0.006815943472847697	4.0	122.0
+15.0	cellular copper ion homeostasis	0.006815943472847697	4.0	122.0
 15.0	phosphate ion transmembrane transport	0.00877229950891877	5.0	122.0
+15.0	recombinational repair	0.015290803561251938	4.0	122.0
 15.0	glycerol-3-phosphate transport	0.015290803561251938	4.0	122.0
 15.0	nucleotide-excision repair	0.015290803561251938	4.0	122.0
-15.0	recombinational repair	0.015290803561251938	4.0	122.0
-15.0	cytochrome o ubiquinol oxidase complex	0.0018908956799114202	4.0	122.0
 15.0	alpha-D-ribose 1-methylphosphonate 5-triphosphate synthase complex	0.0018908956799114202	4.0	122.0
+15.0	cytochrome o ubiquinol oxidase complex	0.0018908956799114202	4.0	122.0
 15.0	excinuclease repair complex	0.027983795911521458	3.0	122.0
 15.0	cytochrome bo3 ubiquinol oxidase activity	0.0018908956799114202	4.0	122.0
-15.0	oxidoreduction-driven active transmembrane transporter activity	0.0018908956799114202	4.0	122.0
 15.0	phosphate ion transmembrane-transporting ATPase activity	0.0018908956799114202	4.0	122.0
 15.0	alpha-D-ribose 1-methylphosphonate 5-triphosphate synthase activity	0.0018908956799114202	4.0	122.0
+15.0	oxidoreduction-driven active transmembrane transporter activity	0.0018908956799114202	4.0	122.0
 15.0	copper ion binding	0.007757124154913098	6.0	122.0
 15.0	ATP-dependent DNA helicase activity	0.01507147534973477	5.0	122.0
 15.0	inorganic phosphate transmembrane transporter activity	0.015290803561251938	4.0	122.0
 15.0	helicase activity	0.015414456889341484	7.0	122.0
 15.0	DNA binding	0.025888623185358263	33.0	122.0
-15.0	cytochrome o ubiquinol oxidase activity	0.027983795911521458	3.0	122.0
-15.0	copper ion transmembrane transporter activity	0.027983795911521458	3.0	122.0
-15.0	cytochrome-c oxidase activity	0.027983795911521458	3.0	122.0
 15.0	excinuclease ABC activity	0.027983795911521458	3.0	122.0
+15.0	cytochrome o ubiquinol oxidase activity	0.027983795911521458	3.0	122.0
+15.0	cytochrome-c oxidase activity	0.027983795911521458	3.0	122.0
+15.0	copper ion transmembrane transporter activity	0.027983795911521458	3.0	122.0

@@ -60,7 +60,7 @@ node_list2 = gene_names['Name'].str.lower().tolist()
 unmapped_df = final_df[['Time']+node_list]
 unmapped_df.columns = ['Time'] + node_list2
 
-om_df = pd.read_csv('../data/invitro/omranian_parsed_timeseries.tsv', sep='\t')
+om_df = pd.read_csv('../data/invitro/iomranian_parsed_timeseries.tsv', sep='\t')
 om_df = om_df[om_df['Time'] != 90]
 intersecting_genes = set(om_df.columns.tolist()).intersection(set(unmapped_df.columns.tolist()))
 intersecting_genes = sorted(list(intersecting_genes))
@@ -79,6 +79,6 @@ om_df_parsed = zscore_data(om_df[intersecting_genes])
 
 om_df_parsed = om_df_parsed.append(norm_df)
 
-om_df_parsed.to_csv('../data/invitro/omranian_parsed_timeseries.tsv', index=False, sep='\t')
+om_df_parsed.to_csv('../data/invitro/iomranian_parsed_timeseries.tsv', index=False, sep='\t')
 
 

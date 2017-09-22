@@ -6,10 +6,10 @@ from collections import defaultdict
 
 
 def parse_go():
-    go = pd.read_csv('../data/invitro/gene_association.sgd', sep='\t', comment='!')
-    master_map = pd.read_csv('../data/invitro/marbach_gene_ids.tsv', sep='\t')
-    gs = pd.read_csv('../data/invitro/marbach_goldstandard.tsv',sep='\t')
-    tfs = pd.read_csv('../data/invitro/marbach_tf_list.tsv',sep='\t')
+    go = pd.read_csv('../../data/invitro/gene_association.sgd', sep='\t', comment='!')
+    master_map = pd.read_csv('../../data/invitro/marbach_gene_ids.tsv', sep='\t')
+    gs = pd.read_csv('../../data/invitro/marbach_goldstandard.tsv',sep='\t')
+    tfs = pd.read_csv('../../data/invitro/marbach_tf_list.tsv',sep='\t')
 
 
     gs.columns = ['regulator', 'target', 'exists']
@@ -29,10 +29,11 @@ def parse_go():
 
     # next, make the master table that maps geneid to anonymized gene name to real genename in eco_go
     master_map.columns = ['anonID', 'geneid']
-    map_dict = master_map.set_index('anonID').T.to_dict()
+    pdb.set_trace()
+    map_dict = master_map.set_index('anonID').T.to_dict('record')
     # replace gs file with IDs
-    parsed_gs = gs.replace(map_dict)
-    parsed_gs.to_csv('../data/invitro/marbach_parsed_goldstandard.tsv',sep='\t',header=None,index=False)
+    parsed_gs = gs.replace(map_dict[0])
+    parsed_gs.to_csv('../../data/invitro/marbach_parsed_goldstandard.tsv',sep='\t',header=None,index=False)
 
     return(eco_go)
 
@@ -44,7 +45,7 @@ def get_clist(clusterid, cluster_table):
 eco_go = parse_go()
 pdb.set_trace()
 
-clusters = pd.read_csv('../data/invitro/yeast_cluster_assign5.csv',sep=',')
+clusters = pd.read_csv('../../data/invitro/yeast_cluster_assign4.csv',sep=',')
 
 
 obodag = GODag("go-basic.obo")

@@ -15,7 +15,10 @@ mpl.rcParams['pdf.fonttype'] = 42
 mpl.rcParams['font.sans-serif'] = 'Arial'
 import pdb
 from scipy.stats import pearsonr
-
+from sklearn.metrics.cluster import entropy
+from sklearn.metrics.cluster import expected_mutual_information
+from sklearn.utils.validation import check_array
+from math import log
 from Swing.util.Evaluator import Evaluator
 
 def get_experiment_list(filename, timepoints=21, perturbs=5):
@@ -60,6 +63,7 @@ def cc_experiment(experiment):
             else:
                 unbiased = False
             ccf_array[ii][jj] = ccf(static, moving, unbiased=unbiased)
+    pdb.set_trace()
     return ccf_array
 
 
@@ -97,14 +101,95 @@ def get_pairwise_xcorr(parent,child,experiment,time_map,lag,tolerance,rc):
     all_cs_values = np.vstack(cs)
 
     p_idx,c_idx = get_xcorr_indices(diff_ts, lag, tolerance)
+    
+
     ps_values = [all_ps_values[x] for x in p_idx]
     cs_values = [all_cs_values[x] for x in c_idx]
 
     rsq, pval = pearsonr(ps_values,cs_values)
+    #c_xy = np.histogram2d(ps_values, cs_values, 10)[0]
+    #n_samples = len(ps_values)
+    #mi = my_mutual_info_score(n_samples, x_val = ps_values, y_val = cs_values, labels_true=None, labels_pred=None, contingency=c_xy)
+    #print(mi, parent, child, lag)
 
     return(rsq,pval)
 
-def calc_edge_lag2(experiments,genes, signed_edge_list=None, tolerance = 8, rc = (26,5), mode=None):
+def my_mutual_info_score(n_samples, x_val, y_val, labels_true, labels_pred, contingency=None):
+    """Mutual Information between two clusterings.
+    The Mutual Information is a measure of the similarity between two labels of
+    the same data. Where :math:`P(i)` is the probability of a random sample
+    occurring in cluster :math:`U_i` and :math:`P'(j)` is the probability of a
+    random sample occurring in cluster :math:`V_j`, the Mutual Information
+    between clusterings :math:`U` and :math:`V` is given as:
+    .. math::
+        MI(U,V)=\sum_{i=1}^R \sum_{j=1}^C P(i,j)\log\\frac{P(i,j)}{P(i)P'(j)}
+    This is equal to the Kullback-Leibler divergence of the joint distribution
+    with the product distribution of the marginals.
+    This metric is independent of the absolute values of the labels:
+    a permutation of the class or cluster label values won't change the
+    score value in any way.
+    This metric is furthermore symmetric: switching ``label_true`` with
+    ``label_pred`` will return the same score value. This can be useful to
+    measure the agreement of two independent label assignments strategies
+    on the same dataset when the real ground truth is not known.
+    Read more in the :ref:`User Guide <mutual_info_score>`.
+    Parameters
+    ----------
+    labels_true : int array, shape = [n_samples]
+        A clustering of the data into disjoint subsets.
+    labels_pred : array, shape = [n_samples]
+        A clustering of the data into disjoint subsets.
+    contingency : {None, array, sparse matrix},
+                  shape = [n_classes_true, n_classes_pred]
+        A contingency matrix given by the :func:`contingency_matrix` function.
+        If value is ``None``, it will be computed, otherwise the given value is
+        used, with ``labels_true`` and ``labels_pred`` ignored.
+    Returns
+    -------
+    mi : float
+       Mutual information, a non-negative value
+    See also
+    --------
+    adjusted_mutual_info_score: Adjusted against chance Mutual Information
+    normalized_mutual_info_score: Normalized Mutual Information
+    """
+    if contingency is None:
+        labels_true, labels_pred = check_clusterings(labels_true, labels_pred)
+        contingency = contingency_matrix(labels_true, labels_pred, sparse=True)
+    else:
+        contingency = check_array(contingency,
+                                  accept_sparse=['csr', 'csc', 'coo'],
+                                  dtype=[int, np.int32, np.int64])
+
+    if isinstance(contingency, np.ndarray):
+        # For an array
+        nzx, nzy = np.nonzero(contingency)
+        nz_val = contingency[nzx, nzy]
+    elif sp.issparse(contingency):
+        # For a sparse matrix
+        nzx, nzy, nz_val = sp.find(contingency)
+    else:
+        raise ValueError("Unsupported type for 'contingency': %s" %
+                         type(contingency))
+
+    contingency_sum = contingency.sum()
+    pi = np.ravel(contingency.sum(axis=1))
+    pj = np.ravel(contingency.sum(axis=0))
+    log_contingency_nm = np.log(nz_val)
+    contingency_nm = nz_val / contingency_sum
+    # Don't need to calculate the full outer product, just for non-zeroes
+    outer = pi.take(nzx) * pj.take(nzy)
+    log_outer = -np.log(outer) + log(pi.sum()) + log(pj.sum())
+    mi = (contingency_nm * (log_contingency_nm - log(contingency_sum)) +
+          contingency_nm * log_outer)
+    mi = mi.sum()
+    emi = expected_mutual_information(contingency, n_samples)
+    # Calculate entropy for each labeling
+    h_true, h_pred = entropy(x_val), entropy(y_val)
+    ami = (mi - emi) / (max(h_true, h_pred) - emi)
+    return ami
+
+def calc_edge_lag2(experiments,genes, signed_edge_list=None, tolerance = 8, rc = (23,6), mode=None):
     
     # load the interval file
     edges = signed_edge_list['regulator-target']
@@ -119,12 +204,12 @@ def calc_edge_lag2(experiments,genes, signed_edge_list=None, tolerance = 8, rc =
 
     lag_results = []
     if mode is 'marbach':
-        time_map = pd.read_csv('../data/invitro/marbach_timesteps.tsv', sep='\t')
+        time_map = pd.read_csv('../../data/invitro/marbach_timesteps.tsv', sep='\t')
         rc = (23,6)
         lags = [0,5,10,20,30,40]
         tolerance = 3
     else:
-        time_map = pd.read_csv('../data/invitro/omranian_timesteps.tsv', sep='\t')
+        time_map = pd.read_csv('../../data/invitro/omranian_timesteps.tsv', sep='\t')
         lags = [0,10,20,30,60,90]
 
     time_steps = time_map['Timestep'].tolist()

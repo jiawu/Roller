@@ -1,8 +1,8 @@
 import pandas as pd
 import pdb
-raw_gs1 = pd.read_csv('../data/invitro/regulon_tf_tf.tsv', sep = '\t')
+raw_gs1 = pd.read_csv('../../data/invitro/regulon_tf_tf.tsv', sep = '\t')
 
-raw_gs2 = pd.read_csv('../data/invitro/regulon_tf_gene.tsv', sep = '\t')
+raw_gs2 = pd.read_csv('../../data/invitro/regulon_tf_gene.tsv', sep = '\t')
 
 combined_gs = raw_gs1.append(raw_gs2)
 combined_gs['parent'] = combined_gs['parent'].str.lower()
@@ -32,15 +32,15 @@ for idx,row in question_values.iterrows():
 
 no_dup = combined_gs.drop_duplicates(['parent','child'])
 
-no_dup.to_csv('../data/invitro/regulon_parsed.tsv', sep='\t',index=False, header=False)
+no_dup.to_csv('../../data/invitro/regulon_parsed.tsv', sep='\t',index=False, header=False)
 
 no_dup['edge'] = 1
 
 final_gs = no_dup[['parent','child', 'edge']]
 signed_final_gs = no_dup[['parent','child','reg']]
 
-final_gs.to_csv('../data/invitro/omranian_parsed_goldstandard.tsv', sep='\t',index=False, header=False)
-signed_final_gs.to_csv('../data/invitro/omranian_signed_parsed_goldstandard.tsv', sep='\t',index=False, header=False)
+final_gs.to_csv('../../data/invitro/omranian_parsed_goldstandard.tsv', sep='\t',index=False, header=False)
+signed_final_gs.to_csv('../../data/invitro/omranian_signed_parsed_goldstandard.tsv', sep='\t',index=False, header=False)
 
 
 tf_list = no_dup['parent'].unique().tolist()

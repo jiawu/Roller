@@ -1,6 +1,3 @@
-__author__ = 'Justin Finkle'
-__email__ = 'jfinkle@u.northwestern.edu'
-
 import random
 import sys
 import pandas as pd
@@ -460,7 +457,7 @@ class Swing(object):
         return self.window_list
 
 
-    def fit_windows(self, alpha=None, n_trees=None, n_jobs=None, show_progress=True):
+    def fit_windows(self, pcs=None, alpha=None, n_trees=None, n_jobs=None, show_progress=True):
         #todo: need a better way to pass parameters to fit functions
         """
         Fit each window in the list
@@ -482,6 +479,9 @@ class Swing(object):
                     window.n_trees = n_trees
                 if n_jobs is not None:
                     window.n_jobs = n_jobs
+            if self.window_type == "Dionesus":
+                if pcs is not None:
+                    window.num_pcs = pcs
             if show_progress:
                 if window.td_window:
                     print("Fitting window index %i against the following window indices: ")

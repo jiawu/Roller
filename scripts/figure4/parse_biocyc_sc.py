@@ -13,7 +13,6 @@ import math
 from Swing import Swing
 from Swing.util import utility_module as ut
 sys.path.append('../pipelines')
-import Pipelines as pl
 from Swing.util.Evaluator import Evaluator
 import os.path
 import Swing.util.lag_identification as lag_id
@@ -22,7 +21,7 @@ import networkx as nx
 from nxpd import draw
 
 def parse_go():
-    go = pd.read_csv('../data/invitro/gene_ontology.tsv', sep='\t')
+    go = pd.read_csv('../../data/invitro/gene_ontology.tsv', sep='\t')
     genes_go = go.iloc[:,[2,4]]
     genes_go.columns = ['name','GO_ID']
     genes = genes_go['name'].str.lower().tolist()
@@ -106,7 +105,7 @@ def run_subswing(df, td_window=6, min_lag = 0, max_lag = 0, window_type = 'Rando
     gene_end = None
     time_label = "Time"
     separator = "\t"
-    window_types = ['Dionesus', 'RandomForest', 'Lasso']
+    window_types = ['RandomForest']
     final_edge_list = []
     for window_type in window_types:
         tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_lag =min_lag, max_lag = max_lag, window_type = window_type, sub_dict=sub_dict)
@@ -270,7 +269,7 @@ def get_group_stats(sub_group,parsed_info, sub_stats, sub_all_edges):
     return(pr[2].values[-1], roc[2].values[-1])
 
 def parse_eco_pathways():
-    df = pd.read_csv('../data/invitro/ecocyc_database_export_ver1_02.txt',sep='\t')
+    df = pd.read_csv('../../data/invitro/ecocyc_database_export_ver1_02.txt',sep='\t')
 
     # Parse the gene lists for each pathway
     
@@ -307,20 +306,20 @@ def get_dbs():
 
 def main(window_type='RandomForest', CLUSTER=1):
     
-    if os.path.isfile('sc_lag_df2_parse_biocyc_4.pkl'):
-        lag_df = pd.read_pickle('sc_lag_df2_parse_biocyc_4.pkl')
-        edge_df = pd.read_pickle('sc_edge_df2_parse_biocyc_4.pkl')
+    if os.path.isfile('../pickles/sc_lag_df2_parse_biocyc_4.pkl'):
+        lag_df = pd.read_pickle('../pickles/sc_lag_df2_parse_biocyc_4.pkl')
+        edge_df = pd.read_pickle('../pickles/sc_edge_df2_parse_biocyc_4.pkl')
     else:
         ## Get the lags to associate with the network
         #(lag_df, edge_df) = flm.get_true_lags('../data/invitro/marbach_parsed_timeseries.tsv',6,23, dset='marbach')
-        experiments = lag_id.get_experiment_list('../data/invitro/marbach_parsed_timeseries.tsv',6,23)
-        signed_edge_list = pd.read_csv('../data/invitro/marbach_signed_parsed_goldstandard.tsv',sep='\t',header=None)
+        experiments = lag_id.get_experiment_list('../../data/invitro/marbach_parsed_timeseries.tsv',6,23)
+        signed_edge_list = pd.read_csv('../../data/invitro/marbach_signed_parsed_goldstandard.tsv',sep='\t',header=None)
         signed_edge_list.columns=['regulator', 'target', 'signs']
         signed_edge_list['regulator-target'] = tuple(zip(signed_edge_list['regulator'],signed_edge_list['target']))
         genes = list(experiments[0].columns.values)
         lag_df,edge_df = lag_id.calc_edge_lag2(experiments,genes,signed_edge_list, mode='marbach')
-        lag_df.to_pickle('sc_lag_df2_parse_biocyc_4.pkl')
-        edge_df.to_pickle('sc_edge_df2_parse_biocyc_4.pkl')
+        lag_df.to_pickle('../pickles/sc_lag_df2_parse_biocyc_4.pkl')
+        edge_df.to_pickle('../pickles/sc_edge_df2_parse_biocyc_4.pkl')
         
         #lag_df['lag_median'] = [np.median(x) for x in lag_df['Lag'].tolist()]
         #edge_df['lag_median'] = [np.median(x) for x in edge_df['Lag'].tolist()]
@@ -372,7 +371,7 @@ def main(window_type='RandomForest', CLUSTER=1):
             continue
         pr1,roc1 = run_subswing(current_group, td_window = 6, min_lag = 0, max_lag = 0, window_type = window_type)
         pr2,roc2 = run_subswing(current_group, td_window = 5, min_lag = 1, max_lag = 1, window_type = window_type)
-        #pr3,roc3 = run_subswing(current_group, td_window = 5, min_lag = 0, max_lag = 1, window_type = window_type)
+        pr3,roc3 = run_subswing(current_group, td_window = 5, min_lag = 0, max_lag = 1, window_type = window_type)
         #pr4,roc4 = run_subswing(current_group, td_window = 4, min_lag = 0, max_lag = 2, window_type = window_type)
         #pr5,roc5 = run_subswing(current_group, td_window = 4, min_lag = 1, max_lag = 2, window_type = window_type)
         #pr6,roc6 = run_subswing(current_group, td_window = 4, min_lag = 2, max_lag = 2, window_type = window_type)
@@ -401,8 +400,8 @@ def main(window_type='RandomForest', CLUSTER=1):
                             'baseline_aupr':pr1,
                             'swing_aupr':pr2,
                             'swing_auroc':roc2,
-                            #'swing_aupr2':pr3,
-                            #'swing_auroc2':roc3,
+                            'swing_aupr2':pr3,
+                            'swing_auroc2':roc3,
                             #'swing_aupr3':pr4,
                             #'swing_auroc3':roc4,
                             #'swing_aupr4':pr5,

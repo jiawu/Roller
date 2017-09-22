@@ -74,7 +74,7 @@ run_params = {}
 inf_list = ["Dionesus", "RandomForest", "Lasso"]
 inf_list2 = ["Dionesus-td10", "RandomForest-td10", "Lasso-td10", "Dionesus-td15", "RandomForest-td15", "Lasso-td15"]
 
-methods_of_interest = ['Dionesus-td_2', 'Dionesus-td_10', 'Dionesus-td_15','Dionesus-td_21', 'Dionesus-ml_0', 'Dionesus-ml_1', 'Dionesus-ml_2','Dionesus-ml_3','Dionesus-ml_4', 'Dionesus-ml_5','Dionesus-ml_6','Dionesus-ml_7','Dionesus-ml_8','Dionesus-ml_9','Dionesus-ml_10','RF-td_2', 'RF-td_10', 'RF-td_15','RF-td_21', 'RF-ml_0', 'RF-ml_1', 'RF-ml_2','RF-ml_3','RF-ml_4', 'RF-ml_5','RF-ml_6','RF-ml_7','RF-ml_8','RF-ml_9','RF-ml_10' ]
+methods_of_interest = ['Dionesus-td_2', 'Dionesus-td_10', 'Dionesus-td_15','Dionesus-td_21', 'Dionesus-ml_0', 'Dionesus-ml_1', 'Dionesus-ml_2','Dionesus-ml_3','Dionesus-ml_4', 'Dionesus-ml_5','Dionesus-ml_6','Dionesus-ml_7','Dionesus-ml_8','Dionesus-ml_9','Dionesus-ml_10','RF-td_2', 'RF-td_10', 'RF-td_15','RF-td_21', 'RF-ml_0', 'RF-ml_1', 'RF-ml_2','RF-ml_3','RF-ml_4', 'RF-ml_5','RF-ml_6','RF-ml_7','RF-ml_8','RF-ml_9','RF-ml_10', 'Lasso-td_10','Lasso-td_15']
  
 
 inf_method_key = {'RF':'RandomForest', 'Dionesus': 'Dionesus', 'Lasso':'Lasso'}
@@ -96,8 +96,8 @@ for organism in organisms:
             run_params['td_window'] = td_window
             run_params['min_lag'] = min_lag
             run_params['max_lag'] = max_lag
-            run_params['n_trees'] = 100
-            run_params['bootstrap_n'] = 10
+            run_params['n_trees'] = 500
+            run_params['bootstrap_n'] = 50
             run_params['filter_noisy'] = False
             print(run_params)
             

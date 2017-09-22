@@ -50,7 +50,7 @@ df_list = []
 
 prev_df = None
 iseq = True
-directory ='/projects/p20519/roller_output/cluster_summaries/' 
+directory ='cluster_summaries/' 
 for filepath in os.listdir(directory):
     if 'cluster_summary_within_community_c'+str(CLUSTER)+'_' in filepath and 'swp' not in filepath:
         try:

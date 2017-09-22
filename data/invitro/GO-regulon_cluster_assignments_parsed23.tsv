@@ -1,6 +1,6 @@
 clusterid	ontology	p-value	study_count	study_n
-1.0	glycogen metabolic process	0.015742322643781902	4.0	82.0
 1.0	intracellular pH elevation	0.015742322643781902	4.0	82.0
+1.0	glycogen metabolic process	0.015742322643781902	4.0	82.0
 2.0	bacterial-type flagellum organization	0.00017654694498665382	8.0	93.0
 2.0	bacterial-type flagellum-dependent cell motility	0.007997798922899252	8.0	93.0
 2.0	chemotaxis	0.007997798922899252	7.0	93.0
@@ -16,30 +16,30 @@ clusterid	ontology	p-value	study_count	study_n
 3.0	maltose transport	0.0009947780362999927	6.0	305.0
 3.0	L-threonine catabolic process to propionate	0.005775542177196795	6.0	305.0
 3.0	monosaccharide transport	0.005978030834608618	7.0	305.0
-3.0	glycerol-3-phosphate metabolic process	0.005978030834608618	5.0	305.0
-3.0	maltodextrin transport	0.005978030834608618	5.0	305.0
-3.0	glycerol-3-phosphate catabolic process	0.005978030834608618	5.0	305.0
-3.0	D-gluconate catabolic process	0.005978030834608618	5.0	305.0
 3.0	galactose metabolic process	0.005978030834608618	5.0	305.0
+3.0	D-gluconate catabolic process	0.005978030834608618	5.0	305.0
+3.0	maltodextrin transport	0.005978030834608618	5.0	305.0
+3.0	glycerol-3-phosphate metabolic process	0.005978030834608618	5.0	305.0
+3.0	glycerol-3-phosphate catabolic process	0.005978030834608618	5.0	305.0
 3.0	rhamnose metabolic process	0.029998317035667743	5.0	305.0
 3.0	phosphorylation	0.03833397373244885	30.0	305.0
-3.0	monosaccharide metabolic process	0.03833397373244885	4.0	305.0
-3.0	fucose catabolic process	0.03833397373244885	4.0	305.0
-3.0	arabinose catabolic process	0.03833397373244885	4.0	305.0
-3.0	L-ascorbic acid catabolic process	0.03833397373244885	4.0	305.0
 3.0	N-acetylglucosamine transport	0.03833397373244885	4.0	305.0
+3.0	arabinose catabolic process	0.03833397373244885	4.0	305.0
+3.0	fucose catabolic process	0.03833397373244885	4.0	305.0
+3.0	L-ascorbic acid catabolic process	0.03833397373244885	4.0	305.0
+3.0	monosaccharide metabolic process	0.03833397373244885	4.0	305.0
 3.0	L-idonate catabolic process	0.03833397373244885	4.0	305.0
 3.0	D-ribose transport	0.03833397373244885	4.0	305.0
-3.0	glycerol metabolic process	0.03833397373244885	7.0	305.0
 3.0	aromatic compound catabolic process	0.03833397373244885	7.0	305.0
+3.0	glycerol metabolic process	0.03833397373244885	7.0	305.0
 3.0	glycerol-3-phosphate dehydrogenase complex	0.005978030834608618	5.0	305.0
 3.0	maltose transport complex	0.03833397373244885	4.0	305.0
 3.0	transcription factor activity, sequence-specific DNA binding	0.005978030834608618	36.0	305.0
 3.0	kinase activity	0.025177106937244308	30.0	305.0
 3.0	protein-N(PI)-phosphohistidine-sugar phosphotransferase activity	0.03128146178113022	11.0	305.0
 3.0	monosaccharide transmembrane transporter activity	0.03833397373244885	6.0	305.0
-3.0	monosaccharide binding	0.03833397373244885	4.0	305.0
 3.0	glycerol-3-phosphate dehydrogenase activity	0.03833397373244885	4.0	305.0
+3.0	monosaccharide binding	0.03833397373244885	4.0	305.0
 5.0	iron ion homeostasis	6.095743004525415e-17	18.0	113.0
 5.0	enterobactin biosynthetic process	1.0302280607928322e-06	7.0	113.0
 5.0	protein secretion by the type II secretion system	1.0302280607928322e-06	7.0	113.0
@@ -49,8 +49,8 @@ clusterid	ontology	p-value	study_count	study_n
 5.0	transport	0.00030313378377348597	43.0	113.0
 5.0	tricarboxylic acid cycle	0.001683166880503676	8.0	113.0
 5.0	ferric-enterobactin transport	0.001683166880503676	4.0	113.0
-5.0	D-glucarate catabolic process	0.001683166880503676	4.0	113.0
 5.0	galactarate catabolic process	0.001683166880503676	4.0	113.0
+5.0	D-glucarate catabolic process	0.001683166880503676	4.0	113.0
 5.0	siderophore transport	0.0023302056581479703	5.0	113.0
 5.0	tetrahydrofolate interconversion	0.019856899169856317	4.0	113.0
 5.0	iron-sulfur cluster assembly	0.020796001405228567	6.0	113.0
@@ -60,8 +60,8 @@ clusterid	ontology	p-value	study_count	study_n
 5.0	ferric-enterobactin transmembrane transporter activity	0.001683166880503676	4.0	113.0
 5.0	receptor activity	0.004799967453269538	5.0	113.0
 5.0	peroxidase activity	0.03732318228969105	5.0	113.0
-5.0	energy transducer activity	0.03732318228969105	3.0	113.0
 5.0	2,3-dihydroxybenzoate-serine ligase activity	0.03732318228969105	3.0	113.0
+5.0	energy transducer activity	0.03732318228969105	3.0	113.0
 6.0	oxidation-reduction process	5.5097674942717536e-21	93.0	261.0
 6.0	anaerobic respiration	5.5097674942717536e-21	33.0	261.0
 6.0	carnitine metabolic process	7.445644294446417e-09	10.0	261.0
@@ -135,24 +135,24 @@ clusterid	ontology	p-value	study_count	study_n
 9.0	response to silver ion	0.0001040153654028167	4.0	55.0
 9.0	phosphate ion transmembrane transport	0.0002831089517781472	5.0	55.0
 9.0	glycerophosphodiester transport	0.00036320433499526905	4.0	55.0
-9.0	cellular copper ion homeostasis	0.00036320433499526905	4.0	55.0
 9.0	detoxification of copper ion	0.00036320433499526905	4.0	55.0
+9.0	cellular copper ion homeostasis	0.00036320433499526905	4.0	55.0
 9.0	glycerol-3-phosphate transport	0.0009645391845710796	4.0	55.0
 9.0	electron transport coupled proton transport	0.004000243099544558	4.0	55.0
 9.0	aerobic electron transport chain	0.006211620441808142	4.0	55.0
 9.0	alkylphosphonate transport	0.014010685077146704	3.0	55.0
 9.0	copper ion export	0.014010685077146704	3.0	55.0
-9.0	cytochrome o ubiquinol oxidase complex	0.0001040153654028167	4.0	55.0
 9.0	alpha-D-ribose 1-methylphosphonate 5-triphosphate synthase complex	0.0001040153654028167	4.0	55.0
+9.0	cytochrome o ubiquinol oxidase complex	0.0001040153654028167	4.0	55.0
 9.0	cytochrome bo3 ubiquinol oxidase activity	0.0001040153654028167	4.0	55.0
-9.0	oxidoreduction-driven active transmembrane transporter activity	0.0001040153654028167	4.0	55.0
 9.0	phosphate ion transmembrane-transporting ATPase activity	0.0001040153654028167	4.0	55.0
 9.0	alpha-D-ribose 1-methylphosphonate 5-triphosphate synthase activity	0.0001040153654028167	4.0	55.0
+9.0	oxidoreduction-driven active transmembrane transporter activity	0.0001040153654028167	4.0	55.0
 9.0	copper ion binding	0.00011961205581915527	6.0	55.0
 9.0	inorganic phosphate transmembrane transporter activity	0.0009645391845710796	4.0	55.0
 9.0	cytochrome o ubiquinol oxidase activity	0.004000243099544558	3.0	55.0
-9.0	copper ion transmembrane transporter activity	0.004000243099544558	3.0	55.0
 9.0	cytochrome-c oxidase activity	0.004000243099544558	3.0	55.0
+9.0	copper ion transmembrane transporter activity	0.004000243099544558	3.0	55.0
 9.0	hydrogen ion transmembrane transporter activity	0.014155012003129621	4.0	55.0
 11.0	fatty acid metabolic process	1.922755945514741e-25	16.0	25.0
 11.0	lipid metabolic process	1.9540422502518245e-18	16.0	25.0

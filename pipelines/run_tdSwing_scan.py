@@ -5,6 +5,8 @@ import pandas as pd
 from datetime import datetime
 import numpy as np
 import time
+import tempfile
+import os
 
 # saving the models for the iteration tests:
 # to save the models for the iteration tests, we will save a dataframe (in the form of the final dataframe from Analyzer...) instead of a full model, because it is too computationally expensive, and as of this day, we are running out of room on QUEST.
@@ -64,7 +66,12 @@ def main(data_folder, output_path, target_dataset, my_iterating_param, param_tes
             run_result=pd.Series(run_params)
             overall_df = overall_df.append(run_result, ignore_index=True)
             print(run_result)
-    overall_df.to_csv(output_path+current_time+'.tsv', index=False, sep='\t')
+    full_path = output_path+current_time
+    directory = os.path.dirname(full_path)
+    _, filename = os.path.split(full_path)
+    with tempfile.NamedTemporaryFile(prefix=filename, suffix='.tsv', dir=directory, delete=False) as temp:
+        overall_df.to_csv(temp.name, index=False, sep='\t')
+        temp.close()
 
 if __name__ == "__main__":
     """
@@ -81,7 +88,6 @@ if __name__ == "__main__":
     
 
     """
-
     data_folder = str(sys.argv[1])
     output_path = str(sys.argv[2])
     target_dataset = str(sys.argv[3])
@@ -112,7 +118,7 @@ if __name__ == "__main__":
         param_tests = list(zip( map(int, pli[1::2]), map(int, pli[2::2])))
         my_iterating_param = my_iterating_param.split("^")
         
-    n_trials = 2
+    n_trials = 100
 
     #always save the full parameter list and date in the dataframe for each test. for posterity!
 

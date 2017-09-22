@@ -1,7 +1,7 @@
 inf_methods = ['Dionesus', 'Lasso', 'RandomForest']
 organisms = [("yeast", "Yeast", "Yeast10"), ("ecoli","Ecoli", "Ecoli10")]
 
-fobj = open("job_params_3.txt", "w")
+fobj = open("job_params_high_sampling.txt", "w")
 
 intervals = [10,30,50,100,200,333,500]
 

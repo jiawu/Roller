@@ -51,8 +51,8 @@ clusterid	ontology	p-value	study_count	study_n
 30.0	N-acetylglucosamine transport	1.0802434336316253e-05	4.0	23.0
 30.0	N,N'-diacetylchitobiose import	0.0010351432702740918	3.0	23.0
 30.0	mannose transport	0.0010351432702740918	3.0	23.0
-30.0	UDP-N-acetylglucosamine biosynthetic process	0.0030932770722201124	3.0	23.0
 30.0	glucose import into cell	0.0030932770722201124	3.0	23.0
+30.0	UDP-N-acetylglucosamine biosynthetic process	0.0030932770722201124	3.0	23.0
 30.0	fructose import	0.0068470500857713565	3.0	23.0
 30.0	carbohydrate transmembrane transport	0.02089579224061487	5.0	23.0
 30.0	protein-N(PI)-phosphohistidine-mannose phosphotransferase system transporter activity	0.0010351432702740918	3.0	23.0

@@ -28,16 +28,16 @@ class Evaluator:
                 self.full_list = tuple(map(tuple,self.possible_edges(np.array(self.regulators),np.array(self.targets))))
 
             elif 'omranian' in self.gs_file:
-                with open('../data/invitro/omranian_parsed_tf_list.tsv', 'r') as f:
+                with open('../../data/invitro/omranian_parsed_tf_list.tsv', 'r') as f:
                     self.regulators = f.read().splitlines()
-                with open('../data/invitro/omranian_all_genes_list.tsv', 'r') as f:
+                with open('../../data/invitro/omranian_all_genes_list.tsv', 'r') as f:
                     self.targets = f.read().splitlines()
                 self.full_list = tuple(map(tuple, self.possible_edges(np.array(self.regulators), np.array(self.targets))))
 
             elif 'dream5' in self.gs_file:
-                with open('../data/dream5/insilico_transcription_factors.tsv', 'r') as f:
+                with open('../../data/dream5/insilico_transcription_factors.tsv', 'r') as f:
                     self.regulators = f.read().splitlines()
-                fp = '../data/dream5/insilico_timeseries.tsv'
+                fp = '../../data/dream5/insilico_timeseries.tsv'
                 df = pd.read_csv(fp, sep='\t')
                 geneids = df.columns.tolist()
                 geneids.pop(0)

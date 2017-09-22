@@ -6,7 +6,7 @@ from collections import defaultdict
 import generate_json
 
 def parse_go():
-    go = pd.read_csv('../data/invitro/gene_ontology.tsv', sep='\t')
+    go = pd.read_csv('../../data/invitro/gene_ontology.tsv', sep='\t')
     genes_go = go.iloc[:,[2,4]]
     genes_go.columns = ['name','GO_ID']
     genes = genes_go['name'].str.lower().tolist()
@@ -28,8 +28,8 @@ eco_go = parse_go()
 stats = []
 overall_results = []
 
-for ind in range(17,29):
-    clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments_parsed'+str(ind)+'.csv',sep=',')
+for ind in range(26,27):
+    clusters = pd.read_csv('../../data/invitro/regulon_cluster_assignments_parsed'+str(ind)+'.csv',sep=',')
 
 
     obodag = GODag("go-basic.obo")
@@ -48,6 +48,7 @@ for ind in range(17,29):
     valid_clusters.remove(99)
     res = []
     expanded_df = pd.DataFrame()
+    count = 0
     for clusterid in valid_clusters:
         genes_0 = get_clist(clusterid, clusters)
         goea_results_all = goeaobj.run_study(genes_0)
@@ -55,9 +56,9 @@ for ind in range(17,29):
         print(len(goea_results_sig))
         ratios = []
         for result in goea_results_sig:
-            result_tup = (clusterid,result.name, result.ratio_in_study)
+            result_tup = (count,result.name, result.ratio_in_study)
 
-            expanded_result = { 'clusterid': clusterid,
+            expanded_result = { 'clusterid': count,
                                 'ontology': result.name,
                                 'p-value': result.get_pvalue(),
                                 'study_count': result.ratio_in_study[0],
@@ -66,20 +67,21 @@ for ind in range(17,29):
             expanded_df = expanded_df.append(expanded_result, ignore_index=True)
 
         ratios = sorted(ratios, key=lambda tup: tup[1][2][0])
-        my_result = { 'clusterid': clusterid,
+        my_result = { 'clusterid': count,
                       'ratios': ratios,
                       'n_genes': len(genes_0)}
         res.append(my_result)
+        count += 1
 
     ## write to tsv
-    expanded_df.to_csv('../data/invitro/GO-regulon_cluster_assignments_parsed'+str(ind)+'.tsv',sep='\t', index=False)
+    expanded_df.to_csv('../../data/invitro/GO-regulon_cluster_assignments_parsed'+str(ind)+'.tsv',sep='\t', index=False)
 
     count_ontology = 0
     count_no = 0
     for result in res:
         # get number of modules over size 10, and has an ontology
         # get number of modules over size 10 with no ontology
-        if result['n_genes'] > 9:
+        if result['n_genes'] > 5:
             if not result['ratios']:
                 count_no += 1
             else:

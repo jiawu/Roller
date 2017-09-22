@@ -2,7 +2,6 @@ from datetime import datetime
 import sys
 import pandas as pd
 import pdb
-import find_lagged_modules as flm
 import numpy as np
 import pickle
 from collections import defaultdict
@@ -23,7 +22,7 @@ from nxpd import draw
 
 
 def parse_go():
-    go = pd.read_csv('../data/invitro/gene_ontology.tsv', sep='\t')
+    go = pd.read_csv('../../data/invitro/gene_ontology.tsv', sep='\t')
     genes_go = go.iloc[:,[2,4]]
     genes_go.columns = ['name','GO_ID']
     genes = genes_go['name'].str.lower().tolist()
@@ -100,12 +99,13 @@ def run_subswing(df, td_window=6, min_lag = 0, max_lag = 0, window_type = 'Rando
     """
     Pass in subnet_dict
     """
+    pdb.set_trace()
     true_edges = df['Edge'].tolist()
     #true_edges = df['index'].tolist()
     sub_dict = get_subnetwork_info(df)
     sub_eval = Evaluator(subnet_dict = sub_dict)
     
-    file_path = "/home/jjw036/Roller/data/invitro/omranian_parsed_timeseries.tsv"
+    file_path = "/home/jjw036/Roller/data/invitro/iomranian_parsed_timeseries.tsv"
     gene_start_column = 1
     gene_end = None
     time_label = "Time"
@@ -283,7 +283,7 @@ def get_group_stats(sub_group,parsed_info, sub_stats, sub_all_edges):
 4. Check if there's an enrichment, or if cluster is statistically significant
 
 """
-def main(window_type='RandomForest', CLUSTER=14):
+def main(window_type='RandomForest', CLUSTER=26):
     """
     df = pd.read_csv('../data/invitro/ecocyc_database_export_ver1_02.txt',sep='\t')
 
@@ -303,28 +303,29 @@ def main(window_type='RandomForest', CLUSTER=14):
     df['parsed_genes_list'] = pathway_gene_list
     df['parsed_genes_str'] = pathway_gene_string
     """
-    if os.path.isfile('lag_df2_parse_biocyc_6.pkl'):
-        lag_df = pd.read_pickle('lag_df2_parse_biocyc_6.pkl')
-        edge_df = pd.read_pickle('edge_df2_parse_biocyc_6.pkl')
+    if os.path.isfile('../pickles/lag_df2_parse_biocyc_6.pkl'):
+        lag_df = pd.read_pickle('../pickles/lag_df2_parse_biocyc_6.pkl')
+        edge_df = pd.read_pickle('../pickles/edge_df2_parse_biocyc_6.pkl')
     else:
-        experiments = lag_id.get_experiment_list('../data/invitro/omranian_parsed_timeseries.tsv',5,26)
-        signed_edge_list = pd.read_csv('../data/invitro/omranian_signed_parsed_goldstandard.tsv',sep='\t',header=None)
+        experiments = lag_id.get_experiment_list('../../data/invitro/omranian_parsed_timeseries.tsv',5,26)
+        signed_edge_list = pd.read_csv('../../data/invitro/omranian_signed_parsed_goldstandard.tsv',sep='\t',header=None)
         signed_edge_list.columns=['regulator', 'target', 'signs']
         signed_edge_list['regulator-target'] = tuple(zip(signed_edge_list['regulator'],signed_edge_list['target']))
         genes = list(experiments[0].columns.values)
         lag_df,edge_df = lag_id.calc_edge_lag2(experiments,genes,signed_edge_list)
         ## Get the lags to associate with the network
-        #(lag_df, edge_df) = flm.get_true_lags('../data/invitro/omranian_parsed_timeseries.tsv',5,26)
+        #(lag_df, edge_df) = flm.get_true_lags('../../data/invitro/omranian_parsed_timeseries.tsv',5,26)
         #lag_df['lag_median'] = [np.median(x) for x in lag_df['Lag'].tolist()]
         #edge_df['lag_median'] = [np.median(x) for x in edge_df['Lag'].tolist()]
-        lag_df.to_pickle('lag_df2_parse_biocyc_6.pkl')
-        edge_df.to_pickle('edge_df2_parse_biocyc_6.pkl')
+        lag_df.to_pickle('../pickles/lag_df2_parse_biocyc_6.pkl')
+        edge_df.to_pickle('../pickles/edge_df2_parse_biocyc_6.pkl')
     
     #lag_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in lag_df['Lag'].tolist()]
     #edge_df['lag_counts'] = [len(x) if type(x) is list else 0 for x in edge_df['Lag'].tolist()]
 
-    clusters = pd.read_csv('../data/invitro/regulon_cluster_assignments'+str(CLUSTER)+'.csv',sep=',')
+    clusters = pd.read_csv('../../data/invitro/regulon_cluster_assignments'+str(CLUSTER)+'.csv',sep=',')
 
+    pdb.set_trace()
     new_lag= lag_df.reset_index()
     #new_lag[['parent','child']] = new_lag['index'].apply(pd.Series)
     merged_lag = pd.merge(new_lag, clusters[['name','__glayCluster']], how='left', left_on=['parent'], right_on=['name'])
@@ -368,8 +369,9 @@ def main(window_type='RandomForest', CLUSTER=14):
     """
     clusters.sort()
     current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
-    output_file = "community_omranian_clusters_" + current_time + ".csv"
-    output_file2 = "SWING_community_omranian_clusters_" + current_time + ".csv"
+    output_file = "networks/community_omranian_clusters_" + current_time + ".csv"
+    output_file2 = "networks/SWING_community_omranian_clusters_" + current_time + ".csv"
+    output_file3 = "networks/SWING2_community_omranian_clusters_" + current_time + ".csv"
     for clusterid in clusters:
         print(clusterid, len(clusters))
         current_group = grouped_by_cluster.get_group(clusterid)
@@ -382,8 +384,8 @@ def main(window_type='RandomForest', CLUSTER=14):
             continue
         pr1,roc1 = run_subswing(current_group, td_window = 5, min_lag = 0, max_lag = 0, window_type = window_type, clusterid = clusterid, output_fn = output_file)
         pr2,roc2 = run_subswing(current_group, td_window = 4, min_lag = 1, max_lag = 1, window_type = window_type, clusterid = clusterid, output_fn = output_file2)
-        #pr3,roc3 = run_subswing(current_group, td_window = 4, min_lag = 0, max_lag = 1, window_type = window_type, clusterid = clusterid)
-        #pr4,roc4 = run_subswing(current_group, td_window = 3, min_lag = 0, max_lag = 2, window_type = window_type, clusterid = clusterid)
+        pr3,roc3 = run_subswing(current_group, td_window = 4, min_lag = 0, max_lag = 1, window_type = window_type, clusterid = clusterid, output_fn = output_file3)
+        pr4,roc4 = run_subswing(current_group, td_window = 3, min_lag = 1, max_lag = 2, window_type = window_type, clusterid = clusterid)
         #pr5,roc5 = run_subswing(current_group, td_window = 3, min_lag = 1, max_lag = 1, window_type = window_type, clusterid = clusterid)
         #pr6,roc6 = run_subswing(current_group, td_window = 3, min_lag = 2, max_lag = 2, window_type = window_type, clusterid = clusterid)
         print('Diff pr:', pr1-pr2)
@@ -412,10 +414,10 @@ def main(window_type='RandomForest', CLUSTER=14):
                             'baseline_aupr':pr1,
                             'swing_aupr':pr2,
                             'swing_auroc':roc2,
-                            #'swing_aupr2':pr3,
-                            #'swing_auroc2':roc3,
-                            #'swing_aupr3':pr4,
-                            #'swing_auroc3':roc4,
+                            'swing_aupr2':pr3,
+                            'swing_auroc2':roc3,
+                            'swing_aupr3':pr4,
+                            'swing_auroc3':roc4,
                             #'swing_aupr4':pr5,
                             #'swing_auroc4':roc5,
                             #'swing_aupr5':pr6,
@@ -425,7 +427,7 @@ def main(window_type='RandomForest', CLUSTER=14):
         cluster_summary = cluster_summary.append(cluster_result, ignore_index = True)
 
     current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')    
-    cluster_summary.to_csv('cluster_summary_within_community_c'+str(CLUSTER)+'_' + current_time + '.csv', header=True, index=False, sep='\t')
+    cluster_summary.to_csv('cluster_summaries/cluster_summary_within_community_c'+str(CLUSTER)+'_' + current_time + '.csv', header=True, index=False, sep='\t')
 
 
 if __name__ == '__main__':

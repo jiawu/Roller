@@ -47,8 +47,8 @@ clusterid	ontology	p-value	study_count	study_n
 22.0	type II protein secretion system complex	3.5823833277567767e-09	7.0	56.0
 22.0	protein transporter activity	3.5823833277567767e-09	9.0	56.0
 22.0	receptor activity	0.00021980382043573706	5.0	56.0
-22.0	energy transducer activity	0.00747795807288209	3.0	56.0
 22.0	2,3-dihydroxybenzoate-serine ligase activity	0.00747795807288209	3.0	56.0
+22.0	energy transducer activity	0.00747795807288209	3.0	56.0
 22.0	ferric-enterobactin transmembrane transporter activity	0.02405132650544087	3.0	56.0
 23.0	purine nucleotide biosynthetic process	2.1582342501567892e-18	12.0	32.0
 23.0	'de novo' IMP biosynthetic process	3.6962146401753405e-16	10.0	32.0
@@ -99,8 +99,8 @@ clusterid	ontology	p-value	study_count	study_n
 55.0	N-acetylglucosamine transport	1.2962921203565646e-05	4.0	24.0
 55.0	N,N'-diacetylchitobiose import	0.0011830208803134791	3.0	24.0
 55.0	mannose transport	0.0011830208803134791	3.0	24.0
-55.0	UDP-N-acetylglucosamine biosynthetic process	0.003534479354584823	3.0	24.0
 55.0	glucose import into cell	0.003534479354584823	3.0	24.0
+55.0	UDP-N-acetylglucosamine biosynthetic process	0.003534479354584823	3.0	24.0
 55.0	fructose import	0.00782212657508403	3.0	24.0
 55.0	carbohydrate transmembrane transport	0.026153743053446	5.0	24.0
 55.0	protein-N(PI)-phosphohistidine-mannose phosphotransferase system transporter activity	0.0011830208803134791	3.0	24.0

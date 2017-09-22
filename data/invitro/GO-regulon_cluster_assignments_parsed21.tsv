@@ -35,31 +35,31 @@ clusterid	ontology	p-value	study_count	study_n
 4.0	protein transport	9.995471216891352e-09	14.0	64.0
 4.0	siderophore transport	1.6994884867509616e-06	6.0	64.0
 4.0	ferric-enterobactin transport	0.00016609520494138277	4.0	64.0
-4.0	D-glucarate catabolic process	0.00016609520494138277	4.0	64.0
 4.0	galactarate catabolic process	0.00016609520494138277	4.0	64.0
+4.0	D-glucarate catabolic process	0.00016609520494138277	4.0	64.0
 4.0	bacteriocin transport	0.016182744195338876	4.0	64.0
 4.0	type II protein secretion system complex	9.995471216891352e-09	7.0	64.0
 4.0	protein transporter activity	9.995471216891352e-09	9.0	64.0
 4.0	receptor activity	4.529063107797933e-06	6.0	64.0
 4.0	ferric-enterobactin transmembrane transporter activity	0.00016609520494138277	4.0	64.0
-4.0	energy transducer activity	0.009132173040528584	3.0	64.0
 4.0	2,3-dihydroxybenzoate-serine ligase activity	0.009132173040528584	3.0	64.0
+4.0	energy transducer activity	0.009132173040528584	3.0	64.0
 5.0	carbohydrate transport	8.518994593019544e-12	16.0	38.0
 5.0	maltodextrin transport	1.0456669485276488e-06	5.0	38.0
 5.0	phosphoenolpyruvate-dependent sugar phosphotransferase system	1.0456669485276488e-06	10.0	38.0
 5.0	maltose transport	3.5695616960287886e-06	5.0	38.0
 5.0	N-acetylglucosamine transport	4.502437552436623e-05	4.0	38.0
 5.0	carbohydrate metabolic process	0.00039040513848479104	11.0	38.0
-5.0	alpha-glucan catabolic process	0.002465406162628811	3.0	38.0
 5.0	N,N'-diacetylchitobiose import	0.002465406162628811	3.0	38.0
 5.0	mannose transport	0.002465406162628811	3.0	38.0
-5.0	UDP-N-acetylglucosamine biosynthetic process	0.008394932646240331	3.0	38.0
+5.0	alpha-glucan catabolic process	0.002465406162628811	3.0	38.0
 5.0	glucose import into cell	0.008394932646240331	3.0	38.0
+5.0	UDP-N-acetylglucosamine biosynthetic process	0.008394932646240331	3.0	38.0
 5.0	fructose import	0.019454061813480014	3.0	38.0
 5.0	transport	0.032721739225627065	18.0	38.0
 5.0	maltose transport complex	4.502437552436623e-05	4.0	38.0
-5.0	protein-N(PI)-phosphohistidine-mannose phosphotransferase system transporter activity	0.002465406162628811	3.0	38.0
 5.0	maltose-transporting ATPase activity	0.002465406162628811	3.0	38.0
+5.0	protein-N(PI)-phosphohistidine-mannose phosphotransferase system transporter activity	0.002465406162628811	3.0	38.0
 6.0	bacterial-type flagellum organization	0.00019246840856583245	8.0	94.0
 6.0	transcription, DNA-templated	0.004635831961045579	25.0	94.0
 6.0	bacterial-type flagellum-dependent cell motility	0.006885792406086221	8.0	94.0
@@ -97,24 +97,24 @@ clusterid	ontology	p-value	study_count	study_n
 12.0	response to silver ion	8.256603714576787e-05	4.0	52.0
 12.0	phosphate ion transmembrane transport	0.00021220696190875295	5.0	52.0
 12.0	glycerophosphodiester transport	0.0002884893637324604	4.0	52.0
-12.0	cellular copper ion homeostasis	0.0002884893637324604	4.0	52.0
 12.0	detoxification of copper ion	0.0002884893637324604	4.0	52.0
+12.0	cellular copper ion homeostasis	0.0002884893637324604	4.0	52.0
 12.0	glycerol-3-phosphate transport	0.0007666079478146039	4.0	52.0
 12.0	electron transport coupled proton transport	0.0033308900729312712	4.0	52.0
 12.0	aerobic electron transport chain	0.004946308851962686	4.0	52.0
 12.0	alkylphosphonate transport	0.01137202062639958	3.0	52.0
 12.0	copper ion export	0.01137202062639958	3.0	52.0
-12.0	cytochrome o ubiquinol oxidase complex	8.256603714576787e-05	4.0	52.0
 12.0	alpha-D-ribose 1-methylphosphonate 5-triphosphate synthase complex	8.256603714576787e-05	4.0	52.0
+12.0	cytochrome o ubiquinol oxidase complex	8.256603714576787e-05	4.0	52.0
 12.0	cytochrome bo3 ubiquinol oxidase activity	8.256603714576787e-05	4.0	52.0
-12.0	oxidoreduction-driven active transmembrane transporter activity	8.256603714576787e-05	4.0	52.0
 12.0	phosphate ion transmembrane-transporting ATPase activity	8.256603714576787e-05	4.0	52.0
 12.0	alpha-D-ribose 1-methylphosphonate 5-triphosphate synthase activity	8.256603714576787e-05	4.0	52.0
+12.0	oxidoreduction-driven active transmembrane transporter activity	8.256603714576787e-05	4.0	52.0
 12.0	copper ion binding	8.457109288465135e-05	6.0	52.0
 12.0	inorganic phosphate transmembrane transporter activity	0.0007666079478146039	4.0	52.0
 12.0	cytochrome o ubiquinol oxidase activity	0.0033697492853063294	3.0	52.0
-12.0	copper ion transmembrane transporter activity	0.0033697492853063294	3.0	52.0
 12.0	cytochrome-c oxidase activity	0.0033697492853063294	3.0	52.0
+12.0	copper ion transmembrane transporter activity	0.0033697492853063294	3.0	52.0
 12.0	hydrogen ion transmembrane transporter activity	0.01137202062639958	4.0	52.0
 14.0	fatty acid metabolic process	1.922755945514741e-25	16.0	25.0
 14.0	lipid metabolic process	1.9540422502518245e-18	16.0	25.0
@@ -139,12 +139,12 @@ clusterid	ontology	p-value	study_count	study_n
 25.0	phenylacetate catabolic process	1.7980823746590908e-12	13.0	182.0
 25.0	carbohydrate metabolic process	1.2350401326533529e-06	28.0	182.0
 25.0	fucose metabolic process	5.320676285909983e-06	7.0	182.0
-25.0	glycerol metabolic process	0.007228723373461994	7.0	182.0
 25.0	aromatic compound catabolic process	0.007228723373461994	7.0	182.0
+25.0	glycerol metabolic process	0.007228723373461994	7.0	182.0
 25.0	rhamnose metabolic process	0.007228723373461994	5.0	182.0
 25.0	3-phenylpropionate catabolic process	0.016185219050338824	6.0	182.0
-25.0	fucose catabolic process	0.016185219050338824	4.0	182.0
 25.0	arabinose catabolic process	0.016185219050338824	4.0	182.0
+25.0	fucose catabolic process	0.016185219050338824	4.0	182.0
 25.0	L-ascorbic acid catabolic process	0.016185219050338824	4.0	182.0
 25.0	carbohydrate transmembrane transport	0.023709448331653993	11.0	182.0
 27.0	protein maturation	1.0367632259302211e-05	7.0	49.0
@@ -168,8 +168,8 @@ clusterid	ontology	p-value	study_count	study_n
 38.0	heme transport	4.0730879986316283e-07	7.0	93.0
 38.0	nickel cation transport	9.12850451068458e-05	5.0	93.0
 38.0	anaerobic electron transport chain	0.002703974614556991	5.0	93.0
-38.0	nickel cation transmembrane transport	0.013597867973479583	4.0	93.0
 38.0	formate oxidation	0.013597867973479583	4.0	93.0
+38.0	nickel cation transmembrane transport	0.013597867973479583	4.0	93.0
 38.0	[Ni-Fe] hydrogenase complex	1.849929701582288e-08	7.0	93.0
 38.0	intrinsic component of periplasmic side of plasma membrane	0.00029494950856278544	5.0	93.0
 38.0	plasma membrane fumarate reductase complex	0.0005342785818791433	4.0	93.0

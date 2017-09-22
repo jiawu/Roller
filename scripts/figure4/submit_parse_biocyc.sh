@@ -1,12 +1,12 @@
 #!/bin/bash
 #MSUB -A p20519
-#MSUB -l walltime=24:00:00
+#MSUB -l walltime=48:00:00
 #MSUB -l nodes=1:ppn=1
 #MSUB -M jiawu@u.northwestern.edu
 #MSUB -j oe
-#MSUB -o /projects/p20519/jia_output/insilico_rank_plots.txt
+#MSUB -o /projects/p20519/jia_output/parse_biocyc_tf_all_clusters.txt
 #MSUB -m bae
-#MSUB -q normal
+#MSUB -q long
 #MSUB -N parse_biocyc_all
 #MSUB -V
 
@@ -14,6 +14,7 @@ param_set=${MOAB_JOBARRAYINDEX}
 #param_set=$1
 workon seqgen
 module load python/anaconda3
-cd /home/jjw036/Roller/scripts
+source activate my_root
+cd /home/jjw036/Roller/scripts/figure4
 
-python parse_biocyc.py community 26
+python parse_biocyc_tf_all_clusters.py community 26
