@@ -9,6 +9,7 @@ import sys
 from datetime import datetime
 import numpy as np
 import warnings
+import json
 
 warnings.filterwarnings("ignore")
 
@@ -43,6 +44,12 @@ run_params = {'data_folder': data_folder,
               'sort_by': 'rank',
               'window_type': 'Dionesus'
               }
+
+test = str(list(it.combinations_with_replacement(range(0,5), 2))).strip('[]')
+test = test.replace('(', "").replace(')', "").replace(', ', '_')
+print(test)
+sys.exit()
+
 roc_list = []
 pr_list = []
 for w in range(2,15):
