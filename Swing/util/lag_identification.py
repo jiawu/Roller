@@ -13,7 +13,6 @@ from collections import Counter
 import matplotlib as mpl
 mpl.rcParams['pdf.fonttype'] = 42
 mpl.rcParams['font.sans-serif'] = 'Arial'
-import pdb
 from scipy.stats import pearsonr
 from sklearn.metrics.cluster import entropy
 from sklearn.metrics.cluster import expected_mutual_information
@@ -63,7 +62,6 @@ def cc_experiment(experiment):
             else:
                 unbiased = False
             ccf_array[ii][jj] = ccf(static, moving, unbiased=unbiased)
-    pdb.set_trace()
     return ccf_array
 
 
