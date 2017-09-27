@@ -12,6 +12,15 @@ import sys
 import os
 import time
 
+def adjacent_values(vals, q1, q3):
+    upper_adjacent_value = q3 + (q3 - q1) * 1.5
+    upper_adjacent_value = np.clip(upper_adjacent_value, q3, vals[-1])
+
+    lower_adjacent_value = q1 - (q3 - q1) * 1.5
+    lower_adjacent_value = np.clip(lower_adjacent_value, vals[0], q1)
+    return lower_adjacent_value, upper_adjacent_value
+
+
 def get_df(df, fp, min_lag, max_lag, td_window):
     new_df = df[(df['file_path'] == fp) & (df['min_lag'] == min_lag) & (df['max_lag'] == max_lag) & (df['td_window'] == td_window)]
     return(new_df)
@@ -34,7 +43,7 @@ def read_tdr_results(folder_list, folder_str):
     return(agg_df)
 
 #input_folder_list = ["/projects/p20519/roller_output/high_sampling/RandomForest/"]  
-input_folder_list = ["/projects/p20519/roller_output/gnw/Dionesus/"]  
+input_folder_list = ["/projects/p20519/roller_output/gnw/RandomForest/"]  
 test_statistic = ['aupr', 'auroc']
 save_tag = "window_scan"
 n_trials = 100
@@ -44,14 +53,19 @@ agg_df = read_tdr_results(input_folder_list, folder_str = "2017-09")
 #agg_df.to_pickle("RF_window_scan.pkl")
 end = time.time()
 
-stat = 'aupr'
+stat = 'auroc'
 network_list = agg_df['file_path'].unique().tolist()
 
 window_sizes = range(1,21)
+organism = "Ecoli"
+inf_method = "RandomForest"
+
 outer_list = []
 for td_window in window_sizes:
-    inner_list = []
+    inner_df = []
     for network in network_list:
+        if organism not in network:
+            continue
         baseline = get_df(agg_df, network, 0, 0, 21)
         if len(baseline) == 0:
             continue
@@ -71,9 +85,52 @@ for td_window in window_sizes:
             continue
         
         winstat = ((comparisons[stat]-baseline_mean)/baseline_mean)*100
-        print(winstat)
-        print(min_lag,max_lag,td_window)
-        inner_list.append(winstat.iloc[0])
-    outer_list.append(inner_list)
+        inner_df.append(winstat.iloc[0])
+    outer_list.append(inner_df)
+fig, ax = plt.subplots(figsize=(8,5))
+violin = ax.violinplot(outer_list, points = 100, widths = 0.4, showmeans=False, showextrema=False, showmedians=False)
+
+#color = "#E49E22"
+color = "#6CB1D2"
+for element in violin['bodies']:
+    element.set(color=color)
+    element.set(alpha=1)
+    element.set(edgecolor='white')
+#### Box plot within violinplots
+
+quartile1 = []
+medians = []
+quartile3 =[]
+
+qmq = []
+#qmq.append(tuple(np.percentile(tt1.values, [25,50,75])))
+for ws in outer_list:
+    qmq.append(tuple(np.percentile(ws, [25,50,75])))
+
+quartile1 = [x[0] for x in qmq]
+medians = [x[1] for x in qmq]
+quartile3 = [x[2] for x in qmq]
+
+whiskers = np.array([adjacent_values(sorted_array, q1, q3) for sorted_array, q1, q3 in zip(outer_list, quartile1, quartile3)])
+whiskersMin, whiskersMax = whiskers[:, 0], whiskers[:, 1]
+
+inds = np.arange(1, len(medians) + 1)
+ax.scatter(inds, medians, marker='o', color='white', s=15, zorder=3)
+#ax.vlines(inds, quartile1, quartile3, color='k', linestyle='-', lw=5)
+#ax.vlines(inds, whiskersMin, whiskersMax, color='k', linestyle='-', lw=1)
+ax.axhline(y=0, linestyle='-', color='darkgrey')
+
+ax.set_ylabel('Percentage Increase of AUPR (PLSR)')
+ax.set_xlabel('Window Size')
+
+ax.set_ylim([-50,75])
+ax.set_xlim([ 0, 21])
+ax.set_yticks([x for x in range(-50,150,25)])
+ax.set_xticks([x for x in range(1,21)])
+ax.set_xticklabels([x for x in range(1,21)])
+
+fp = "{}_{}_{}.pdf".format(organism,inf_method, "td_window_scan")
+fig.tight_layout()
+plt.savefig(fp)
 
 
