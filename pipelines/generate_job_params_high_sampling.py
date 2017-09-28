@@ -1,4 +1,4 @@
-inf_methods = ['Dionesus', 'Lasso', 'RandomForest']
+inf_methods = ['Lasso']
 organisms = [("yeast", "Yeast", "Yeast10"), ("ecoli","Ecoli", "Ecoli10")]
 
 fobj = open("job_params_high_sampling.txt", "w")

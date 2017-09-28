@@ -37,7 +37,7 @@ def get_td_stats_test(**kwargs):
     td_types = ["Dionesus", "RandomForest", "Lasso"]
     final_edge_list = []
     for type in td_types:
-        tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator, window_type=type)
+        tdr = tdRoller(file_path, gene_start_column, gene_end, time_label, separator, window_type=type, window_width =kwargs['td_window'])
 
         tdr.zscore_all_data()
         tdr.set_window(kwargs['td_window'])
@@ -82,8 +82,7 @@ def get_td_stats(**kwargs):
     file_path = kwargs['file_path']
     
     df = pd.read_csv(file_path,sep=separator)
-    if "high_sampling" in file_path:
-        
+    if "high_sampling" in file_path:        
         prefix = file_path.split('/')[-1].split('_')[0]
         pref = file_path.split('/')[-1]
         folder = file_path.rstrip(pref)
@@ -103,7 +102,7 @@ def get_td_stats(**kwargs):
         kwargs['window_type'] = matches[0]
 
 
-    tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_lag = kwargs['min_lag'], max_lag = kwargs['max_lag'], window_type = kwargs['window_type'])
+    tdr = Swing(file_path, gene_start_column, gene_end, time_label, separator, min_lag = kwargs['min_lag'], max_lag = kwargs['max_lag'], window_type = kwargs['window_type'], window_width = kwargs['td_window'])
     final_edge_list = []
 
     # turning off zscoring for omranian

@@ -16,8 +16,9 @@ def str2bool(v):
 
 def main(data_folder, output_path, target_dataset, my_iterating_param, param_test_style, param_tests, n_trials):
 
-    current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
-
+    current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S:%f')
+    if 'Dionesus' in data_folder:
+        n_trials = 2
     default_params = {'data_folder':data_folder, 'file_path':target_dataset, 'td_window':15,'min_lag':1,'max_lag':3,'n_trees':10,'permutation_n':5, 'lag_method':'mean_mean', 'calc_mse':False, 'bootstrap_n':5,'n_trials':n_trials, 'run_time':current_time, 'sort_by': 'rank','iterating_param':my_iterating_param, 'filter_noisy':False, 'alpha': None}
 
     overall_df = pd.DataFrame()
@@ -34,6 +35,11 @@ def main(data_folder, output_path, target_dataset, my_iterating_param, param_tes
                 run_params[my_iterating_param[0]] = current_param_value[0]
                 run_params[my_iterating_param[1]] = current_param_value[1]
             
+            elif param_test_style == "triplet":
+                run_params[my_iterating_param[0]] = current_param_value[0]
+                run_params[my_iterating_param[1]] = current_param_value[1]
+                run_params[my_iterating_param[2]] = current_param_value[2]
+            
             else:
                 run_params[my_iterating_param]=current_param_value
             
@@ -41,20 +47,29 @@ def main(data_folder, output_path, target_dataset, my_iterating_param, param_tes
             if 'size10' in run_params['data_folder']:
                 max_window = 21
             if 'high_sampling' in run_params['data_folder']:
-                interval = run_params['file_path'].split('/')[-1].split('_')[1]
-                max_window = int(1000/int(interval)+1)
+                if 'even' in run_params['file_path']:
+                    max_window = 7
+                else:
+                    interval = run_params['file_path'].split('/')[-1].split('_')[1]
+                    max_window = int(1000/int(interval)+1)
             else:
                 max_window = 21
             lag_gap = max_window-run_params['td_window']
-            if lag_gap < run_params['max_lag']:
+            # max window = 1, td window = 1
+            # lag gap = 1-1 =0 
+            # if lag gap (0) <= max_lag = 1
+            if lag_gap <= run_params['max_lag']:
                 run_params['max_lag'] = lag_gap
-                if run_params['min_lag'] > run_params['max_lag']:
-                    run_params['min_lag'] = run_params['max_lag']
+            if run_params['max_lag'] >= max_window:
+                run_params['max_lag'] = max_window - 1
+            
+            if run_params['min_lag'] > run_params['max_lag']:
+                run_params['min_lag'] = run_params['max_lag']
             
             if 'community' in data_folder:
-                roc,pr, tdr = pl.get_td_community(**run_params)
+                roc,pr, tdr, _ = pl.get_td_community(**run_params)
             else:
-                roc,pr, tdr = pl.get_td_stats(**run_params)
+                roc,pr, tdr, _ = pl.get_td_stats(**run_params)
             run_params['auroc']=roc
             run_params['aupr']=pr
 
@@ -66,11 +81,13 @@ def main(data_folder, output_path, target_dataset, my_iterating_param, param_tes
             run_result=pd.Series(run_params)
             overall_df = overall_df.append(run_result, ignore_index=True)
             print(run_result)
+    current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S:%f')
     full_path = output_path+current_time
     directory = os.path.dirname(full_path)
     _, filename = os.path.split(full_path)
     with tempfile.NamedTemporaryFile(prefix=filename, suffix='.tsv', dir=directory, delete=False) as temp:
         overall_df.to_csv(temp.name, index=False, sep='\t')
+        print(temp.name)
         temp.close()
 
 if __name__ == "__main__":
@@ -117,14 +134,17 @@ if __name__ == "__main__":
         pli =param_test_combo.split("_")
         param_tests = list(zip( map(int, pli[1::2]), map(int, pli[2::2])))
         my_iterating_param = my_iterating_param.split("^")
+    
+    elif param_test_style == "triplet":
+        pli =param_test_combo.split("_")
+        param_tests = list(zip( map(int, pli[1::3]), map(int, pli[2::3]), map(int, pli[3::3]) ) )
+        my_iterating_param = my_iterating_param.split("^")
         
-    n_trials = 100
+    n_trials = 20
 
     #always save the full parameter list and date in the dataframe for each test. for posterity!
 
-    current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
-
-    default_params = {'data_folder':data_folder, 'file_path':target_dataset, 'td_window':14,'min_lag':1,'max_lag':3,'n_trees':500,'permutation_n':5, 'lag_method':'median_median','sort_by':'rank', 'calc_mse':False, 'n_trials':n_trials, 'run_time':current_time, 'iterating_param':my_iterating_param}
+    current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S:%f')
 
     overall_df = pd.DataFrame()
 

@@ -62,7 +62,7 @@ network_list = agg_df['file_path'].unique().tolist()
 
 window_sizes = range(1,21)
 organism = "aggregate"
-inf_method = "Dionesus"
+inf_method = "RandomForest"
 
 outer_list = []
 
@@ -91,6 +91,8 @@ for mm in min_maxes:
         inner_list.append(winstat.mean())
     outer_list.append(inner_list)
 fig, ax = plt.subplots(figsize=(8,5))
+
+pdb.set_trace()
 violin = ax.violinplot(outer_list, points = 100, widths = 0.4, showmeans=False, showextrema=False, showmedians=False)
 
 color = "#E49E22"

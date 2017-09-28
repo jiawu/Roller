@@ -21,7 +21,10 @@ def read_tdr_results(folder_list, folder_str):
     for input_folder in folder_list:
         for file_path in os.listdir(input_folder):
             if folder_str in file_path:
-              df = pd.read_csv(input_folder+file_path,sep='\t', engine='python')
+              try:
+                  df = pd.read_csv(input_folder+file_path,sep='\t', engine='python')
+              except pd.io.common.EmptyDataError:
+                  continue
               agg_df = agg_df.append(df)
     return(agg_df)
 

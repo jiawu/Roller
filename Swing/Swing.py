@@ -310,16 +310,16 @@ class Swing(object):
         :return:
         """
         if self.min_lag > self.max_lag and self.max_lag is not None:
-            raise ValueError('The minimum lag cannot be greater than the maximum lag')
+            raise ValueError('The minimum lag {} cannot be greater than the maximum lag {}'.format(self.min_lag, self.max_lag))
 
         if self.min_lag < 0:
-            raise ValueError('The minimum lag cannot be negative')
+            raise ValueError('The minimum lag {} cannot be negative'.format(self.min_lag))
 
         if self.min_lag > self.get_n_windows():
-            raise ValueError('The minimum lag cannot be greater than the number of windows')
+            raise ValueError('The minimum lag {} cannot be greater than the number of windows {}'.format(self.min_lag, self.get_n_windows()))
 
         if self.max_lag >= self.get_n_windows():
-            raise ValueError('The maximum lag cannot be greater than or equal to the number of windows')
+            raise ValueError('The maximum lag {} cannot be greater than or equal to the number of windows {}'.format(self.max_lag, self.get_n_windows()))
 
     def strip_dataframe(self, dataframe):
         """

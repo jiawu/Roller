@@ -1,4 +1,4 @@
-inf_methods = ['Dionesus', 'Lasso', 'RandomForest']
+inf_methods = ['Lasso', 'RandomForest']
 organisms = [("Yeast100", "Yeast100"), ("Ecoli100","Ecoli100")]
 
 fobj = open("job_params_large_networks.txt", "w")

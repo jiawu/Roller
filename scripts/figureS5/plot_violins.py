@@ -43,7 +43,7 @@ def read_tdr_results(folder_list, folder_str):
     return(agg_df)
 
 #input_folder_list = ["/projects/p20519/roller_output/high_sampling/RandomForest/"]  
-input_folder_list = ["/projects/p20519/roller_output/gnw/Lasso/"]  
+input_folder_list = ["/projects/p20519/roller_output/gnw/RandomForest/"]  
 test_statistic = ['aupr', 'auroc']
 save_tag = "window_scan"
 n_trials = 100
