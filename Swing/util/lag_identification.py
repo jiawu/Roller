@@ -20,18 +20,29 @@ from sklearn.utils.validation import check_array
 from math import log
 from Swing.util.Evaluator import Evaluator
 
-def get_experiment_list(filename, timepoints=21, perturbs=5):
+def get_experiment_list(filename, timepoints=None, perturbs=None, time_col='Time'):
     # load files
     timecourse = pd.read_csv(filename, sep="\t")
+    if timepoints is None:
+        timepoints = len(set(timecourse[time_col]))
+
+    if perturbs is None:
+        perturbs = len(timecourse)/timepoints
+
+    if perturbs.is_integer():
+        perturbs = int(perturbs)
+    else:
+        raise ValueError("Uneven number of timepoints between perturbation experiments")
+
     # divide into list of dataframes
     experiments = []
     for i in range(0, timepoints * perturbs - timepoints + 1, timepoints):
         experiments.append(timecourse.ix[i:i + timepoints - 1])
     # reformat
     for idx, exp in enumerate(experiments):
-        exp = exp.set_index('Time')
+        exp = exp.set_index(time_col)
         experiments[idx] = exp
-    return (experiments)
+    return experiments
 
 
 def xcorr_experiments(experiments, gene_axis=1):
@@ -242,7 +253,7 @@ def calc_edge_lag2(experiments,genes, signed_edge_list=None, tolerance = 8, rc =
     return(lag_results, edge_lag)
 
  
-def calc_edge_lag(xcorr, genes, sc_frac=0.1, min_ccf=0.5, timestep=1, signed_edge_list=None, flat = True, return_raw = False):
+def calc_edge_lag(xcorr, genes, sc_frac=0.1, min_ccf=0.5, timestep=1, signed_edge_list=None, flat=True, return_raw=False):
     """
 
     :param xcorr: 4d array
@@ -322,6 +333,12 @@ def calc_edge_lag(xcorr, genes, sc_frac=0.1, min_ccf=0.5, timestep=1, signed_edg
         lag_results = pd.DataFrame(lag_results)
         edge_lag = pd.merge(edge_lag, lag_results, how='outer', on='Edge')
             # print(edge, np.argmax(filtered, axis=0), np.mean(np.argmax(filtered, axis=0)))
+
+    # If all cross correlations were filtered out, no estimate will be made
+    # Assign all lags to 0
+    if 'Lag' not in edge_lag.columns:
+        edge_lag['Lag'] = 0
+
     return edge_lag
 
 
@@ -357,11 +374,12 @@ def filter_ccfs(ccfs, sc_thresh, min_ccf):
     ### throw out these cross correlations in filtered time-series
     max_lag = ccfs.shape[1]
 
-    if max_lag < 10:
-        max_lag = np.ceil(ccfs.shape[1]/2.0)
-    
-    filtered_ccf = ccfs[(np.sum(signchange, axis=1) <= sc_thresh) & (np.max(np.abs(ccfs), axis=1) > min_ccf), :max_lag + 1]
-    
+    # if max_lag < 10:
+    #     max_lag = int(np.ceil(ccfs.shape[1]/2.0))
+
+    filtered_ccf = ccfs[(np.sum(signchange, axis=1) <= sc_thresh) & (np.max(np.abs(ccfs), axis=1) > min_ccf),
+                        :max_lag + 1]
+
     return filtered_ccf
 
 
