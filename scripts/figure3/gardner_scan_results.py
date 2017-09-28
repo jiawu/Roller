@@ -52,7 +52,7 @@ plt.show()
 
 #
 # # print(auroc[10.0])
-# ax = sns.heatmap(auroc)
+ax = sns.heatmap(auroc)
 #
-# plt.setp(ax.yaxis.get_majorticklabels(), rotation=0)
-# plt.show()
+plt.setp(ax.yaxis.get_majorticklabels(), rotation=0)
+plt.show()
