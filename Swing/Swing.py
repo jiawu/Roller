@@ -701,7 +701,7 @@ class Swing(object):
         print("[DONE]")
         return
 
-    def make_static_edge_dict(self, true_edges, self_edges=False, lag_method='max_median'):
+    def make_static_edge_dict(self, true_edges, self_edges=False, lag_method='max_median', full_edge_set=None):
         """
         Make a dictionary of edges
         :return:
@@ -720,13 +720,11 @@ class Swing(object):
         edge_set = set(df.Edge)
 
         # Calculate the full set of potential edges with TF list if it is provided.
-
-        if self.tf_list is not None:
-            full_edge_set = set(utility.make_possible_edge_list(np.array(self.tf_list), self.gene_list, self_edges=self_edges))
-        else:
-            full_edge_set = set(utility.make_possible_edge_list(self.gene_list, self.gene_list, self_edges=self_edges))
-
-        print(len(full_edge_set))
+        if full_edge_set is None:
+            if self.tf_list is not None:
+                full_edge_set = set(utility.make_possible_edge_list(np.array(self.tf_list), self.gene_list, self_edges=self_edges))
+            else:
+                full_edge_set = set(utility.make_possible_edge_list(self.gene_list, self.gene_list, self_edges=self_edges))
 
         # Identify edges that could exist, but do not appear in the inferred list
         edge_diff = full_edge_set.difference(edge_set)

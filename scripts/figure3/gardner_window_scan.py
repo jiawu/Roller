@@ -31,10 +31,10 @@ current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
 file_path = "../../data/lahav/lahav_timeseries.tsv"
 run_params = {'data_folder': data_folder,
               'file_path': file_path,
-              'td_window': 8,
+              'td_window': 5,
               'min_lag': 0,
-              'max_lag': 0,
-              'n_trees': 100,
+              'max_lag': 1,
+              'n_trees': 1000,
               'permutation_n': 0,
               'lag_method': 'median_median',
               'calc_mse': False,
@@ -42,7 +42,7 @@ run_params = {'data_folder': data_folder,
               'n_trials': 5,
               'run_time': current_time,
               'sort_by': 'rank',
-              'window_type': 'Dionesus'
+              'window_type': 'RandomForest'
               }
 
 # test = str(list(it.combinations_with_replacement(range(0,5), 2))).strip('[]')
@@ -52,10 +52,13 @@ run_params = {'data_folder': data_folder,
 
 roc_list = []
 pr_list = []
-for w in range(2,15):
+for w in [4,5,6,7,8]:
     run_params['td_window'] = w
-    if w == 14:
-        run_params['max_lag']=0
+    if w == 8:
+        run_params['max_lag'] = 0
+        run_params['min_lag'] = 0
+    elif w == 7:
+        run_params['max_lag'] = 1
     roc, pr, tdr, edge_list = tdw.get_td_stats(**run_params)
     roc_list.append(roc)
     pr_list.append(pr)

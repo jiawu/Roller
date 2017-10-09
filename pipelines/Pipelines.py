@@ -151,10 +151,10 @@ def get_td_stats(**kwargs):
     if 'lahav' in kwargs['file_path']:
         subnet_dict = {'true_edges': evaluator.gs_flat.tolist(), 'edges': evaluator.gs_data['regulator-target'].tolist()}
         evaluator = Evaluator(current_gold_standard, '\t', node_list=node_list, subnet_dict=subnet_dict)
-        print(evaluator.full_list)
-        # true_edges = subevaluator.gs_flat.tolist()
+        true_edges = evaluator.gs_flat.tolist()
 
-    tdr.make_static_edge_dict(true_edges, self_edges=False, lag_method=kwargs['lag_method'])
+    tdr.make_static_edge_dict(true_edges, self_edges=False, lag_method=kwargs['lag_method'],
+                              full_edge_set=set(evaluator.full_list.tolist()))
     df2 = tdr.make_sort_df(tdr.edge_dict, sort_by=kwargs['sort_by'])
     df2['Rank'] = np.arange(len(df2))
 
