@@ -60,6 +60,10 @@ class Evaluator:
             self.full_list = [ x for x in self.full_list if x[0] != x[1] ]
             self.full_list = pd.Series(self.full_list)
 
+            if (subnet_dict is not None):
+                self.gs_flat = pd.Series(subnet_dict['true_edges'])
+                self.full_list = pd.Series(subnet_dict['edges'])
+
     def possible_edges(self,parents, children):
         """
         Create a list of all the possible edges between parents and children

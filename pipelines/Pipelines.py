@@ -4,6 +4,7 @@ from Swing.util.Evaluator import Evaluator
 import numpy as np
 import Swing.util.utility_module as Rutil
 import re
+import sys
 
 import pdb
 
@@ -125,7 +126,7 @@ def get_td_stats(**kwargs):
 
     # No custom windows for Gardner data
     make_custom = True
-    if 'gardner' in kwargs['file_path']:
+    if 'gardner' in kwargs['file_path'] or 'lahav' in kwargs['file_path']:
         make_custom = False
 
     if make_custom:
@@ -146,11 +147,18 @@ def get_td_stats(**kwargs):
 
     tdr.compile_roller_edges(self_edges=False)
 
+    # For the Lahav data we need to restrict the edge list to only look at P53 targets
+    if 'lahav' in kwargs['file_path']:
+        subnet_dict = {'true_edges': evaluator.gs_flat.tolist(), 'edges': evaluator.gs_data['regulator-target'].tolist()}
+        evaluator = Evaluator(current_gold_standard, '\t', node_list=node_list, subnet_dict=subnet_dict)
+        print(evaluator.full_list)
+        # true_edges = subevaluator.gs_flat.tolist()
+
     tdr.make_static_edge_dict(true_edges, self_edges=False, lag_method=kwargs['lag_method'])
     df2 = tdr.make_sort_df(tdr.edge_dict, sort_by=kwargs['sort_by'])
     df2['Rank'] = np.arange(len(df2))
 
-    roc_dict, pr_dict = tdr.score(df2, gold_standard_file = current_gold_standard)
+    roc_dict, pr_dict = tdr.score(df2, gold_standard_file=current_gold_standard, evaluator=evaluator)
 
     print(roc_dict['auroc'][-1])
     print(pr_dict['aupr'][-1])#+(1-pr_dict['recall'][-1])

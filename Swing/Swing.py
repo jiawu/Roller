@@ -706,8 +706,10 @@ class Swing(object):
         Make a dictionary of edges
         :return:
         """
+
         print("Lumping edges...", end='')
         df = self.full_edge_list.copy()
+        df = df[df.Parent == 'TP53']
 
         # Only keep edges with importance > 0. Values below 0 are not helpful for model building
         df = df[df['Importance'] > 0]
@@ -724,6 +726,8 @@ class Swing(object):
         else:
             full_edge_set = set(utility.make_possible_edge_list(self.gene_list, self.gene_list, self_edges=self_edges))
 
+        print(len(full_edge_set))
+
         # Identify edges that could exist, but do not appear in the inferred list
         edge_diff = full_edge_set.difference(edge_set)
 
@@ -731,9 +735,9 @@ class Swing(object):
         lag_importance_score, lag_lump_method = lag_method.split('_')
         score_method = eval('np.'+lag_importance_score)
         lump_method = eval('np.'+lag_lump_method)
-        for idx,edge in enumerate(full_edge_set):
-            if idx%1000 ==0:
-                print(str(idx)+" out of "+ str(len(full_edge_set)), end='')
+        for idx, edge in enumerate(full_edge_set):
+            if idx % 1000 == 0:
+                print(str(idx)+" out of " + str(len(full_edge_set)) + "\n", end='')
             if edge in edge_diff:
                 self.edge_dict[edge] = {"dataframe": None, "mean_importance": 0, 'real_edge': (edge in true_edges),
                                         "max_importance": 0, 'max_edge': None, 'lag_importance': 0,
@@ -798,7 +802,7 @@ class Swing(object):
         node_list.pop(0)
         return node_list
 
-    def score(self, sorted_edge_list, gold_standard_file=None):
+    def score(self, sorted_edge_list, gold_standard_file=None, evaluator=None):
         """
         Scores some stuff, I think...
         Called by:
@@ -813,7 +817,9 @@ class Swing(object):
         else:
             current_gold_standard = gold_standard_file
 
-        evaluator = Evaluator(current_gold_standard, '\t', node_list=self.get_samples())
+        if evaluator is None:
+            evaluator = Evaluator(current_gold_standard, '\t', node_list=self.get_samples())
+
         tpr, fpr, auroc = evaluator.calc_roc(sorted_edge_list)
         auroc_dict = {'tpr':np.array(tpr), 'fpr':np.array(fpr), 'auroc': np.array(auroc)}
         precision, recall, aupr = evaluator.calc_pr(sorted_edge_list)

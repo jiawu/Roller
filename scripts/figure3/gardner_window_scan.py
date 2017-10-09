@@ -22,18 +22,18 @@ nxpdParams['show'] = 'ipynb'
 sys.path.append("../../pipelines")
 import Pipelines as tdw
 
-data_folder = "../../data/invitro/"
+data_folder = "../../data/lahav/"
 
 output_path = "../../data/invitro/"
 
 current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
 
-file_path = "../../data/invitro/gardner_timeseries.tsv"
+file_path = "../../data/lahav/lahav_timeseries.tsv"
 run_params = {'data_folder': data_folder,
               'file_path': file_path,
-              'td_window': 13,
+              'td_window': 8,
               'min_lag': 0,
-              'max_lag': 1,
+              'max_lag': 0,
               'n_trees': 100,
               'permutation_n': 0,
               'lag_method': 'median_median',
@@ -45,10 +45,10 @@ run_params = {'data_folder': data_folder,
               'window_type': 'Dionesus'
               }
 
-test = str(list(it.combinations_with_replacement(range(0,5), 2))).strip('[]')
-test = test.replace('(', "").replace(')', "").replace(', ', '_')
-print(test)
-sys.exit()
+# test = str(list(it.combinations_with_replacement(range(0,5), 2))).strip('[]')
+# test = test.replace('(', "").replace(')', "").replace(', ', '_')
+# print(test)
+# sys.exit()
 
 roc_list = []
 pr_list = []
@@ -59,6 +59,7 @@ for w in range(2,15):
     roc, pr, tdr, edge_list = tdw.get_td_stats(**run_params)
     roc_list.append(roc)
     pr_list.append(pr)
+sys.exit()
 
 plt.plot(range(2,14), roc_list[:-1], '.-')
 plt.plot([2,15], [roc_list[-1], roc_list[-1]], '-k', zorder=0)
