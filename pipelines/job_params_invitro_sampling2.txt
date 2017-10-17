@@ -1,0 +1,9 @@
+/projects/p20519/roller_output/gardner_out/RandomForest/ /projects/p20519/roller_output/gardner_out/RandomForest/ /home/jjw036/Roller/data/invitro/gardner_2_timeseries.tsv td_window num_7_4
+/projects/p20519/roller_output/gardner_out/RandomForest/ /projects/p20519/roller_output/gardner_out/RandomForest/ /home/jjw036/Roller/data/invitro/gardner_3_timeseries.tsv td_window num_5_2
+/projects/p20519/roller_output/gardner_out/RandomForest/ /projects/p20519/roller_output/gardner_out/RandomForest/ /home/jjw036/Roller/data/invitro/gardner_4_timeseries.tsv td_window num_4_2
+/projects/p20519/roller_output/gardner_out/Dionesus/ /projects/p20519/roller_output/gardner_out/Dionesus/ /home/jjw036/Roller/data/invitro/gardner_2_timeseries.tsv td_window num_7_4
+/projects/p20519/roller_output/gardner_out/Dionesus/ /projects/p20519/roller_output/gardner_out/Dionesus/ /home/jjw036/Roller/data/invitro/gardner_3_timeseries.tsv td_window num_5_2
+/projects/p20519/roller_output/gardner_out/Dionesus/ /projects/p20519/roller_output/gardner_out/Dionesus/ /home/jjw036/Roller/data/invitro/gardner_4_timeseries.tsv td_window num_4_2
+/projects/p20519/roller_output/gardner_out/Lasso/ /projects/p20519/roller_output/gardner_out/Lasso/ /home/jjw036/Roller/data/invitro/gardner_2_timeseries.tsv td_window num_7_4
+/projects/p20519/roller_output/gardner_out/Lasso/ /projects/p20519/roller_output/gardner_out/Lasso/ /home/jjw036/Roller/data/invitro/gardner_3_timeseries.tsv td_window num_5_2
+/projects/p20519/roller_output/gardner_out/Lasso/ /projects/p20519/roller_output/gardner_out/Lasso/ /home/jjw036/Roller/data/invitro/gardner_4_timeseries.tsv td_window num_4_2

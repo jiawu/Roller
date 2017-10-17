@@ -87,7 +87,11 @@ def get_td_stats(**kwargs):
         pref = file_path.split('/')[-1]
         folder = file_path.rstrip(pref)
         current_gold_standard = "{}{}_goldstandard.tsv".format(folder,prefix)
-
+    elif "gardner" in file_path:
+        prefix = file_path.split('/')[-1].split('_')[0]
+        pref = file_path.split('/')[-1]
+        folder = file_path.rstrip(pref)
+        current_gold_standard = "{}{}_goldstandard.tsv".format(folder,prefix)
     else:    
         current_gold_standard = file_path.replace("timeseries.tsv","goldstandard.tsv")
     node_list = df.columns.tolist()

@@ -43,7 +43,7 @@ def parse(method_string):
 
         elif case == 4:
             min_lag = 1
-            max_lag = 4
+            max_lag = 3
 
         elif case == 5:
             min_lag = 2
@@ -61,12 +61,12 @@ methods_of_interest = ['RF-td_5', 'RF-td_10', 'RF-td_15','RF-td_21', 'Dionesus-t
 
 inf_method_key = {'RF':'RandomForest', 'Dionesus': 'Dionesus', 'Lasso':'Lasso'}
 
-organisms = ['Ecoli']
+organisms = ['Ecoli', 'Yeast']
 
 organism_results = []
 for organism in organisms:    
     network_results = []
-    for network_index in range(5,6):
+    for network_index in range(1,21):
         method_results = []
         for method in methods_of_interest:
         
@@ -78,12 +78,12 @@ for organism in organisms:
             run_params['td_window'] = td_window
             run_params['min_lag'] = min_lag
             run_params['max_lag'] = max_lag
-            run_params['n_trees'] = 100
-            run_params['bootstrap_n'] = 10
+            run_params['n_trees'] = 500
+            run_params['bootstrap_n'] = 50
             run_params['filter_noisy'] = False
             print(run_params)
 
-            roc, pr, tdr = pl.get_td_stats(**run_params)
+            roc, pr, tdr, _ = pl.get_td_stats(**run_params)
             result_table = tdr.make_sort_df(tdr.edge_dict, sort_by = 'rank')
             result_table['rank_importance'] = np.arange(len(result_table))
             method_results.append(result_table)
@@ -98,8 +98,8 @@ for organism in organisms:
     organism_results.append(network_results)
 
 import pickle
-pickle.dump(organism_results, open("ecoli_organism_results.p","wb"))
-mm = pickle.load(open("ecoli_organism_results.p","rb"))
+pickle.dump(organism_results, open("all_organism_results.p","wb"))
+mm = pickle.load(open("all_organism_results.p","rb"))
 mm = mm[0][0]
 """
 network_results_td = pickle.load(open("merged_results_td.p","rb"))
@@ -133,7 +133,12 @@ for c, i, target_name in zip("bbbryyyrgggryyyrggggggbbbbbbbbb", indices, methods
       axes.scatter(X_r[i][1], X_r[i][2], c=c, label=target_name)
       axes.annotate(methods_of_interest[i], (X_r[i][1], X_r[i][2]))
 
-f.savefig('ecoli_updated_pca_plot_12.ps', format = "ps", bbox_inches='tight')
+f.savefig('all_organisms_PCA_plot_pc23.ps', format = "ps", bbox_inches='tight')
+
+for c, i, target_name in zip("bbbryyyrgggryyyrggggggbbbbbbbbb", indices, methods_of_interest):
+      axes.scatter(X_r[i][0], X_r[i][1], c=c, label=target_name)
+      axes.annotate(methods_of_interest[i], (X_r[i][1], X_r[i][2]))
+f.savefig('all_organisms_PCA_plot_pc12.ps', format = "ps", bbox_inches='tight')
 
 
 # for each inference method, get results

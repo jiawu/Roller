@@ -71,9 +71,7 @@ for td_window in window_sizes:
             continue
         
         winstat = ((comparisons[stat]-baseline_mean)/baseline_mean)*100
-        print(winstat)
-        print(min_lag,max_lag,td_window)
         inner_list.append(winstat.iloc[0])
     outer_list.append(inner_list)
 
-
+pdb.set_trace()

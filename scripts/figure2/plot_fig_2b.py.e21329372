@@ -1,0 +1,3 @@
+/hpc/opt/torque6/nodes/qnode4091/mom_priv/jobs/21329372.qsched03.quest.it.northwestern.edu.SC: line 7: import: command not found
+/hpc/opt/torque6/nodes/qnode4091/mom_priv/jobs/21329372.qsched03.quest.it.northwestern.edu.SC: line 8: syntax error near unexpected token `'Agg''
+/hpc/opt/torque6/nodes/qnode4091/mom_priv/jobs/21329372.qsched03.quest.it.northwestern.edu.SC: line 8: `matplotlib.use('Agg')'

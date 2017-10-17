@@ -10,7 +10,7 @@ for inf_method in inf_methods:
         for i in range(1,21):
             for interval in intervals:
                 max_window = int(1000/interval+1)
-                param_str = "{}_{}".format(max_window, int(max_window*(2/3)))
+                param_str = "{}_{}".format(max_window, int(round(max_window*(0.75))))
                 params = [param_str]
                 print(interval, params)
                 for param in params:

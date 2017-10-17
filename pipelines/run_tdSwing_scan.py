@@ -19,7 +19,7 @@ def main(data_folder, output_path, target_dataset, my_iterating_param, param_tes
     current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S:%f')
     if 'Dionesus' in data_folder:
         n_trials = 2
-    default_params = {'data_folder':data_folder, 'file_path':target_dataset, 'td_window':15,'min_lag':1,'max_lag':3,'n_trees':10,'permutation_n':5, 'lag_method':'mean_mean', 'calc_mse':False, 'bootstrap_n':5,'n_trials':n_trials, 'run_time':current_time, 'sort_by': 'rank','iterating_param':my_iterating_param, 'filter_noisy':False, 'alpha': None}
+    default_params = {'data_folder':data_folder, 'file_path':target_dataset, 'td_window':15,'min_lag':1,'max_lag':3,'n_trees':500,'permutation_n':5, 'lag_method':'mean_mean', 'calc_mse':False, 'bootstrap_n':5,'n_trials':n_trials, 'run_time':current_time, 'sort_by': 'rank','iterating_param':my_iterating_param, 'filter_noisy':False, 'alpha': None}
 
     overall_df = pd.DataFrame()
 
@@ -52,6 +52,9 @@ def main(data_folder, output_path, target_dataset, my_iterating_param, param_tes
                 else:
                     interval = run_params['file_path'].split('/')[-1].split('_')[1]
                     max_window = int(1000/int(interval)+1)
+            if 'gardner_out' in run_params['data_folder']:
+                interval = run_params['file_path'].split('/')[-1].split('_')[1]
+                max_window = int(round(14/int(interval)))
             else:
                 max_window = 21
             lag_gap = max_window-run_params['td_window']
@@ -140,7 +143,7 @@ if __name__ == "__main__":
         param_tests = list(zip( map(int, pli[1::3]), map(int, pli[2::3]), map(int, pli[3::3]) ) )
         my_iterating_param = my_iterating_param.split("^")
         
-    n_trials = 20
+    n_trials = 100
 
     #always save the full parameter list and date in the dataframe for each test. for posterity!
 

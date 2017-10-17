@@ -1,0 +1,28 @@
+----------------------------------------
+PBS: Begin PBS Prologue Mon Oct  2 17:23:17 CDT 2017 1506982997
+PBS: Job ID:		21329372.qsched03.quest.it.northwestern.edu
+PBS: Username:		jjw036
+PBS: Group:		jjw036
+PBS: Executing queue:     short
+PBS: Job name:		plot_fig_2b.py
+PBS: Account:		p20519
+----------------------------------------
+   The following variables are not
+   guaranteed to be the same in 
+   prologue and the job run script  
+----------------------------------------
+PBS: Temporary Dir($TMPDIR):	/tmp/21329372.qsched03.quest.it.northwestern.edu
+PBS: Master Node($PBS_MSHOST):		qnode4091
+PBS: node file($PBS_NODEFILE):  /hpc/opt/torque6/nodes/qnode4091/aux//21329372.qsched03.quest.it.northwestern.edu
+PBS: PATH (in prologue) : /bin:/usr/bin
+PBS: WORKDIR ($PBS_O_WORKDIR) is:  /home/jjw036/Roller/scripts/figure2
+----------------------------------------
+PBS: End PBS Prologue Mon Oct  2 17:23:17 CDT 2017 1506982997
+----------------------------------------
+PBS job ended
+Begin PBS Epilogue Mon Oct  2 17:23:22 CDT 2017 1506983002
+JobID: 21329372.qsched03.quest.it.northwestern.edu
+Session ID:			15539
+Resources Used:			cput=00:00:00,energy_used=0,mem=0kb,vmem=0kb,walltime=00:00:01
+Job exit value:			2
+----------------------------------------
