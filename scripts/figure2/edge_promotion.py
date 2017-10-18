@@ -6,6 +6,7 @@ import os
 import pandas as pd
 import numpy as np
 import networkx as nx
+import seaborn as sns
 from collections import deque
 from Swing.util.Evaluator import Evaluator
 from Swing.util.lag_identification import get_experiment_list, xcorr_experiments, calc_edge_lag
@@ -418,6 +419,20 @@ elif X = 5; min_lag = 2, max_lag = 3
 
 
 if __name__ == "__main__":
+    pd.set_option('display.width', 2000)
+    # Results from sensitivity analysis
+    data = pd.read_pickle('../../output/sensitivity_analysis/sensitivity_analysis_results_2017-10-18.pkl') # type: pd.DataFrame
+    grouped = data.groupby(['method', 'model', 'net', 'min_lag', 'max_lag', 'td_window'])
+    # print(grouped.get_group(('Lasso', 'ecoli', '13', 1, 3, 15)).mean())
+    # print(grouped.get_group(('Lasso', 'ecoli', '13', 0, 0, 21)).mean())
+    idx = pd.IndexSlice
+    avg = grouped.mean().loc[:, ['aupr', 'auroc']].stack().reset_index()
+    avg = avg[((avg.td_window==10) & (avg.min_lag==1) & (avg.max_lag==3))| (avg.td_window==21)]
+    avg.columns = avg.columns[:-2].tolist()+['score', 'value']
+    g = sns.factorplot(x='td_window', y='value', data=avg, col='score', row='model', hue='method', kind='box')
+    plt.show()
+    sys.exit()
+
     # Values for displaying or saving figures are True, 'show' or False
     savefig1 = False
     savefig2 = False
