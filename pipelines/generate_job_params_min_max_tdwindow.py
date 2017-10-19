@@ -1,12 +1,12 @@
 import pdb
-inf_methods = ['Dionesus']
+inf_methods = ['RandomForest']
 organisms = [("yeast", "Yeast"), ("ecoli","Ecoli")]
                              
 fobj = open("job_params_min_max_tdwindow.txt", "w")
 
 #params = ["1_2_3_4_5","6_7_8_9_10","11_12_13_14_15","16_17_18_19_20_21"] 
-params = ["0_0","0_1","0_2","0_3","0_4", "1_1","1_2","1_3", "1_4", "2_2", "2_3", "2_4","3_3", "3_4","4_4"]
-window_size = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
+params = ["0_1","0_2","0_3","0_4", "1_1","1_2","1_3", "1_4", "2_2", "2_3", "2_4","3_3", "3_4","4_4"]
+window_size = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
 
 p = ["_".join([params[x],str(window_size[y])]) for x in range(len(params)) for y in range(len(window_size))]
 # remove invalid windows
