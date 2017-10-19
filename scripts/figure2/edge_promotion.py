@@ -17,7 +17,6 @@ from matplotlib import rcParams, gridspec
 from matplotlib.path import Path
 import matplotlib.patches as patches
 from matplotlib.patches import Polygon
-import brewer2mpl
 from scipy.stats import fisher_exact, linregress, ttest_rel, mannwhitneyu, ttest_ind, pearsonr
 
 
@@ -427,7 +426,7 @@ if __name__ == "__main__":
     # print(grouped.get_group(('Lasso', 'ecoli', '13', 0, 0, 21)).mean())
     idx = pd.IndexSlice
     avg = grouped.mean().loc[:, ['aupr', 'auroc']].stack().reset_index()
-    avg = avg[((avg.td_window==10) & (avg.min_lag==1) & (avg.max_lag==3))| (avg.td_window==21)]
+    avg = avg[((avg.td_window==5) & (avg.min_lag==1) & (avg.max_lag==3))| (avg.td_window==21)]
     avg.columns = avg.columns[:-2].tolist()+['score', 'value']
     g = sns.factorplot(x='td_window', y='value', data=avg, col='score', row='model', hue='method', kind='box')
     plt.show()
