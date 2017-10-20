@@ -52,7 +52,7 @@ def main(data_folder, output_path, target_dataset, my_iterating_param, param_tes
                 else:
                     interval = run_params['file_path'].split('/')[-1].split('_')[1]
                     max_window = int(1000/int(interval)+1)
-            if 'gardner_out' in run_params['data_folder']:
+            elif 'gardner_out' in run_params['data_folder']:
                 interval = run_params['file_path'].split('/')[-1].split('_')[1]
                 max_window = int(round(14/int(interval)))
             else:
@@ -143,7 +143,7 @@ if __name__ == "__main__":
         param_tests = list(zip( map(int, pli[1::3]), map(int, pli[2::3]), map(int, pli[3::3]) ) )
         my_iterating_param = my_iterating_param.split("^")
         
-    n_trials = 100
+    n_trials = 50
 
     #always save the full parameter list and date in the dataframe for each test. for posterity!
 
