@@ -10,6 +10,7 @@ from datetime import datetime
 import numpy as np
 import warnings
 import json
+import time
 
 warnings.filterwarnings("ignore")
 
@@ -29,26 +30,41 @@ output_path = "../../data/invitro/"
 current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
 
 file_path = "../../data/invitro/gardner_timeseries.tsv"
+
+n_trials = 50
 run_params = {'data_folder': data_folder,
               'file_path': file_path,
-              'td_window': 13,
+              'td_window': 7,
               'min_lag': 0,
               'max_lag': 1,
-              'n_trees': 100,
+              'n_trees': 1000,
               'permutation_n': 0,
-              'lag_method': 'median_median',
+              'lag_method': 'mean_mean',
               'calc_mse': False,
               'bootstrap_n': 1000,
-              'n_trials': 5,
+              'n_trilas50': n_trials,
               'run_time': current_time,
               'sort_by': 'rank',
-              'window_type': 'Dionesus'
+              'window_type': 'RandomForest'
               }
 
-test = str(list(it.combinations_with_replacement(range(0,5), 2))).strip('[]')
-test = test.replace('(', "").replace(')', "").replace(', ', '_')
-print(test)
+overall_df = pd.DataFrame()
+for n in range(n_trials):
+    print('Trial {} \n=====\n====='.format(n))
+    roc, pr, tdr, edge_list = tdw.get_td_stats(**run_params)
+    run_params['roc'] = roc
+    run_params['pr'] = pr
+    run_params['edge_list'] = edge_list
+    run_result = pd.Series(run_params)
+    overall_df = overall_df.append(run_result, ignore_index=True)
+overall_df.to_pickle('gardner_RF_w7_results.pkl')
 sys.exit()
+
+
+# test = str(list(it.combinations_with_replacement(range(0,5), 2))).strip('[]')
+# test = test.replace('(', "").replace(')', "").replace(', ', '_')
+# print(test)
+# sys.exit()
 
 roc_list = []
 pr_list = []
