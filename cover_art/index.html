@@ -1,0 +1,295 @@
+<hmtl>
+
+<head>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.10/seedrandom.min.js></script>
+</head>
+
+<body>
+	<script>
+		//Load data and call visualization function in callbacks (whatever the fuck those are)
+
+		// Vertical panels
+		var n = 10;
+
+		// Node colors
+		var color1 = d3.color("hsl(230, 100%, 50%)");
+		var color2 = d3.color("hsl(125, 100%, 50%)");
+
+		d3.tsv("node_data.tsv", function(node_error,nodes){
+			if(node_error) throw node_error;
+
+			d3.tsv("edge_list.tsv", function(edge_error,edges){
+				if(edge_error) throw edge_error;
+
+				create_viz(nodes, edges);
+				});
+		});
+		
+		//Use to scale numbers
+		function getRandomArbitrary(min, max) {
+		  return Math.random() * (max - min) + min;
+		}
+
+		// Shamelessly taken from https://stackoverflow.com/questions/5560248/programmatically-lighten-or-darken-a-hex-color-or-rgb-and-blend-colors
+		function shadeRGBColor(color, percent) {
+	    	var f=color.split(","),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=parseInt(f[0].slice(4)),G=parseInt(f[1]),B=parseInt(f[2]);
+	    	return "rgb("+(Math.round((t-R)*p)+R)+","+(Math.round((t-G)*p)+G)+","+(Math.round((t-B)*p)+B)+")";
+		}
+
+		function blendRGBColors(c0, c1, p) {
+		    var f=c0.split(","),t=c1.split(","),R=parseInt(f[0].slice(4)),G=parseInt(f[1]),B=parseInt(f[2]);
+			return "rgb("+(Math.round((parseInt(t[0].slice(4))-R)*p)+R)+","+(Math.round((parseInt(t[1])-G)*p)+G)+","+(Math.round((parseInt(t[2])-B)*p)+B)+")";
+		}
+
+		//Build out a color
+		function getNodeColor(depth, current_depth, bg_color, rotation){
+			//Node 1 is treated differently
+			if(depth==0){
+				var n1scale=d3.scalePow().exponent(0.01).domain([0, n]).range([color1, bg_color.brighter()]);
+				return n1scale(current_depth);
+			}
+
+			// Choose color
+			var base_color = Math.random() < 0.5 ? color1 : color2; //Globally set colors
+			var nscale = d3.scalePow().domain([0, current_depth, n]).range([bg_color.brighter(), base_color, bg_color]);
+			return nscale(depth);
+			// var active_scale = d3.scaleLinear().domain([current_depth-2,current_depth, current_depth+2]).range([base_color.brighter(), base_color, base_color.brighter()]);
+			// var inner_scale = d3.scaleLinear().domain([current_depth-2, 0]).range([base_color, base_color.brighter()]);
+			// var outer_scale = d3.scaleLinear().domain([current_depth, n]).range([base_color, bg_color]);
+
+			// if(Math.abs(depth-current_depth)<=2){
+			// 	// Nodes +- 1 away get a color
+			// 	color = active_scale(depth);
+			// } else if(depth>current_depth){
+			// 	color = outer_scale(depth);
+			// } else {
+			// 	color = inner_scale(depth);
+			// }
+
+			return color
+			// var hue1 = 230;
+			// var hue2 = 125;
+
+			// // Set hue range properly
+			// var upper_hue;
+			// var lower_hue;
+			// var split = 0.5;
+			// if (rotation===0 || rotation===2){
+			// 	upper_hue = hue1;
+			// 	lower_hue = hue2;
+
+			// } else if (rotation===1 || rotation===3){
+			// 	upper_hue = hue2;
+			// 	lower_hue = hue1;	
+			// }
+
+			// Set node color
+			var node_color;
+			
+			if(depth===0){
+				// The central node is treated differently
+				var color_fraction = current_depth/n; //n is the number of panels, defined globaly
+				'#9CBF9F'
+				node_color = d3.color()
+
+			}
+			var node_hue = ((depth==0) ? hue2 : getHue(lower_hue, upper_hue, split));
+
+
+			if(depth<(current_depth-2)){
+				return shadeRGBColor(bg_color, 0.5);
+			} else{
+				return d3.color("hsl("+node_hue+","+"50%,"+lscale(depth)+"%)");
+			}
+		}
+
+		function getEdgeColor(edge, max_depth, bg_color, rotation){
+			var hue1 = 230;
+			var hue2 = 125;
+			// Set hue range properly
+			var upper_hue;
+			var lower_hue;
+			var split = 0.5;
+			if (rotation===0 || rotation===2){
+				upper_hue = hue1;
+				lower_hue = hue2;
+
+			} else if (rotation===1 || rotation===3){
+				upper_hue = hue2;
+				lower_hue = hue1;	
+			}
+			// console.log(edge.parent_depth, max_depth-2);
+			if(edge.parent_depth<(max_depth-2)){
+				return bg_color.brighter();
+			} else{
+				return d3.color("hsl("+getHue(lower_hue, upper_hue, split)+","+"50%,"+lscale(edge.parent_depth)+"%)");
+			}
+		}
+
+		function getHue(lower, upper, split){
+			var rand_color = Math.random(); 
+			var hue;
+			if (rand_color > split){
+				hue = upper;
+			} else {
+				hue = lower;
+			}
+			return hue;
+		}
+
+		function getBaseLog(x, y) {
+		  return Math.log(y) / Math.log(x);
+		}
+
+		function create_timepoint(g, structure, edges, width, height, lscale, current_depth, bg_color){
+			for(var i=0; i<4;i++){
+				var G=g.append('g').attr('transform', "rotate(180,"+width/4+","+height/4+") rotate("+(i*90+12)+")")
+
+				var jittered=structure[i];
+				// width = width/2;
+
+				var nn = 2.4;
+
+				// Add edges
+				G.append('g').selectAll('path')
+					.data(edges).enter().append("path")//.filter(function(d){return (d.parent_depth<=max_depth && d.child_depth<=max_depth);})
+						.attr('id', function(d){return d.parent+"_"+d.child;})
+						.attr("d", function(d){
+							var parent=jittered[Number(d.parent)];
+							var child=jittered[Number(d.child)];
+							return "M "+parent.scaled_cx*width/nn+","+parent.scaled_cy*width/nn+" L "+child.scaled_cx*width/nn+","+child.scaled_cy*width/nn;
+						})
+						// .attr("opacity", function(d){if((Math.abs(max_depth-d.parent_depth)>1)||(Math.abs(max_depth-d.child_depth)>1)){op=0.3;}else{op=1;} return op;})
+						.attr('stroke-width', function(d){return Math.max(0.5, 1*Math.random());})
+						.attr('stroke', function(d){return getEdgeColor(d, current_depth, bg_color, i);})
+						.attr('stroke-linecap', 'round')
+
+				var rad = d3.scaleLinear().domain([1,8]).range([3,6]);
+
+				Math.seedrandom('random'+i);
+				// Add nodes
+				G.append('g').selectAll("circle")
+					.data(jittered).enter().append('circle')//.filter(function(d){return d.depth<=max_depth})
+						.attr('id', function(d){return "node_"+d.node;})
+						.attr("cx", function(d){return Number(d.scaled_cx)*width/nn;})
+						.attr("cy", function(d){return Number(d.scaled_cy)*width/nn;})
+						.attr("r", function(d){return rad(d.degree)})	
+						// .attr("opacity", function(d){if(Math.abs(max_depth-d.depth)>1){op=0.1;}else{op=1;} return op;})
+						.attr('fill', function(d){return getNodeColor(d.depth, current_depth, bg_color, i);})
+						.attr('stroke', bg_color);
+			}
+
+		}
+
+		function create_viz(nodes, edges){
+			var network_depth = Math.max.apply(Math, nodes.map(function(v){return Number(v.depth);}));
+
+			// Make an SVG with specified dimensions in pixels
+			var width=790/96*72;
+			var height=850/96*72;
+			var margin=10; //{top: 10, left:20};
+
+
+			var svg=d3.select("body").append("svg").attr("width", width+2*margin).attr("height", height+2*margin);
+			
+			svg.append('rect').attr("width", width+2*margin).attr("height", height+2*margin).attr('fill', '#222').attr('stroke', '#F00');
+			svg = svg.append('g').attr('transform', 'translate(10,10)');
+
+			// Add border to svg for easy viewing
+			svg.append('rect').attr("width", width).attr("height", height).attr('fill', "#222").attr('stroke', '#00F');
+
+			// Set node 0 to center of canvas
+			// var X=nodes[0].scaled_cx;
+			// var Y=nodes[0].scaled_cy;
+
+			// Make and store the original structure
+			var structure=[];
+
+			var timepoint = svg.append('g')
+			for(var i=0; i<4;i++){
+				// Add jitter
+				var jittered=nodes;
+				for (var jj=0; jj<nodes.length;jj++){
+					jittered[jj].scaled_cx*=getRandomArbitrary(0.95, 1.05);
+					jittered[jj].scaled_cy*=getRandomArbitrary(0.95, 1.05);
+					jittered[jj].scaled_cx=Math.min(1, jittered[jj].scaled_cx);
+					jittered[jj].scaled_cy=Math.min(1, jittered[jj].scaled_cy);
+				}
+
+				structure.push(jittered);
+			}
+
+			// var ccscale = d3.scaleLinear().domain([0, n]).range(['#1D2951', '#000033'])
+			var ccscale = d3.scalePow().domain([0, n]).range(['#340D35', '#781B53'])
+
+			var total_width = 0;
+			var n_panel_units = (n*(n+1)/2);
+			var panel_unit = width/n_panel_units;
+			var panels_available = n_panel_units;
+
+			for (var ii = 0; ii < n; ii++) {
+				// Scale the panel width
+				var panels_requested = Math.max(ii+1, 3);
+				var panels_used = Math.min(panels_requested, panels_available);
+				panels_available -=panels_used;
+
+				var panel_width = panel_unit*panels_used;
+				// var panel_width = width/n;
+
+				lscale = d3.scaleLinear().domain([Math.max(0,ii-4), ii, Math.min(ii+1)]).range([80, 50, 80]);
+
+
+				var x_shift = -width/2+total_width+panel_width/2;
+				var y_idx = total_width/width*n+1;
+				var y_shift = (getBaseLog(2.3,y_idx)*-120 + height/2);
+				if (ii===0){
+					y_shift *=.9;
+				}
+				// y_shift=0;
+
+				// Add a new grouping at the correct location relative to the center
+				var gg = svg.append('g').attr('transform', "translate(" + x_shift + "," + y_shift + ")").attr('id', 'new_group_'+ii);
+
+				//Background color rectangle
+				bg_color = d3.color(ccscale(ii));
+				gg.append('rect')
+					.attr('transform', "translate(" + -x_shift + "," + -y_shift + ")")
+					.attr('width', panel_width)
+					.attr('height', height)
+					.attr('x', total_width)
+					.attr('y', 0)
+					.attr('fill', bg_color)
+					.attr('stroke', bg_color);
+
+				create_timepoint(gg, structure, edges, width, height, lscale, ii, bg_color);
+
+				
+				// if (ii == 0) break;
+
+				gg.attr('clip-path', 'url(#timepoint' + ii + ")");
+
+				gg.append('clipPath')
+					.attr('id', 'timepoint' + ii)
+					.append('rect')
+						.attr('transform', "translate(" + -x_shift + "," + -y_shift + ")")
+						.attr('width', panel_width)
+						.attr('height', height)
+						.attr('x', total_width)
+						.attr('y', 0)
+
+				// Keep track of total width for translate
+				total_width += panel_width;
+
+				// if (ii == 0) break;
+			}
+
+			// svg = svg.append("g").attr('transform','translate(' + 2*width + ',' + 0 + ') scale(-1,1)');
+
+
+		}
+			
+	</script>
+</body>
+
+</hmtl>
